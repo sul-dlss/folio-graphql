@@ -12,3 +12,7 @@ start the server:
 ```sh
 npm start
 ```
+to regenerate the typescript typings when changing the graphql schema:
+```sh
+npm run codegen
+```
