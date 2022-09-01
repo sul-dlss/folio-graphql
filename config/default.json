@@ -1,6 +1,8 @@
 {
   "folio": {
     "baseUrl": "https://okapi-test.stanford.edu",
-    "tenant": "sul"
+    "tenant": "sul",
+    "username": "",
+    "password": ""
   }
 }
