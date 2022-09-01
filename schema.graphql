@@ -1,0 +1,8 @@
+type Patron {
+    id: ID!
+    name: String
+}
+
+type Query {
+    patrons: [Patron]
+}
