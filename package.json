@@ -7,7 +7,7 @@
   "scripts": {
     "compile": "tsc",
     "postinstall": "npm run compile",
-    "start": "npm run compile && node ./dist/index.js",
+    "start": "npm run compile && npm run codegen && node ./dist/index.js",
     "codegen": "gql-gen --config codegen.yml"
   },
   "keywords": [],
