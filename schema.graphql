@@ -1,13 +1,29 @@
 # These are non-core graphql types; resolvers are provided by graphql-scalars
 scalar Date
 scalar UUID
+scalar EmailAddress
 
+enum PatronStatus {
+  OK
+  BLOCKED
+}
+
+enum PatronStanding {
+  OK
+  BARRED
+  COLLECTION
+  BLOCKED
+  DELINQUENT
+}
+
+# We only need one query; all the magic happens in the resolvers
 type Query {
   patron(id: UUID!): Patron
 }
 
 type Patron {
   id: UUID
+  user: User
   totalCharges: ChargeAmount!
   totalChargesCount: Int!,
   totalLoans: Int!,
@@ -15,6 +31,59 @@ type Patron {
   charges: [Charge]!,
   holds: [Hold]!,
   loans: [Loan]!,
+}
+
+type User {
+  id: UUID
+  username: String
+  externalSystemId: String
+  barcode: String
+  active: Boolean
+  type: String
+  patronGroup: UUID
+  department: [UUID]
+  personal: Personal
+  enrollmentDate: Date
+  expirationDate: Date
+  metadata: Metadata
+  tags: Tags
+}
+
+type Personal {
+  lastName: String!
+  firstName: String
+  middleName: String
+  preferredFirstName: String
+  email: EmailAddress
+  phone: String
+  mobilePhone: String
+  dateOfBirth: Date
+  preferredContactTypeId: String
+}
+
+type Address {
+  id: String
+  countryId: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  region: String
+  postalCode: String
+  addressTypeId: UUID!
+  primaryAddress: Boolean
+}
+
+type Metadata {
+  createdDate: Date!
+  createdByUserId: UUID
+  createdByUsername: String
+  updatedDate: Date
+  updatedByUserId: UUID
+  updatedByUsername: String
+}
+
+type Tags {
+  tagList: [String]
 }
 
 type Item {

@@ -1,22 +1,30 @@
 import { readFileSync } from "fs"
 
-import { DateResolver, UUIDResolver } from "graphql-scalars"
+import { DateResolver, EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 import { ApolloServer } from "@apollo/server"
 import { startStandaloneServer } from "@apollo/server/standalone"
 
 import PatronsAPI from "./patrons-api.js"
+import UsersAPI from "./users-api.js"
 
 const patrons = new PatronsAPI()
+const users = new UsersAPI()
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
   Query: {
     patron(parent, args, context, info) {
       return patrons.getPatron(args.id)
+    },
+  },
+  Patron: {
+    user(parent, args, context, info) {
+      return users.getUser(parent.id)
     }
   },
   Date: DateResolver,
-  UUID: UUIDResolver
+  UUID: UUIDResolver,
+  EmailAddress: EmailAddressResolver
 }
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo

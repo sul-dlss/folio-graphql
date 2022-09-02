@@ -11,7 +11,21 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  EmailAddress: any;
   UUID: any;
+};
+
+export type Address = {
+  __typename?: 'Address';
+  addressLine1?: Maybe<Scalars['String']>;
+  addressLine2?: Maybe<Scalars['String']>;
+  addressTypeId: Scalars['UUID'];
+  city?: Maybe<Scalars['String']>;
+  countryId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  primaryAddress?: Maybe<Scalars['Boolean']>;
+  region?: Maybe<Scalars['String']>;
 };
 
 export type Charge = {
@@ -63,6 +77,16 @@ export type Loan = {
   overdue: Scalars['Boolean'];
 };
 
+export type Metadata = {
+  __typename?: 'Metadata';
+  createdByUserId?: Maybe<Scalars['UUID']>;
+  createdByUsername?: Maybe<Scalars['String']>;
+  createdDate: Scalars['Date'];
+  updatedByUserId?: Maybe<Scalars['UUID']>;
+  updatedByUsername?: Maybe<Scalars['String']>;
+  updatedDate?: Maybe<Scalars['Date']>;
+};
+
 export type Patron = {
   __typename?: 'Patron';
   charges: Array<Maybe<Charge>>;
@@ -73,6 +97,33 @@ export type Patron = {
   totalChargesCount: Scalars['Int'];
   totalHolds: Scalars['Int'];
   totalLoans: Scalars['Int'];
+  user?: Maybe<User>;
+};
+
+export enum PatronStanding {
+  Barred = 'BARRED',
+  Blocked = 'BLOCKED',
+  Collection = 'COLLECTION',
+  Delinquent = 'DELINQUENT',
+  Ok = 'OK'
+}
+
+export enum PatronStatus {
+  Blocked = 'BLOCKED',
+  Ok = 'OK'
+}
+
+export type Personal = {
+  __typename?: 'Personal';
+  dateOfBirth?: Maybe<Scalars['Date']>;
+  email?: Maybe<Scalars['EmailAddress']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName: Scalars['String'];
+  middleName?: Maybe<Scalars['String']>;
+  mobilePhone?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  preferredContactTypeId?: Maybe<Scalars['String']>;
+  preferredFirstName?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -83,4 +134,26 @@ export type Query = {
 
 export type QueryPatronArgs = {
   id: Scalars['UUID'];
+};
+
+export type Tags = {
+  __typename?: 'Tags';
+  tagList?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type User = {
+  __typename?: 'User';
+  active?: Maybe<Scalars['Boolean']>;
+  barcode?: Maybe<Scalars['String']>;
+  department?: Maybe<Array<Maybe<Scalars['UUID']>>>;
+  enrollmentDate?: Maybe<Scalars['Date']>;
+  expirationDate?: Maybe<Scalars['Date']>;
+  externalSystemId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['UUID']>;
+  metadata?: Maybe<Metadata>;
+  patronGroup?: Maybe<Scalars['UUID']>;
+  personal?: Maybe<Personal>;
+  tags?: Maybe<Tags>;
+  type?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
 };
