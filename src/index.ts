@@ -6,9 +6,11 @@ import { startStandaloneServer } from "@apollo/server/standalone"
 
 import PatronsAPI from "./patrons-api.js"
 import UsersAPI from "./users-api.js"
+import LocationsAPI from "./locations-api.js"
 
 const patrons = new PatronsAPI()
 const users = new UsersAPI()
+const locations = new LocationsAPI()
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -20,6 +22,11 @@ const resolvers = {
   Patron: {
     user(parent, args, context, info) {
       return users.getUser(parent.id)
+    },
+  },
+  Hold: {
+    pickupLocation(parent, args, context, info) {
+      return locations.getLocation(parent.pickupLocationId)
     }
   },
   Date: DateResolver,

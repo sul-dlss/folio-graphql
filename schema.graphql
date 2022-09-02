@@ -115,12 +115,23 @@ type Hold {
   expirationDate: Date
   status: String
   pickupLocationId: UUID!
+  pickupLocation: Location
   queuePosition: Int
   cancellationReasonId: UUID
   canceledByUserId: UUID
   cancellationAdditionalInformation: String
   canceledDate: String
   patronComments: String
+}
+
+type Location {
+  id: UUID
+  name: String!
+  code: String!
+  discoveryDisplayName: String!
+  description: String
+  shelvingLagTime: Int
+  pickupLocation: Boolean
 }
 
 type Loan {

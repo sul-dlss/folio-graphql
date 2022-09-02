@@ -54,6 +54,7 @@ export type Hold = {
   expirationDate?: Maybe<Scalars['Date']>;
   item?: Maybe<Item>;
   patronComments?: Maybe<Scalars['String']>;
+  pickupLocation?: Maybe<Location>;
   pickupLocationId: Scalars['UUID'];
   queuePosition?: Maybe<Scalars['Int']>;
   requestDate: Scalars['Date'];
@@ -75,6 +76,17 @@ export type Loan = {
   item: Item;
   loanDate: Scalars['Date'];
   overdue: Scalars['Boolean'];
+};
+
+export type Location = {
+  __typename?: 'Location';
+  code: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  discoveryDisplayName: Scalars['String'];
+  id?: Maybe<Scalars['UUID']>;
+  name: Scalars['String'];
+  pickupLocation?: Maybe<Scalars['Boolean']>;
+  shelvingLagTime?: Maybe<Scalars['Int']>;
 };
 
 export type Metadata = {
