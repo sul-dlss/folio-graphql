@@ -7,7 +7,7 @@ export default class FolioAPI extends RESTDataSource {
   // send these headers by default on every request
   override willSendRequest(request: WillSendRequestOptions) {
     if (this.token) request.headers["X-Okapi-Token"] = this.token
-    request.headers["X-Okapi-Tenant"] = "sul"
+    request.headers["X-Okapi-Tenant"] = config.get("folio.tenant")
     request.headers["User-Agent"] = "FolioApiClient"
     request.headers["Accept"] = "application/json, text/plain"
     request.headers["Content-Type"] = "application/json"
