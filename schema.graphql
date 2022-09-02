@@ -1,10 +1,62 @@
+# These are non-core graphql types; resolvers are provided by graphql-scalars
+scalar Date
+scalar UUID
+
 type Query {
-  patron(id: ID!): Patron
+  patron(id: UUID!): Patron
 }
 
 type Patron {
-  id: ID!
-  totalChargesCount: Int,
-  totalLoans: Int,
-  totalHolds: Int,
+  id: UUID
+  totalCharges: ChargeAmount!
+  totalChargesCount: Int!,
+  totalLoans: Int!,
+  totalHolds: Int!,
+  charges: [Charge]!,
+  holds: [Hold]!,
+  loans: [Loan]!,
+}
+
+type Item {
+  instanceId: UUID!
+  itemId: UUID
+  title: String
+  author: String
+  isbn: String
+}
+
+type Charge {
+  item: Item
+  chargeAmount: ChargeAmount
+  accrualDate: Date
+  description: String
+  state: String
+  reason: String
+  feeFineId: UUID
+}
+
+type ChargeAmount {
+  amount: Float!
+  isoCurrencyCode: String!
+}
+
+type Hold {
+  item: Item
+  requestDate: Date!
+  expirationDate: Date
+  status: String
+  pickupLocationId: UUID!
+  queuePosition: Int
+  cancellationReasonId: UUID
+  canceledByUserId: UUID
+  cancellationAdditionalInformation: String
+  canceledDate: String
+  patronComments: String
+}
+
+type Loan {
+  item: Item!
+  loanDate: Date!
+  dueDate: Date!
+  overdue: Boolean!
 }
