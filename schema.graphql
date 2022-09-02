@@ -1,8 +1,10 @@
-type Patron {
-    id: ID!
-    name: String
+type Query {
+  patron(id: ID!): Patron
 }
 
-type Query {
-    patrons: [Patron]
+type Patron {
+  id: ID!
+  totalChargesCount: Int,
+  totalLoans: Int,
+  totalHolds: Int,
 }
