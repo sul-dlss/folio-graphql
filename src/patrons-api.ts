@@ -1,10 +1,8 @@
-import { RESTDataSource } from '@apollo/datasource-rest';
-import { Patron } from './schema';
+import FolioAPI from "./folio-api.js"
+import { Patron } from './schema'
 
-export class PatronsAPI extends RESTDataSource {
-  override baseURL = 'https://app_mylibrary:MyAccount_1n_foli0@okapi-test.stanford.edu/patron/account/';
-
+export default class PatronsAPI extends FolioAPI {
   async getPatron(id: string): Promise<Patron> {
-    return this.get<Patron>(encodeURIComponent(id));
+    return this.get<Patron>(`/patron/account/${encodeURIComponent(id)}`)
   }
 }

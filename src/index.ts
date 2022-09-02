@@ -38,26 +38,6 @@ const server = new ApolloServer({
 //  1. creates an Express app
 //  2. installs your ApolloServer instance as middleware
 //  3. prepares your app to handle incoming requests
-// const { url } = await startStandaloneServer(server, {
-//     listen: { port: 4000 },
-// });
+})
 
-// console.log(`🚀  Server ready at: ${url}`);
-
-class PatronsAPI extends RESTDataSource {
-    override baseURL = 'https://okapi-test.stanford.edu/patron/account/';
-
-    override willSendRequest(request: WillSendRequestOptions) {
-        request.headers['X-Okapi-Tenant'] = 'sul';
-        request.headers['User-Agent'] = 'FolioApiClient';
-        request.headers['Accept'] = 'application/json, text/plain';
-        request.headers['Content-Type'] = 'application/json';
-      }
-  
-    async getPatron(id: string): Promise<Patron> {
-      return this.get<Patron>(encodeURIComponent(id));
-    }
-  }
-const patrons = new PatronsAPI();
-
-console.log(patrons.getPatron('d0f7d057-9f7e-4eae-9017-45c389a42397'));
+console.log(`🚀  Server ready at: ${url}`)
