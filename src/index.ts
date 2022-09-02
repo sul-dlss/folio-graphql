@@ -1,6 +1,9 @@
+import { readFileSync } from "fs"
+
+import { DateResolver, UUIDResolver } from "graphql-scalars"
 import { ApolloServer } from "@apollo/server"
 import { startStandaloneServer } from "@apollo/server/standalone"
-import { readFileSync } from "fs"
+
 import PatronsAPI from "./patrons-api.js"
 
 const patrons = new PatronsAPI()
@@ -12,6 +15,8 @@ const resolvers = {
       return patrons.getPatron(args.id)
     }
   },
+  Date: DateResolver,
+  UUID: UUIDResolver
 }
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
