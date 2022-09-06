@@ -7,10 +7,16 @@ import { startStandaloneServer } from "@apollo/server/standalone"
 import PatronsAPI from "./patrons-api.js"
 import UsersAPI from "./users-api.js"
 import LocationsAPI from "./locations-api.js"
+import InstancesAPI from "./instances-api.js"
+import ItemsAPI from "./items-api.js"
+import HoldingsAPI from "./holdings-api.js"
 
 const patrons = new PatronsAPI()
 const users = new UsersAPI()
 const locations = new LocationsAPI()
+const instances = new InstancesAPI()
+const items = new ItemsAPI()
+const holdings = new HoldingsAPI()
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -18,6 +24,9 @@ const resolvers = {
     patron(parent, args, context, info) {
       return patrons.getPatron(args.id)
     },
+    instance(parent, args, context, info) {
+      return instances.getInstance(args.id)
+    }
   },
   Patron: {
     user(parent, args, context, info) {
@@ -27,6 +36,38 @@ const resolvers = {
   Hold: {
     pickupLocation(parent, args, context, info) {
       return locations.getLocation(parent.pickupLocationId)
+    }
+  },
+  RequestItem: {
+    instance(parent, args, context, info) {
+      return instances.getInstance(parent.instanceId)
+    },
+    item(parent, args, context, info) {
+      return items.getItem(parent.itemId)
+    }
+  },
+  Instance: {
+    holdingsRecords(parent, args, context, info) {
+      return holdings.getByInstanceId(parent.id)
+    },
+    items(parent, args, context, info) {
+      return items.getByInstanceId(parent.id)
+    }
+  },
+  HoldingsRecord: {
+    items(parent, args, context, info) {
+      return items.getByHoldingsRecordId(parent.id)
+    },
+    instance(parent, args, context, info) {
+      return instances.getInstance(parent.instanceId)
+    }
+  },
+  Item: {
+    holdingsRecord(parent, args, context, info) {
+      return holdings.getHoldingsRecord(parent.holdingsRecordId)
+    },
+    instance(parent, args, context, info) {
+      return instances.getByHoldingsRecordId(parent.holdingsRecordId)
     }
   },
   Date: DateResolver,
