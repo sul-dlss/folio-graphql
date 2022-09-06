@@ -28,13 +28,19 @@ export type Address = {
   region?: Maybe<Scalars['String']>;
 };
 
+export type AlternativeTitle = {
+  __typename?: 'AlternativeTitle';
+  alternativeTitle?: Maybe<Scalars['String']>;
+  alternativeTitleTypeId?: Maybe<Scalars['UUID']>;
+};
+
 export type Charge = {
   __typename?: 'Charge';
   accrualDate?: Maybe<Scalars['Date']>;
   chargeAmount?: Maybe<ChargeAmount>;
   description?: Maybe<Scalars['String']>;
   feeFineId?: Maybe<Scalars['UUID']>;
-  item?: Maybe<Item>;
+  item?: Maybe<RequestItem>;
   reason?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
 };
@@ -45,6 +51,56 @@ export type ChargeAmount = {
   isoCurrencyCode: Scalars['String'];
 };
 
+export type CheckIn = {
+  __typename?: 'CheckIn';
+  dateTime?: Maybe<Scalars['String']>;
+  servicePointId?: Maybe<Scalars['UUID']>;
+  staffMemberId?: Maybe<Scalars['UUID']>;
+};
+
+export type CirculationNote = {
+  __typename?: 'CirculationNote';
+  date?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  noteType?: Maybe<Scalars['String']>;
+  source?: Maybe<Source>;
+  staffOnly?: Maybe<Scalars['Boolean']>;
+};
+
+export type Classification = {
+  __typename?: 'Classification';
+  classificationNumber: Scalars['String'];
+  classificationTypeId: Scalars['UUID'];
+};
+
+export type Contributor = {
+  __typename?: 'Contributor';
+  authorityId?: Maybe<Scalars['UUID']>;
+  contributorNameTypeId?: Maybe<Scalars['String']>;
+  contributorTypeId: Scalars['UUID'];
+  contributorTypeText?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  primary?: Maybe<Scalars['Boolean']>;
+};
+
+export type EffectiveCallNumberComponents = {
+  __typename?: 'EffectiveCallNumberComponents';
+  callNumber?: Maybe<Scalars['String']>;
+  prefix?: Maybe<Scalars['String']>;
+  suffix?: Maybe<Scalars['String']>;
+  typeId?: Maybe<Scalars['UUID']>;
+};
+
+export type ElectronicAccess = {
+  __typename?: 'ElectronicAccess';
+  linkText?: Maybe<Scalars['String']>;
+  materialsSpecification?: Maybe<Scalars['String']>;
+  publicNote?: Maybe<Scalars['String']>;
+  relationshipId?: Maybe<Scalars['UUID']>;
+  uri: Scalars['String'];
+};
+
 export type Hold = {
   __typename?: 'Hold';
   canceledByUserId?: Maybe<Scalars['UUID']>;
@@ -52,7 +108,7 @@ export type Hold = {
   cancellationAdditionalInformation?: Maybe<Scalars['String']>;
   cancellationReasonId?: Maybe<Scalars['UUID']>;
   expirationDate?: Maybe<Scalars['Date']>;
-  item?: Maybe<Item>;
+  item?: Maybe<RequestItem>;
   patronComments?: Maybe<Scalars['String']>;
   pickupLocation?: Maybe<Location>;
   pickupLocationId: Scalars['UUID'];
@@ -61,19 +117,176 @@ export type Hold = {
   status?: Maybe<Scalars['String']>;
 };
 
+export type HoldingsNote = {
+  __typename?: 'HoldingsNote';
+  holdingsNoteTypeId?: Maybe<Scalars['UUID']>;
+  note?: Maybe<Scalars['String']>;
+  staffOnly?: Maybe<Scalars['Boolean']>;
+};
+
+export type HoldingsRecord = {
+  __typename?: 'HoldingsRecord';
+  _version?: Maybe<Scalars['Int']>;
+  acquisitionFormat?: Maybe<Scalars['String']>;
+  administrativeNotes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  callNumber?: Maybe<Scalars['String']>;
+  callNumberPrefix?: Maybe<Scalars['String']>;
+  callNumberSuffix?: Maybe<Scalars['String']>;
+  callNumberTypeId?: Maybe<Scalars['UUID']>;
+  copyNumber?: Maybe<Scalars['String']>;
+  digitizationPolicy?: Maybe<Scalars['String']>;
+  discoverySuppress?: Maybe<Scalars['Boolean']>;
+  effectiveLocationId?: Maybe<Scalars['UUID']>;
+  electronicAccess?: Maybe<Array<Maybe<ElectronicAccess>>>;
+  formatIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  holdingsStatement?: Maybe<Array<Maybe<HoldingsStatement>>>;
+  holdingsStatementsForIndexes?: Maybe<Array<Maybe<HoldingsStatement>>>;
+  holdingsStatementsForSupplements?: Maybe<Array<Maybe<HoldingsStatement>>>;
+  holdingsTypeId?: Maybe<Scalars['UUID']>;
+  hrid?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['UUID']>;
+  illPolicyId?: Maybe<Scalars['UUID']>;
+  instance?: Maybe<Instance>;
+  instanceId: Scalars['UUID'];
+  items?: Maybe<Array<Maybe<Item>>>;
+  metadata?: Maybe<Metadata>;
+  notes?: Maybe<Array<Maybe<HoldingsNote>>>;
+  numberOfItems?: Maybe<Scalars['String']>;
+  permanentLocationId: Scalars['UUID'];
+  receiptStatus?: Maybe<Scalars['String']>;
+  receivingHistory?: Maybe<ReceivingHistory>;
+  retentionPolicy?: Maybe<Scalars['String']>;
+  shelvingTitle?: Maybe<Scalars['String']>;
+  sourceId?: Maybe<Scalars['UUID']>;
+  statisticalCodeIds?: Maybe<Array<Maybe<Scalars['UUID']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  temporaryLocationId?: Maybe<Scalars['UUID']>;
+};
+
+export type HoldingsStatement = {
+  __typename?: 'HoldingsStatement';
+  note?: Maybe<Scalars['String']>;
+  staffNote?: Maybe<Scalars['String']>;
+  statement?: Maybe<Scalars['String']>;
+};
+
+export type Identifier = {
+  __typename?: 'Identifier';
+  identifierTypeId: Scalars['UUID'];
+  value: Scalars['String'];
+};
+
+export type Instance = {
+  __typename?: 'Instance';
+  _version: Scalars['Int'];
+  administrativeNotes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  alternativeTitles?: Maybe<Array<Maybe<AlternativeTitle>>>;
+  catalogedDate?: Maybe<Scalars['String']>;
+  classifications?: Maybe<Array<Maybe<Classification>>>;
+  contributors?: Maybe<Array<Maybe<Contributor>>>;
+  discoverySuppress?: Maybe<Scalars['Boolean']>;
+  editions?: Maybe<Array<Maybe<Scalars['String']>>>;
+  electronicAccess?: Maybe<Array<Maybe<ElectronicAccess>>>;
+  holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
+  hrid: Scalars['String'];
+  id: Scalars['UUID'];
+  identifiers?: Maybe<Array<Maybe<Identifier>>>;
+  indexTitle?: Maybe<Scalars['String']>;
+  instanceFormatIds?: Maybe<Array<Maybe<Scalars['UUID']>>>;
+  instanceTypeId?: Maybe<Scalars['UUID']>;
+  items?: Maybe<Array<Maybe<Item>>>;
+  languages?: Maybe<Array<Maybe<Scalars['String']>>>;
+  matchKey?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Metadata>;
+  modeOfIssuanceId?: Maybe<Scalars['UUID']>;
+  natureOfContentTypeIds?: Maybe<Array<Maybe<Scalars['UUID']>>>;
+  notes?: Maybe<Array<Maybe<InstanceNote>>>;
+  physicalDescriptions?: Maybe<Array<Maybe<Scalars['String']>>>;
+  previouslyHeld?: Maybe<Scalars['Boolean']>;
+  publication?: Maybe<Array<Maybe<Publication>>>;
+  publicationFrequency?: Maybe<Array<Maybe<Scalars['String']>>>;
+  publicationPeriod?: Maybe<Array<Maybe<PublicationPeriod>>>;
+  publicationRange?: Maybe<Array<Maybe<Scalars['String']>>>;
+  series?: Maybe<Array<Maybe<Scalars['String']>>>;
+  source: Scalars['String'];
+  sourceRecordFormat?: Maybe<Scalars['String']>;
+  staffSuppress?: Maybe<Scalars['Boolean']>;
+  statisticalCodeIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  statusId?: Maybe<Scalars['UUID']>;
+  statusUpdatedDate?: Maybe<Scalars['String']>;
+  subjects?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type InstanceNote = {
+  __typename?: 'InstanceNote';
+  instanceNoteTypeId?: Maybe<Scalars['UUID']>;
+  note?: Maybe<Scalars['String']>;
+  staffOnly?: Maybe<Scalars['Boolean']>;
+};
+
 export type Item = {
   __typename?: 'Item';
-  author?: Maybe<Scalars['String']>;
-  instanceId: Scalars['UUID'];
-  isbn?: Maybe<Scalars['String']>;
-  itemId?: Maybe<Scalars['UUID']>;
-  title?: Maybe<Scalars['String']>;
+  _version: Scalars['Int'];
+  accessionNumber?: Maybe<Scalars['String']>;
+  administrativeNotes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  barcode?: Maybe<Scalars['String']>;
+  chronology?: Maybe<Scalars['String']>;
+  circulationNotes?: Maybe<Array<Maybe<CirculationNote>>>;
+  copyNumber?: Maybe<Scalars['String']>;
+  descriptionOfPieces?: Maybe<Scalars['String']>;
+  discoverySuppress?: Maybe<Scalars['Boolean']>;
+  effectiveCallNumberComponents?: Maybe<EffectiveCallNumberComponents>;
+  effectiveLocationId?: Maybe<Scalars['String']>;
+  effectiveShelvingOrder?: Maybe<Scalars['String']>;
+  electronicAccess?: Maybe<Array<Maybe<ElectronicAccess>>>;
+  enumeration?: Maybe<Scalars['String']>;
+  formerIds?: Maybe<Array<Maybe<Scalars['String']>>>;
+  holdingsRecord?: Maybe<HoldingsRecord>;
+  holdingsRecordId: Scalars['String'];
+  hrid?: Maybe<Scalars['String']>;
+  id: Scalars['UUID'];
+  inTransitDestinationServicePointId?: Maybe<Scalars['UUID']>;
+  instance?: Maybe<Instance>;
+  itemDamagedStatusDate?: Maybe<Scalars['String']>;
+  itemDamagedStatusId?: Maybe<Scalars['String']>;
+  itemIdentifier?: Maybe<Scalars['String']>;
+  itemLevelCallNumber?: Maybe<Scalars['String']>;
+  itemLevelCallNumberPrefix?: Maybe<Scalars['String']>;
+  itemLevelCallNumberSuffix?: Maybe<Scalars['String']>;
+  itemLevelCallNumberTypeId?: Maybe<Scalars['String']>;
+  lastCheckIn?: Maybe<CheckIn>;
+  materialTypeId: Scalars['String'];
+  metadata?: Maybe<Metadata>;
+  missingPieces?: Maybe<Scalars['String']>;
+  missingPiecesDate?: Maybe<Scalars['String']>;
+  notes?: Maybe<Array<Maybe<ItemNote>>>;
+  numberOfMissingPieces?: Maybe<Scalars['String']>;
+  numberOfPieces?: Maybe<Scalars['String']>;
+  permanentLoanTypeId: Scalars['String'];
+  permanentLocationId?: Maybe<Scalars['String']>;
+  purchaseOrderLineIdentifier?: Maybe<Scalars['String']>;
+  statisticalCodes?: Maybe<Array<Maybe<Scalars['UUID']>>>;
+  status: Status;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  temporaryLoanTypeId?: Maybe<Scalars['String']>;
+  temporaryLocationId?: Maybe<Scalars['String']>;
+  volume?: Maybe<Scalars['String']>;
+  yearCaption?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type ItemNote = {
+  __typename?: 'ItemNote';
+  itemNoteTypeId?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  staffOnly?: Maybe<Scalars['Boolean']>;
 };
 
 export type Loan = {
   __typename?: 'Loan';
   dueDate: Scalars['Date'];
-  item: Item;
+  item: RequestItem;
   loanDate: Scalars['Date'];
   overdue: Scalars['Boolean'];
 };
@@ -138,14 +351,75 @@ export type Personal = {
   preferredFirstName?: Maybe<Scalars['String']>;
 };
 
+export type Publication = {
+  __typename?: 'Publication';
+  dateOfPublication?: Maybe<Scalars['String']>;
+  place?: Maybe<Scalars['String']>;
+  publisher?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']>;
+};
+
+export type PublicationPeriod = {
+  __typename?: 'PublicationPeriod';
+  end?: Maybe<Scalars['Int']>;
+  start?: Maybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  instance?: Maybe<Instance>;
   patron?: Maybe<Patron>;
+};
+
+
+export type QueryInstanceArgs = {
+  id: Scalars['UUID'];
 };
 
 
 export type QueryPatronArgs = {
   id: Scalars['UUID'];
+};
+
+export type ReceivingHistory = {
+  __typename?: 'ReceivingHistory';
+  displayType?: Maybe<Scalars['String']>;
+  entries?: Maybe<Array<Maybe<ReceivingHistoryEntry>>>;
+};
+
+export type ReceivingHistoryEntry = {
+  __typename?: 'ReceivingHistoryEntry';
+  chronology?: Maybe<Scalars['String']>;
+  enumeration?: Maybe<Scalars['String']>;
+  publicDisplay?: Maybe<Scalars['Boolean']>;
+};
+
+export type RequestItem = {
+  __typename?: 'RequestItem';
+  author?: Maybe<Scalars['String']>;
+  instance?: Maybe<Instance>;
+  instanceId: Scalars['UUID'];
+  isbn?: Maybe<Scalars['String']>;
+  item?: Maybe<Item>;
+  itemId?: Maybe<Scalars['UUID']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type Source = {
+  __typename?: 'Source';
+  id?: Maybe<Scalars['String']>;
+  personal?: Maybe<Personal>;
+};
+
+export type Status = {
+  __typename?: 'Status';
+  date?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  tagList?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type Tags = {
