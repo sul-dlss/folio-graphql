@@ -16,10 +16,25 @@ enum PatronStanding {
   DELINQUENT
 }
 
+input CqlParams {
+  query: String
+  limit: Int
+  offset: Int
+  sortby: String
+}
+
 # We only need one query; all the magic happens in the resolvers
 type Query {
   patron(id: UUID!): Patron
+
   instance(id: UUID!): Instance
+  instances(id: [String], hrid: [String], params: CqlParams): [Instance]
+
+  holdingsRecord(id: UUID!): HoldingsRecord
+  holdingsRecords(id: [String], hrid: [String], params: CqlParams): [HoldingsRecord]
+
+  item(id: UUID!): Item
+  items(id: [String], hrid: [String], params: CqlParams): [Item]
 }
 
 type Patron {
@@ -182,8 +197,8 @@ type Instance {
   tags: [Tag]
   metadata: Metadata
   natureOfContentTypeIds: [UUID]
-  holdingsRecords: [HoldingsRecord]
-  items: [Item]
+  holdingsRecords(params: CqlParams): [HoldingsRecord]
+  items(params: CqlParams): [Item]
 }
 
 type AlternativeTitle {
@@ -367,7 +382,7 @@ type HoldingsRecord {
   metadata: Metadata
   sourceId: UUID
   instance: Instance,
-  items: [Item]
+  items(params: CqlParams): [Item]
 }
 
 type HoldingsNote {

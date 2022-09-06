@@ -1,5 +1,6 @@
 import config from "config"
 import { RESTDataSource, WillSendRequestOptions } from "@apollo/datasource-rest"
+import { CqlParams } from './schema'
 
 export default class FolioAPI extends RESTDataSource {
   override baseURL = config.get("folio.baseUrl") as string
@@ -30,5 +31,38 @@ export default class FolioAPI extends RESTDataSource {
         this.refreshToken = response.refreshToken
       })
       .catch(console.error)
+  }
+
+  buildCqlQuery({ params, ...rest }: Partial<{ params: CqlParams, [key: string]: Object | Object[] | undefined }>): URLSearchParams {
+    let urlParams = new URLSearchParams()
+    let cqlQuery = ""
+
+    for (const [key, value] of Object.entries(rest)) {
+      if (cqlQuery.length > 0) {
+        cqlQuery += " AND "
+      }
+
+      if (Array.isArray(value)) {
+        cqlQuery += `(${value.map((v: string) => `${key}==${v}`).join(" OR ")} )`
+      } else {
+        cqlQuery += `${key}=="${value}"`
+      }
+    }
+
+    if (params?.query) {
+      if (cqlQuery.length > 0) {
+        cqlQuery = `(${cqlQuery}) AND ${params.query}`
+      } else {
+        cqlQuery = params.query
+      }
+    }
+
+    if (params?.sortby) cqlQuery += ` sortby ${params.sortby}`
+
+    if (cqlQuery.length > 0) { urlParams.set('query', cqlQuery) }
+    if (params?.limit) urlParams.set('limit', params.limit.toString())
+    if (params?.offset) urlParams.set('offset', params.offset.toString())
+
+    return urlParams
   }
 }
