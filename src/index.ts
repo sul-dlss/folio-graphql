@@ -10,6 +10,8 @@ import LocationsAPI from "./locations-api.js"
 import InstancesAPI from "./instances-api.js"
 import ItemsAPI from "./items-api.js"
 import HoldingsAPI from "./holdings-api.js"
+import TypeAPI from "./type-api.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint } from "./schema.js"
 
 const patrons = new PatronsAPI()
 const users = new UsersAPI()
@@ -17,6 +19,7 @@ const locations = new LocationsAPI()
 const instances = new InstancesAPI()
 const items = new ItemsAPI()
 const holdings = new HoldingsAPI()
+const types = new TypeAPI()
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -60,6 +63,15 @@ const resolvers = {
     },
     instance(parent, args, context, info) {
       return instances.getInstance(parent.instanceId)
+    },
+    permanentLocation(parent, args, context, info) {
+      return types.getMapFor<Location>("locations", { cache: context.typeCache }).then(map => map.get(parent.permanentLocationId))
+    },
+    temporaryLocation(parent, args, context, info) {
+      return types.getMapFor<Location>("locations", { cache: context.typeCache }).then(map => map.get(parent.temporaryLocationId))
+    },
+    effectiveLocation(parent, args, context, info) {
+      return types.getMapFor<Location>("locations", { cache: context.typeCache }).then(map => map.get(parent.effectiveLocationId))
     }
   },
   Item: {
@@ -68,6 +80,47 @@ const resolvers = {
     },
     instance(parent, args, context, info) {
       return instances.getByHoldingsRecordId(parent.holdingsRecordId)
+    },
+    permanentLocation(parent, args, context, info) {
+      return types.getMapFor<Location>("locations", { cache: context.typeCache }).then(map => map.get(parent.permanentLocationId))
+    },
+    temporaryLocation(parent, args, context, info) {
+      return types.getMapFor<Location>("locations", { cache: context.typeCache }).then(map => map.get(parent.temporaryLocationId))
+    },
+    effectiveLocation(parent, args, context, info) {
+      return types.getMapFor<Location>("locations", { cache: context.typeCache }).then(map => map.get(parent.effectiveLocationId))
+    }
+  },
+  Classification: {
+    classificationType(parent, args, context, info) {
+      return types.getMapFor<ClassificationType>("classification-types", { cache: context.typeCache }).then(map => map.get(parent.classificationTypeId))
+    }
+  },
+  Location: {
+    institution(parent, args, context, info) {
+      return types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: context.typeCache }).then(map => map.get(parent.institutionId))
+    },
+    campus(parent, args, context, info) {
+      return types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: context.typeCache }).then(map => map.get(parent.campusId))
+    },
+    library(parent, args, context, info) {
+      return types.getMapFor<Library>("location-units/libraries", { key: "loclibs", cache: context.typeCache }).then(map => map.get(parent.libraryId))
+    },
+    primaryServicePointObject(parent, args, context, info) {
+      return types.getMapFor<ServicePoint>("service-points", { key: "servicepoints", cache: context.typeCache }).then(map => map.get(parent.primaryServicePoint))
+    },
+    servicePoints(parent, args, context, info) {
+      return types.getValuesFor<ServicePoint>("service-points", { key: "servicepoints", cache: context.typeCache }).then(arr => arr.filter(sp => parent.servicePointIds.includes(sp.id)))
+    }
+  },
+  Campus: {
+    institution(parent, args, context, info) {
+      return types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: context.typeCache }).then(map => map.get(parent.institutionId))
+    }
+  },
+  Library: {
+    campus(parent, args, context, info) {
+      return types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: context.typeCache }).then(map => map.get(parent.campusId))
     }
   },
   Date: DateResolver,
@@ -78,9 +131,13 @@ const resolvers = {
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
 const typeDefs = readFileSync("schema.graphql").toString("utf-8")
 
+interface MyContext { // Context typing
+  typeCache: Map<string, Map<string, any>>
+}
+
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
-const server = new ApolloServer({
+const server = new ApolloServer<MyContext>({
   typeDefs,
   resolvers,
 })
@@ -91,6 +148,9 @@ const server = new ApolloServer({
 //  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
+  context: async ({ req, res }) => ({
+    typeCache: new Map()
+  })
 })
 
 console.log(`🚀  Server ready at: ${url}`)
