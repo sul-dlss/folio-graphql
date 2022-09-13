@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 
-import { DateResolver, EmailAddressResolver, UUIDResolver } from "graphql-scalars"
+import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 import { ApolloServer } from "@apollo/server"
 import { startStandaloneServer } from "@apollo/server/standalone"
 
@@ -123,7 +123,6 @@ const resolvers = {
       return types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: context.typeCache }).then(map => map.get(parent.campusId))
     }
   },
-  Date: DateResolver,
   UUID: UUIDResolver,
   EmailAddress: EmailAddressResolver
 }

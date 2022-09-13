@@ -10,7 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: any;
+  DateTime: any;
   EmailAddress: any;
   UUID: any;
 };
@@ -46,7 +46,7 @@ export type Campus = {
 
 export type Charge = {
   __typename?: 'Charge';
-  accrualDate?: Maybe<Scalars['Date']>;
+  accrualDate?: Maybe<Scalars['DateTime']>;
   chargeAmount?: Maybe<ChargeAmount>;
   description?: Maybe<Scalars['String']>;
   feeFineId?: Maybe<Scalars['UUID']>;
@@ -126,13 +126,13 @@ export type Hold = {
   canceledDate?: Maybe<Scalars['String']>;
   cancellationAdditionalInformation?: Maybe<Scalars['String']>;
   cancellationReasonId?: Maybe<Scalars['UUID']>;
-  expirationDate?: Maybe<Scalars['Date']>;
+  expirationDate?: Maybe<Scalars['DateTime']>;
   item?: Maybe<RequestItem>;
   patronComments?: Maybe<Scalars['String']>;
   pickupLocation?: Maybe<ServicePoint>;
   pickupLocationId: Scalars['UUID'];
   queuePosition?: Maybe<Scalars['Int']>;
-  requestDate: Scalars['Date'];
+  requestDate: Scalars['DateTime'];
   status?: Maybe<Scalars['String']>;
 };
 
@@ -328,9 +328,9 @@ export type Library = {
 
 export type Loan = {
   __typename?: 'Loan';
-  dueDate: Scalars['Date'];
+  dueDate: Scalars['DateTime'];
   item: RequestItem;
-  loanDate: Scalars['Date'];
+  loanDate: Scalars['DateTime'];
   overdue: Scalars['Boolean'];
 };
 
@@ -359,10 +359,10 @@ export type Metadata = {
   __typename?: 'Metadata';
   createdByUserId?: Maybe<Scalars['UUID']>;
   createdByUsername?: Maybe<Scalars['String']>;
-  createdDate: Scalars['Date'];
+  createdDate: Scalars['DateTime'];
   updatedByUserId?: Maybe<Scalars['UUID']>;
   updatedByUsername?: Maybe<Scalars['String']>;
-  updatedDate?: Maybe<Scalars['Date']>;
+  updatedDate?: Maybe<Scalars['DateTime']>;
 };
 
 export type Patron = {
@@ -393,7 +393,7 @@ export enum PatronStatus {
 
 export type Personal = {
   __typename?: 'Personal';
-  dateOfBirth?: Maybe<Scalars['Date']>;
+  dateOfBirth?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['EmailAddress']>;
   firstName?: Maybe<Scalars['String']>;
   lastName: Scalars['String'];
@@ -496,8 +496,8 @@ export type User = {
   active?: Maybe<Scalars['Boolean']>;
   barcode?: Maybe<Scalars['String']>;
   department?: Maybe<Array<Maybe<Scalars['UUID']>>>;
-  enrollmentDate?: Maybe<Scalars['Date']>;
-  expirationDate?: Maybe<Scalars['Date']>;
+  enrollmentDate?: Maybe<Scalars['DateTime']>;
+  expirationDate?: Maybe<Scalars['DateTime']>;
   externalSystemId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['UUID']>;
   metadata?: Maybe<Metadata>;
