@@ -133,7 +133,7 @@ type Hold {
   expirationDate: Date
   status: String
   pickupLocationId: UUID!
-  pickupLocation: Location
+  pickupLocation: ServicePoint
   queuePosition: Int
   cancellationReasonId: UUID
   canceledByUserId: UUID
@@ -142,7 +142,7 @@ type Hold {
   patronComments: String
 }
 
-type Location {
+type ServicePoint {
   id: UUID
   name: String!
   code: String!
@@ -223,6 +223,14 @@ type Contributor {
 type Classification {
   classificationNumber: String!
   classificationTypeId: UUID!
+  classificationType: ClassificationType
+}
+
+type ClassificationType {
+  id: UUID!
+  name: String!
+  source: String
+  metadata: Metadata
 }
 
 type Publication {
@@ -302,6 +310,9 @@ type Item {
   lastCheckIn: CheckIn
   holdingsRecord: HoldingsRecord
   instance: Instance
+  permanentLocation: Location
+  temporaryLocation: Location
+  effectiveLocation: Location
 }
 
 type EffectiveCallNumberComponents {
@@ -383,6 +394,9 @@ type HoldingsRecord {
   sourceId: UUID
   instance: Instance,
   items(params: CqlParams): [Item]
+  permanentLocation: Location
+  temporaryLocation: Location
+  effectiveLocation: Location
 }
 
 type HoldingsNote {
@@ -406,4 +420,49 @@ type ReceivingHistoryEntry {
   publicDisplay: Boolean
   enumeration: String
   chronology: String
+}
+
+type Location {
+  id: String
+  name: String!
+  code: String!
+  description: String
+  discoveryDisplayName: String
+  isActive: Boolean
+  institutionId: String!
+  campusId: String!
+  libraryId: String!
+  primaryServicePoint: UUID!
+  servicePointIds: [UUID]
+  metadata: Metadata
+  institution: Institution
+  campus: Campus
+  library: Library
+  primaryServicePointObject: ServicePoint
+  servicePoints: [ServicePoint]
+}
+
+type Institution {
+  id: String
+  name: String!
+  code: String!
+  metadata: Metadata
+}
+
+type Campus {
+  id: String
+  name: String!
+  code: String!
+  institutionId: String!
+  institution: Institution
+  metadata: Metadata
+}
+
+type Library {
+  id: String
+  name: String!
+  code: String!
+  campusId: String!
+  campus: Campus
+  metadata: Metadata
 }

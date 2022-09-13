@@ -34,6 +34,16 @@ export type AlternativeTitle = {
   alternativeTitleTypeId?: Maybe<Scalars['UUID']>;
 };
 
+export type Campus = {
+  __typename?: 'Campus';
+  code: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  institution?: Maybe<Institution>;
+  institutionId: Scalars['String'];
+  metadata?: Maybe<Metadata>;
+  name: Scalars['String'];
+};
+
 export type Charge = {
   __typename?: 'Charge';
   accrualDate?: Maybe<Scalars['Date']>;
@@ -71,7 +81,16 @@ export type CirculationNote = {
 export type Classification = {
   __typename?: 'Classification';
   classificationNumber: Scalars['String'];
+  classificationType?: Maybe<ClassificationType>;
   classificationTypeId: Scalars['UUID'];
+};
+
+export type ClassificationType = {
+  __typename?: 'ClassificationType';
+  id: Scalars['UUID'];
+  metadata?: Maybe<Metadata>;
+  name: Scalars['String'];
+  source?: Maybe<Scalars['String']>;
 };
 
 export type Contributor = {
@@ -117,7 +136,7 @@ export type Hold = {
   expirationDate?: Maybe<Scalars['Date']>;
   item?: Maybe<RequestItem>;
   patronComments?: Maybe<Scalars['String']>;
-  pickupLocation?: Maybe<Location>;
+  pickupLocation?: Maybe<ServicePoint>;
   pickupLocationId: Scalars['UUID'];
   queuePosition?: Maybe<Scalars['Int']>;
   requestDate: Scalars['Date'];
@@ -143,6 +162,7 @@ export type HoldingsRecord = {
   copyNumber?: Maybe<Scalars['String']>;
   digitizationPolicy?: Maybe<Scalars['String']>;
   discoverySuppress?: Maybe<Scalars['Boolean']>;
+  effectiveLocation?: Maybe<Location>;
   effectiveLocationId?: Maybe<Scalars['UUID']>;
   electronicAccess?: Maybe<Array<Maybe<ElectronicAccess>>>;
   formatIds?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -159,6 +179,7 @@ export type HoldingsRecord = {
   metadata?: Maybe<Metadata>;
   notes?: Maybe<Array<Maybe<HoldingsNote>>>;
   numberOfItems?: Maybe<Scalars['String']>;
+  permanentLocation?: Maybe<Location>;
   permanentLocationId: Scalars['UUID'];
   receiptStatus?: Maybe<Scalars['String']>;
   receivingHistory?: Maybe<ReceivingHistory>;
@@ -167,6 +188,7 @@ export type HoldingsRecord = {
   sourceId?: Maybe<Scalars['UUID']>;
   statisticalCodeIds?: Maybe<Array<Maybe<Scalars['UUID']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
+  temporaryLocation?: Maybe<Location>;
   temporaryLocationId?: Maybe<Scalars['UUID']>;
 };
 
@@ -248,6 +270,14 @@ export type InstanceNote = {
   staffOnly?: Maybe<Scalars['Boolean']>;
 };
 
+export type Institution = {
+  __typename?: 'Institution';
+  code: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Metadata>;
+  name: Scalars['String'];
+};
+
 export type Item = {
   __typename?: 'Item';
   _version: Scalars['Int'];
@@ -260,6 +290,7 @@ export type Item = {
   descriptionOfPieces?: Maybe<Scalars['String']>;
   discoverySuppress?: Maybe<Scalars['Boolean']>;
   effectiveCallNumberComponents?: Maybe<EffectiveCallNumberComponents>;
+  effectiveLocation?: Maybe<Location>;
   effectiveLocationId?: Maybe<Scalars['String']>;
   effectiveShelvingOrder?: Maybe<Scalars['String']>;
   electronicAccess?: Maybe<Array<Maybe<ElectronicAccess>>>;
@@ -287,12 +318,14 @@ export type Item = {
   numberOfMissingPieces?: Maybe<Scalars['String']>;
   numberOfPieces?: Maybe<Scalars['String']>;
   permanentLoanTypeId: Scalars['String'];
+  permanentLocation?: Maybe<Location>;
   permanentLocationId?: Maybe<Scalars['String']>;
   purchaseOrderLineIdentifier?: Maybe<Scalars['String']>;
   statisticalCodes?: Maybe<Array<Maybe<Scalars['UUID']>>>;
   status: Status;
   tags?: Maybe<Array<Maybe<Tag>>>;
   temporaryLoanTypeId?: Maybe<Scalars['String']>;
+  temporaryLocation?: Maybe<Location>;
   temporaryLocationId?: Maybe<Scalars['String']>;
   volume?: Maybe<Scalars['String']>;
   yearCaption?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -305,6 +338,16 @@ export type ItemNote = {
   staffOnly?: Maybe<Scalars['Boolean']>;
 };
 
+export type Library = {
+  __typename?: 'Library';
+  campus?: Maybe<Campus>;
+  campusId: Scalars['String'];
+  code: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  metadata?: Maybe<Metadata>;
+  name: Scalars['String'];
+};
+
 export type Loan = {
   __typename?: 'Loan';
   dueDate: Scalars['Date'];
@@ -315,13 +358,23 @@ export type Loan = {
 
 export type Location = {
   __typename?: 'Location';
+  campus?: Maybe<Campus>;
+  campusId: Scalars['String'];
   code: Scalars['String'];
   description?: Maybe<Scalars['String']>;
-  discoveryDisplayName: Scalars['String'];
-  id?: Maybe<Scalars['UUID']>;
+  discoveryDisplayName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  institution?: Maybe<Institution>;
+  institutionId: Scalars['String'];
+  isActive?: Maybe<Scalars['Boolean']>;
+  library?: Maybe<Library>;
+  libraryId: Scalars['String'];
+  metadata?: Maybe<Metadata>;
   name: Scalars['String'];
-  pickupLocation?: Maybe<Scalars['Boolean']>;
-  shelvingLagTime?: Maybe<Scalars['Int']>;
+  primaryServicePoint: Scalars['UUID'];
+  primaryServicePointObject?: Maybe<ServicePoint>;
+  servicePointIds?: Maybe<Array<Maybe<Scalars['UUID']>>>;
+  servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
 };
 
 export type Metadata = {
@@ -461,6 +514,17 @@ export type RequestItem = {
   item?: Maybe<Item>;
   itemId?: Maybe<Scalars['UUID']>;
   title?: Maybe<Scalars['String']>;
+};
+
+export type ServicePoint = {
+  __typename?: 'ServicePoint';
+  code: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  discoveryDisplayName: Scalars['String'];
+  id?: Maybe<Scalars['UUID']>;
+  name: Scalars['String'];
+  pickupLocation?: Maybe<Scalars['Boolean']>;
+  shelvingLagTime?: Maybe<Scalars['Int']>;
 };
 
 export type Source = {
