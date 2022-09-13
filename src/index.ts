@@ -11,7 +11,8 @@ import InstancesAPI from "./instances-api.js"
 import ItemsAPI from "./items-api.js"
 import HoldingsAPI from "./holdings-api.js"
 import TypeAPI from "./type-api.js"
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint } from "./schema.js"
+import FeeFinesAPI from "./feefines-api.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine } from "./schema.js"
 
 const patrons = new PatronsAPI()
 const users = new UsersAPI()
@@ -20,6 +21,7 @@ const instances = new InstancesAPI()
 const items = new ItemsAPI()
 const holdings = new HoldingsAPI()
 const types = new TypeAPI()
+const feefines = new FeeFinesAPI()
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -136,6 +138,11 @@ const resolvers = {
   Library: {
     campus(parent, args, context, info) {
       return types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: context.typeCache }).then(map => map.get(parent.campusId))
+    }
+  },
+  Charge: {
+    feeFine(parent, args, context, info) {
+      return feefines.getFeeFine(parent.feeFineId)
     }
   },
   UUID: UUIDResolver,

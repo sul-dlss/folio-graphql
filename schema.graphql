@@ -46,7 +46,7 @@ type Patron {
   totalHolds: Int!,
   charges: [Charge]!,
   holds: [Hold]!,
-  loans: [Loan]!,
+  loans: [Loan]!
 }
 
 type User {
@@ -120,11 +120,23 @@ type Charge {
   state: String
   reason: String
   feeFineId: UUID
+  feeFine: FeeFine
 }
 
 type ChargeAmount {
   amount: Float!
   isoCurrencyCode: String!
+}
+
+type FeeFine {
+  id: UUID,
+  automatic: Boolean!,
+  feeFineType: String!,
+  defaultAmount: Float,
+  chargeNoticeId: UUID,
+  actionNoticeId: UUID,
+  ownerId: UUID,
+  metadata: Metadata
 }
 
 type Hold {
