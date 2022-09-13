@@ -1,5 +1,5 @@
 # These are non-core graphql types; resolvers are provided by graphql-scalars
-scalar Date
+scalar DateTime
 scalar UUID
 scalar EmailAddress
 
@@ -44,8 +44,8 @@ type User {
   patronGroup: UUID
   department: [UUID]
   personal: Personal
-  enrollmentDate: Date
-  expirationDate: Date
+  enrollmentDate: DateTime
+  expirationDate: DateTime
   metadata: Metadata
   tags: Tags
 }
@@ -58,7 +58,7 @@ type Personal {
   email: EmailAddress
   phone: String
   mobilePhone: String
-  dateOfBirth: Date
+  dateOfBirth: DateTime
   preferredContactTypeId: String
 }
 
@@ -75,10 +75,10 @@ type Address {
 }
 
 type Metadata {
-  createdDate: Date!
+  createdDate: DateTime!
   createdByUserId: UUID
   createdByUsername: String
-  updatedDate: Date
+  updatedDate: DateTime
   updatedByUserId: UUID
   updatedByUsername: String
 }
@@ -100,7 +100,7 @@ type RequestItem {
 type Charge {
   item: RequestItem
   chargeAmount: ChargeAmount
-  accrualDate: Date
+  accrualDate: DateTime
   description: String
   state: String
   reason: String
@@ -114,8 +114,8 @@ type ChargeAmount {
 
 type Hold {
   item: RequestItem
-  requestDate: Date!
-  expirationDate: Date
+  requestDate: DateTime!
+  expirationDate: DateTime
   status: String
   pickupLocationId: UUID!
   pickupLocation: ServicePoint
@@ -123,7 +123,7 @@ type Hold {
   cancellationReasonId: UUID
   canceledByUserId: UUID
   cancellationAdditionalInformation: String
-  canceledDate: String
+  canceledDate: DateTime
   patronComments: String
 }
 
@@ -139,8 +139,8 @@ type ServicePoint {
 
 type Loan {
   item: RequestItem!
-  loanDate: Date!
-  dueDate: Date!
+  loanDate: DateTime!
+  dueDate: DateTime!
   overdue: Boolean!
 }
 
