@@ -49,6 +49,7 @@ export type Charge = {
   accrualDate?: Maybe<Scalars['DateTime']>;
   chargeAmount?: Maybe<ChargeAmount>;
   description?: Maybe<Scalars['String']>;
+  feeFine?: Maybe<FeeFine>;
   feeFineId?: Maybe<Scalars['UUID']>;
   item?: Maybe<RequestItem>;
   reason?: Maybe<Scalars['String']>;
@@ -127,10 +128,22 @@ export type ElectronicAccess = {
   uri: Scalars['String'];
 };
 
+export type FeeFine = {
+  __typename?: 'FeeFine';
+  actionNoticeId?: Maybe<Scalars['UUID']>;
+  automatic: Scalars['Boolean'];
+  chargeNoticeId?: Maybe<Scalars['UUID']>;
+  defaultAmount?: Maybe<Scalars['Float']>;
+  feeFineType: Scalars['String'];
+  id?: Maybe<Scalars['UUID']>;
+  metadata?: Maybe<Metadata>;
+  ownerId?: Maybe<Scalars['UUID']>;
+};
+
 export type Hold = {
   __typename?: 'Hold';
   canceledByUserId?: Maybe<Scalars['UUID']>;
-  canceledDate?: Maybe<Scalars['String']>;
+  canceledDate?: Maybe<Scalars['DateTime']>;
   cancellationAdditionalInformation?: Maybe<Scalars['String']>;
   cancellationReasonId?: Maybe<Scalars['UUID']>;
   expirationDate?: Maybe<Scalars['DateTime']>;
