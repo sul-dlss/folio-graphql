@@ -29,6 +29,21 @@ const resolvers = {
     },
     instance(parent, args, context, info) {
       return instances.getInstance(args.id)
+    },
+    instances(parent, args, context, info) {
+      return instances.getInstances(args)
+    },
+    holdingsRecord(parent, args, context, info) {
+      return holdings.getHoldingsRecord(args.id)
+    },
+    holdingsRecords(parent, args, context, info) {
+      return holdings.getHoldingsRecords(args)
+    },
+    item(parent, args, context, info) {
+      return items.getItem(args.id)
+    },
+    items(parent, args, context, info) {
+      return items.getItems(args)
     }
   },
   Patron: {
@@ -51,15 +66,15 @@ const resolvers = {
   },
   Instance: {
     holdingsRecords(parent, args, context, info) {
-      return holdings.getByInstanceId(parent.id)
+      return holdings.getByInstanceId(parent.id, args)
     },
     items(parent, args, context, info) {
-      return items.getByInstanceId(parent.id)
+      return items.getByInstanceId(parent.id, args)
     }
   },
   HoldingsRecord: {
     items(parent, args, context, info) {
-      return items.getByHoldingsRecordId(parent.id)
+      return items.getByHoldingsRecordId(parent.id, args)
     },
     instance(parent, args, context, info) {
       return instances.getInstance(parent.instanceId)

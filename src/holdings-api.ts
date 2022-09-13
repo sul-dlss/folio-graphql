@@ -1,14 +1,19 @@
 import FolioAPI from "./folio-api.js"
-import { HoldingsRecord } from './schema'
+import { CqlParams, HoldingsRecord } from './schema'
 
 export default class HoldingsAPI extends FolioAPI {
   async getHoldingsRecord(id: string): Promise<HoldingsRecord> {
     return await this.get<HoldingsRecord>(`/holdings-storage/holdings/${encodeURIComponent(id)}`)
   }
 
-  async getByInstanceId(instanceId: string): Promise<HoldingsRecord[]> {
-    var holdingsRecord = await this.get<HoldingsRecord>(`/holdings-storage/holdings?query=instanceId==${encodeURIComponent(instanceId)}`)
+  async getByInstanceId(instanceId: string, params: Partial<{ params: CqlParams, [key: string]: Object | Object[] | undefined }>): Promise<HoldingsRecord[]> {
+    return await this.getHoldingsRecords({ ...params, instanceId: [instanceId] })
+  }
 
-    return holdingsRecord['holdingsRecords']
+  async getHoldingsRecords(params: Partial<{ params: CqlParams, [key: string]: Object | Object[] | undefined }>): Promise<HoldingsRecord[]> {
+    let urlParams = this.buildCqlQuery(params)
+
+    let response = await this.get<HoldingsRecord[]>(`/holdings-storage/holdings`, { params: urlParams })
+    return response['holdingsRecords']
   }
 }

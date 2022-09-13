@@ -103,6 +103,13 @@ export type Contributor = {
   primary?: Maybe<Scalars['Boolean']>;
 };
 
+export type CqlParams = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  query?: InputMaybe<Scalars['String']>;
+  sortby?: InputMaybe<Scalars['String']>;
+};
+
 export type EffectiveCallNumberComponents = {
   __typename?: 'EffectiveCallNumberComponents';
   callNumber?: Maybe<Scalars['String']>;
@@ -185,6 +192,11 @@ export type HoldingsRecord = {
   temporaryLocationId?: Maybe<Scalars['UUID']>;
 };
 
+
+export type HoldingsRecordItemsArgs = {
+  params?: InputMaybe<CqlParams>;
+};
+
 export type HoldingsStatement = {
   __typename?: 'HoldingsStatement';
   note?: Maybe<Scalars['String']>;
@@ -239,6 +251,16 @@ export type Instance = {
   subjects?: Maybe<Array<Maybe<Scalars['String']>>>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   title?: Maybe<Scalars['String']>;
+};
+
+
+export type InstanceHoldingsRecordsArgs = {
+  params?: InputMaybe<CqlParams>;
+};
+
+
+export type InstanceItemsArgs = {
+  params?: InputMaybe<CqlParams>;
 };
 
 export type InstanceNote = {
@@ -420,13 +442,49 @@ export type PublicationPeriod = {
 
 export type Query = {
   __typename?: 'Query';
+  holdingsRecord?: Maybe<HoldingsRecord>;
+  holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
   instance?: Maybe<Instance>;
+  instances?: Maybe<Array<Maybe<Instance>>>;
+  item?: Maybe<Item>;
+  items?: Maybe<Array<Maybe<Item>>>;
   patron?: Maybe<Patron>;
+};
+
+
+export type QueryHoldingsRecordArgs = {
+  id: Scalars['UUID'];
+};
+
+
+export type QueryHoldingsRecordsArgs = {
+  hrid?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  params?: InputMaybe<CqlParams>;
 };
 
 
 export type QueryInstanceArgs = {
   id: Scalars['UUID'];
+};
+
+
+export type QueryInstancesArgs = {
+  hrid?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  params?: InputMaybe<CqlParams>;
+};
+
+
+export type QueryItemArgs = {
+  id: Scalars['UUID'];
+};
+
+
+export type QueryItemsArgs = {
+  hrid?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  params?: InputMaybe<CqlParams>;
 };
 
 
