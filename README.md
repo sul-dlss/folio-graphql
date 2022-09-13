@@ -10,7 +10,7 @@ cp config/default.json config/local.json
 ```
 start the server:
 ```sh
-npm start
+npm start:dev
 ```
 to regenerate the typescript typings when changing the graphql schema:
 ```sh

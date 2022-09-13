@@ -7,7 +7,8 @@
   "scripts": {
     "compile": "tsc",
     "postinstall": "npm run compile",
-    "start": "npm run compile && npm run codegen && node ./dist/index.js",
+    "start": "npm run codegen && ts-node-esm src/index.ts",
+    "start:dev": "nodemon",
     "codegen": "gql-gen --config codegen.yml"
   },
   "keywords": [],
@@ -25,6 +26,8 @@
     "@graphql-codegen/typescript": "^2.7.3",
     "@types/config": "^3.3.0",
     "@types/node": "^18.7.14",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
     "typescript": "^4.8.2"
   }
 }
