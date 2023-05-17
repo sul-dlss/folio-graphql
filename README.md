@@ -36,3 +36,14 @@ to regenerate the typescript typings when changing the graphql schema:
 ```sh
 npm run codegen
 ```
+
+## Deploying
+
+Github actions deploys the image to docker hub.  Once that is complete you can push the image to the server:
+
+```sh
+ssh graphql@sul-folio-graphql-test.stanford.edu \
+'docker pull suldlss/folio-graphql:latest && \
+docker rm $(docker stop $(docker ps -a -q --filter="name=folio-graphql")) && \
+docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:latest'
+```
