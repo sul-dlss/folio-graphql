@@ -10,7 +10,7 @@ npm run compile
 ```
 
 ## Configure
-create a local configuration file, and fill in credentials:
+By default the configuration is set to read from environment variables `OKAPI_BASE_URL`, `OKAPI_USERNAME`, and `OKAPI_PASSWORD`, but you can overwrite this config by creating `config/local.json` and setting values you wish to use.
 ```sh
 cp config/default.json config/local.json
 ```
