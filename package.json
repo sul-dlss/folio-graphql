@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "compile": "tsc",
-    "postinstall": "npm run compile",
     "start": "npm run codegen && ts-node-esm src/index.ts",
     "start:dev": "nodemon",
     "codegen": "gql-gen --config codegen.yml"
