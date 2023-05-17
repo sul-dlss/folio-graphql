@@ -2,6 +2,7 @@ version: '3.6'
 services:
   app:
     build: .
+    image: suldlss/folio-graphql:latest
     environment:
       - OKAPI_USERNAME
       - OKAPI_PASSWORD
