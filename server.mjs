@@ -5,20 +5,13 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { resolvers } from './dist/index.js';
 
-// The GraphQL schema
-const typeDefs = `#graphql
-  type Query {
-    hello: String
-  }
-`;
+import { readFileSync } from "fs"
 
-// A map of functions which return data for the schema.
-const resolvers = {
-  Query: {
-    hello: () => 'world',
-  },
-};
+// Read the schema.graphql into utf-8 string so we can pass it to Apollo
+const typeDefs = readFileSync("schema.graphql").toString("utf-8")
+
 
 const app = express();
 const httpServer = http.createServer(app);
