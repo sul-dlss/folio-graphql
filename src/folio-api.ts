@@ -1,5 +1,7 @@
 import config from "config"
 import { RESTDataSource, WillSendRequestOptions } from "@apollo/datasource-rest"
+// KeyValueCache is the type of Apollo server's default cache
+import type { KeyValueCache } from '@apollo/utils.keyvaluecache';
 import { CqlParams } from './schema'
 
 export default class FolioAPI extends RESTDataSource {
@@ -17,20 +19,9 @@ export default class FolioAPI extends RESTDataSource {
   private token: string
   private refreshToken: string
 
-  constructor(options = {}) {
+  constructor(options: { token: string, cache: KeyValueCache }) {
     super(options)
-
-    this.post("authn/login", {
-      body: {
-        username: config.get("folio.username"),
-        password: config.get("folio.password"),
-      }
-    })
-      .then(response => {
-        this.token = response.okapiToken
-        this.refreshToken = response.refreshToken
-      })
-      .catch(console.error)
+    this.token = options.token
   }
 
   buildCqlQuery({ params, ...rest }: Partial<{ params: CqlParams, [key: string]: Object | Object[] | undefined }>): URLSearchParams {
