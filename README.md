@@ -17,7 +17,7 @@ cp config/default.json config/local.json
 
 ## Start the server
 ```sh
-npm server.mjs
+node server.mjs
 ```
 The server will start on http://localhost:4000/
 
