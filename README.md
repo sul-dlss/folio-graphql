@@ -26,7 +26,7 @@ or using docker:
 docker compose up app
 ```
 
-Clients must provide the headers okapi_username and okapi_password.  The server will use these to authenticate with okapi and retrieve Sr.
+Clients must provide the headers okapi_username and okapi_password.  The server will use these to authenticate with okapi and retrieve data.
 
 ## Developing
 
