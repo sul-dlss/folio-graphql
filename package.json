@@ -5,6 +5,7 @@
   "main": "server.mjs",
   "type": "module",
   "scripts": {
+    "build": "npm run codegen && npm run compile",
     "compile": "tsc",
     "start": "npm run codegen && ts-node-esm src/index.ts",
     "start:dev": "nodemon",
