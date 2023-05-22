@@ -1,6 +1,6 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine } from "./schema.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy } from "./schema.js"
 import TypeAPI from "./type-api.js"
 
 // Resolvers define how to fetch the types defined in your schema.
@@ -36,6 +36,22 @@ export const resolvers = {
   Hold: {
     pickupLocation(parent, args, { dataSources }, info) {
       return dataSources.locations.getLocation(parent.pickupLocationId)
+    }
+  },
+  Loan: {
+    details(parent, args, { dataSources }, info) {
+      return dataSources.circulation.getLoan(parent.id)
+    }
+  },
+  CirculationLoan: {
+    item(parent, args, { dataSources }, info) {
+      return dataSources.items.getItem(parent.itemId)
+    },
+    itemEffectiveLocationAtCheckOut(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.itemEffectiveLocationIdAtCheckOut))
+    },
+    loanPolicy(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getMapFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache }).then(map => map.get(parent.loanPolicyId))
     }
   },
   RequestItem: {
