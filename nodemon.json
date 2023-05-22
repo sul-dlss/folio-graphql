@@ -6,8 +6,9 @@
   ],
   "watch": [
     "src",
-    "schema.graphql"
+    "schema.graphql",
+    "server.mjs"
   ],
   "ext": "ts",
-  "exec": "ts-node-esm ./src/index.ts"
+  "exec": "ts-node-esm ./src/index.ts && node server.mjs"
 }

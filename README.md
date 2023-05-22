@@ -10,21 +10,23 @@ npm run compile
 ```
 
 ## Configure
-By default the configuration is set to read from environment variables `OKAPI_BASE_URL`, `OKAPI_USERNAME`, and `OKAPI_PASSWORD`, but you can overwrite this config by creating `config/local.json` and setting values you wish to use.
+By default the configuration is set to read from environment variables `OKAPI_BASE_URL`, but you can overwrite this config by creating `config/local.json` and setting values you wish to use.
 ```sh
 cp config/default.json config/local.json
 ```
 
 ## Start the server
 ```sh
-npm server.mjs
+node server.mjs
 ```
 The server will start on http://localhost:4000/
 
 or using docker:
 ```
-OKAPI_USERNAME=<user> OKAPI_PASSWORD=<password> docker compose up app
+docker compose up app
 ```
+
+Clients must provide the headers okapi_username and okapi_password.  The server will use these to authenticate with okapi and retrieve data.
 
 ## Developing
 
