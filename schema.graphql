@@ -140,6 +140,7 @@ type FeeFine {
 }
 
 type Hold {
+  requestId: UUID!
   item: RequestItem
   requestDate: DateTime!
   expirationDate: DateTime
@@ -165,6 +166,7 @@ type ServicePoint {
 }
 
 type Loan {
+  id: UUID
   item: RequestItem!
   loanDate: DateTime!
   dueDate: DateTime!
