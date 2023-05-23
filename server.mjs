@@ -82,7 +82,8 @@ const context = async ({ req }) => {
       types: new TypeAPI({ cache, token }),
       feefines: new FeeFinesAPI({ cache, token }),
       circulation: new CirculationAPI({ cache, token }),
-    }
+    },
+    typeCache: new Map()
   }
 }
 
