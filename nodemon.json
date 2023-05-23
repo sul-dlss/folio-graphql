@@ -10,5 +10,5 @@
     "server.mjs"
   ],
   "ext": "ts",
-  "exec": "ts-node-esm ./src/index.ts && node server.mjs"
+  "exec": "npm run codegen && npm run compile && node server.mjs"
 }
