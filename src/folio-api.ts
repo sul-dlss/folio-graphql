@@ -24,7 +24,7 @@ export default class FolioAPI extends RESTDataSource {
     this.token = options.token
   }
 
-  buildCqlQuery({ params, ...rest }: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): URLSearchParams {
+  buildCqlQuery({ params, ...rest }: Partial<{ params: CqlParams, [key: string]: unknown}>): URLSearchParams {
     const urlParams = new URLSearchParams()
     let cqlQuery = ""
 
