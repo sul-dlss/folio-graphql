@@ -54,6 +54,11 @@ export const resolvers = {
       return dataSources.types.getMapFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache }).then(map => map.get(parent.loanPolicyId))
     }
   },
+  LoansPolicy: {
+    fixedDueDateSchedule(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getMapFor<LoanPolicy>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
+    }
+  },
   RequestItem: {
     instance(parent, args, { dataSources }, info) {
       return dataSources.instances.getInstance(parent.instanceId)

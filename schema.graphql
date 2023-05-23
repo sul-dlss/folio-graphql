@@ -212,6 +212,20 @@ type LoansPolicy {
   profileId: String
   period: Period
   fixedDueDateScheduleId: UUID
+  fixedDueDateSchedule: FixedDueDateSchedule
+}
+
+type FixedDueDateSchedule {
+  id: UUID!
+  name: String!
+  description: String
+  schedules: [Schedule]
+}
+
+type Schedule {
+  from: DateTime!
+  to: DateTime!
+  due: DateTime!
 }
 
 type Period {

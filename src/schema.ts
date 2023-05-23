@@ -172,6 +172,14 @@ export type FeeFine = {
   ownerId?: Maybe<Scalars['UUID']>;
 };
 
+export type FixedDueDateSchedule = {
+  __typename?: 'FixedDueDateSchedule';
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['UUID'];
+  name: Scalars['String'];
+  schedules?: Maybe<Array<Maybe<Schedule>>>;
+};
+
 export type Hold = {
   __typename?: 'Hold';
   canceledByUserId?: Maybe<Scalars['UUID']>;
@@ -415,6 +423,7 @@ export type LoanPolicy = {
 
 export type LoansPolicy = {
   __typename?: 'LoansPolicy';
+  fixedDueDateSchedule?: Maybe<FixedDueDateSchedule>;
   fixedDueDateScheduleId?: Maybe<Scalars['UUID']>;
   period?: Maybe<Period>;
   profileId?: Maybe<Scalars['String']>;
@@ -593,6 +602,13 @@ export type RequestItem = {
   item?: Maybe<Item>;
   itemId?: Maybe<Scalars['UUID']>;
   title?: Maybe<Scalars['String']>;
+};
+
+export type Schedule = {
+  __typename?: 'Schedule';
+  due: Scalars['DateTime'];
+  from: Scalars['DateTime'];
+  to: Scalars['DateTime'];
 };
 
 export type ServicePoint = {
