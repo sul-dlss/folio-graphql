@@ -390,6 +390,7 @@ export type Library = {
   campusId: Scalars['String'];
   code: Scalars['String'];
   id?: Maybe<Scalars['String']>;
+  locations?: Maybe<Array<Maybe<Location>>>;
   metadata?: Maybe<Metadata>;
   name: Scalars['String'];
 };
@@ -518,6 +519,8 @@ export type Query = {
   instances?: Maybe<Array<Maybe<Instance>>>;
   item?: Maybe<Item>;
   items?: Maybe<Array<Maybe<Item>>>;
+  libraries?: Maybe<Array<Maybe<Library>>>;
+  loanPolicies?: Maybe<Array<Maybe<LoanPolicy>>>;
   patron?: Maybe<Patron>;
 };
 
@@ -554,6 +557,16 @@ export type QueryItemArgs = {
 export type QueryItemsArgs = {
   hrid?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   id?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  params?: InputMaybe<CqlParams>;
+};
+
+
+export type QueryLibrariesArgs = {
+  params?: InputMaybe<CqlParams>;
+};
+
+
+export type QueryLoanPoliciesArgs = {
   params?: InputMaybe<CqlParams>;
 };
 

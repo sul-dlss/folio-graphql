@@ -26,6 +26,12 @@ export const resolvers = {
     },
     items(parent, args, { dataSources }, info) {
       return dataSources.items.getItems(args)
+    },
+    loanPolicies(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache })
+    },
+    libraries(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
     }
   },
   Patron: {
@@ -134,7 +140,10 @@ export const resolvers = {
   Library: {
     campus(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
       return dataSources.types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache }).then(map => map.get(parent.campusId))
-    }
+    },
+    locations(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache }).then(values => values.filter(v => v.libraryId == parent.id))
+    },
   },
   Charge: {
     feeFine(parent, args, { dataSources }, info) {

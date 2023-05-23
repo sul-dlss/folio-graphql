@@ -35,6 +35,9 @@ type Query {
 
   item(id: UUID!): Item
   items(id: [String], hrid: [String], params: CqlParams): [Item]
+
+  loanPolicies(params: CqlParams): [LoanPolicy]
+  libraries(params: CqlParams): [Library]
 }
 
 type Patron {
@@ -536,5 +539,6 @@ type Library {
   code: String!
   campusId: String!
   campus: Campus
+  locations: [Location]
   metadata: Metadata
 }
