@@ -24,7 +24,7 @@ export default class FolioAPI extends RESTDataSource {
     this.token = options.token
   }
 
-  buildCqlQuery({ params, ...rest }: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): URLSearchParams {
+  buildCqlQuery({ params, ...rest }: Partial<{ params: CqlParams, [key: string]: object | object[] | string | undefined }>): URLSearchParams {
     const urlParams = new URLSearchParams()
     let cqlQuery = ""
 
@@ -34,7 +34,7 @@ export default class FolioAPI extends RESTDataSource {
       }
 
       if (Array.isArray(value)) {
-        cqlQuery += `(${value.map((v: string) => `${key}==${v}`).join(" OR ")} )`
+        cqlQuery += `(${(value as string[]).map((v: string) => `${key}==${v}`).join(" OR ")} )`
       } else {
         cqlQuery += `${key}=="${value}"`
       }
