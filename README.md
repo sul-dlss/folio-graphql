@@ -32,7 +32,7 @@ Clients must provide the headers okapi_username and okapi_password.  The server 
 
 start the server:
 ```sh
-npm start:dev
+npm run start:dev
 ```
 to regenerate the typescript typings when changing the graphql schema:
 ```sh

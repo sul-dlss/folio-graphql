@@ -3,6 +3,7 @@ import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy } from "./schema.js"
 import TypeAPI from "./type-api.js"
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // Resolvers define how to fetch the types defined in your schema.
 export const resolvers = {
   Query: {
