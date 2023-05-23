@@ -10,7 +10,8 @@
     "start": "npm run codegen && ts-node-esm src/index.ts",
     "start:dev": "nodemon",
     "codegen": "gql-gen --config codegen.yml",
-    "lint": "eslint src -c .eslintrc.yml"
+    "lint": "eslint src -c .eslintrc.yml",
+    "test": ""
   },
   "keywords": [],
   "author": "",
