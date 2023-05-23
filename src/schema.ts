@@ -69,6 +69,38 @@ export type CheckIn = {
   staffMemberId?: Maybe<Scalars['UUID']>;
 };
 
+export type CirculationLoan = {
+  __typename?: 'CirculationLoan';
+  action: Scalars['String'];
+  actionComment?: Maybe<Scalars['String']>;
+  declaredLostDate?: Maybe<Scalars['DateTime']>;
+  dueDate?: Maybe<Scalars['DateTime']>;
+  dueDateChangedByHold?: Maybe<Scalars['Boolean']>;
+  dueDateChangedByRecall?: Maybe<Scalars['Boolean']>;
+  feesAndFines?: Maybe<CirculationLoanFeesAndFines>;
+  id: Scalars['UUID'];
+  item?: Maybe<Item>;
+  itemEffectiveLocationAtCheckOut?: Maybe<Location>;
+  itemEffectiveLocationIdAtCheckOut?: Maybe<Scalars['UUID']>;
+  itemId?: Maybe<Scalars['UUID']>;
+  loanDate: Scalars['DateTime'];
+  loanPolicy?: Maybe<LoanPolicy>;
+  loanPolicyId?: Maybe<Scalars['UUID']>;
+  lostItemPolicyId?: Maybe<Scalars['UUID']>;
+  overdueFinePolicyId?: Maybe<Scalars['UUID']>;
+  proxyUserId?: Maybe<Scalars['UUID']>;
+  renewalCount?: Maybe<Scalars['Int']>;
+  returnDate?: Maybe<Scalars['DateTime']>;
+  status?: Maybe<Scalars['String']>;
+  systemReturnDate?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['UUID']>;
+};
+
+export type CirculationLoanFeesAndFines = {
+  __typename?: 'CirculationLoanFeesAndFines';
+  amountRemainingToPay?: Maybe<Scalars['Int']>;
+};
+
 export type CirculationNote = {
   __typename?: 'CirculationNote';
   date?: Maybe<Scalars['String']>;
@@ -153,6 +185,7 @@ export type Hold = {
   pickupLocationId: Scalars['UUID'];
   queuePosition?: Maybe<Scalars['Int']>;
   requestDate: Scalars['DateTime'];
+  requestId: Scalars['UUID'];
   status?: Maybe<Scalars['String']>;
 };
 
@@ -363,10 +396,28 @@ export type Library = {
 
 export type Loan = {
   __typename?: 'Loan';
+  details: CirculationLoan;
   dueDate: Scalars['DateTime'];
+  id?: Maybe<Scalars['UUID']>;
   item: RequestItem;
   loanDate: Scalars['DateTime'];
   overdue: Scalars['Boolean'];
+};
+
+export type LoanPolicy = {
+  __typename?: 'LoanPolicy';
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['UUID'];
+  loansPolicy?: Maybe<LoansPolicy>;
+  name?: Maybe<Scalars['String']>;
+  renewalsPolicy?: Maybe<RenewalsPolicy>;
+};
+
+export type LoansPolicy = {
+  __typename?: 'LoansPolicy';
+  fixedDueDateScheduleId?: Maybe<Scalars['UUID']>;
+  period?: Maybe<Period>;
+  profileId?: Maybe<Scalars['String']>;
 };
 
 export type Location = {
@@ -425,6 +476,12 @@ export enum PatronStatus {
   Blocked = 'BLOCKED',
   Ok = 'OK'
 }
+
+export type Period = {
+  __typename?: 'Period';
+  duration: Scalars['Int'];
+  intervalId: Scalars['String'];
+};
 
 export type Personal = {
   __typename?: 'Personal';
@@ -516,6 +573,15 @@ export type ReceivingHistoryEntry = {
   chronology?: Maybe<Scalars['String']>;
   enumeration?: Maybe<Scalars['String']>;
   publicDisplay?: Maybe<Scalars['Boolean']>;
+};
+
+export type RenewalsPolicy = {
+  __typename?: 'RenewalsPolicy';
+  numberAllowed?: Maybe<Scalars['Int']>;
+  period?: Maybe<Period>;
+  renewFromId?: Maybe<Scalars['String']>;
+  renewable?: Maybe<Scalars['Boolean']>;
+  unlimited?: Maybe<Scalars['Boolean']>;
 };
 
 export type RequestItem = {

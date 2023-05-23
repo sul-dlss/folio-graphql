@@ -20,6 +20,7 @@ import HoldingsAPI from "./dist/holdings-api.js"
 import TypeAPI from "./dist/type-api.js"
 import FeeFinesAPI from "./dist/feefines-api.js"
 import FolioAPI from "./dist/folio-api.js"
+import CirculationAPI from "./dist/circulation-api.js"
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
 const typeDefs = readFileSync("schema.graphql").toString("utf-8")
@@ -79,8 +80,10 @@ const context = async ({ req }) => {
       items: new ItemsAPI({ cache, token }),
       holdings: new HoldingsAPI({ cache, token }),
       types: new TypeAPI({ cache, token }),
-      feefines: new FeeFinesAPI({ cache, token })
-    }
+      feefines: new FeeFinesAPI({ cache, token }),
+      circulation: new CirculationAPI({ cache, token }),
+    },
+    typeCache: new Map()
   }
 }
 

@@ -171,6 +171,64 @@ type Loan {
   loanDate: DateTime!
   dueDate: DateTime!
   overdue: Boolean!
+  details: CirculationLoan!
+}
+
+type CirculationLoan {
+  id: UUID!
+  userId: UUID
+  proxyUserId: UUID
+  itemId: UUID
+  item: Item
+  loanPolicyId: UUID
+  loanPolicy: LoanPolicy
+  overdueFinePolicyId: UUID
+  lostItemPolicyId: UUID
+  itemEffectiveLocationIdAtCheckOut: UUID
+  itemEffectiveLocationAtCheckOut: Location
+  status: String
+  loanDate: DateTime!
+  dueDate: DateTime
+  returnDate: DateTime
+  systemReturnDate: DateTime
+  action: String!
+  actionComment: String
+  renewalCount: Int
+  dueDateChangedByRecall: Boolean
+  dueDateChangedByHold: Boolean
+  feesAndFines: CirculationLoanFeesAndFines
+  declaredLostDate: DateTime
+}
+
+type LoanPolicy {
+  id: UUID!
+  name: String
+  description: String
+  loansPolicy: LoansPolicy
+  renewalsPolicy: RenewalsPolicy
+}
+
+type LoansPolicy {
+  profileId: String
+  period: Period
+  fixedDueDateScheduleId: UUID
+}
+
+type Period {
+  duration: Int!
+  intervalId: String!
+}
+
+type RenewalsPolicy {
+  unlimited: Boolean
+  numberAllowed: Int
+  renewable: Boolean
+  renewFromId: String
+  period: Period
+}
+
+type CirculationLoanFeesAndFines {
+  amountRemainingToPay: Int
 }
 
 type Instance {
