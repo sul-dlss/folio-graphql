@@ -13,7 +13,7 @@ export default class ItemsAPI extends FolioAPI {
     return await this.getItems({ ...params, 'holdingsRecords.instanceId': instanceId })
   }
 
-  async getItems(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<Item[]> {
+  async getItems(params: Partial<{ params: CqlParams, [key: string]: unknown}>): Promise<Item[]> {
     const urlParams = this.buildCqlQuery(params)
 
     const response = await this.get<Item[]>(`/item-storage/items`, { params: urlParams })
