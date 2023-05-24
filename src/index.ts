@@ -1,6 +1,6 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy } from "./schema.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy } from "./schema.js"
 import TypeAPI from "./type-api.js"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
