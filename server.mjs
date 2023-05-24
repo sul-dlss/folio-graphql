@@ -21,6 +21,7 @@ import TypeAPI from "./dist/type-api.js"
 import FeeFinesAPI from "./dist/feefines-api.js"
 import FolioAPI from "./dist/folio-api.js"
 import CirculationAPI from "./dist/circulation-api.js"
+import OkapiAPI from "./dist/okapi-api.js"
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
 const typeDefs = readFileSync("schema.graphql").toString("utf-8")
@@ -95,6 +96,9 @@ const server = new ApolloServer({
 });
 await server.start();
 
+app.get('/status', async (req, res) => {
+  await new OkapiAPI().get('/_/version').then(_response => res.status(200).send('OK')).catch(error => res.status(500).send(error))
+});
 app.use(Honeybadger.requestHandler) // Use *before* all other app middleware.
 app.use(
   cors(),
@@ -104,4 +108,6 @@ app.use(
 app.use(Honeybadger.errorHandler) // Use *after* all other app middleware
 
 await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+
+
 console.log(`🚀 Server ready at http://localhost:4000`);
