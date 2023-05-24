@@ -1,7 +1,5 @@
 {
   "folio": {
-    "baseUrl": "OKAPI_BASE_URL",
-    "username": "OKAPI_USERNAME",
-    "password": "OKAPI_PASSWORD"
+    "baseUrl": "OKAPI_BASE_URL"
   }
 }
