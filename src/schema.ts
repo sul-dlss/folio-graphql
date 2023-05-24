@@ -474,6 +474,14 @@ export type Patron = {
   user?: Maybe<User>;
 };
 
+export type PatronGroup = {
+  __typename?: 'PatronGroup';
+  desc?: Maybe<Scalars['String']>;
+  expirationOffsetInDays?: Maybe<Scalars['Int']>;
+  group: Scalars['String'];
+  id?: Maybe<Scalars['UUID']>;
+};
+
 export enum PatronStanding {
   Barred = 'BARRED',
   Blocked = 'BLOCKED',
@@ -667,7 +675,8 @@ export type User = {
   externalSystemId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['UUID']>;
   metadata?: Maybe<Metadata>;
-  patronGroup?: Maybe<Scalars['UUID']>;
+  patronGroup?: Maybe<PatronGroup>;
+  patronGroupId?: Maybe<Scalars['UUID']>;
   personal?: Maybe<Personal>;
   tags?: Maybe<Tags>;
   type?: Maybe<Scalars['String']>;

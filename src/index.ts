@@ -1,6 +1,6 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy } from "./schema.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy, PatronGroup } from "./schema.js"
 import TypeAPI from "./type-api.js"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -39,6 +39,14 @@ export const resolvers = {
     user(parent, args, { dataSources }, info) {
       return dataSources.users.getUser(parent.id)
     },
+  },
+  User: {
+    patronGroupId(parent, args, { dataSources }, info) {
+      return parent.patronGroup;
+    },
+    patronGroup(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroup));
+    }
   },
   Hold: {
     pickupLocation(parent, args, { dataSources }, info) {

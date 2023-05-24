@@ -59,13 +59,21 @@ type User {
   barcode: String
   active: Boolean
   type: String
-  patronGroup: UUID
+  patronGroupId: UUID
+  patronGroup: PatronGroup
   department: [UUID]
   personal: Personal
   enrollmentDate: DateTime
   expirationDate: DateTime
   metadata: Metadata
   tags: Tags
+}
+
+type PatronGroup {
+  group: String!
+  desc: String
+  id: UUID
+  expirationOffsetInDays: Int
 }
 
 type Personal {
