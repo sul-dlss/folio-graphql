@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { User, Block, CqlParams, ManualBlock, Account } from './schema'
+import { User, Block, CqlParams, ManualBlock, Account, ProxyFor } from './schema'
 
 export default class UsersAPI extends FolioAPI {
   async getUser(id: string): Promise<User> {
@@ -24,5 +24,20 @@ export default class UsersAPI extends FolioAPI {
     const blocks = await this.get<Account[]>(`/accounts`, { params: urlParams })
 
     return blocks['accounts']
+  }
+
+  async getProxiesFor(id: string): Promise<ProxyFor[]> {
+    return this.getProxyFor({ 'proxyUserId': [id] })
+  }
+
+  async getProxiesOf(id: string): Promise<ProxyFor[]> {
+    return this.getProxyFor({ 'userId': [id] })
+  }
+
+  async getProxyFor(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ProxyFor[]> {
+    const urlParams = this.buildCqlQuery(params)
+
+    const response = await this.get<ProxyFor[]>(`/proxiesfor`, { params: urlParams })
+    return response['proxiesFor']
   }
 }
