@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { User, Block, CqlParams, ManualBlock } from './schema'
+import { User, Block, CqlParams, ManualBlock, Account } from './schema'
 
 export default class UsersAPI extends FolioAPI {
   async getUser(id: string): Promise<User> {
@@ -17,5 +17,12 @@ export default class UsersAPI extends FolioAPI {
     const blocks = await this.get<ManualBlock[]>(`/manualblocks`, { params: urlParams })
 
     return blocks['manualblocks']
+  }
+
+  async getAccounts(userId: string): Promise<any> {
+    const urlParams = this.buildCqlQuery({ userId: userId })
+    const blocks = await this.get<Account[]>(`/accounts`, { params: urlParams })
+
+    return blocks['accounts']
   }
 }

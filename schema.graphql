@@ -55,6 +55,7 @@ type Patron {
   loans: [Loan]!
   blocks: [Block]
   manualBlocks: [ManualBlock]
+  accounts: [Account]
 }
 
 type User {
@@ -74,6 +75,7 @@ type User {
   tags: Tags
   blocks: [Block]
   manualBlocks: [ManualBlock]
+  accounts: [Account]
 }
 
 type Block {
@@ -182,6 +184,47 @@ type Charge {
 type ChargeAmount {
   amount: Float!
   isoCurrencyCode: String!
+}
+
+type Account {
+  amount: Float!
+  remaining: Float!
+  dateCreated: DateTime
+  dateUpdated: DateTime
+  status: Status
+  paymentStatus: Status!
+  feeFineType: String
+  feeFineOwner: String
+  title: String
+  callNumber: String
+  barcode: String
+  materialType: String
+  itemStatus: Status
+  location: String
+  dueDate: DateTime
+  returnedDate: DateTime
+  loanId: UUID
+  userId: UUID!
+  itemId: UUID
+  materialTypeId: UUID
+  feeFineId: UUID!
+  ownerId: UUID!
+  id: UUID
+  holdingsRecordId: UUID
+  instanceId: UUID
+  loanPolicyId: UUID
+  overdueFinePolicyId: UUID
+  lostItemFeePolicyId: UUID
+  processId: UUID
+
+  user: User
+  loan: CirculationLoan
+  item: Item
+  feeFine: FeeFine
+}
+
+type Status {
+  name: String!
 }
 
 type FeeFine {
