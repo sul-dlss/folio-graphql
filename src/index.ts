@@ -44,6 +44,9 @@ export const resolvers = {
     },
     blocks(parent, args, { dataSources }, info) {
       return dataSources.users.getBlocks(parent.id)
+    },
+    manualBlocks(parent, args, { dataSources }, info) {
+      return dataSources.users.getManualBlocks(parent.id)
     }
   },
   User: {
@@ -55,6 +58,9 @@ export const resolvers = {
     },
     blocks(parent, args, { dataSources }, info) {
       return dataSources.users.getBlocks(parent.id)
+    },
+    manualBlocks(parent, args, { dataSources }, info) {
+      return dataSources.users.getManualBlocks(parent.id)
     }
   },
   Hold: {

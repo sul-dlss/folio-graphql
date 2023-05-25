@@ -52,6 +52,7 @@ type Patron {
   holds: [Hold]!
   loans: [Loan]!
   blocks: [Block]
+  manualBlocks: [ManualBlock]
 }
 
 type User {
@@ -70,6 +71,7 @@ type User {
   metadata: Metadata
   tags: Tags
   blocks: [Block]
+  manualBlocks: [ManualBlock]
 }
 
 type Block {
@@ -78,6 +80,17 @@ type Block {
   blockRenewals: Boolean
   blockRequests: Boolean
   message: String
+}
+
+type ManualBlock {
+  id: UUID
+  type: String
+  desc: String!
+  patronMessage: String
+  expirationDate: DateTime
+  borrowing: Boolean
+  renewals: Boolean
+  requests: Boolean
 }
 
 type PatronGroup {
