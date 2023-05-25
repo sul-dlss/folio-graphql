@@ -596,6 +596,20 @@ export type Personal = {
   preferredFirstName?: Maybe<Scalars['String']>;
 };
 
+export type ProxyFor = {
+  __typename?: 'ProxyFor';
+  accrueTo?: Maybe<Scalars['String']>;
+  expirationDate?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['String']>;
+  notificationsTo?: Maybe<Scalars['String']>;
+  proxyUser?: Maybe<User>;
+  proxyUserId?: Maybe<Scalars['String']>;
+  requestforSponsor?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['String']>;
+};
+
 export type Publication = {
   __typename?: 'Publication';
   dateOfPublication?: Maybe<Scalars['String']>;
@@ -778,6 +792,8 @@ export type User = {
   patronGroup?: Maybe<PatronGroup>;
   patronGroupId?: Maybe<Scalars['UUID']>;
   personal?: Maybe<Personal>;
+  proxies?: Maybe<Array<Maybe<ProxyFor>>>;
+  proxyFor?: Maybe<Array<Maybe<ProxyFor>>>;
   tags?: Maybe<Tags>;
   type?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;

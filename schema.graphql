@@ -71,6 +71,8 @@ type User {
   personal: Personal
   enrollmentDate: DateTime
   expirationDate: DateTime
+  proxyFor: [ProxyFor]
+  proxies: [ProxyFor]
   metadata: Metadata
   tags: Tags
   blocks: [Block]
@@ -158,6 +160,19 @@ type Metadata {
 
 type Tags {
   tagList: [String]
+}
+
+type ProxyFor {
+  user: User
+  userId: String
+  proxyUser: User
+  proxyUserId: String
+  id: String
+  requestforSponsor: String
+  notificationsTo: String
+  accrueTo: String
+  status: String
+  expirationDate: DateTime
 }
 
 type RequestItem {

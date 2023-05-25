@@ -70,6 +70,12 @@ export const resolvers = {
     },
     accounts(parent, args, { dataSources }, info) {
       return dataSources.users.getAccounts(parent.id)
+    },
+    proxyFor(parent, args, { dataSources }, info) {
+      return dataSources.users.getProxiesFor(parent.id)
+    },
+    proxies(parent, args, { dataSources }, info) {
+      return dataSources.users.getProxiesOf(parent.id)
     }
   },
   PatronGroup: {
@@ -80,6 +86,14 @@ export const resolvers = {
   BlockLimit: {
     condition(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
       return dataSources.types.getMapFor<BlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
+    }
+  },
+  ProxyFor: {
+    user(parent, args, { dataSources }, info) {
+      return dataSources.users.getUser(parent.userId)
+    },
+    proxyUser(parent, args, { dataSources }, info) {
+      return dataSources.users.getUser(parent.proxyUserId)
     }
   },
   Hold: {
