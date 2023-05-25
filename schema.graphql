@@ -39,6 +39,8 @@ type Query {
   loanPolicies(params: CqlParams): [LoanPolicy]
   requestPolicies(params: CqlParams): [RequestPolicy]
   libraries(params: CqlParams): [Library]
+
+  patronGroups: [PatronGroup]
 }
 
 type Patron {
@@ -98,6 +100,25 @@ type PatronGroup {
   desc: String
   id: UUID
   expirationOffsetInDays: Int
+  limits: [BlockLimit]
+}
+
+type BlockLimit {
+  id: UUID
+  patronGroupId: UUID
+  conditionId: UUID
+  condition: BlockCondition
+  value: Float
+}
+
+type BlockCondition {
+  id: UUID
+  name: String
+  blockBorrowing: Boolean
+  blockRenewals: Boolean
+  blockRequests: Boolean
+  valueType: String
+  message: String
 }
 
 type Personal {

@@ -43,6 +43,26 @@ export type Block = {
   patronBlockConditionId?: Maybe<Scalars['UUID']>;
 };
 
+export type BlockCondition = {
+  __typename?: 'BlockCondition';
+  blockBorrowing?: Maybe<Scalars['Boolean']>;
+  blockRenewals?: Maybe<Scalars['Boolean']>;
+  blockRequests?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['UUID']>;
+  message?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  valueType?: Maybe<Scalars['String']>;
+};
+
+export type BlockLimit = {
+  __typename?: 'BlockLimit';
+  condition?: Maybe<BlockCondition>;
+  conditionId?: Maybe<Scalars['UUID']>;
+  id?: Maybe<Scalars['UUID']>;
+  patronGroupId?: Maybe<Scalars['UUID']>;
+  value?: Maybe<Scalars['Float']>;
+};
+
 export type Campus = {
   __typename?: 'Campus';
   code: Scalars['String'];
@@ -503,6 +523,7 @@ export type PatronGroup = {
   expirationOffsetInDays?: Maybe<Scalars['Int']>;
   group: Scalars['String'];
   id?: Maybe<Scalars['UUID']>;
+  limits?: Maybe<Array<Maybe<BlockLimit>>>;
 };
 
 export enum PatronStanding {
@@ -562,6 +583,7 @@ export type Query = {
   libraries?: Maybe<Array<Maybe<Library>>>;
   loanPolicies?: Maybe<Array<Maybe<LoanPolicy>>>;
   patron?: Maybe<Patron>;
+  patronGroups?: Maybe<Array<Maybe<PatronGroup>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
 };
 

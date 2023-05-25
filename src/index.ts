@@ -1,6 +1,6 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy, PatronGroup } from "./schema.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy, PatronGroup, BlockLimit, BlockCondition } from "./schema.js"
 import TypeAPI from "./type-api.js"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -36,6 +36,9 @@ export const resolvers = {
     },
     libraries(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
       return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
+    },
+    patronGroups(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getValuesFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache })
     }
   },
   Patron: {
@@ -61,6 +64,16 @@ export const resolvers = {
     },
     manualBlocks(parent, args, { dataSources }, info) {
       return dataSources.users.getManualBlocks(parent.id)
+    }
+  },
+  PatronGroup: {
+    limits(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getValuesFor<BlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
+    }
+  },
+  BlockLimit: {
+    condition(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getMapFor<BlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
     }
   },
   Hold: {
