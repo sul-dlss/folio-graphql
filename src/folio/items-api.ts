@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { CqlParams, Item } from './schema'
+import { CqlParams, Item } from '../schema'
 export default class ItemsAPI extends FolioAPI {
   async getItem(id: string): Promise<Item> {
     return await this.get<Item>(`/item-storage/items/${encodeURIComponent(id)}`)

@@ -5,10 +5,8 @@
     "node_modules"
   ],
   "watch": [
-    "src",
-    "schema.graphql",
-    "server.mjs"
+    "src"
   ],
   "ext": "ts",
-  "exec": "npm run codegen && npm run compile && node server.mjs"
+  "exec": "npm run start"
 }
