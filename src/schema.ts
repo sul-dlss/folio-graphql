@@ -34,6 +34,15 @@ export type AlternativeTitle = {
   alternativeTitleTypeId?: Maybe<Scalars['UUID']>;
 };
 
+export type Block = {
+  __typename?: 'Block';
+  blockBorrowing?: Maybe<Scalars['Boolean']>;
+  blockRenewals?: Maybe<Scalars['Boolean']>;
+  blockRequests?: Maybe<Scalars['Boolean']>;
+  message?: Maybe<Scalars['String']>;
+  patronBlockConditionId?: Maybe<Scalars['UUID']>;
+};
+
 export type Campus = {
   __typename?: 'Campus';
   code: Scalars['String'];
@@ -463,6 +472,7 @@ export type Metadata = {
 
 export type Patron = {
   __typename?: 'Patron';
+  blocks?: Maybe<Array<Maybe<Block>>>;
   charges: Array<Maybe<Charge>>;
   holds: Array<Maybe<Hold>>;
   id?: Maybe<Scalars['UUID']>;
@@ -683,6 +693,7 @@ export type User = {
   __typename?: 'User';
   active?: Maybe<Scalars['Boolean']>;
   barcode?: Maybe<Scalars['String']>;
+  blocks?: Maybe<Array<Maybe<Block>>>;
   department?: Maybe<Array<Maybe<Scalars['UUID']>>>;
   enrollmentDate?: Maybe<Scalars['DateTime']>;
   expirationDate?: Maybe<Scalars['DateTime']>;

@@ -45,12 +45,13 @@ type Patron {
   id: UUID
   user: User
   totalCharges: ChargeAmount!
-  totalChargesCount: Int!,
-  totalLoans: Int!,
-  totalHolds: Int!,
-  charges: [Charge]!,
-  holds: [Hold]!,
+  totalChargesCount: Int!
+  totalLoans: Int!
+  totalHolds: Int!
+  charges: [Charge]!
+  holds: [Hold]!
   loans: [Loan]!
+  blocks: [Block]
 }
 
 type User {
@@ -68,6 +69,15 @@ type User {
   expirationDate: DateTime
   metadata: Metadata
   tags: Tags
+  blocks: [Block]
+}
+
+type Block {
+  patronBlockConditionId: UUID
+  blockBorrowing: Boolean
+  blockRenewals: Boolean
+  blockRequests: Boolean
+  message: String
 }
 
 type PatronGroup {
