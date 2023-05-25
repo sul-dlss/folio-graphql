@@ -42,6 +42,12 @@ export const resolvers = {
     user(parent, args, { dataSources }, info) {
       return dataSources.users.getUser(parent.id)
     },
+    blocks(parent, args, { dataSources }, info) {
+      return dataSources.users.getBlocks(parent.id)
+    },
+    manualBlocks(parent, args, { dataSources }, info) {
+      return dataSources.users.getManualBlocks(parent.id)
+    }
   },
   User: {
     patronGroupId(parent, args, { dataSources }, info) {
@@ -49,6 +55,12 @@ export const resolvers = {
     },
     patronGroup(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
       return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroup));
+    },
+    blocks(parent, args, { dataSources }, info) {
+      return dataSources.users.getBlocks(parent.id)
+    },
+    manualBlocks(parent, args, { dataSources }, info) {
+      return dataSources.users.getManualBlocks(parent.id)
     }
   },
   Hold: {

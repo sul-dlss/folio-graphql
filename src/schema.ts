@@ -34,6 +34,15 @@ export type AlternativeTitle = {
   alternativeTitleTypeId?: Maybe<Scalars['UUID']>;
 };
 
+export type Block = {
+  __typename?: 'Block';
+  blockBorrowing?: Maybe<Scalars['Boolean']>;
+  blockRenewals?: Maybe<Scalars['Boolean']>;
+  blockRequests?: Maybe<Scalars['Boolean']>;
+  message?: Maybe<Scalars['String']>;
+  patronBlockConditionId?: Maybe<Scalars['UUID']>;
+};
+
 export type Campus = {
   __typename?: 'Campus';
   code: Scalars['String'];
@@ -451,6 +460,18 @@ export type Location = {
   servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
 };
 
+export type ManualBlock = {
+  __typename?: 'ManualBlock';
+  borrowing?: Maybe<Scalars['Boolean']>;
+  desc: Scalars['String'];
+  expirationDate?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['UUID']>;
+  patronMessage?: Maybe<Scalars['String']>;
+  renewals?: Maybe<Scalars['Boolean']>;
+  requests?: Maybe<Scalars['Boolean']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type Metadata = {
   __typename?: 'Metadata';
   createdByUserId?: Maybe<Scalars['UUID']>;
@@ -463,10 +484,12 @@ export type Metadata = {
 
 export type Patron = {
   __typename?: 'Patron';
+  blocks?: Maybe<Array<Maybe<Block>>>;
   charges: Array<Maybe<Charge>>;
   holds: Array<Maybe<Hold>>;
   id?: Maybe<Scalars['UUID']>;
   loans: Array<Maybe<Loan>>;
+  manualBlocks?: Maybe<Array<Maybe<ManualBlock>>>;
   totalCharges: ChargeAmount;
   totalChargesCount: Scalars['Int'];
   totalHolds: Scalars['Int'];
@@ -683,11 +706,13 @@ export type User = {
   __typename?: 'User';
   active?: Maybe<Scalars['Boolean']>;
   barcode?: Maybe<Scalars['String']>;
+  blocks?: Maybe<Array<Maybe<Block>>>;
   department?: Maybe<Array<Maybe<Scalars['UUID']>>>;
   enrollmentDate?: Maybe<Scalars['DateTime']>;
   expirationDate?: Maybe<Scalars['DateTime']>;
   externalSystemId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['UUID']>;
+  manualBlocks?: Maybe<Array<Maybe<ManualBlock>>>;
   metadata?: Maybe<Metadata>;
   patronGroup?: Maybe<PatronGroup>;
   patronGroupId?: Maybe<Scalars['UUID']>;
