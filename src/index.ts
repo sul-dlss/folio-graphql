@@ -1,6 +1,6 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, FeeFine, LoanPolicy, PatronGroup, BlockLimit, BlockCondition } from "./schema.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, PatronGroup, BlockLimit, BlockCondition } from "./schema.js"
 import TypeAPI from "./type-api.js"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -50,6 +50,9 @@ export const resolvers = {
     },
     manualBlocks(parent, args, { dataSources }, info) {
       return dataSources.users.getManualBlocks(parent.id)
+    },
+    accounts(parent, args, { dataSources }, info) {
+      return dataSources.users.getAccounts(parent.id)
     }
   },
   User: {
@@ -64,6 +67,9 @@ export const resolvers = {
     },
     manualBlocks(parent, args, { dataSources }, info) {
       return dataSources.users.getManualBlocks(parent.id)
+    },
+    accounts(parent, args, { dataSources }, info) {
+      return dataSources.users.getAccounts(parent.id)
     }
   },
   PatronGroup: {
@@ -191,6 +197,20 @@ export const resolvers = {
     feeFine(parent, args, { dataSources }, info) {
       return dataSources.feefines.getFeeFine(parent.feeFineId)
     }
+  },
+  Account: {
+    user(parent, args, { dataSources }, info) {
+      return dataSources.users.getUser(parent.userId)
+    },
+    loan(parent, args, { dataSources }, info) {
+      return dataSources.circulation.getLoan(parent.id)
+    },
+    item(parent, args, { dataSources }, info) {
+      return dataSources.items.getItem(args.itemId)
+    },
+    feeFine(parent, args, { dataSources }, info) {
+      return dataSources.feefines.getFeeFine(parent.feeFineId)
+    },
   },
   UUID: UUIDResolver,
   EmailAddress: EmailAddressResolver

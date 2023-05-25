@@ -15,6 +15,43 @@ export type Scalars = {
   UUID: any;
 };
 
+export type Account = {
+  __typename?: 'Account';
+  amount: Scalars['Float'];
+  barcode?: Maybe<Scalars['String']>;
+  callNumber?: Maybe<Scalars['String']>;
+  dateCreated?: Maybe<Scalars['DateTime']>;
+  dateUpdated?: Maybe<Scalars['DateTime']>;
+  dueDate?: Maybe<Scalars['DateTime']>;
+  feeFine?: Maybe<FeeFine>;
+  feeFineId: Scalars['UUID'];
+  feeFineOwner?: Maybe<Scalars['String']>;
+  feeFineType?: Maybe<Scalars['String']>;
+  holdingsRecordId?: Maybe<Scalars['UUID']>;
+  id?: Maybe<Scalars['UUID']>;
+  instanceId?: Maybe<Scalars['UUID']>;
+  item?: Maybe<Item>;
+  itemId?: Maybe<Scalars['UUID']>;
+  itemStatus?: Maybe<Status>;
+  loan?: Maybe<CirculationLoan>;
+  loanId?: Maybe<Scalars['UUID']>;
+  loanPolicyId?: Maybe<Scalars['UUID']>;
+  location?: Maybe<Scalars['String']>;
+  lostItemFeePolicyId?: Maybe<Scalars['UUID']>;
+  materialType?: Maybe<Scalars['String']>;
+  materialTypeId?: Maybe<Scalars['UUID']>;
+  overdueFinePolicyId?: Maybe<Scalars['UUID']>;
+  ownerId: Scalars['UUID'];
+  paymentStatus: Status;
+  processId?: Maybe<Scalars['UUID']>;
+  remaining: Scalars['Float'];
+  returnedDate?: Maybe<Scalars['DateTime']>;
+  status?: Maybe<Status>;
+  title?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  userId: Scalars['UUID'];
+};
+
 export type Address = {
   __typename?: 'Address';
   addressLine1?: Maybe<Scalars['String']>;
@@ -504,6 +541,7 @@ export type Metadata = {
 
 export type Patron = {
   __typename?: 'Patron';
+  accounts?: Maybe<Array<Maybe<Account>>>;
   blocks?: Maybe<Array<Maybe<Block>>>;
   charges: Array<Maybe<Charge>>;
   holds: Array<Maybe<Hold>>;
@@ -726,6 +764,7 @@ export type Tags = {
 
 export type User = {
   __typename?: 'User';
+  accounts?: Maybe<Array<Maybe<Account>>>;
   active?: Maybe<Scalars['Boolean']>;
   barcode?: Maybe<Scalars['String']>;
   blocks?: Maybe<Array<Maybe<Block>>>;
