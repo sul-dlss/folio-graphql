@@ -37,6 +37,7 @@ type Query {
   items(id: [String], hrid: [String], params: CqlParams): [Item]
 
   loanPolicies(params: CqlParams): [LoanPolicy]
+  requestPolicies(params: CqlParams): [RequestPolicy]
   libraries(params: CqlParams): [Library]
 }
 
@@ -250,6 +251,13 @@ type RenewalsPolicy {
   renewable: Boolean
   renewFromId: String
   period: Period
+}
+
+type RequestPolicy {
+  id: String
+  name: String!
+  description: String
+  requestTypes: [String]
 }
 
 type CirculationLoanFeesAndFines {

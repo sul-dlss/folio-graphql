@@ -31,6 +31,9 @@ export const resolvers = {
     loanPolicies(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
       return dataSources.types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache })
     },
+    requestPolicies(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+      return dataSources.types.getValuesFor<LoanPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies', cache: typeCache })
+    },
     libraries(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
       return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
     }

@@ -539,6 +539,7 @@ export type Query = {
   libraries?: Maybe<Array<Maybe<Library>>>;
   loanPolicies?: Maybe<Array<Maybe<LoanPolicy>>>;
   patron?: Maybe<Patron>;
+  requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
 };
 
 
@@ -592,6 +593,11 @@ export type QueryPatronArgs = {
   id: Scalars['UUID'];
 };
 
+
+export type QueryRequestPoliciesArgs = {
+  params?: InputMaybe<CqlParams>;
+};
+
 export type ReceivingHistory = {
   __typename?: 'ReceivingHistory';
   displayType?: Maybe<Scalars['String']>;
@@ -623,6 +629,14 @@ export type RequestItem = {
   item?: Maybe<Item>;
   itemId?: Maybe<Scalars['UUID']>;
   title?: Maybe<Scalars['String']>;
+};
+
+export type RequestPolicy = {
+  __typename?: 'RequestPolicy';
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  requestTypes?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type Schedule = {
