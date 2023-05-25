@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { Patron } from './schema'
+import { Patron } from '../schema'
 
 export default class PatronsAPI extends FolioAPI {
   private params = new URLSearchParams({

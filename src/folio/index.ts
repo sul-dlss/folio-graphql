@@ -1,7 +1,7 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, PatronGroup, BlockLimit, BlockCondition } from "./schema.js"
-import TypeAPI from "./type-api.js"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, PatronGroup, BlockLimit, BlockCondition } from "../schema"
+import TypeAPI from "./type-api"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Resolvers define how to fetch the types defined in your schema.

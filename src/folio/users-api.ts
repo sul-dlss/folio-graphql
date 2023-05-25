@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { User, Block, CqlParams, ManualBlock, Account, ProxyFor } from './schema'
+import { User, Block, CqlParams, ManualBlock, Account, ProxyFor } from '../schema'
 
 export default class UsersAPI extends FolioAPI {
   async getUser(id: string): Promise<User> {

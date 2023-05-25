@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { CqlParams, HoldingsRecord } from './schema'
+import { CqlParams, HoldingsRecord } from '../schema'
 
 export default class HoldingsAPI extends FolioAPI {
   async getHoldingsRecord(id: string): Promise<HoldingsRecord> {

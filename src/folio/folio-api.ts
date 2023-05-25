@@ -2,7 +2,7 @@ import config from "config"
 import { RESTDataSource, WillSendRequestOptions } from "@apollo/datasource-rest"
 // KeyValueCache is the type of Apollo server's default cache
 import type { KeyValueCache } from '@apollo/utils.keyvaluecache';
-import { CqlParams } from './schema'
+import { CqlParams } from '../schema'
 
 export default class FolioAPI extends RESTDataSource {
   override baseURL = config.get("folio.baseUrl") as string

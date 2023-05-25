@@ -6,28 +6,52 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { resolvers } from './dist/index.js';
+import { WillSendRequestOptions } from '@apollo/datasource-rest';
+import config from 'config';
+
 
 import { readFileSync } from "fs"
+import path from 'path';
+import url from 'url';
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 import Honeybadger from '@honeybadger-io/js';
 
-import PatronsAPI from "./dist/patrons-api.js"
-import UsersAPI from "./dist/users-api.js"
-import LocationsAPI from "./dist/locations-api.js"
-import InstancesAPI from "./dist/instances-api.js"
-import ItemsAPI from "./dist/items-api.js"
-import HoldingsAPI from "./dist/holdings-api.js"
-import TypeAPI from "./dist/type-api.js"
-import FeeFinesAPI from "./dist/feefines-api.js"
-import FolioAPI from "./dist/folio-api.js"
-import CirculationAPI from "./dist/circulation-api.js"
-import OkapiAPI from "./dist/okapi-api.js"
+import { resolvers } from './folio/index.js';
+import PatronsAPI from "./folio/patrons-api.js"
+import UsersAPI from "./folio/users-api.js"
+import LocationsAPI from "./folio/locations-api.js"
+import InstancesAPI from "./folio/instances-api.js"
+import ItemsAPI from "./folio/items-api.js"
+import HoldingsAPI from "./folio/holdings-api.js"
+import TypeAPI from "./folio/type-api.js"
+import FeeFinesAPI from "./folio/feefines-api.js"
+import FolioAPI from "./folio/folio-api.js"
+import CirculationAPI from "./folio/circulation-api.js"
+import OkapiAPI from "./folio/okapi-api.js"
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
-const typeDefs = readFileSync("schema.graphql").toString("utf-8")
+const typeDefs = readFileSync(path.resolve(__dirname, "schema.graphql")).toString("utf-8")
 
-class AuthnAPI extends FolioAPI {
-
+class AuthnAPI extends OkapiAPI {
+  // send these headers by default on every request
+  override willSendRequest(request: WillSendRequestOptions) {
+    request.headers["X-Okapi-Tenant"] = config.get("folio.tenant")
+    request.headers["User-Agent"] = "FolioApiClient"
+    request.headers["Accept"] = "application/json, text/plain"
+    request.headers["Content-Type"] = "application/json"
+  }
+  
+    private 
+  async login(username, password) {
+    return this.post("authn/login", {
+      body: {
+        username,
+        password,
+      }
+    })
+  }
 }
 
 const app = express();
@@ -46,12 +70,7 @@ function getTokenFromRequest(req) {
     );
   }
 
-  return new AuthnAPI({}).post("authn/login", {
-    body: {
-      username: req.headers.okapi_username,
-      password: req.headers.okapi_password,
-    }
-  })
+  return new AuthnAPI().login(req.headers.okapi_username, req.headers.okapi_password)
     .then(response => ({
       token: response.okapiToken,
       refreshToken: response.refreshToken
@@ -97,7 +116,7 @@ const server = new ApolloServer({
 await server.start();
 
 app.get('/status', async (req, res) => {
-  await new OkapiAPI().get('/_/version').then(_response => res.status(200).send('OK')).catch(error => res.status(500).send(error))
+  await new OkapiAPI().getVersion().then(_response => res.status(200).send('OK')).catch(error => res.status(500).send(error))
 });
 app.use(Honeybadger.requestHandler) // Use *before* all other app middleware.
 app.use(
@@ -107,7 +126,7 @@ app.use(
 );
 app.use(Honeybadger.errorHandler) // Use *after* all other app middleware
 
-await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
 
 
 console.log(`🚀 Server ready at http://localhost:4000`);

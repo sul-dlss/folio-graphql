@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { CqlParams, Instance } from './schema'
+import { CqlParams, Instance } from '../schema'
 
 export default class InstancesAPI extends FolioAPI {
   async getInstance(id: string): Promise<Instance> {
