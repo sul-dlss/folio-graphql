@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm run codegen && npm run compile",
     "compile": "tsc && cp src/schema.graphql dist/schema.graphql",
-    "start": "npm run codegen && ts-node-esm src/server.ts",
+    "start": "npm run codegen && node --loader ts-node/esm src/server.ts",
     "start:dev": "nodemon",
     "codegen": "graphql-codegen-esm --config codegen.yml",
     "lint": "eslint src -c .eslintrc.yml",
