@@ -11,7 +11,7 @@ export default class AuthnAPI extends OkapiAPI {
     request.headers["Content-Type"] = "application/json"
   }
 
-  async login(username, password) {
+  async login(username: string, password: string) {
     return this.post("authn/login", {
       body: {
         username,

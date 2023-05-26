@@ -35,8 +35,8 @@ const typeDefs = readFileSync(path.resolve(__dirname, "schema.graphql")).toStrin
 const app = express();
 const httpServer = http.createServer(app);
 
-function getTokenFromRequest(req) {
-  if (!req.headers.okapi_username || !req.headers.okapi_password) {
+async function getTokenFromRequest(req: express.Request): Promise<{ token: string, refreshToken: string }> {
+  if (!req.get('okapi_username') || !req.get('okapi_password')) {
     throw new GraphQLError(
       'Need to provide username and password in request',
       {
@@ -48,23 +48,24 @@ function getTokenFromRequest(req) {
     );
   }
 
-  return new AuthnAPI().login(req.headers.okapi_username, req.headers.okapi_password)
-    .then(response => ({
+  try {
+    const response = await new AuthnAPI().login(req.get('okapi_username'), req.get('okapi_password'));
+    return ({
       token: response.okapiToken,
       refreshToken: response.refreshToken
-    }))
-    .catch(error => {
-      throw new GraphQLError('User is not authenticated',
-        {
-          extensions: {
-            code: 'UNAUTHENTICATED',
-            http: { status: 401 },
-          }
-        });
-    })
+    });
+  } catch (error) {
+    throw new GraphQLError('User is not authenticated',
+      {
+        extensions: {
+          code: 'UNAUTHENTICATED',
+          http: { status: 401 },
+        }
+      });
+  }
 }
 
-const context = async ({ req }) => {
+const context = async ({ req }: Partial<{ req: express.Request }>) => {
   const { token } = await getTokenFromRequest(req);
   const { cache } = server;
 
