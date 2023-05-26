@@ -6,9 +6,6 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { WillSendRequestOptions } from '@apollo/datasource-rest';
-import config from 'config';
-
 
 import { readFileSync } from "fs"
 import path from 'path';
@@ -27,32 +24,12 @@ import ItemsAPI from "./folio/items-api.js"
 import HoldingsAPI from "./folio/holdings-api.js"
 import TypeAPI from "./folio/type-api.js"
 import FeeFinesAPI from "./folio/feefines-api.js"
-import FolioAPI from "./folio/folio-api.js"
 import CirculationAPI from "./folio/circulation-api.js"
+import AuthnAPI from "./folio/authn-api.js"
 import OkapiAPI from "./folio/okapi-api.js"
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
 const typeDefs = readFileSync(path.resolve(__dirname, "schema.graphql")).toString("utf-8")
-
-class AuthnAPI extends OkapiAPI {
-  // send these headers by default on every request
-  override willSendRequest(request: WillSendRequestOptions) {
-    request.headers["X-Okapi-Tenant"] = config.get("folio.tenant")
-    request.headers["User-Agent"] = "FolioApiClient"
-    request.headers["Accept"] = "application/json, text/plain"
-    request.headers["Content-Type"] = "application/json"
-  }
-  
-    private 
-  async login(username, password) {
-    return this.post("authn/login", {
-      body: {
-        username,
-        password,
-      }
-    })
-  }
-}
 
 const app = express();
 const httpServer = http.createServer(app);
