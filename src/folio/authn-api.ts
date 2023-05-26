@@ -1,10 +1,10 @@
-import { WillSendRequestOptions } from '@apollo/datasource-rest';
+import { AugmentedRequest } from "@apollo/datasource-rest"
 import config from 'config';
 import OkapiAPI from "./okapi-api.js"
 
 export default class AuthnAPI extends OkapiAPI {
   // send these headers by default on every request
-  override willSendRequest(request: WillSendRequestOptions) {
+  override willSendRequest(path, request: AugmentedRequest) {
     request.headers["X-Okapi-Tenant"] = config.get("folio.tenant")
     request.headers["User-Agent"] = "FolioApiClient"
     request.headers["Accept"] = "application/json, text/plain"
