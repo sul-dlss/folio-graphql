@@ -1,5 +1,9 @@
 import FolioAPI from "./folio-api.js"
 import { CqlParams, Item } from '../schema'
+
+interface ItemsResponse {
+  items: Item[]
+}
 export default class ItemsAPI extends FolioAPI {
   async getItem(id: string): Promise<Item> {
     return await this.get<Item>(`/item-storage/items/${encodeURIComponent(id)}`)
@@ -16,7 +20,7 @@ export default class ItemsAPI extends FolioAPI {
   async getItems(params: Partial<{ params: CqlParams, [key: string]: unknown}>): Promise<Item[]> {
     const urlParams = this.buildCqlQuery(params)
 
-    const response = await this.get<Item[]>(`/item-storage/items`, { params: urlParams })
-    return response['items']
+    const response = await this.get<ItemsResponse>(`/item-storage/items`, { params: urlParams })
+    return response.items
   }
 }
