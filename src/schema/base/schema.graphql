@@ -1,0 +1,26 @@
+# These are non-core graphql types; resolvers are provided by graphql-scalars
+scalar DateTime
+scalar UUID
+scalar EmailAddress
+
+input CqlParams {
+  query: String
+  limit: Int
+  offset: Int
+  sortby: String
+}
+
+type Query
+
+type Metadata {
+  createdDate: DateTime!
+  createdByUserId: UUID
+  createdByUsername: String
+  updatedDate: DateTime
+  updatedByUserId: UUID
+  updatedByUsername: String
+}
+
+type Tags {
+  tagList: [String]
+}

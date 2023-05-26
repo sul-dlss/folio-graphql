@@ -1,13 +1,7 @@
-overwrite: true
-schema: "src/schema.graphql"
-documents: null
+schema: '**/schema.graphql'
 generates:
-  src/resolvers-types.ts:
-    config:
-      useIndexSignature: true
-    plugins:
-      - typescript
-      - typescript-resolvers
-  src/schema.ts:
-    plugins:
-      - "typescript"
+  src/schema:
+    preset: '@eddeee888/gcg-typescript-resolver-files'
+    watchPattern: '**/*.mappers.ts'
+    presetConfig:
+      emitLegacyCommonJSImports: false

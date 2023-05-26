@@ -1,0 +1,274 @@
+# We only need one query; all the magic happens in the resolvers
+extend type Query {
+  instance(id: UUID!): Instance
+  instances(id: [String], hrid: [String], params: CqlParams): [Instance]
+
+  holdingsRecord(id: UUID!): HoldingsRecord
+  holdingsRecords(id: [String], hrid: [String], params: CqlParams): [HoldingsRecord]
+
+  item(id: UUID!): Item
+  items(id: [String], hrid: [String], params: CqlParams): [Item]
+}
+
+type Instance {
+  id: UUID!
+  _version: Int!
+  hrid: String!
+  matchKey: String
+  source: String!
+  title: String
+  indexTitle: String
+  alternativeTitles: [AlternativeTitle]
+  editions: [String]
+  series: [String]
+  identifiers: [Identifier]
+  contributors: [Contributor]
+  subjects: [String]
+  classifications: [Classification]
+  publication: [Publication]
+  publicationFrequency: [String]
+  publicationRange: [String]
+  publicationPeriod: [PublicationPeriod]
+  electronicAccess: [ElectronicAccess]
+  instanceTypeId: UUID
+  instanceFormatIds: [UUID]
+  physicalDescriptions: [String]
+  languages: [String]
+  notes: [InstanceNote]
+  administrativeNotes: [String]
+  modeOfIssuanceId: UUID
+  catalogedDate: String
+  previouslyHeld: Boolean
+  staffSuppress: Boolean
+  discoverySuppress: Boolean
+  statisticalCodeIds: [String]
+  sourceRecordFormat: String
+  statusId: UUID
+  statusUpdatedDate: String
+  tags: [Tag]
+  metadata: Metadata
+  natureOfContentTypeIds: [UUID]
+  holdingsRecords(params: CqlParams): [HoldingsRecord]
+  items(params: CqlParams): [Item]
+}
+
+type AlternativeTitle {
+  alternativeTitleTypeId: UUID
+  alternativeTitle: String
+}
+
+type Identifier {
+  value: String!
+  identifierTypeId: UUID!
+}
+
+type Contributor {
+  name: String!
+  contributorTypeId: UUID!
+  contributorTypeText: String
+  contributorNameTypeId: String
+  authorityId: UUID
+  primary: Boolean
+}
+
+type Classification {
+  classificationNumber: String!
+  classificationTypeId: UUID!
+  classificationType: ClassificationType
+}
+
+type ClassificationType {
+  id: UUID!
+  name: String!
+  source: String
+  metadata: Metadata
+}
+
+type Publication {
+  publisher: String
+  place: String
+  dateOfPublication: String
+  role: String
+}
+
+type PublicationPeriod {
+  start: Int
+  end: Int
+}
+
+type ElectronicAccess {
+  uri: String!
+  linkText: String
+  materialsSpecification: String
+  publicNote: String
+  relationshipId: UUID
+}
+
+type InstanceNote {
+  instanceNoteTypeId: UUID
+  note: String
+  staffOnly: Boolean
+}
+
+type Tag {
+  tagList: [String]
+}
+
+type Item {
+  id: UUID!
+  _version: Int!
+  hrid: String
+  holdingsRecordId: String!
+  formerIds: [String]
+  discoverySuppress: Boolean
+  accessionNumber: String
+  barcode: String
+  effectiveShelvingOrder: String
+  itemLevelCallNumber: String
+  itemLevelCallNumberPrefix: String
+  itemLevelCallNumberSuffix: String
+  itemLevelCallNumberTypeId: String
+  effectiveCallNumberComponents: EffectiveCallNumberComponents
+  volume: String
+  enumeration: String
+  chronology: String
+  yearCaption: [String]
+  itemIdentifier: String
+  copyNumber: String
+  numberOfPieces: String
+  descriptionOfPieces: String
+  numberOfMissingPieces: String
+  missingPieces: String
+  missingPiecesDate: String
+  itemDamagedStatusId: String
+  itemDamagedStatusDate: String
+  administrativeNotes: [String]
+  notes: [ItemNote]
+  circulationNotes: [CirculationNote]
+  status: Status!
+  materialTypeId: String!
+  permanentLoanTypeId: String!
+  temporaryLoanTypeId: String
+  permanentLocationId: String
+  temporaryLocationId: String
+  effectiveLocationId: String
+  electronicAccess: [ElectronicAccess]
+  inTransitDestinationServicePointId: UUID
+  statisticalCodes: [UUID]
+  purchaseOrderLineIdentifier: String
+  tags: [Tag]
+  metadata: Metadata
+  lastCheckIn: CheckIn
+  holdingsRecord: HoldingsRecord
+  instance: Instance
+  permanentLocation: Location
+  temporaryLocation: Location
+  effectiveLocation: Location
+}
+
+type EffectiveCallNumberComponents {
+  callNumber: String
+  prefix: String
+  suffix: String
+  typeId: UUID
+}
+
+type ItemNote {
+  itemNoteTypeId: String
+  note: String
+  staffOnly: Boolean
+}
+
+type CirculationNote {
+  id: String
+  noteType: String
+  note: String
+  source: Source
+  date: String
+  staffOnly: Boolean
+}
+
+type Source {
+  id: String
+  personal: Personal
+}
+
+type Personal {
+  lastName: String
+  firstName: String
+}
+
+type Status {
+  name: String!
+  date: String
+}
+
+type CheckIn {
+  dateTime: String
+  servicePointId: UUID
+  staffMemberId: UUID
+}
+
+type HoldingsRecord {
+  id: UUID
+  _version: Int
+  hrid: String
+  holdingsTypeId: UUID
+  formatIds: [String]
+  instanceId: UUID!
+  permanentLocationId: UUID!
+  temporaryLocationId: UUID
+  effectiveLocationId: UUID
+  electronicAccess: [ElectronicAccess]
+  callNumberTypeId: UUID
+  callNumberPrefix: String
+  callNumber: String
+  callNumberSuffix: String
+  shelvingTitle: String
+  acquisitionFormat: String
+  receiptStatus: String
+  administrativeNotes: [String]
+  notes: [HoldingsNote]
+  illPolicyId: UUID
+  retentionPolicy: String
+  digitizationPolicy: String
+  holdingsStatement: [HoldingsStatement]
+  holdingsStatementsForIndexes: [HoldingsStatement]
+  holdingsStatementsForSupplements: [HoldingsStatement]
+  copyNumber: String
+  numberOfItems: String
+  receivingHistory: ReceivingHistory
+  discoverySuppress: Boolean
+  statisticalCodeIds: [UUID]
+  tags: [Tag]
+  metadata: Metadata
+  sourceId: UUID
+  instance: Instance,
+  items(params: CqlParams): [Item]
+  permanentLocation: Location
+  temporaryLocation: Location
+  effectiveLocation: Location
+}
+
+type HoldingsNote {
+  holdingsNoteTypeId: UUID
+  note: String
+  staffOnly: Boolean
+}
+
+type HoldingsStatement {
+  statement: String
+  note: String
+  staffNote: String
+}
+
+type ReceivingHistory {
+  displayType: String
+  entries: [ReceivingHistoryEntry]
+}
+
+type ReceivingHistoryEntry {
+  publicDisplay: Boolean
+  enumeration: String
+  chronology: String
+}

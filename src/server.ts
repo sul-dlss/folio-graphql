@@ -7,15 +7,7 @@ import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
-import { readFileSync } from "fs"
-import path from 'path';
-import url from 'url';
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 import Honeybadger from '@honeybadger-io/js';
-
-import { resolvers } from './folio/index.js';
 import PatronsAPI from "./folio/patrons-api.js"
 import UsersAPI from "./folio/users-api.js"
 import LocationsAPI from "./folio/locations-api.js"
@@ -29,8 +21,8 @@ import AuthnAPI from "./folio/authn-api.js"
 import OkapiAPI from "./folio/okapi-api.js"
 import FolioContext from './context.js'
 
-// Read the schema.graphql into utf-8 string so we can pass it to Apollo
-const typeDefs = readFileSync(path.resolve(__dirname, "schema.graphql")).toString("utf-8")
+import { typeDefs } from './schema/typeDefs.generated.js'
+import { resolvers } from './schema/resolvers.generated.js'
 
 const app = express();
 const httpServer = http.createServer(app);

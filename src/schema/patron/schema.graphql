@@ -1,0 +1,175 @@
+
+# We only need one query; all the magic happens in the resolvers
+extend type Query {
+  patron(id: UUID!): Patron
+  patronGroups: [PatronGroup]
+}
+
+type Patron {
+  id: UUID
+  user: User
+  totalCharges: ChargeAmount!
+  totalChargesCount: Int!
+  totalLoans: Int!
+  totalHolds: Int!
+  charges: [Charge]!
+  holds: [Hold]!
+  loans: [Loan]!
+  blocks: [Block]
+  manualBlocks: [ManualBlock]
+  accounts: [Account]
+}
+
+type User {
+  id: UUID
+  username: String
+  externalSystemId: String
+  barcode: String
+  active: Boolean
+  type: String
+  patronGroupId: UUID
+  patronGroup: PatronGroup
+  department: [UUID]
+  personal: Personal
+  enrollmentDate: DateTime
+  expirationDate: DateTime
+  proxyFor: [ProxyFor]
+  proxies: [ProxyFor]
+  metadata: Metadata
+  tags: Tags
+  blocks: [Block]
+  manualBlocks: [ManualBlock]
+  accounts: [Account]
+}
+
+type Block {
+  patronBlockConditionId: UUID
+  blockBorrowing: Boolean
+  blockRenewals: Boolean
+  blockRequests: Boolean
+  message: String
+}
+
+type ManualBlock {
+  id: UUID
+  type: String
+  desc: String!
+  patronMessage: String
+  expirationDate: DateTime
+  borrowing: Boolean
+  renewals: Boolean
+  requests: Boolean
+}
+
+type PatronGroup {
+  group: String!
+  desc: String
+  id: UUID
+  expirationOffsetInDays: Int
+  limits: [BlockLimit]
+}
+
+type BlockLimit {
+  id: UUID
+  patronGroupId: UUID
+  conditionId: UUID
+  condition: BlockCondition
+  value: Float
+}
+
+type BlockCondition {
+  id: UUID
+  name: String
+  blockBorrowing: Boolean
+  blockRenewals: Boolean
+  blockRequests: Boolean
+  valueType: String
+  message: String
+}
+
+type Personal {
+  lastName: String!
+  firstName: String
+  middleName: String
+  preferredFirstName: String
+  email: EmailAddress
+  phone: String
+  mobilePhone: String
+  dateOfBirth: DateTime
+  preferredContactTypeId: String
+}
+
+type Address {
+  id: String
+  countryId: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  region: String
+  postalCode: String
+  addressTypeId: UUID!
+  primaryAddress: Boolean
+}
+
+type ProxyFor {
+  user: User
+  userId: String
+  proxyUser: User
+  proxyUserId: String
+  id: String
+  requestforSponsor: String
+  notificationsTo: String
+  accrueTo: String
+  status: String
+  expirationDate: DateTime
+}
+type RequestItem {
+  instanceId: UUID!
+  itemId: UUID
+  title: String
+  author: String
+  isbn: String
+  instance: Instance
+  item: Item
+}
+
+type Charge {
+  item: RequestItem
+  chargeAmount: ChargeAmount
+  accrualDate: DateTime
+  description: String
+  state: String
+  reason: String
+  feeFineId: UUID
+  feeFine: FeeFine
+}
+
+type ChargeAmount {
+  amount: Float!
+  isoCurrencyCode: String!
+}
+
+type Hold {
+  requestId: UUID!
+  item: RequestItem
+  requestDate: DateTime!
+  expirationDate: DateTime
+  status: String
+  pickupLocationId: UUID!
+  pickupLocation: ServicePoint
+  queuePosition: Int
+  cancellationReasonId: UUID
+  canceledByUserId: UUID
+  cancellationAdditionalInformation: String
+  canceledDate: DateTime
+  patronComments: String
+}
+
+type Loan {
+  id: UUID
+  item: RequestItem!
+  loanDate: DateTime!
+  dueDate: DateTime!
+  overdue: Boolean!
+  details: CirculationLoan!
+}

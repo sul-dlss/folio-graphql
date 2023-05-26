@@ -1,0 +1,136 @@
+
+# We only need one query; all the magic happens in the resolvers
+extend type Query {
+  loanPolicies(params: CqlParams): [LoanPolicy]
+  requestPolicies(params: CqlParams): [RequestPolicy]
+}
+
+type CirculationLoan {
+  id: UUID!
+  userId: UUID
+  proxyUserId: UUID
+  itemId: UUID
+  item: Item
+  loanPolicyId: UUID
+  loanPolicy: LoanPolicy
+  overdueFinePolicyId: UUID
+  lostItemPolicyId: UUID
+  itemEffectiveLocationIdAtCheckOut: UUID
+  itemEffectiveLocationAtCheckOut: Location
+  status: String
+  loanDate: DateTime!
+  dueDate: DateTime
+  returnDate: DateTime
+  systemReturnDate: DateTime
+  action: String!
+  actionComment: String
+  renewalCount: Int
+  dueDateChangedByRecall: Boolean
+  dueDateChangedByHold: Boolean
+  feesAndFines: CirculationLoanFeesAndFines
+  declaredLostDate: DateTime
+}
+
+type LoanPolicy {
+  id: UUID!
+  name: String
+  description: String
+  loansPolicy: LoansPolicy
+  renewalsPolicy: RenewalsPolicy
+}
+
+type LoansPolicy {
+  profileId: String
+  period: Period
+  fixedDueDateScheduleId: UUID
+  fixedDueDateSchedule: FixedDueDateSchedule
+}
+
+type FixedDueDateSchedule {
+  id: UUID!
+  name: String!
+  description: String
+  schedules: [Schedule]
+}
+
+type Schedule {
+  from: DateTime!
+  to: DateTime!
+  due: DateTime!
+}
+
+type Period {
+  duration: Int!
+  intervalId: String!
+}
+
+type RenewalsPolicy {
+  unlimited: Boolean
+  numberAllowed: Int
+  renewable: Boolean
+  renewFromId: String
+  period: Period
+}
+
+type RequestPolicy {
+  id: String
+  name: String!
+  description: String
+  requestTypes: [String]
+}
+
+type CirculationLoanFeesAndFines {
+  amountRemainingToPay: Int
+}
+
+type Account {
+  amount: Float!
+  remaining: Float!
+  dateCreated: DateTime
+  dateUpdated: DateTime
+  status: Status
+  paymentStatus: Status!
+  feeFineType: String
+  feeFineOwner: String
+  title: String
+  callNumber: String
+  barcode: String
+  materialType: String
+  itemStatus: Status
+  location: String
+  dueDate: DateTime
+  returnedDate: DateTime
+  loanId: UUID
+  userId: UUID!
+  itemId: UUID
+  materialTypeId: UUID
+  feeFineId: UUID!
+  ownerId: UUID!
+  id: UUID
+  holdingsRecordId: UUID
+  instanceId: UUID
+  loanPolicyId: UUID
+  overdueFinePolicyId: UUID
+  lostItemFeePolicyId: UUID
+  processId: UUID
+
+  user: User
+  loan: CirculationLoan
+  item: Item
+  feeFine: FeeFine
+}
+
+type Status {
+  name: String!
+}
+
+type FeeFine {
+  id: UUID,
+  automatic: Boolean!,
+  feeFineType: String!,
+  defaultAmount: Float,
+  chargeNoticeId: UUID,
+  actionNoticeId: UUID,
+  ownerId: UUID,
+  metadata: Metadata
+}
