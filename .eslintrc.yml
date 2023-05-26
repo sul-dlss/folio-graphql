@@ -13,6 +13,8 @@ parserOptions:
   project: ./tsconfig.json
 plugins:
   - '@typescript-eslint'
+ignorePatterns:
+  - src/resolvers-types.ts
 rules: {
   "@typescript-eslint/no-explicit-any": "off"
 }
