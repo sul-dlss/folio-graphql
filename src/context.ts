@@ -8,7 +8,7 @@ import TypeAPI from "./folio/type-api.js"
 import FeeFinesAPI from "./folio/feefines-api.js"
 import CirculationAPI from "./folio/circulation-api.js"
 
-export default interface FolioContext {
+export interface FolioContext {
   token: string;
   dataSources: {
     patrons: PatronsAPI;

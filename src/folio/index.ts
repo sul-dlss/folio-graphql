@@ -1,6 +1,5 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, BlockLimit, BlockCondition, FixedDueDateSchedule } from "../schema"
-import FolioContext from "../context"
 import { Resolvers } from '../resolvers-types'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -28,16 +27,16 @@ export const resolvers: Resolvers = {
     items(parent, args, { dataSources }, info) {
       return dataSources.items.getItems(args)
     },
-    loanPolicies(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    loanPolicies(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache })
     },
-    requestPolicies(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    requestPolicies(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<RequestPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies', cache: typeCache })
     },
-    libraries(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    libraries(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
     },
-    patronGroups(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    patronGroups(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache })
     }
   },
@@ -59,7 +58,7 @@ export const resolvers: Resolvers = {
     patronGroupId(parent, args, { dataSources }, info) {
       return parent.patronGroup;
     },
-    patronGroup(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    patronGroup(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroupId));
     },
     blocks(parent, args, { dataSources }, info) {
@@ -79,12 +78,12 @@ export const resolvers: Resolvers = {
     }
   },
   PatronGroup: {
-    limits(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    limits(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<BlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
     }
   },
   BlockLimit: {
-    condition(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    condition(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<BlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
     }
   },
@@ -110,15 +109,15 @@ export const resolvers: Resolvers = {
     item(parent, args, { dataSources }, info) {
       return dataSources.items.getItem(parent.itemId)
     },
-    itemEffectiveLocationAtCheckOut(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    itemEffectiveLocationAtCheckOut(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.itemEffectiveLocationIdAtCheckOut))
     },
-    loanPolicy(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    loanPolicy(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache }).then(map => map.get(parent.loanPolicyId))
     }
   },
   LoansPolicy: {
-    fixedDueDateSchedule(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    fixedDueDateSchedule(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
     }
   },
@@ -145,13 +144,13 @@ export const resolvers: Resolvers = {
     instance(parent, args, { dataSources }, info) {
       return dataSources.instances.getInstance(parent.instanceId)
     },
-    permanentLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    permanentLocation(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.permanentLocationId))
     },
-    temporaryLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    temporaryLocation(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.temporaryLocationId))
     },
-    effectiveLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    effectiveLocation(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
     }
   },
@@ -162,48 +161,48 @@ export const resolvers: Resolvers = {
     instance(parent, args, { dataSources }, info) {
       return dataSources.instances.getByHoldingsRecordId(parent.holdingsRecordId)
     },
-    permanentLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    permanentLocation(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.permanentLocationId))
     },
-    temporaryLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    temporaryLocation(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.temporaryLocationId))
     },
-    effectiveLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    effectiveLocation(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
     }
   },
   Classification: {
-    classificationType(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    classificationType(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<ClassificationType>("classification-types", { cache: typeCache }).then(map => map.get(parent.classificationTypeId))
     }
   },
   Location: {
-    institution(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    institution(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache }).then(map => map.get(parent.institutionId))
     },
-    campus(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    campus(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache }).then(map => map.get(parent.campusId))
     },
-    library(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    library(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache }).then(map => map.get(parent.libraryId))
     },
-    primaryServicePointObject(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    primaryServicePointObject(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<ServicePoint>("service-points", { key: "servicepoints", cache: typeCache }).then(map => map.get(parent.primaryServicePoint))
     },
-    servicePoints(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    servicePoints(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<ServicePoint>("service-points", { key: "servicepoints", cache: typeCache }).then(arr => arr.filter(sp => parent.servicePointIds.includes(sp.id)))
     }
   },
   Campus: {
-    institution(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    institution(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache }).then(map => map.get(parent.institutionId))
     }
   },
   Library: {
-    campus(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    campus(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache }).then(map => map.get(parent.campusId))
     },
-    locations(parent, args, { dataSources, typeCache }: FolioContext, info) {
+    locations(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache }).then(values => values.filter(v => v.libraryId == parent.id))
     },
   },

@@ -5,6 +5,7 @@ generates:
   src/resolvers-types.ts:
     config:
       useIndexSignature: true
+      contextType: "./context#FolioContext"
     plugins:
       - typescript
       - typescript-resolvers
