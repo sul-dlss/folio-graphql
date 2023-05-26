@@ -1,7 +1,6 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
-
 import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, PatronGroup, BlockLimit, BlockCondition } from "../schema"
-import TypeAPI from "./type-api"
+import FolioContext from "../context"
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Resolvers define how to fetch the types defined in your schema.
@@ -28,16 +27,16 @@ export const resolvers = {
     items(parent, args, { dataSources }, info) {
       return dataSources.items.getItems(args)
     },
-    loanPolicies(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    loanPolicies(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache })
     },
-    requestPolicies(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    requestPolicies(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<LoanPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies', cache: typeCache })
     },
-    libraries(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    libraries(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
     },
-    patronGroups(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    patronGroups(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache })
     }
   },
@@ -59,7 +58,7 @@ export const resolvers = {
     patronGroupId(parent, args, { dataSources }, info) {
       return parent.patronGroup;
     },
-    patronGroup(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    patronGroup(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroup));
     },
     blocks(parent, args, { dataSources }, info) {
@@ -79,12 +78,12 @@ export const resolvers = {
     }
   },
   PatronGroup: {
-    limits(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    limits(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<BlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
     }
   },
   BlockLimit: {
-    condition(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    condition(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<BlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
     }
   },
@@ -110,15 +109,15 @@ export const resolvers = {
     item(parent, args, { dataSources }, info) {
       return dataSources.items.getItem(parent.itemId)
     },
-    itemEffectiveLocationAtCheckOut(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    itemEffectiveLocationAtCheckOut(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.itemEffectiveLocationIdAtCheckOut))
     },
-    loanPolicy(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    loanPolicy(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache }).then(map => map.get(parent.loanPolicyId))
     }
   },
   LoansPolicy: {
-    fixedDueDateSchedule(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    fixedDueDateSchedule(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<LoanPolicy>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
     }
   },
@@ -145,13 +144,13 @@ export const resolvers = {
     instance(parent, args, { dataSources }, info) {
       return dataSources.instances.getInstance(parent.instanceId)
     },
-    permanentLocation(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    permanentLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.permanentLocationId))
     },
-    temporaryLocation(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    temporaryLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.temporaryLocationId))
     },
-    effectiveLocation(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    effectiveLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
     }
   },
@@ -162,48 +161,48 @@ export const resolvers = {
     instance(parent, args, { dataSources }, info) {
       return dataSources.instances.getByHoldingsRecordId(parent.holdingsRecordId)
     },
-    permanentLocation(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    permanentLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.permanentLocationId))
     },
-    temporaryLocation(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    temporaryLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.temporaryLocationId))
     },
-    effectiveLocation(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    effectiveLocation(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
     }
   },
   Classification: {
-    classificationType(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    classificationType(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<ClassificationType>("classification-types", { cache: typeCache }).then(map => map.get(parent.classificationTypeId))
     }
   },
   Location: {
-    institution(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    institution(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache }).then(map => map.get(parent.institutionId))
     },
-    campus(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    campus(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache }).then(map => map.get(parent.campusId))
     },
-    library(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    library(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache }).then(map => map.get(parent.libraryId))
     },
-    primaryServicePointObject(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    primaryServicePointObject(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<ServicePoint>("service-points", { key: "servicepoints", cache: typeCache }).then(map => map.get(parent.primaryServicePoint))
     },
-    servicePoints(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    servicePoints(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<ServicePoint>("service-points", { key: "servicepoints", cache: typeCache }).then(arr => arr.filter(sp => parent.servicePointIds.includes(sp.id)))
     }
   },
   Campus: {
-    institution(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    institution(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache }).then(map => map.get(parent.institutionId))
     }
   },
   Library: {
-    campus(parent, args, { dataSources, typeCache } : Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any}>, info) {
+    campus(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache }).then(map => map.get(parent.campusId))
     },
-    locations(parent, args, { dataSources, typeCache }: Partial<{ dataSources: Partial<{ types: TypeAPI }>, typeCache: any }>, info) {
+    locations(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache }).then(values => values.filter(v => v.libraryId == parent.id))
     },
   },

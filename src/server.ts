@@ -30,6 +30,7 @@ import FeeFinesAPI from "./folio/feefines-api.js"
 import FolioAPI from "./folio/folio-api.js"
 import CirculationAPI from "./folio/circulation-api.js"
 import OkapiAPI from "./folio/okapi-api.js"
+import FolioContext from './context.js'
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
 const typeDefs = readFileSync(path.resolve(__dirname, "schema.graphql")).toString("utf-8")
@@ -108,7 +109,7 @@ const context = async ({ req }) => {
 }
 
 // Set up Apollo Server
-const server = new ApolloServer({
+const server = new ApolloServer<FolioContext>({
   typeDefs,
   resolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
