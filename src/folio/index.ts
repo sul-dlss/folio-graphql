@@ -1,10 +1,11 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, PatronGroup, BlockLimit, BlockCondition } from "../schema"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, BlockLimit, BlockCondition, FixedDueDateSchedule } from "../schema"
 import FolioContext from "../context"
+import { Resolvers } from '../resolvers-types'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Resolvers define how to fetch the types defined in your schema.
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
     patron(parent, args, { dataSources }, info) {
       return dataSources.patrons.getPatron(args.id)
@@ -31,7 +32,7 @@ export const resolvers = {
       return dataSources.types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache })
     },
     requestPolicies(parent, args, { dataSources, typeCache }: FolioContext, info) {
-      return dataSources.types.getValuesFor<LoanPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies', cache: typeCache })
+      return dataSources.types.getValuesFor<RequestPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies', cache: typeCache })
     },
     libraries(parent, args, { dataSources, typeCache }: FolioContext, info) {
       return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
@@ -59,7 +60,7 @@ export const resolvers = {
       return parent.patronGroup;
     },
     patronGroup(parent, args, { dataSources, typeCache }: FolioContext, info) {
-      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroup));
+      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroupId));
     },
     blocks(parent, args, { dataSources }, info) {
       return dataSources.users.getBlocks(parent.id)
@@ -118,7 +119,7 @@ export const resolvers = {
   },
   LoansPolicy: {
     fixedDueDateSchedule(parent, args, { dataSources, typeCache }: FolioContext, info) {
-      return dataSources.types.getMapFor<LoanPolicy>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
+      return dataSources.types.getMapFor<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
     }
   },
   RequestItem: {
@@ -219,7 +220,7 @@ export const resolvers = {
       return dataSources.circulation.getLoan(parent.id)
     },
     item(parent, args, { dataSources }, info) {
-      return dataSources.items.getItem(args.itemId)
+      return dataSources.items.getItem(parent.itemId)
     },
     feeFine(parent, args, { dataSources }, info) {
       return dataSources.feefines.getFeeFine(parent.feeFineId)

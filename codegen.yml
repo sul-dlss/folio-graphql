@@ -2,10 +2,12 @@ overwrite: true
 schema: "src/schema.graphql"
 documents: null
 generates:
+  src/resolvers-types.ts:
+    config:
+      useIndexSignature: true
+    plugins:
+      - typescript
+      - typescript-resolvers
   src/schema.ts:
     plugins:
       - "typescript"
-  #     - "typescript-resolvers"
-  # ./graphql.schema.json:
-  #   plugins:
-  #     - "introspection"
