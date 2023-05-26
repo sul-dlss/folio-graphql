@@ -1,10 +1,11 @@
 import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
 import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, BlockLimit, BlockCondition, FixedDueDateSchedule } from "../schema"
 import FolioContext from "../context"
+import { Resolvers } from '../resolvers-types'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // Resolvers define how to fetch the types defined in your schema.
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
     patron(parent, args, { dataSources }, info) {
       return dataSources.patrons.getPatron(args.id)
