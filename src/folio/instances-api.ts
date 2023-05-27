@@ -1,6 +1,10 @@
 import FolioAPI from "./folio-api.js"
 import { CqlParams, Instance } from '../schema'
 
+interface InstancesResponse {
+  instances: Instance[]
+}
+
 export default class InstancesAPI extends FolioAPI {
   async getInstance(id: string): Promise<Instance> {
     const instance = await this.get<Instance>(`/instance-storage/instances/${encodeURIComponent(id)}`)
@@ -15,7 +19,7 @@ export default class InstancesAPI extends FolioAPI {
   async getInstances(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<Instance[]> {
     const urlParams = this.buildCqlQuery(params)
 
-    const response = await this.get<Instance[]>(`/instance-storage/instances`, { params: urlParams })
-    return response['instances']
+    const response = await this.get<InstancesResponse>(`/instance-storage/instances`, { params: urlParams })
+    return response.instances
   }
 }
