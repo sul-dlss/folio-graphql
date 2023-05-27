@@ -1,5 +1,5 @@
 import config from "config"
-import { RESTDataSource, WillSendRequestOptions } from "@apollo/datasource-rest"
+import { RESTDataSource, AugmentedRequest } from "@apollo/datasource-rest"
 // KeyValueCache is the type of Apollo server's default cache
 import type { KeyValueCache } from '@apollo/utils.keyvaluecache';
 import { CqlParams } from '../schema'
@@ -8,7 +8,7 @@ export default class FolioAPI extends RESTDataSource {
   override baseURL = config.get("folio.baseUrl") as string
 
   // send these headers by default on every request
-  override willSendRequest(request: WillSendRequestOptions) {
+  override willSendRequest(path, request: AugmentedRequest) {
     if (this.token) request.headers["X-Okapi-Token"] = this.token
     request.headers["X-Okapi-Tenant"] = config.get("folio.tenant")
     request.headers["User-Agent"] = "FolioApiClient"
