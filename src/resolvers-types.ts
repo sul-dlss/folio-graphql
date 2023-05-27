@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { FolioContext } from './context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -1013,7 +1014,7 @@ export type ResolversParentTypes = ResolversObject<{
   User: User;
 }>;
 
-export type AccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = ResolversObject<{
+export type AccountResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1050,7 +1051,7 @@ export type AccountResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type AddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = ResolversObject<{
+export type AddressResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = ResolversObject<{
   addressLine1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   addressLine2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   addressTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
@@ -1063,13 +1064,13 @@ export type AddressResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type AlternativeTitleResolvers<ContextType = any, ParentType extends ResolversParentTypes['AlternativeTitle'] = ResolversParentTypes['AlternativeTitle']> = ResolversObject<{
+export type AlternativeTitleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AlternativeTitle'] = ResolversParentTypes['AlternativeTitle']> = ResolversObject<{
   alternativeTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   alternativeTitleTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type BlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['Block'] = ResolversParentTypes['Block']> = ResolversObject<{
+export type BlockResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Block'] = ResolversParentTypes['Block']> = ResolversObject<{
   blockBorrowing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   blockRenewals?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   blockRequests?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -1078,7 +1079,7 @@ export type BlockResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type BlockConditionResolvers<ContextType = any, ParentType extends ResolversParentTypes['BlockCondition'] = ResolversParentTypes['BlockCondition']> = ResolversObject<{
+export type BlockConditionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BlockCondition'] = ResolversParentTypes['BlockCondition']> = ResolversObject<{
   blockBorrowing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   blockRenewals?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   blockRequests?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -1089,7 +1090,7 @@ export type BlockConditionResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type BlockLimitResolvers<ContextType = any, ParentType extends ResolversParentTypes['BlockLimit'] = ResolversParentTypes['BlockLimit']> = ResolversObject<{
+export type BlockLimitResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BlockLimit'] = ResolversParentTypes['BlockLimit']> = ResolversObject<{
   condition?: Resolver<Maybe<ResolversTypes['BlockCondition']>, ParentType, ContextType>;
   conditionId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
@@ -1098,7 +1099,7 @@ export type BlockLimitResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CampusResolvers<ContextType = any, ParentType extends ResolversParentTypes['Campus'] = ResolversParentTypes['Campus']> = ResolversObject<{
+export type CampusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Campus'] = ResolversParentTypes['Campus']> = ResolversObject<{
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   institution?: Resolver<Maybe<ResolversTypes['Institution']>, ParentType, ContextType>;
@@ -1108,7 +1109,7 @@ export type CampusResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ChargeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Charge'] = ResolversParentTypes['Charge']> = ResolversObject<{
+export type ChargeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Charge'] = ResolversParentTypes['Charge']> = ResolversObject<{
   accrualDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   chargeAmount?: Resolver<Maybe<ResolversTypes['ChargeAmount']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1120,20 +1121,20 @@ export type ChargeResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ChargeAmountResolvers<ContextType = any, ParentType extends ResolversParentTypes['ChargeAmount'] = ResolversParentTypes['ChargeAmount']> = ResolversObject<{
+export type ChargeAmountResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ChargeAmount'] = ResolversParentTypes['ChargeAmount']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   isoCurrencyCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CheckInResolvers<ContextType = any, ParentType extends ResolversParentTypes['CheckIn'] = ResolversParentTypes['CheckIn']> = ResolversObject<{
+export type CheckInResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CheckIn'] = ResolversParentTypes['CheckIn']> = ResolversObject<{
   dateTime?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   servicePointId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   staffMemberId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CirculationLoanResolvers<ContextType = any, ParentType extends ResolversParentTypes['CirculationLoan'] = ResolversParentTypes['CirculationLoan']> = ResolversObject<{
+export type CirculationLoanResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationLoan'] = ResolversParentTypes['CirculationLoan']> = ResolversObject<{
   action?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   actionComment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   declaredLostDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -1160,12 +1161,12 @@ export type CirculationLoanResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CirculationLoanFeesAndFinesResolvers<ContextType = any, ParentType extends ResolversParentTypes['CirculationLoanFeesAndFines'] = ResolversParentTypes['CirculationLoanFeesAndFines']> = ResolversObject<{
+export type CirculationLoanFeesAndFinesResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationLoanFeesAndFines'] = ResolversParentTypes['CirculationLoanFeesAndFines']> = ResolversObject<{
   amountRemainingToPay?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CirculationNoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['CirculationNote'] = ResolversParentTypes['CirculationNote']> = ResolversObject<{
+export type CirculationNoteResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationNote'] = ResolversParentTypes['CirculationNote']> = ResolversObject<{
   date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1175,14 +1176,14 @@ export type CirculationNoteResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ClassificationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Classification'] = ResolversParentTypes['Classification']> = ResolversObject<{
+export type ClassificationResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Classification'] = ResolversParentTypes['Classification']> = ResolversObject<{
   classificationNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   classificationType?: Resolver<Maybe<ResolversTypes['ClassificationType']>, ParentType, ContextType>;
   classificationTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ClassificationTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClassificationType'] = ResolversParentTypes['ClassificationType']> = ResolversObject<{
+export type ClassificationTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ClassificationType'] = ResolversParentTypes['ClassificationType']> = ResolversObject<{
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1190,7 +1191,7 @@ export type ClassificationTypeResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ContributorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Contributor'] = ResolversParentTypes['Contributor']> = ResolversObject<{
+export type ContributorResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Contributor'] = ResolversParentTypes['Contributor']> = ResolversObject<{
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   contributorNameTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contributorTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
@@ -1204,7 +1205,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
-export type EffectiveCallNumberComponentsResolvers<ContextType = any, ParentType extends ResolversParentTypes['EffectiveCallNumberComponents'] = ResolversParentTypes['EffectiveCallNumberComponents']> = ResolversObject<{
+export type EffectiveCallNumberComponentsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['EffectiveCallNumberComponents'] = ResolversParentTypes['EffectiveCallNumberComponents']> = ResolversObject<{
   callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   prefix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   suffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1212,7 +1213,7 @@ export type EffectiveCallNumberComponentsResolvers<ContextType = any, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ElectronicAccessResolvers<ContextType = any, ParentType extends ResolversParentTypes['ElectronicAccess'] = ResolversParentTypes['ElectronicAccess']> = ResolversObject<{
+export type ElectronicAccessResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ElectronicAccess'] = ResolversParentTypes['ElectronicAccess']> = ResolversObject<{
   linkText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   materialsSpecification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publicNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1225,7 +1226,7 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
   name: 'EmailAddress';
 }
 
-export type FeeFineResolvers<ContextType = any, ParentType extends ResolversParentTypes['FeeFine'] = ResolversParentTypes['FeeFine']> = ResolversObject<{
+export type FeeFineResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FeeFine'] = ResolversParentTypes['FeeFine']> = ResolversObject<{
   actionNoticeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   automatic?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   chargeNoticeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
@@ -1237,7 +1238,7 @@ export type FeeFineResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type FixedDueDateScheduleResolvers<ContextType = any, ParentType extends ResolversParentTypes['FixedDueDateSchedule'] = ResolversParentTypes['FixedDueDateSchedule']> = ResolversObject<{
+export type FixedDueDateScheduleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FixedDueDateSchedule'] = ResolversParentTypes['FixedDueDateSchedule']> = ResolversObject<{
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1245,7 +1246,7 @@ export type FixedDueDateScheduleResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type HoldResolvers<ContextType = any, ParentType extends ResolversParentTypes['Hold'] = ResolversParentTypes['Hold']> = ResolversObject<{
+export type HoldResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Hold'] = ResolversParentTypes['Hold']> = ResolversObject<{
   canceledByUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   canceledDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   cancellationAdditionalInformation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1262,14 +1263,14 @@ export type HoldResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type HoldingsNoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['HoldingsNote'] = ResolversParentTypes['HoldingsNote']> = ResolversObject<{
+export type HoldingsNoteResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsNote'] = ResolversParentTypes['HoldingsNote']> = ResolversObject<{
   holdingsNoteTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type HoldingsRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['HoldingsRecord'] = ResolversParentTypes['HoldingsRecord']> = ResolversObject<{
+export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsRecord'] = ResolversParentTypes['HoldingsRecord']> = ResolversObject<{
   _version?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   acquisitionFormat?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
@@ -1311,20 +1312,20 @@ export type HoldingsRecordResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type HoldingsStatementResolvers<ContextType = any, ParentType extends ResolversParentTypes['HoldingsStatement'] = ResolversParentTypes['HoldingsStatement']> = ResolversObject<{
+export type HoldingsStatementResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsStatement'] = ResolversParentTypes['HoldingsStatement']> = ResolversObject<{
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   staffNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IdentifierResolvers<ContextType = any, ParentType extends ResolversParentTypes['Identifier'] = ResolversParentTypes['Identifier']> = ResolversObject<{
+export type IdentifierResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Identifier'] = ResolversParentTypes['Identifier']> = ResolversObject<{
   identifierTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type InstanceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Instance'] = ResolversParentTypes['Instance']> = ResolversObject<{
+export type InstanceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Instance'] = ResolversParentTypes['Instance']> = ResolversObject<{
   _version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   alternativeTitles?: Resolver<Maybe<Array<Maybe<ResolversTypes['AlternativeTitle']>>>, ParentType, ContextType>;
@@ -1367,14 +1368,14 @@ export type InstanceResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type InstanceNoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['InstanceNote'] = ResolversParentTypes['InstanceNote']> = ResolversObject<{
+export type InstanceNoteResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceNote'] = ResolversParentTypes['InstanceNote']> = ResolversObject<{
   instanceNoteTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type InstitutionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Institution'] = ResolversParentTypes['Institution']> = ResolversObject<{
+export type InstitutionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Institution'] = ResolversParentTypes['Institution']> = ResolversObject<{
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
@@ -1382,7 +1383,7 @@ export type InstitutionResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['Item'] = ResolversParentTypes['Item']> = ResolversObject<{
+export type ItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Item'] = ResolversParentTypes['Item']> = ResolversObject<{
   _version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   accessionNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
@@ -1435,14 +1436,14 @@ export type ItemResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ItemNoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['ItemNote'] = ResolversParentTypes['ItemNote']> = ResolversObject<{
+export type ItemNoteResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemNote'] = ResolversParentTypes['ItemNote']> = ResolversObject<{
   itemNoteTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type LibraryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Library'] = ResolversParentTypes['Library']> = ResolversObject<{
+export type LibraryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Library'] = ResolversParentTypes['Library']> = ResolversObject<{
   campus?: Resolver<Maybe<ResolversTypes['Campus']>, ParentType, ContextType>;
   campusId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1453,7 +1454,7 @@ export type LibraryResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type LoanResolvers<ContextType = any, ParentType extends ResolversParentTypes['Loan'] = ResolversParentTypes['Loan']> = ResolversObject<{
+export type LoanResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Loan'] = ResolversParentTypes['Loan']> = ResolversObject<{
   details?: Resolver<ResolversTypes['CirculationLoan'], ParentType, ContextType>;
   dueDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
@@ -1463,7 +1464,7 @@ export type LoanResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type LoanPolicyResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoanPolicy'] = ResolversParentTypes['LoanPolicy']> = ResolversObject<{
+export type LoanPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicy'] = ResolversParentTypes['LoanPolicy']> = ResolversObject<{
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   loansPolicy?: Resolver<Maybe<ResolversTypes['LoansPolicy']>, ParentType, ContextType>;
@@ -1472,7 +1473,7 @@ export type LoanPolicyResolvers<ContextType = any, ParentType extends ResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type LoansPolicyResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoansPolicy'] = ResolversParentTypes['LoansPolicy']> = ResolversObject<{
+export type LoansPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoansPolicy'] = ResolversParentTypes['LoansPolicy']> = ResolversObject<{
   fixedDueDateSchedule?: Resolver<Maybe<ResolversTypes['FixedDueDateSchedule']>, ParentType, ContextType>;
   fixedDueDateScheduleId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   period?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
@@ -1480,7 +1481,7 @@ export type LoansPolicyResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type LocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = ResolversObject<{
+export type LocationResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = ResolversObject<{
   campus?: Resolver<Maybe<ResolversTypes['Campus']>, ParentType, ContextType>;
   campusId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1501,7 +1502,7 @@ export type LocationResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ManualBlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['ManualBlock'] = ResolversParentTypes['ManualBlock']> = ResolversObject<{
+export type ManualBlockResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ManualBlock'] = ResolversParentTypes['ManualBlock']> = ResolversObject<{
   borrowing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   desc?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   expirationDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -1513,7 +1514,7 @@ export type ManualBlockResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type MetadataResolvers<ContextType = any, ParentType extends ResolversParentTypes['Metadata'] = ResolversParentTypes['Metadata']> = ResolversObject<{
+export type MetadataResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Metadata'] = ResolversParentTypes['Metadata']> = ResolversObject<{
   createdByUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   createdByUsername?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -1523,7 +1524,7 @@ export type MetadataResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PatronResolvers<ContextType = any, ParentType extends ResolversParentTypes['Patron'] = ResolversParentTypes['Patron']> = ResolversObject<{
+export type PatronResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Patron'] = ResolversParentTypes['Patron']> = ResolversObject<{
   accounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Account']>>>, ParentType, ContextType>;
   blocks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Block']>>>, ParentType, ContextType>;
   charges?: Resolver<Array<Maybe<ResolversTypes['Charge']>>, ParentType, ContextType>;
@@ -1539,7 +1540,7 @@ export type PatronResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PatronGroupResolvers<ContextType = any, ParentType extends ResolversParentTypes['PatronGroup'] = ResolversParentTypes['PatronGroup']> = ResolversObject<{
+export type PatronGroupResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronGroup'] = ResolversParentTypes['PatronGroup']> = ResolversObject<{
   desc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   expirationOffsetInDays?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   group?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1548,13 +1549,13 @@ export type PatronGroupResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PeriodResolvers<ContextType = any, ParentType extends ResolversParentTypes['Period'] = ResolversParentTypes['Period']> = ResolversObject<{
+export type PeriodResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Period'] = ResolversParentTypes['Period']> = ResolversObject<{
   duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   intervalId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PersonalResolvers<ContextType = any, ParentType extends ResolversParentTypes['Personal'] = ResolversParentTypes['Personal']> = ResolversObject<{
+export type PersonalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Personal'] = ResolversParentTypes['Personal']> = ResolversObject<{
   dateOfBirth?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['EmailAddress']>, ParentType, ContextType>;
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1567,7 +1568,7 @@ export type PersonalResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProxyForResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProxyFor'] = ResolversParentTypes['ProxyFor']> = ResolversObject<{
+export type ProxyForResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ProxyFor'] = ResolversParentTypes['ProxyFor']> = ResolversObject<{
   accrueTo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   expirationDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1581,7 +1582,7 @@ export type ProxyForResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PublicationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Publication'] = ResolversParentTypes['Publication']> = ResolversObject<{
+export type PublicationResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Publication'] = ResolversParentTypes['Publication']> = ResolversObject<{
   dateOfPublication?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   place?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publisher?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1589,13 +1590,13 @@ export type PublicationResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PublicationPeriodResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicationPeriod'] = ResolversParentTypes['PublicationPeriod']> = ResolversObject<{
+export type PublicationPeriodResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PublicationPeriod'] = ResolversParentTypes['PublicationPeriod']> = ResolversObject<{
   end?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   start?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   holdingsRecord?: Resolver<Maybe<ResolversTypes['HoldingsRecord']>, ParentType, ContextType, RequireFields<QueryHoldingsRecordArgs, 'id'>>;
   holdingsRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['HoldingsRecord']>>>, ParentType, ContextType, Partial<QueryHoldingsRecordsArgs>>;
   instance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType, RequireFields<QueryInstanceArgs, 'id'>>;
@@ -1609,20 +1610,20 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   requestPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['RequestPolicy']>>>, ParentType, ContextType, Partial<QueryRequestPoliciesArgs>>;
 }>;
 
-export type ReceivingHistoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReceivingHistory'] = ResolversParentTypes['ReceivingHistory']> = ResolversObject<{
+export type ReceivingHistoryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ReceivingHistory'] = ResolversParentTypes['ReceivingHistory']> = ResolversObject<{
   displayType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   entries?: Resolver<Maybe<Array<Maybe<ResolversTypes['ReceivingHistoryEntry']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ReceivingHistoryEntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['ReceivingHistoryEntry'] = ResolversParentTypes['ReceivingHistoryEntry']> = ResolversObject<{
+export type ReceivingHistoryEntryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ReceivingHistoryEntry'] = ResolversParentTypes['ReceivingHistoryEntry']> = ResolversObject<{
   chronology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   enumeration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publicDisplay?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type RenewalsPolicyResolvers<ContextType = any, ParentType extends ResolversParentTypes['RenewalsPolicy'] = ResolversParentTypes['RenewalsPolicy']> = ResolversObject<{
+export type RenewalsPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RenewalsPolicy'] = ResolversParentTypes['RenewalsPolicy']> = ResolversObject<{
   numberAllowed?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   period?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   renewFromId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1631,7 +1632,7 @@ export type RenewalsPolicyResolvers<ContextType = any, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type RequestItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['RequestItem'] = ResolversParentTypes['RequestItem']> = ResolversObject<{
+export type RequestItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestItem'] = ResolversParentTypes['RequestItem']> = ResolversObject<{
   author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   instance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType>;
   instanceId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
@@ -1642,7 +1643,7 @@ export type RequestItemResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type RequestPolicyResolvers<ContextType = any, ParentType extends ResolversParentTypes['RequestPolicy'] = ResolversParentTypes['RequestPolicy']> = ResolversObject<{
+export type RequestPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestPolicy'] = ResolversParentTypes['RequestPolicy']> = ResolversObject<{
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1650,14 +1651,14 @@ export type RequestPolicyResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ScheduleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Schedule'] = ResolversParentTypes['Schedule']> = ResolversObject<{
+export type ScheduleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Schedule'] = ResolversParentTypes['Schedule']> = ResolversObject<{
   due?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   from?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   to?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ServicePointResolvers<ContextType = any, ParentType extends ResolversParentTypes['ServicePoint'] = ResolversParentTypes['ServicePoint']> = ResolversObject<{
+export type ServicePointResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePoint'] = ResolversParentTypes['ServicePoint']> = ResolversObject<{
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   discoveryDisplayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1668,24 +1669,24 @@ export type ServicePointResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type SourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Source'] = ResolversParentTypes['Source']> = ResolversObject<{
+export type SourceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Source'] = ResolversParentTypes['Source']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   personal?: Resolver<Maybe<ResolversTypes['Personal']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type StatusResolvers<ContextType = any, ParentType extends ResolversParentTypes['Status'] = ResolversParentTypes['Status']> = ResolversObject<{
+export type StatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Status'] = ResolversParentTypes['Status']> = ResolversObject<{
   date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type TagResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = ResolversObject<{
+export type TagResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = ResolversObject<{
   tagList?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type TagsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tags'] = ResolversParentTypes['Tags']> = ResolversObject<{
+export type TagsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Tags'] = ResolversParentTypes['Tags']> = ResolversObject<{
   tagList?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1694,7 +1695,7 @@ export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'UUID';
 }
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+export type UserResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   accounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Account']>>>, ParentType, ContextType>;
   active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1717,7 +1718,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   Account?: AccountResolvers<ContextType>;
   Address?: AddressResolvers<ContextType>;
   AlternativeTitle?: AlternativeTitleResolvers<ContextType>;
