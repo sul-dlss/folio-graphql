@@ -22,8 +22,8 @@ beforeEach(() => {
 })
 
 // expose mockResponse for use in tests, allowing each test to pass in its own expected response data
-export const mockResponse = (data: object) => {
-  fetchMock.mockResponse(JSON.stringify(data), { status: 200, headers: { "Content-Type": 'application/json' } });
+export const mockResponse = (match: RegExp, data: object) => {
+  fetchMock.mockIf(match, async _req => ({ body: JSON.stringify(data), status: 200, headers: { "Content-Type": 'application/json' }}));
 }
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
 const typeDefs = readFileSync(path.resolve(__dirname, "../src/schema.graphql")).toString("utf-8")

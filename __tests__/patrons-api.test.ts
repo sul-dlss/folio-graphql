@@ -1,10 +1,11 @@
 
 import assert from 'assert';
+import escapeStringRegexp from 'escape-string-regexp';
 import { mockResponse, queryTestServer } from './setupJest';
 
 describe('Patrons API', () => {
   it('returns data from getPatrons', async () => {
-    mockResponse({
+    mockResponse(new RegExp(escapeStringRegexp("/patron/account/d7b67ab1-a3f2-45a9-87cc-d867bca8315f?includeLoans=true&includeHolds=true&includeCharges=true")), {
       "totalCharges": {
         "amount": 50.0,
         "isoCurrencyCode": "USD"
@@ -73,4 +74,4 @@ describe('Patrons API', () => {
     expect(response.body.singleResult.errors).toBeUndefined();
     expect(response.body.singleResult.data?.patron.loans[0].dueDate).toBe('2525-01-01T11:12:00Z')
   });
-}) 
+})
