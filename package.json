@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run codegen && npm run compile",
-    "compile": "tsc && cp src/schema.graphql dist/schema.graphql",
+    "compile": "tsc -p tsconfig-build.json && cp src/schema.graphql dist/schema.graphql",
     "start": "npm run codegen && node --loader ts-node/esm src/server.ts",
     "start:dev": "nodemon",
     "codegen": "graphql-codegen-esm --config codegen.yml",

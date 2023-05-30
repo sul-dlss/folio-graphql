@@ -9,7 +9,5 @@
     "esModuleInterop": true,
     "types": ["node", "jest"],
     "sourceMap": true,
-  },
-  "include": ["src"],
-  "exclude": ["__tests__/*.ts"]
+  }
 }
