@@ -39,6 +39,11 @@ to regenerate the typescript typings when changing the graphql schema:
 npm run codegen
 ```
 
+to run the test suite
+```sh
+npm test
+```
+
 ## Deploying
 
 Github actions deploys the image to docker hub.  Once that is complete you can push the image to the server:

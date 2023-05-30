@@ -19,7 +19,7 @@ export default class FolioAPI extends RESTDataSource {
   private token: string
   private refreshToken: string
 
-  constructor(options: { token: string, cache: KeyValueCache }) {
+  constructor(options: { token: string, cache?: KeyValueCache, fetch?: any }) {
     super(options)
     this.token = options.token
   }
