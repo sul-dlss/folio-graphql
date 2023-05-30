@@ -1,5 +1,5 @@
-import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, BlockLimit, BlockCondition, FixedDueDateSchedule } from "../schema"
+import { UUIDResolver } from "graphql-scalars"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, PatronBlockLimit, PatronBlockCondition, FixedDueDateSchedule } from "../schema"
 import { Resolvers } from '../resolvers-types'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -70,21 +70,21 @@ export const resolvers: Resolvers = {
     accounts(parent, args, { dataSources }, info) {
       return dataSources.users.getAccounts(parent.id)
     },
-    proxyFor(parent, args, { dataSources }, info) {
+    proxiesFor(parent, args, { dataSources }, info) {
       return dataSources.users.getProxiesFor(parent.id)
     },
-    proxies(parent, args, { dataSources }, info) {
+    proxiesOf(parent, args, { dataSources }, info) {
       return dataSources.users.getProxiesOf(parent.id)
     }
   },
   PatronGroup: {
     limits(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<BlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
+      return dataSources.types.getValuesFor<PatronBlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
     }
   },
-  BlockLimit: {
+  PatronBlockLimit: {
     condition(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<BlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
+      return dataSources.types.getMapFor<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
     }
   },
   ProxyFor: {
@@ -100,12 +100,12 @@ export const resolvers: Resolvers = {
       return dataSources.locations.getLocation(parent.pickupLocationId)
     }
   },
-  Loan: {
+  PatronLoan: {
     details(parent, args, { dataSources }, info) {
       return dataSources.circulation.getLoan(parent.id)
     }
   },
-  CirculationLoan: {
+  Loan: {
     item(parent, args, { dataSources }, info) {
       return dataSources.items.getItem(parent.itemId)
     },
@@ -116,12 +116,12 @@ export const resolvers: Resolvers = {
       return dataSources.types.getMapFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache }).then(map => map.get(parent.loanPolicyId))
     }
   },
-  LoansPolicy: {
+  LoanPolicyLoansPolicy: {
     fixedDueDateSchedule(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
     }
   },
-  RequestItem: {
+  PatronItem: {
     instance(parent, args, { dataSources }, info) {
       return dataSources.instances.getInstance(parent.instanceId)
     },
@@ -171,7 +171,7 @@ export const resolvers: Resolvers = {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
     }
   },
-  Classification: {
+  InstanceClassificationsItem: {
     classificationType(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<ClassificationType>("classification-types", { cache: typeCache }).then(map => map.get(parent.classificationTypeId))
     }
@@ -206,7 +206,7 @@ export const resolvers: Resolvers = {
       return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache }).then(values => values.filter(v => v.libraryId == parent.id))
     },
   },
-  Charge: {
+  PatronCharge: {
     feeFine(parent, args, { dataSources }, info) {
       return dataSources.feefines.getFeeFine(parent.feeFineId)
     }
@@ -225,6 +225,5 @@ export const resolvers: Resolvers = {
       return dataSources.feefines.getFeeFine(parent.feeFineId)
     },
   },
-  UUID: UUIDResolver,
-  EmailAddress: EmailAddressResolver
+  UUID: UUIDResolver
 }

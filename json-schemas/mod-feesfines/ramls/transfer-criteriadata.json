@@ -1,0 +1,30 @@
+{
+  "$schema":"http://json-schema.org/draft-04/schema#",
+  "title":"Transfer criteria schema",
+  "description": "CRUD Fee/Fine transfer criteria",
+  "type":"object",
+  "properties":{
+    "criteria":{
+      "description": "Not implemented yet",
+      "type":"string"
+    },
+    "type":{
+      "description": "Not implemented yet",
+      "type":"string"
+    },
+    "value":{
+      "description": "Not implemented yet",
+      "javaType": "org.folio.rest.domain.MonetaryValue",
+      "type": "number"
+    },
+    "interval":{
+      "description": "Not implemented yet",
+      "type":"string"
+    },
+    "id":{
+      "description": "Transfer criteria id, UUID",
+      "$ref": "raml-util/schemas/uuid.schema"
+    }
+  },
+  "additionalProperties":false
+}

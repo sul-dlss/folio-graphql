@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Action response",
+  "type": "object",
+  "properties": {
+    "accountId": {
+      "type": "string",
+      "description": "Unique ID of the account",
+      "$ref": "../raml-util/schemas/uuid.schema"
+    },
+    "amount": {
+      "type": "string",
+      "description": "Action amount"
+    },
+    "remainingAmount": {
+      "type": "string",
+      "description": "Remaining fee/fine amount after action"
+    },
+    "feefineactions": {
+      "type": "array",
+      "description": "Fee/fine action records created as a result of an action",
+      "items": {
+        "type": "object",
+        "$ref": "../feefineactiondata.json"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "accountId",
+    "amount",
+    "remainingAmount"
+  ]
+}
