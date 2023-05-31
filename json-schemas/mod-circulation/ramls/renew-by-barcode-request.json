@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Request to renew an existing loan, found by barcodes of item and loanee",
+  "properties": {
+    "itemBarcode": {
+      "description": "Barcode of the item to be renewed",
+      "type": "string"
+    },
+    "userBarcode": {
+      "description": "Barcode of the user (representing the patron) the item has been loaned to",
+      "type": "string"
+    },
+    "servicePointId": {
+      "description": "Service point where an item is being processed",
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    },
+    "overrideBlocks": {
+      "description": "Blocks to override",
+      "$ref": "override-blocks.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "itemBarcode",
+    "userBarcode"
+  ]
+}

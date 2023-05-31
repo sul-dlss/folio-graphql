@@ -1,5 +1,5 @@
-import { EmailAddressResolver, UUIDResolver } from "graphql-scalars"
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, BlockLimit, BlockCondition, FixedDueDateSchedule } from "../schema"
+import { UUIDResolver } from "graphql-scalars"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, PatronBlockLimit, PatronBlockCondition, FixedDueDateSchedule, HoldStatus } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -54,12 +54,17 @@ export const resolvers: Resolvers = {
       return dataSources.users.getAccounts(parent.id)
     }
   },
+  Block: {
+    blockCondition(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.patronBlockConditionId));
+    },
+  },
   User: {
     patronGroupId(parent, args, { dataSources }, info) {
       return parent.patronGroup;
     },
     patronGroup(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroupId));
+      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroup as unknown as string));
     },
     blocks(parent, args, { dataSources }, info) {
       return dataSources.users.getBlocks(parent.id)
@@ -70,21 +75,21 @@ export const resolvers: Resolvers = {
     accounts(parent, args, { dataSources }, info) {
       return dataSources.users.getAccounts(parent.id)
     },
-    proxyFor(parent, args, { dataSources }, info) {
+    proxiesFor(parent, args, { dataSources }, info) {
       return dataSources.users.getProxiesFor(parent.id)
     },
-    proxies(parent, args, { dataSources }, info) {
+    proxiesOf(parent, args, { dataSources }, info) {
       return dataSources.users.getProxiesOf(parent.id)
     }
   },
   PatronGroup: {
     limits(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<BlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
+      return dataSources.types.getValuesFor<PatronBlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
     }
   },
-  BlockLimit: {
+  PatronBlockLimit: {
     condition(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<BlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
+      return dataSources.types.getMapFor<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
     }
   },
   ProxyFor: {
@@ -98,14 +103,26 @@ export const resolvers: Resolvers = {
   Hold: {
     pickupLocation(parent, args, { dataSources }, info) {
       return dataSources.locations.getLocation(parent.pickupLocationId)
+    },
+    status(parent, args, { dataSources, typeCache }, info) {
+      switch(parent.status as unknown as string) {
+        case "Open - Not yet filled": return HoldStatus.OpenNotYetFilled
+        case "Open - Awaiting pickup": return HoldStatus.OpenAwaitingPickup
+        case "Open - Awaiting delivery": return HoldStatus.OpenAwaitingDelivery
+        case "Open - In transit": return HoldStatus.OpenInTransit
+        case "Closed - Filled": return HoldStatus.ClosedFilled
+        case "Closed - Cancelled": return HoldStatus.ClosedCancelled
+        case "Closed - Unfilled": return HoldStatus.ClosedUnfilled
+        case "Closed - Pickup expired": return HoldStatus.ClosedPickupExpired
+      }
     }
   },
-  Loan: {
+  PatronLoan: {
     details(parent, args, { dataSources }, info) {
       return dataSources.circulation.getLoan(parent.id)
     }
   },
-  CirculationLoan: {
+  Loan: {
     item(parent, args, { dataSources }, info) {
       return dataSources.items.getItem(parent.itemId)
     },
@@ -116,12 +133,12 @@ export const resolvers: Resolvers = {
       return dataSources.types.getMapFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache }).then(map => map.get(parent.loanPolicyId))
     }
   },
-  LoansPolicy: {
+  LoanPolicyLoansPolicy: {
     fixedDueDateSchedule(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
     }
   },
-  RequestItem: {
+  PatronItem: {
     instance(parent, args, { dataSources }, info) {
       return dataSources.instances.getInstance(parent.instanceId)
     },
@@ -171,7 +188,7 @@ export const resolvers: Resolvers = {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
     }
   },
-  Classification: {
+  InstanceClassificationsItem: {
     classificationType(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<ClassificationType>("classification-types", { cache: typeCache }).then(map => map.get(parent.classificationTypeId))
     }
@@ -206,7 +223,7 @@ export const resolvers: Resolvers = {
       return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache }).then(values => values.filter(v => v.libraryId == parent.id))
     },
   },
-  Charge: {
+  PatronCharge: {
     feeFine(parent, args, { dataSources }, info) {
       return dataSources.feefines.getFeeFine(parent.feeFineId)
     }
@@ -225,6 +242,5 @@ export const resolvers: Resolvers = {
       return dataSources.feefines.getFeeFine(parent.feeFineId)
     },
   },
-  UUID: UUIDResolver,
-  EmailAddress: EmailAddressResolver
+  UUID: UUIDResolver
 }

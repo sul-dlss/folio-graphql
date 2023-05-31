@@ -1,20 +1,6 @@
 # These are non-core graphql types; resolvers are provided by graphql-scalars
 scalar DateTime
 scalar UUID
-scalar EmailAddress
-
-enum PatronStatus {
-  OK
-  BLOCKED
-}
-
-enum PatronStanding {
-  OK
-  BARRED
-  COLLECTION
-  BLOCKED
-  DELINQUENT
-}
 
 input CqlParams {
   query: String
@@ -43,562 +29,2217 @@ type Query {
   patronGroups: [PatronGroup]
 }
 
-type Patron {
+"""
+A set of date ranges for materials checkout and their associated due dates.
+"""
+type FixedDueDateSchedule {
+  """Unique ID (generated UUID)"""
   id: UUID
-  user: User
-  totalCharges: ChargeAmount!
-  totalChargesCount: Int!
-  totalLoans: Int!
-  totalHolds: Int!
-  charges: [Charge]!
-  holds: [Hold]!
-  loans: [Loan]!
-  blocks: [Block]
-  manualBlocks: [ManualBlock]
-  accounts: [Account]
-}
-
-type User {
-  id: UUID
-  username: String
-  externalSystemId: String
-  barcode: String
-  active: Boolean
-  type: String
-  patronGroupId: UUID
-  patronGroup: PatronGroup
-  department: [UUID]
-  personal: Personal
-  enrollmentDate: DateTime
-  expirationDate: DateTime
-  proxyFor: [ProxyFor]
-  proxies: [ProxyFor]
+  name: String!
+  description: String
+  schedules: [Schedule!]
   metadata: Metadata
-  tags: Tags
-  blocks: [Block]
-  manualBlocks: [ManualBlock]
-  accounts: [Account]
 }
 
-type Block {
-  patronBlockConditionId: UUID
-  blockBorrowing: Boolean
-  blockRenewals: Boolean
-  blockRequests: Boolean
-  message: String
+"""A UUID"""
+scalar UUID
+
+"""
+A date range and associated due date, connected with the parent FixedDueDateSchedule.
+"""
+type Schedule {
+  """
+  The start of a date range during which materials checked out will be assigned the due date in the 'due' field. Conforms to the ISO 8601 date and time format.
+  """
+  from: DateTime!
+
+  """
+  The end of a date range during which materials checked out will be assigned the due date in the 'due' field. Conforms to the ISO 8601 date and time format.
+  """
+  to: DateTime!
+
+  """
+  The due date for materials checked out in the date range between the 'from' and 'to' dates. Conforms to the ISO 8601 date and time format.
+  """
+  due: DateTime!
 }
 
-type ManualBlock {
-  id: UUID
-  type: String
-  desc: String!
-  patronMessage: String
-  expirationDate: DateTime
-  borrowing: Boolean
-  renewals: Boolean
-  requests: Boolean
-}
+"""A date and time"""
+scalar DateTime
 
-type PatronGroup {
-  group: String!
-  desc: String
-  id: UUID
-  expirationOffsetInDays: Int
-  limits: [BlockLimit]
-}
-
-type BlockLimit {
-  id: UUID
-  patronGroupId: UUID
-  conditionId: UUID
-  condition: BlockCondition
-  value: Float
-}
-
-type BlockCondition {
-  id: UUID
-  name: String
-  blockBorrowing: Boolean
-  blockRenewals: Boolean
-  blockRequests: Boolean
-  valueType: String
-  message: String
-}
-
-type Personal {
-  lastName: String!
-  firstName: String
-  middleName: String
-  preferredFirstName: String
-  email: EmailAddress
-  phone: String
-  mobilePhone: String
-  dateOfBirth: DateTime
-  preferredContactTypeId: String
-}
-
-type Address {
-  id: String
-  countryId: String
-  addressLine1: String
-  addressLine2: String
-  city: String
-  region: String
-  postalCode: String
-  addressTypeId: UUID!
-  primaryAddress: Boolean
-}
-
+"""
+Metadata about creation and changes to records, provided by the server (client should not provide)
+"""
 type Metadata {
+  """Date and time when the record was created"""
   createdDate: DateTime!
+
+  """ID of the user who created the record (when available)"""
   createdByUserId: UUID
+
+  """Username of the user who created the record (when available)"""
   createdByUsername: String
+
+  """Date and time when the record was last updated"""
   updatedDate: DateTime
+
+  """ID of the user who last updated the record (when available)"""
   updatedByUserId: UUID
+
+  """Username of the user who last updated the record (when available)"""
   updatedByUsername: String
 }
 
-type Tags {
-  tagList: [String]
-}
-
-type ProxyFor {
-  user: User
-  userId: String
-  proxyUser: User
-  proxyUserId: String
+type LoanPolicy {
   id: String
-  requestforSponsor: String
-  notificationsTo: String
-  accrueTo: String
-  status: String
-  expirationDate: DateTime
+  name: String!
+  description: String
+  loanable: Boolean!
+  loansPolicy: LoanPolicyLoansPolicy
+
+  """Is item renewable"""
+  renewable: Boolean!
+  renewalsPolicy: LoanPolicyRenewalsPolicy
+  requestManagement: LoanPolicyRequestManagement
+  metadata: Metadata
 }
 
-type RequestItem {
+type LoanPolicyLoansPolicy {
+  """Loan profile"""
+  profileId: String
+
+  """Loan period"""
+  period: Period
+
+  """Closed library due date management"""
+  closedLibraryDueDateManagementId: String
+
+  """Grace period"""
+  gracePeriod: Period
+
+  """Opening offset time period"""
+  openingTimeOffset: Period
+
+  """Fixed due date schedule (due date limit)"""
+  fixedDueDateScheduleId: String
+
+  """Number of items allowed"""
+  itemLimit: Int
+}
+
+type Period {
+  """Duration of the period, number of times the interval repeats"""
+  duration: Int!
+
+  """Interval for the period, e.g. hours, days or weeks"""
+  intervalId: PeriodIntervalId!
+}
+
+enum PeriodIntervalId {
+  Minutes
+  Hours
+  Days
+  Weeks
+  Months
+}
+
+type LoanPolicyRenewalsPolicy {
+  """Unlimited renewals"""
+  unlimited: Boolean
+
+  """Number of renewals allowed"""
+  numberAllowed: Float
+
+  """Renew from date"""
+  renewFromId: String
+
+  """Renewal period different from original loan"""
+  differentPeriod: Boolean
+
+  """Alternate loan period for renewals"""
+  period: Period
+
+  """Alternate fixed due date schedule (due date limit) for renewals"""
+  alternateFixedDueDateScheduleId: String
+}
+
+type LoanPolicyRequestManagement {
+  recalls: LoanPolicyRequestManagementRecalls
+  holds: LoanPolicyRequestManagementHolds
+  pages: LoanPolicyRequestManagementPages
+}
+
+type LoanPolicyRequestManagementRecalls {
+  """Alternate grace period for recalled items"""
+  alternateGracePeriod: Period
+
+  """Minimum guaranteed loan period"""
+  minimumGuaranteedLoanPeriod: Period
+
+  """Recall return interval"""
+  recallReturnInterval: Period
+
+  """Whether recalls are allowed to extend overdue loans"""
+  allowRecallsToExtendOverdueLoans: Boolean
+
+  """Alternate recall return interval for overdue loans"""
+  alternateRecallReturnInterval: Period
+}
+
+type LoanPolicyRequestManagementHolds {
+  """
+  Alternate loan period at checkout for items with active, pending hold request
+  """
+  alternateCheckoutLoanPeriod: Period
+
+  """Allow renewal of items with active, pending hold request"""
+  renewItemsWithRequest: Boolean
+
+  """
+  Alternate loan period at renewal for items with active, pending hold request
+  """
+  alternateRenewalLoanPeriod: Period
+}
+
+type LoanPolicyRequestManagementPages {
+  """
+  Alternate loan period at checkout for items with active, pending page request
+  """
+  alternateCheckoutLoanPeriod: Period
+
+  """Allow renewal of items with active, pending page request"""
+  renewItemsWithRequest: Boolean
+
+  """
+  Alternate loan period at renewal for items with active, pending page request
+  """
+  alternateRenewalLoanPeriod: Period
+}
+
+"""request policy schema"""
+type RequestPolicy {
+  """Unique request policy ID"""
+  id: String
+
+  """Unique request policy name, required"""
+  name: String!
+
+  """Description of request policy"""
+  description: String
+
+  """Whether the item should be held upon return, recalled or paged for"""
+  requestTypes: [RequestType!]
+
+  """
+  Metadata about creation and changes to request policy, provided by the server (client should not provide)
+  """
+  metadata: Metadata
+}
+
+enum RequestType {
+  Hold
+  Recall
+  Page
+}
+
+"""
+Links the item with the patron and applies certain conditions based on policies
+"""
+type Loan {
+  """Unique ID (generated UUID) of the loan"""
+  id: UUID
+
+  """
+  ID of the patron the item was lent to. Required for open loans, not required for closed loans (for anonymization).
+  """
+  userId: UUID
+
+  """
+  Additional information about the borrower of the item, taken from the user referred to by the userId
+  """
+  borrower: LoanBorrower
+
+  """ID of the user representing a proxy for the patron"""
+  proxyUserId: UUID
+
+  """ID of the item lent to the patron"""
+  itemId: UUID!
+
+  """ID of last policy used in relation to this loan"""
+  loanPolicyId: UUID
+  loanPolicy: LoanPolicy
+
+  """ID of last overdue fine policy used in relation to this loan"""
+  overdueFinePolicyId: UUID
+
+  """
+  Additional information about the overdue fine policy of the item, taken from the loan overdueFinePolicyId
+  """
+  overdueFinePolicy: LoanOverdueFinePolicy
+
+  """ID of last lost item policy used in relation to this loan"""
+  lostItemPolicyId: UUID
+
+  """
+  Additional information about the lost item policy of the item, taken from the loan lostItemPolicyId
+  """
+  lostItemPolicy: LoanLostItemPolicy
+  item: Item
+
+  """
+  The effective location, at the time of checkout, of the item loaned to the patron.
+  """
+  itemEffectiveLocationIdAtCheckOut: UUID
+
+  """Overall status of the loan"""
+  status: LoanStatus
+
+  """Date and time when the loan began"""
+  loanDate: DateTime!
+
+  """Date and time when the item is due to be returned"""
+  dueDate: DateTime
+
+  """Date and time when the item was returned"""
+  returnDate: DateTime
+
+  """Date and time when return was processed"""
+  systemReturnDate: DateTime
+
+  """
+  Last action performed on a loan (currently can be any value, values commonly used are checkedout and checkedin)
+  """
+  action: String!
+
+  """Last action performed on a loan comments"""
+  actionComment: String
+
+  """
+  Count of how many times a loan has been renewed (incremented by the client)
+  """
+  renewalCount: Int
+
+  """Is due date changed by recall request"""
+  dueDateChangedByRecall: Boolean
+
+  """
+  Indicates whether or not this loan had its due date modified by a expired user
+  """
+  dueDateChangedByNearExpireUser: Boolean
+
+  """Is due date changed by hold request"""
+  dueDateChangedByHold: Boolean
+
+  """ID of the Service Point where the last checkout occured"""
+  checkoutServicePointId: UUID
+
+  """ID of the Service Point where the last checkin occured"""
+  checkinServicePointId: UUID
+
+  """Service Point where the last checkout occurred"""
+  checkoutServicePoint: ServicePoint
+
+  """Service Point where the last checkin occurred"""
+  checkinServicePoint: ServicePoint
+
+  """Patron Group at checkout"""
+  patronGroupAtCheckout: LoanPatronGroupAtCheckout
+
+  """Fees and fines associated with loans"""
+  feesAndFines: LoanFeesAndFines
+
+  """Date and time the item was declared lost during this loan"""
+  declaredLostDate: DateTime
+
+  """
+  Metadata about creation and changes to loan, provided by the server (client should not provide)
+  """
+  metadata: Metadata
+}
+
+"""
+Additional information about the borrower of the item, taken from the user referred to by the userId
+"""
+type LoanBorrower {
+  """first name of the borrower (read only, defined by the server)"""
+  firstName: String
+
+  """last name of the borrower (read only, defined by the server)"""
+  lastName: String
+
+  """middle name of the borrower (read only, defined by the server)"""
+  middleName: String
+
+  """
+  barcode used to identify the borrower (read only, defined by the server)
+  """
+  barcode: String
+}
+
+"""
+Additional information about the overdue fine policy of the item, taken from the loan overdueFinePolicyId
+"""
+type LoanOverdueFinePolicy {
+  """
+  Name of last overdue fine policy used in relation to this loan (read only, defined by the server)
+  """
+  name: String
+}
+
+"""
+Additional information about the lost item policy of the item, taken from the loan lostItemPolicyId
+"""
+type LoanLostItemPolicy {
+  """
+  Name of last lost item policy used in relation to this loan (read only, defined by the server)
+  """
+  name: String
+}
+
+"""An item record"""
+type Item {
+  """Unique ID of the item record"""
+  id: String
+
+  """Record version for optimistic locking"""
+  _version: Int
+
+  """
+  The human readable ID, also called eye readable ID. A system-assigned sequential alternate ID
+  """
+  hrid: String
+
+  """ID of the holdings record the item is a member of."""
+  holdingsRecordId: String!
+
+  """Previous identifiers assigned to the item"""
+  formerIds: [String!]
+
+  """
+  Records the fact that the record should not be displayed in a discovery system
+  """
+  discoverySuppress: Boolean
+
+  """Also called inventar number"""
+  accessionNumber: String
+
+  """
+  Unique inventory control number for physical resources, used largely for circulation purposes
+  """
+  barcode: String
+
+  """
+  A system generated normalization of the call number that allows for call number sorting in reports and search results
+  """
+  effectiveShelvingOrder: String
+
+  """
+  Call Number is an identifier assigned to an item, usually printed on a label attached to the item. The call number is used to determine the items physical position in a shelving sequence, e.g. K1 .M44. The Item level call number, is the call number on item level.
+  """
+  itemLevelCallNumber: String
+
+  """Prefix of the call number on the item level."""
+  itemLevelCallNumberPrefix: String
+
+  """Suffix of the call number on the item level."""
+  itemLevelCallNumberSuffix: String
+
+  """Identifies the source of the call number, e.g., LCC, Dewey, NLM, etc."""
+  itemLevelCallNumberTypeId: String
+
+  """Elements of a full call number generated from the item or holding"""
+  effectiveCallNumberComponents: ItemEffectiveCallNumberComponents
+
+  """
+  Volume is intended for monographs when a multipart monograph (e.g. a biography of George Bernard Shaw in three volumes).
+  """
+  volume: String
+
+  """
+  Enumeration is the descriptive information for the numbering scheme of a serial.
+  """
+  enumeration: String
+
+  """
+  Chronology is the descriptive information for the dating scheme of a serial.
+  """
+  chronology: String
+
+  """
+  In multipart monographs, a caption is a character(s) used to label a level of chronology, e.g., year 1985.
+  """
+  yearCaption: [String!]
+
+  """
+  Item identifier number, e.g. imported from the union catalogue (read only).
+  """
+  itemIdentifier: String
+
+  """
+  Copy number is the piece identifier. The copy number reflects if the library has a copy of a single-volume monograph; one copy of a multi-volume, (e.g. Copy 1, or C.7.)
+  """
+  copyNumber: String
+
+  """
+  Number of pieces. Used when an item is checked out or returned to verify that all parts are present (e.g. 7 CDs in a set).
+  """
+  numberOfPieces: String
+
+  """Description of item pieces."""
+  descriptionOfPieces: String
+
+  """Number of missing pieces."""
+  numberOfMissingPieces: String
+
+  """Description of the missing pieces. """
+  missingPieces: String
+
+  """Date when the piece(s) went missing."""
+  missingPiecesDate: String
+
+  """Item dame status id identifier."""
+  itemDamagedStatusId: String
+
+  """Date and time when the item was damaged."""
+  itemDamagedStatusDate: String
+
+  """Administrative notes"""
+  administrativeNotes: [String!]
+
+  """Notes about action, copy, binding etc."""
+  notes: [ItemNotesItem!]
+
+  """Notes to be displayed in circulation processes"""
+  circulationNotes: [ItemCirculationNotesItem!]
+
+  """The status of the item"""
+  status: ItemStatus!
+
+  """Material type, term. Define what type of thing the item is."""
+  materialTypeId: String!
+
+  """Item's material type"""
+  materialType: MaterialType
+
+  """
+  The permanent loan type, is the default loan type for a given item. Loan types are tenant-defined.
+  """
+  permanentLoanTypeId: String!
+
+  """Temporary loan type, is the temporary loan type for a given item."""
+  temporaryLoanTypeId: String
+
+  """
+  Permanent item location is the default location, shelving location, or holding which is a physical place where items are stored, or an Online location.
+  """
+  permanentLocationId: String
+  permanentLocation: Location
+
+  """
+  Temporary item location is the temporarily location, shelving location, or holding which is a physical place where items are stored, or an Online location.
+  """
+  temporaryLocationId: String
+
+  """
+  Temporary location, shelving location, or holding which is a physical place where items are stored, or an Online location
+  """
+  temporaryLocation: Location
+
+  """Read only current home location for the item."""
+  effectiveLocationId: UUID
+
+  """References for accessing the item by URL."""
+  electronicAccess: [ItemElectronicAccessItem!]
+
+  """
+  Service point an item is intended to be transited to (should only be present when in transit)
+  """
+  inTransitDestinationServicePointId: UUID
+
+  """List of statistical code IDs"""
+  statisticalCodeIds: [String!]
+
+  """ID referencing a remote purchase order object related to this item"""
+  purchaseOrderLineIdentifier: String
+
+  """arbitrary tags associated with this item"""
+  tags: Tags
+  metadata: Metadata
+
+  """Item associated holdings record object."""
+  holdingsRecord2: HoldingsRecord
+
+  """Information about when an item was last scanned in the Inventory app."""
+  lastCheckIn: ItemLastCheckIn
+}
+
+"""Elements of a full call number generated from the item or holding"""
+type ItemEffectiveCallNumberComponents {
+  """
+  Effective Call Number is an identifier assigned to an item or its holding and associated with the item.
+  """
+  callNumber: String
+
+  """
+  Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item.
+  """
+  prefix: String
+
+  """
+  Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item.
+  """
+  suffix: String
+
+  """
+  Effective Call Number Type Id is the call number type id of the item, if available, otherwise that of the holding.
+  """
+  typeId: UUID
+}
+
+type ItemNotesItem {
+  """ID of the type of note"""
+  itemNoteTypeId: String
+
+  """Type of item's note"""
+  itemNoteType: ItemNoteType
+
+  """Text content of the note"""
+  note: String
+
+  """
+  If true, determines that the note should not be visible for others than staff
+  """
+  staffOnly: Boolean
+}
+
+"""An item note type"""
+type ItemNoteType {
+  """unique ID of the item note type; a UUID"""
+  id: String
+
+  """name of the item note type"""
+  name: String!
+
+  """
+  label indicating where the item note type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+type ItemCirculationNotesItem {
+  """The id of the circulation note"""
+  id: String
+
+  """Type of circulation process that the note applies to"""
+  noteType: ItemCirculationNotesItemNoteType
+
+  """Text to display"""
+  note: String
+
+  """
+  The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource.
+  """
+  source: ItemCirculationNotesItemSource
+
+  """
+  Date and time the record is added/updated. The property is generated by the server and needed to support sorting.
+  """
+  date: String
+
+  """Flag to restrict display of this note"""
+  staffOnly: Boolean
+}
+
+enum ItemCirculationNotesItemNoteType {
+  Check_in
+  Check_out
+}
+
+"""
+The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource.
+"""
+type ItemCirculationNotesItemSource {
+  """
+  The id of the user who added/updated the note. The user information is generated by the server and needed to support sorting. Points to /users/{id} resource.
+  """
+  id: String
+
+  """Personal information about the user"""
+  personal: ItemCirculationNotesItemSourcePersonal
+}
+
+"""Personal information about the user"""
+type ItemCirculationNotesItemSourcePersonal {
+  """The user's last name"""
+  lastName: String
+
+  """The user's first name"""
+  firstName: String
+}
+
+"""The status of the item"""
+type ItemStatus {
+  name: String!
+
+  """Date and time when the status was last changed"""
+  date: DateTime
+}
+
+"""A material type"""
+type MaterialType {
+  id: String
+
+  """label for the material type"""
+  name: String!
+
+  """origin of the material type record"""
+  source: String
+  metadata: Metadata
+}
+
+"""
+A (shelf) location, the forth-level location unit below institution, campus, and library.
+"""
+type Location {
+  """id of this (shelf) location record as UUID."""
+  id: String
+
+  """Name of the (shelf) location"""
+  name: String!
+
+  """Code of the (shelf) location, usually an abbreviation of the name."""
+  code: String!
+
+  """Description of the (shelf) location."""
+  description: String
+
+  """Name of the (shelf) location to be shown in the discovery."""
+  discoveryDisplayName: String
+
+  """
+  Whether this (shelf) location is active. Inactive (shelf) locations can no longer been used.
+  """
+  isActive: Boolean
+
+  """
+  The UUID of the institution, the first-level location unit, this (shelf) location belongs to.
+  """
+  institutionId: String!
+
+  """
+  The institution, the first-level location unit, this (shelf) location belongs to.
+  """
+  institution: Institution
+
+  """
+  The UUID of the campus, the second-level location unit, this (shelf) location belongs to.
+  """
+  campusId: String!
+
+  """
+  The campus, the second-level location unit, this (shelf) location belongs to
+  """
+  campus: Campus
+
+  """
+  The UUID of the library, the third-level location unit, this (shelf) location belongs to.
+  """
+  libraryId: String!
+  library: Library
+
+  """Details about this (shelf) location."""
+  details: LocationDetails
+
+  """The UUID of the primary service point of this (shelf) location."""
+  primaryServicePoint: UUID!
+
+  """
+  Dereferenced object for primary service point. This should really just be called 'primaryServicePoint', but the field containing the ID of this object has that name -- it should really be called 'primaryServicePointId' -- so we need something different for this one.
+  """
+  primaryServicePointObject: ServicePoint
+
+  """All service points that this (shelf) location has."""
+  servicePointIds: [String!]
+
+  """List of dereferenced service points"""
+  servicePoints: [ServicePoint!]
+  metadata: Metadata
+}
+
+"""highest-level location unit"""
+type Institution {
+  id: String
+
+  """name of location"""
+  name: String!
+
+  """distinct code for location"""
+  code: String!
+  metadata: Metadata
+}
+
+"""second-level location unit"""
+type Campus {
+  id: String
+
+  """name of the location"""
+  name: String!
+
+  """distinct code for the location"""
+  code: String!
+
+  """
+  ID of the first-level location unit that the second-level unit belongs to
+  """
+  institutionId: String!
+  metadata: Metadata
+}
+
+"""third-level location unit"""
+type Library {
+  id: String
+
+  """name of the location"""
+  name: String!
+
+  """distinct code for the location"""
+  code: String!
+
+  """
+  ID of the second-level location unit that the third-level unit belongs to
+  """
+  campusId: String!
+  metadata: Metadata
+}
+
+"""Details about this (shelf) location."""
+type LocationDetails {
+  _typesWithoutFieldsAreNotAllowed_: String
+}
+
+"""A service point"""
+type ServicePoint {
+  """Id of service-point object"""
+  id: String
+
+  """service-point name, a required field"""
+  name: String!
+
+  """service-point code, a required field"""
+  code: String!
+
+  """display name, a required field"""
+  discoveryDisplayName: String!
+
+  """description of the service-point"""
+  description: String
+
+  """shelving lag time"""
+  shelvingLagTime: Int
+
+  """indicates whether or not the service point is a pickup location"""
+  pickupLocation: Boolean
+
+  """expiration period for items on the hold shelf at the service point"""
+  holdShelfExpiryPeriod: TimePeriod
+
+  """enum for closedLibraryDateManagement associated with hold shelf"""
+  holdShelfClosedLibraryDateManagement: ServicepointHoldShelfClosedLibraryDateManagement
+
+  """List of staff slips for this service point"""
+  staffSlips: [ServicepointStaffSlipsItem!]
+  metadata: Metadata
+}
+
+"""
+schema for time-period, which contains time interval 'duration' and the time unit
+"""
+type TimePeriod {
+  """Duration interval"""
+  duration: Int!
+
+  """Unit of time for the duration"""
+  intervalId: TimePeriodIntervalId!
+}
+
+enum TimePeriodIntervalId {
+  Minutes
+  Hours
+  Days
+  Weeks
+  Months
+}
+
+enum ServicepointHoldShelfClosedLibraryDateManagement {
+  Keep_the_current_due_date
+  Move_to_the_end_of_the_previous_open_day
+  Move_to_the_end_of_the_next_open_day
+  Keep_the_current_due_date_time
+  Move_to_end_of_current_service_point_hours
+  Move_to_beginning_of_next_open_service_point_hours
+}
+
+type ServicepointStaffSlipsItem {
+  """The ID of the staff slip"""
+  id: UUID!
+
+  """Whether or not to print the staff slip by default"""
+  printByDefault: Boolean!
+}
+
+type ItemElectronicAccessItem {
+  """
+  uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources
+  """
+  uri: String!
+
+  """
+  the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated
+  """
+  linkText: String
+
+  """
+  materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record)
+  """
+  materialsSpecification: String
+
+  """URL public note to be displayed in the discovery"""
+  publicNote: String
+
+  """
+  relationship between the electronic resource at the location identified and the item described in the record as a whole
+  """
+  relationshipId: String
+}
+
+"""List of simple tags that can be added to an object"""
+type Tags {
+  """List of tags"""
+  tagList: [String!]
+}
+
+"""A holdings record"""
+type HoldingsRecord {
+  """the unique ID of the holdings record; UUID"""
+  id: UUID
+
+  """Record version for optimistic locking"""
+  _version: Int
+
+  """
+  the human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID
+  """
+  hrid: String
+
+  """unique ID for the type of this holdings record, a UUID"""
+  holdingsTypeId: UUID
+
+  """Previous ID(s) assigned to the holdings record"""
+  formerIds: [String!]
+
+  """Inventory instances identifier"""
   instanceId: UUID!
-  itemId: UUID
+
+  """The permanent shelving location in which an item resides."""
+  permanentLocationId: UUID!
+
+  """The permanent shelving location in which an item resides"""
+  permanentLocation: Location
+
+  """
+  Temporary location is the temporary location, shelving location, or holding which is a physical place where items are stored, or an Online location.
+  """
+  temporaryLocationId: UUID
+
+  """
+  Effective location is calculated by the system based on the values in the permanent and temporary locationId fields.
+  """
+  effectiveLocationId: UUID
+
+  """List of electronic access items"""
+  electronicAccess: [HoldingsrecordElectronicAccessItem!]
+
+  """unique ID for the type of call number on a holdings record, a UUID"""
+  callNumberTypeId: UUID
+
+  """Prefix of the call number on the holding level."""
+  callNumberPrefix: String
+
+  """
+  Call Number is an identifier assigned to an item, usually printed on a label attached to the item.
+  """
+  callNumber: String
+
+  """Suffix of the call number on the holding level."""
+  callNumberSuffix: String
+
+  """Indicates the shelving form of title."""
+  shelvingTitle: String
+
+  """Format of holdings record acquisition"""
+  acquisitionFormat: String
+
+  """Method of holdings record acquisition"""
+  acquisitionMethod: String
+
+  """
+  Receipt status (e.g. pending, awaiting receipt, partially received, fully received, receipt not required, and cancelled)
+  """
+  receiptStatus: String
+
+  """Administrative notes"""
+  administrativeNotes: [String!]
+
+  """Notes about action, copy, binding etc."""
+  notes: [HoldingsrecordNotesItem!]
+
+  """unique ID for an ILL policy, a UUID"""
+  illPolicyId: UUID
+
+  """expanded ILL Policy object corresponding to illPolicyId"""
+  illPolicy: ILLpolicy
+
+  """
+  Records information regarding how long we have agreed to keep something.
+  """
+  retentionPolicy: String
+
+  """Records information regarding digitization aspects."""
+  digitizationPolicy: String
+
+  """Notes about action, copy, binding etc."""
+  holdingsStatements: [HoldingsrecordHoldingsStatementsItem!]
+
+  """Holdings record indexes statements"""
+  holdingsStatementsForIndexes: [HoldingsrecordHoldingsStatementsForIndexesItem!]
+
+  """Holdings record supplements statements"""
+  holdingsStatementsForSupplements: [HoldingsrecordHoldingsStatementsForSupplementsItem!]
+
+  """
+  Item/Piece ID (usually barcode) for systems that do not use item records. Ability to designate the copy number if institution chooses to use copy numbers.
+  """
+  copyNumber: String
+
+  """Text (Number)"""
+  numberOfItems: String
+
+  """Receiving history of holdings record"""
+  receivingHistory: HoldingsrecordReceivingHistory
+
+  """
+  records the fact that the record should not be displayed in a discovery system
+  """
+  discoverySuppress: Boolean
+
+  """List of statistical code IDs"""
+  statisticalCodeIds: [UUID!]
+
+  """
+  Items related to holdings record. This is a virtual field, accessible only when using mod-graphql.
+  """
+  holdingsItems: [Item!]
+
+  """
+  Items of bareHoldings. This is a virtual field, accessible only when using mod-graphql.
+  """
+  bareHoldingsItems: [Item!]
+
+  """
+  Instance of holding record. This is a virtual field, accessible only when using mod-graphql.
+  """
+  holdingsInstance: Instance
+
+  """arbitrary tags associated with this holding"""
+  tags: Tags
+  metadata: Metadata
+
+  """(A reference to) the source of a holdings record"""
+  sourceId: UUID
+}
+
+type HoldingsrecordElectronicAccessItem {
+  """
+  uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources
+  """
+  uri: String!
+
+  """
+  the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated
+  """
+  linkText: String
+
+  """
+  materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record)
+  """
+  materialsSpecification: String
+
+  """URL public note to be displayed in the discovery"""
+  publicNote: String
+
+  """
+  relationship between the electronic resource at the location identified and the item described in the record as a whole
+  """
+  relationshipId: String
+}
+
+type HoldingsrecordNotesItem {
+  """ID of the type of note"""
+  holdingsNoteTypeId: UUID
+
+  """expanded note-type object corresponding to holdingsNoteTypeId"""
+  holdingsNoteType: HoldingsNoteType
+
+  """Text content of the note"""
+  note: String
+
+  """
+  If true, determines that the note should not be visible for others than staff
+  """
+  staffOnly: Boolean
+}
+
+"""A holdings note type"""
+type HoldingsNoteType {
+  """unique ID of the holdings note type; a UUID"""
+  id: String
+
+  """name of the holdings note type"""
+  name: String!
+
+  """
+  label indicating where the holdings note type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+"""An ILL policy"""
+type ILLpolicy {
+  """unique ID of the ILL policy; UUID"""
+  id: String
+
+  """name of the policy"""
+  name: String!
+
+  """
+  label indicating where the ILL policy entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+type HoldingsrecordHoldingsStatementsItem {
+  """
+  Specifices the exact content to which the library has access, typically for continuing publications.
+  """
+  statement: String
+
+  """Note attached to a holdings statement"""
+  note: String
+
+  """Private note attached to a holdings statment"""
+  staffNote: String
+}
+
+type HoldingsrecordHoldingsStatementsForIndexesItem {
+  """Textual description of the holdings of indexes"""
+  statement: String
+
+  """Note attached to a holdings statement"""
+  note: String
+
+  """Private note attached to a holdings statment"""
+  staffNote: String
+}
+
+type HoldingsrecordHoldingsStatementsForSupplementsItem {
+  """textual description of the holdings of supplementary material"""
+  statement: String
+
+  """note attached to a holdings statement"""
+  note: String
+
+  """Private note attached to a holdings statment"""
+  staffNote: String
+}
+
+"""Receiving history of holdings record"""
+type HoldingsrecordReceivingHistory {
+  """
+  Display hint. 1: Display fields separately. 2: Display fields concatenated
+  """
+  displayType: String
+
+  """Entries of receiving history"""
+  entries: [HoldingsrecordReceivingHistoryEntriesItem!]
+}
+
+type HoldingsrecordReceivingHistoryEntriesItem {
+  """Defines if the receivingHistory should be visible to the public."""
+  publicDisplay: Boolean
+
+  """This is the volume/issue number (e.g. v.71:no.6-2)"""
+  enumeration: String
+
+  """
+  Repeated element from Receiving history - Enumeration AND Receiving history - Chronology
+  """
+  chronology: String
+}
+
+"""An instance record"""
+type Instance {
+  """The unique ID of the instance record; a UUID"""
+  id: UUID
+
+  """Record version for optimistic locking"""
+  _version: Int
+
+  """
+  The human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID
+  """
+  hrid: String
+
+  """
+  A unique instance identifier matching a client-side bibliographic record identification scheme, in particular for a scenario where multiple separate catalogs with no shared record identifiers contribute to the same Instance in Inventory. A match key is typically generated from select, normalized pieces of metadata in bibliographic records
+  """
+  matchKey: String
+
+  """
+  The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings)
+  """
+  source: String!
+
+  """The primary title (or label) associated with the resource"""
+  title: String!
+
+  """
+  Title normalized for browsing and searching; based on the title with articles removed
+  """
+  indexTitle: String
+
+  """
+  List of alternative titles for the resource (e.g. original language version title of a movie)
+  """
+  alternativeTitles: [InstanceAlternativeTitlesItem!]
+
+  """
+  The edition statement, imprint and other publication source information
+  """
+  editions: [String!]
+
+  """List of series titles associated with the resource (e.g. Harry Potter)"""
+  series: [InstanceSeriesItem!]
+
+  """
+  An extensible set of name-value pairs of identifiers associated with the resource
+  """
+  identifiers: [InstanceIdentifiersItem!]
+
+  """List of contributors"""
+  contributors: [InstanceContributorsItem!]
+
+  """List of subject headings"""
+  subjects: [InstanceSubjectsItem!]
+
+  """List of classifications"""
+  classifications: [InstanceClassificationsItem!]
+
+  """List of publication items"""
+  publication: [InstancePublicationItem!]
+
+  """
+  List of intervals at which a serial appears (e.g. daily, weekly, monthly, quarterly, etc.)
+  """
+  publicationFrequency: [String!]
+
+  """
+  The range of sequential designation/chronology of publication, or date range
+  """
+  publicationRange: [String!]
+
+  """Publication period"""
+  publicationPeriod: InstancePublicationPeriod
+
+  """List of electronic access items"""
+  electronicAccess: [InstanceElectronicAccessItem!]
+
+  """
+  UUID of the unique term for the resource type whether it's from the RDA content term list of locally defined
+  """
+  instanceTypeId: UUID!
+
+  """
+  UUIDs for the unique terms for the format whether it's from the RDA carrier term list of locally defined
+  """
+  instanceFormatIds: [UUID!]
+
+  """List of dereferenced instance formats"""
+  instanceFormats: [InstanceFormat!]
+
+  """
+  Physical description of the described resource, including its extent, dimensions, and such other physical details as a description of any accompanying materials and unit type and size
+  """
+  physicalDescriptions: [String!]
+
+  """The set of languages used by the resource"""
+  languages: [String!]
+
+  """Bibliographic notes (e.g. general notes, specialized notes)"""
+  notes: [InstanceNotesItem!]
+
+  """Administrative notes"""
+  administrativeNotes: [String!]
+
+  """
+  UUID of the RDA mode of issuance, a categorization reflecting whether a resource is issued in one or more parts, the way it is updated, and whether its termination is predetermined or not (e.g. monograph,  sequential monograph, serial; integrating Resource, other)
+  """
+  modeOfIssuanceId: UUID
+
+  """Date or timestamp on an instance for when is was considered cataloged"""
+  catalogedDate: String
+
+  """
+  Records the fact that the resource was previously held by the library for things like Hathi access, etc.
+  """
+  previouslyHeld: Boolean
+
+  """
+  Records the fact that the record should not be displayed for others than catalogers
+  """
+  staffSuppress: Boolean
+
+  """
+  Records the fact that the record should not be displayed in a discovery system
+  """
+  discoverySuppress: Boolean
+
+  """List of statistical code IDs"""
+  statisticalCodeIds: [String!]
+
+  """
+  Format of the instance source record, if a source record exists (e.g. FOLIO if it's a record created in Inventory,  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings)
+  """
+  sourceRecordFormat: InstanceSourceRecordFormat
+
+  """
+  UUID for the Instance status term (e.g. cataloged, uncatalogued, batch loaded, temporary, other, not yet assigned)
+  """
+  statusId: UUID
+
+  """Date [or timestamp] for when the instance status was updated"""
+  statusUpdatedDate: String
+
+  """arbitrary tags associated with this instance"""
+  tags: Tags
+  metadata: Metadata
+
+  """List of holdings records"""
+  holdingsRecords2: [HoldingsRecord!]
+
+  """
+  Array of UUID for the Instance nature of content (e.g. bibliography, biography, exhibition catalogue, festschrift, newspaper, proceedings, research report, thesis or website)
+  """
+  natureOfContentTermIds: [UUID!]
+}
+
+type InstanceAlternativeTitlesItem {
+  """UUID for an alternative title qualifier"""
+  alternativeTitleTypeId: UUID
+
+  """An alternative title for the resource"""
+  alternativeTitle: String
+
+  """UUID of authority record that controls an alternative title"""
+  authorityId: UUID
+}
+
+type InstanceSeriesItem {
+  """Series title value"""
+  value: String!
+
+  """UUID of authority record that controls an series title"""
+  authorityId: UUID
+}
+
+type InstanceIdentifiersItem {
+  """Resource identifier value"""
+  value: String!
+
+  """
+  UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers)
+  """
+  identifierTypeId: UUID!
+  identifierTypeObject: IdentifierType
+}
+
+"""An identifier type"""
+type IdentifierType {
+  id: String
+
+  """label for the identifier type"""
+  name: String!
+
+  """
+  label indicating where the identifier type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String
+  metadata: Metadata
+}
+
+type InstanceContributorsItem {
+  """Personal name, corporate name, meeting name"""
+  name: String!
+
+  """UUID for the contributor type term defined in controlled vocabulary"""
+  contributorTypeId: UUID
+
+  """
+  Free text element for adding contributor type terms other that defined by the MARC code list for relators
+  """
+  contributorTypeText: String
+
+  """
+  UUID of contributor name type term defined by the MARC code list for relators
+  """
+  contributorNameTypeId: UUID!
+
+  """UUID of authority record that controls the contributor"""
+  authorityId: UUID
+
+  """Dereferenced contributor-name type"""
+  contributorNameType: ContributorNameType
+
+  """Whether this is the primary contributor"""
+  primary: Boolean
+}
+
+"""A contributor name type"""
+type ContributorNameType {
+  id: String
+
+  """label for the type of contributor name"""
+  name: String!
+
+  """
+  used for ordering of contributor name types in displays, i.e. in select lists
+  """
+  ordering: String
+  metadata: Metadata
+}
+
+type InstanceSubjectsItem {
+  """Subject heading value"""
+  value: String!
+
+  """UUID of authority record that controls a subject heading"""
+  authorityId: UUID
+}
+
+type InstanceClassificationsItem {
+  """Classification (e.g. classification scheme, classification schedule)"""
+  classificationNumber: String!
+
+  """
+  UUID of classification schema (e.g. LC, Canadian Classification, NLM, National Agricultural Library, UDC, and Dewey)
+  """
+  classificationTypeId: UUID!
+
+  """Dereferenced classification schema"""
+  classificationType: ClassificationType
+}
+
+"""A classification type"""
+type ClassificationType {
+  id: String
+
+  """label for the classification type"""
+  name: String!
+
+  """
+  label indicating where the classification type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String
+  metadata: Metadata
+}
+
+type InstancePublicationItem {
+  """Name of publisher, distributor, etc."""
+  publisher: String
+
+  """Place of publication, distribution, etc."""
+  place: String
+
+  """Date (year YYYY) of publication, distribution, etc."""
+  dateOfPublication: String
+
+  """The role of the publisher, distributor, etc."""
+  role: String
+}
+
+"""Publication period"""
+type InstancePublicationPeriod {
+  """Publication start year"""
+  start: Int
+
+  """Publication end year"""
+  end: Int
+}
+
+type InstanceElectronicAccessItem {
+  """
+  uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources
+  """
+  uri: String!
+
+  """
+  The value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated
+  """
+  linkText: String
+
+  """
+  Materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record)
+  """
+  materialsSpecification: String
+
+  """URL public note to be displayed in the discovery"""
+  publicNote: String
+
+  """
+  UUID for the type of relationship between the electronic resource at the location identified and the item described in the record as a whole
+  """
+  relationshipId: UUID
+}
+
+"""The format of an Instance"""
+type InstanceFormat {
+  id: String
+
+  """label for the Instance format"""
+  name: String!
+
+  """distinct code for the Instance format"""
+  code: String!
+
+  """origin of the Instance format record"""
+  source: String!
+  metadata: Metadata
+}
+
+type InstanceNotesItem {
+  """ID of the type of note"""
+  instanceNoteTypeId: UUID
+
+  """Text content of the note"""
+  note: String
+
+  """
+  If true, determines that the note should not be visible for others than staff
+  """
+  staffOnly: Boolean
+}
+
+enum InstanceSourceRecordFormat {
+  MARC_JSON
+}
+
+"""Information about when an item was last scanned in the Inventory app."""
+type ItemLastCheckIn {
+  """Date and time of the last check in of the item."""
+  dateTime: DateTime
+
+  """
+  Service point ID being used by a staff member when item was scanned in Check in app.
+  """
+  servicePointId: UUID
+
+  """ID a staff member who scanned the item"""
+  staffMemberId: UUID
+}
+
+"""Overall status of the loan"""
+type LoanStatus {
+  """
+  Name of the status (currently can be any value, values commonly used are Open and Closed)
+  """
+  name: String
+}
+
+"""Patron Group at checkout"""
+type LoanPatronGroupAtCheckout {
+  """Unique ID (generated UUID) of the patron group"""
+  id: UUID
+
+  """Patron group name"""
+  name: String
+}
+
+"""Fees and fines associated with loans"""
+type LoanFeesAndFines {
+  """
+  Total remaining amount due on fees and fines for the loan (read only, defined by the server)
+  """
+  amountRemainingToPay: Float
+}
+
+"""User fines/fees account"""
+type Account {
+  """Amount of the fine/fee"""
+  amount: Float!
+
+  """Remaining of the fine/fee"""
+  remaining: Float!
+
+  """Date and time the account of the fine/fee was created"""
+  dateCreated: DateTime
+
+  """Date and time the account of the fine/fee was updated"""
+  dateUpdated: DateTime
+
+  """Overall status of the fee/fine"""
+  status: AccountdataStatus
+
+  """Overall status of the payment/waive/transfer/refund/cancel"""
+  paymentStatus: AccountdataPaymentStatus
+
+  """Fee/fine that is up to the desecration of the user"""
+  feeFineType: String
+
+  """
+  Owner of the fee/fine defined by the library and is associated with specific fees/fines
+  """
+  feeFineOwner: String
+
+  """The title associated with the item"""
   title: String
+
+  """Identifier (Call number) assigned to an item"""
+  callNumber: String
+
+  """Text, with input likely validated by the barcode scanner"""
+  barcode: String
+
+  """Material type what define what type of thing the item is"""
+  materialType: String
+
+  """The status of the item"""
+  itemStatus: AccountdataItemStatus
+
+  """
+  Effective location is used to know the current home location for the item
+  """
+  location: String
+
+  """
+  Metadata about creation to user fine/fee account, provided by the server
+  """
+  metadata: Metadata
+
+  """Date time when the item is due to be returned"""
+  dueDate: DateTime
+
+  """
+  Date time when the item is returned and the loan ends, if the user does not have a loan associated, hyphen (-) is added as default
+  """
+  returnedDate: DateTime
+
+  """ID of the loan"""
+  loanId: String
+
+  """ID of the user"""
+  userId: String!
+
+  """ID of the item"""
+  itemId: String!
+
+  """ID of the materialType"""
+  materialTypeId: String!
+
+  """ID of the feefines"""
+  feeFineId: String!
+
+  """ID of the owner"""
+  ownerId: String!
+
+  """User fine/fee account id, UUID"""
+  id: String!
+
+  """Item field: item.holdingsRecordId"""
+  holdingsRecordId: String
+
+  """Holdings record field: holdingsRecord.instanceId"""
+  instanceId: String
+}
+
+"""Overall status of the fee/fine"""
+type AccountdataStatus {
+  """Name of the status (values used are Open and Closed)"""
+  name: String!
+}
+
+"""Overall status of the payment/waive/transfer/refund/cancel"""
+type AccountdataPaymentStatus {
+  """
+  Name of the status (values used are Outstanding, Paid partially, Paid fully, Waived partially, Waived fully, Transferred partially, Transferred fully, Refunded partially, Refunded fully, Cancelled as error)
+  """
+  name: String!
+}
+
+"""The status of the item"""
+type AccountdataItemStatus {
+  """Name of the item state"""
+  name: String!
+}
+
+"""
+Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service
+"""
+type FeeFine {
+  """A flag to indicate that fee/fine was created automatically."""
+  automatic: Boolean!
+
+  """Description of fee/fine that is up to the discretion of the user"""
+  feeFineType: String!
+
+  """Amount of fee or fine, which may be overridden. """
+  defaultAmount: Float
+
+  """ID of the charge notice template"""
+  chargeNoticeId: UUID
+
+  """ID of the action notice template"""
+  actionNoticeId: UUID
+
+  """ID of the owner"""
+  ownerId: UUID
+
+  """Metadata about creation to fee/fine, provided by the server"""
+  metadata: Metadata
+
+  """Fee/fine id, UUID"""
+  id: UUID
+}
+
+"""
+Allows institution to manually block a patron from borrowing, renewing, and/or requesting until specified issue is resolved
+"""
+type ManualBlock {
+  """Type of patron block"""
+  type: String
+
+  """Patron block description"""
+  desc: String!
+
+  """
+  Code of the template if block is defined based on a template (optional)
+  """
+  code: String
+
+  """Additional information to staff (optional)"""
+  staffInformation: String
+
+  """Message to patron (optional)"""
+  patronMessage: String
+
+  """
+  Date and time the patron block expiration if is provided the patron block should be automatically removed on that date
+  """
+  expirationDate: DateTime
+
+  """A flag to determine borrowing block action"""
+  borrowing: Boolean
+
+  """A flag to determine renewal block action"""
+  renewals: Boolean
+
+  """A flag to determine request block action"""
+  requests: Boolean
+
+  """ID of the user"""
+  userId: UUID!
+
+  """Metadata about creation to patron block, provided by the server"""
+  metadata: Metadata
+
+  """Patron block id, UUID"""
+  id: UUID
+}
+
+"""Single automated patron block"""
+type Block {
+  """Unique ID of patron block condition"""
+  patronBlockConditionId: UUID
+
+  """Indicates that borrowing is not allowed for patron"""
+  blockBorrowing: Boolean!
+
+  """Indicates that renewals are not allowed for patron"""
+  blockRenewals: Boolean!
+
+  """Indicates that requests are not allowed for patron"""
+  blockRequests: Boolean!
+
+  """Message to be displayed if the patron should be blocked"""
+  message: String!
+}
+
+"""Patron block conditions schema"""
+type PatronBlockCondition {
+  """A UUID identifying the condition"""
+  id: UUID!
+
+  """The name of the condition"""
+  name: String!
+
+  """This flag indicates the block for borrowings"""
+  blockBorrowing: Boolean!
+
+  """This flag indicates the block for renewals"""
+  blockRenewals: Boolean!
+
+  """This flag indicates the block for requests"""
+  blockRequests: Boolean!
+
+  """Defines limit type"""
+  valueType: PatronBlockConditionValueType!
+
+  """A message to be displayed"""
+  message: String
+
+  """
+  Metadata about creation and changes to patron block conditions, provided by the server (client should not provide)
+  """
+  metadata: Metadata
+}
+
+enum PatronBlockConditionValueType {
+  Integer
+  Double
+}
+
+"""Patron block limits schema"""
+type PatronBlockLimit {
+  """A UUID identifying the limit"""
+  id: UUID!
+
+  """A UUID identifying the patron group"""
+  patronGroupId: UUID!
+
+  """A UUID identifying the condition"""
+  conditionId: UUID!
+
+  """Limit value"""
+  value: Float!
+  metadata: Metadata
+}
+
+"""Account schema for patron portal integration"""
+type Patron {
+  """The FOLIO id of the patron"""
+  id: UUID
+
+  """A patron's total outstanding fines and charges"""
+  totalCharges: Money!
+
+  """The total number of fines and charges for the patron"""
+  totalChargesCount: Int!
+
+  """The total number of items loaned to the patron"""
+  totalLoans: Int!
+
+  """The total number of requested items for the patron"""
+  totalHolds: Int!
+
+  """A list of the patron's charges and fines"""
+  charges: [PatronCharge!]!
+
+  """A list of the patron's item holds"""
+  holds: [Hold!]!
+
+  """A list of the patron's item checked out items"""
+  loans: [PatronLoan!]!
+}
+
+"""Money schema for patron portal integration"""
+type Money {
+  """The amount of the fine or charge"""
+  amount: Float!
+
+  """An ISO 4217 standard currency code"""
+  isoCurrencyCode: String!
+}
+
+"""Charge schema for patron portal integration"""
+type PatronCharge {
+  """The item that is accruing the charge"""
+  item: PatronItem
+
+  """The outstanding balance on the item"""
+  chargeAmount: Money
+
+  """The date when charges begin to accrue"""
+  accrualDate: DateTime
+
+  """A description of the charge"""
+  description: String
+
+  """The current state of the charge"""
+  state: String
+
+  """The reason for this charge"""
+  reason: String
+
+  """The UUID of the fee/fine for this charge"""
+  feeFineId: UUID
+}
+
+"""Item schema for patron portal integration"""
+type PatronItem {
+  """The FOLIO id of the instance"""
+  instanceId: UUID!
+
+  """The FOLIO id of the item"""
+  itemId: UUID
+
+  """The title of the item"""
+  title: String
+
+  """The author of the item"""
   author: String
+
+  """The ISBN of the item"""
   isbn: String
+}
+
+"""Hold schema for patron portal integration"""
+type Hold {
+  """The UUID of the request"""
+  requestId: String
+
+  """The item that is checked out"""
+  item: PatronItem
+
+  """The date when the request was made"""
+  requestDate: DateTime!
+
+  """The date when the request expires"""
+  expirationDate: DateTime
+
+  """The status of the hold request"""
+  status: HoldStatus
+
+  """The UUID of the pick up location"""
+  pickupLocationId: UUID!
+
+  """The position in the queue for this patron"""
+  queuePosition: Int
+
+  """The id of the request reason"""
+  cancellationReasonId: UUID
+
+  """The id of the user that cancelled the request"""
+  canceledByUserId: UUID
+
+  """Additional information about a cancellation"""
+  cancellationAdditionalInformation: String
+
+  """Date the request was cancelled"""
+  canceledDate: DateTime
+
+  """Comments made by the patron"""
+  patronComments: String
+}
+
+enum HoldStatus {
+  Open___Not_yet_filled
+  Open___Awaiting_pickup
+  Open___Awaiting_delivery
+  Open___In_transit
+  Closed___Filled
+  Closed___Cancelled
+  Closed___Unfilled
+  Closed___Pickup_expired
+}
+
+"""Loan schema for patron portal integration"""
+type PatronLoan {
+  """The id of the loan"""
+  id: UUID
+
+  """The item that is loaned out"""
+  item: PatronItem!
+
+  """The date the item was loaned out"""
+  loanDate: DateTime!
+
+  """The date the item is due"""
+  dueDate: DateTime!
+
+  """Indicates if the item is overdue"""
+  overdue: Boolean!
+}
+
+"""A proxy for a user"""
+type ProxyFor {
+  """The id of the user for whom this proxy pertains"""
+  userId: String
+
+  """The id of the user acting as the proxy"""
+  proxyUserId: String
+
+  """A UUID identifying this proxy relationship"""
+  id: String
+
+  """Can the user request a sponsor (yes/no)"""
+  requestForSponsor: String
+
+  """Deprecated"""
+  createdDate: DateTime
+
+  """Where notifications are sent"""
+  notificationsTo: String
+
+  """Where fees and fines accrue"""
+  accrueTo: String
+
+  """Active or Inactive"""
+  status: String
+
+  """The date this proxy relationship expires"""
+  expirationDate: DateTime
+  metadata: Metadata
+}
+
+"""A user"""
+type User {
+  """A unique name belonging to a user. Typically used for login"""
+  username: String
+
+  """A globally unique (UUID) identifier for the user"""
+  id: String
+
+  """A unique ID that corresponds to an external authority"""
+  externalSystemId: String
+
+  """The unique library barcode for this user"""
+  barcode: String
+
+  """
+  A flag to determine if the user's account is effective and not expired. The tenant configuration can require the user to be active for login. Active is different from the loan patron block
+  """
+  active: Boolean
+
+  """
+  The class of user like staff or patron; this is different from patronGroup
+  """
+  type: String
+
+  """
+  A list of UUIDs corresponding to the departments the user belongs to, see /departments API
+  """
+  departments: [UUID!]
+
+  """Deprecated"""
+  meta: UserdataMeta
+
+  """Deprecated"""
+  proxyFor: [String!]
+
+  """Personal information about the user"""
+  personal: UserdataPersonal
+
+  """The date in which the user joined the organization"""
+  enrollmentDate: DateTime
+
+  """The date for when the user becomes inactive"""
+  expirationDate: DateTime
+
+  """Deprecated"""
+  createdDate: DateTime
+
+  """Deprecated"""
+  updatedDate: DateTime
+  metadata: Metadata
+  tags: Tags
+
+  """Object that contains custom field"""
+  customFields: UserdataCustomFields
+
+  """
+  A UUID corresponding to the group the user belongs to, see /groups API, example groups are undergraduate and faculty; loan rules, patron blocks, fees/fines and expiration days can use the patron group
+  """
+  patronGroupId: UUID
+}
+
+"""Deprecated"""
+type UserdataMeta {
+  _typesWithoutFieldsAreNotAllowed_: String
+}
+
+"""Personal information about the user"""
+type UserdataPersonal {
+  """The user's surname"""
+  lastName: String!
+
+  """The user's given name"""
+  firstName: String
+
+  """The user's middle name (if any)"""
+  middleName: String
+
+  """The user's preferred name"""
+  preferredFirstName: String
+
+  """The user's email address"""
+  email: String
+
+  """The user's primary phone number"""
+  phone: String
+
+  """The user's mobile phone number"""
+  mobilePhone: String
+
+  """The user's birth date"""
+  dateOfBirth: DateTime
+
+  """Physical addresses associated with the user"""
+  addresses: [UserdataPersonalAddressesItem!]
+
+  """
+  Id of user's preferred contact type like Email, Mail or Text Message, see /addresstypes API
+  """
+  preferredContactTypeId: String
+}
+
+type UserdataPersonalAddressesItem {
+  """A unique id for this address"""
+  id: String
+
+  """The country code for this address"""
+  countryId: String
+
+  """Address, Line 1"""
+  addressLine1: String
+
+  """Address, Line 2"""
+  addressLine2: String
+
+  """City name"""
+  city: String
+
+  """Region"""
+  region: String
+
+  """Postal Code"""
+  postalCode: String
+
+  """A UUID that corresponds with an address type object"""
+  addressTypeId: UUID!
+
+  """Is this the user's primary address?"""
+  primaryAddress: Boolean
+}
+
+"""Object that contains custom field"""
+type UserdataCustomFields {
+  _typesWithoutFieldsAreNotAllowed_: String
+}
+
+"""A user group"""
+type PatronGroup {
+  """The unique name of this group"""
+  group: String!
+
+  """An explanation of this group"""
+  desc: String
+
+  """A UUID identifying this group"""
+  id: String
+
+  """
+  The default period in days after which a newly created user that belongs to this group will expire
+  """
+  expirationOffsetInDays: Int
+  metadata: Metadata
+}
+
+extend type Patron {
+  user: User
+  blocks: [Block!]!
+  manualBlocks: [ManualBlock!]!
+  accounts: [Account!]!
+}
+
+extend type User {
+  patronGroup: PatronGroup
+  department: [UUID]
+  proxiesFor: [ProxyFor]
+  proxiesOf: [ProxyFor]
+  blocks: [Block]
+  manualBlocks: [ManualBlock]
+  accounts: [Account]
+}
+
+extend type PatronGroup {
+  limits: [PatronBlockLimit]
+}
+
+extend type PatronBlockLimit {
+  condition: PatronBlockCondition
+}
+
+extend type ProxyFor {
+  user: User
+  proxyUser: User
+}
+
+extend type PatronItem {
   instance: Instance
   item: Item
 }
 
-type Charge {
-  item: RequestItem
-  chargeAmount: ChargeAmount
-  accrualDate: DateTime
-  description: String
-  state: String
-  reason: String
-  feeFineId: UUID
+extend type PatronCharge {
   feeFine: FeeFine
 }
 
-type ChargeAmount {
-  amount: Float!
-  isoCurrencyCode: String!
-}
-
-type Account {
-  amount: Float!
-  remaining: Float!
-  dateCreated: DateTime
-  dateUpdated: DateTime
-  status: Status
-  paymentStatus: Status!
-  feeFineType: String
-  feeFineOwner: String
-  title: String
-  callNumber: String
-  barcode: String
-  materialType: String
-  itemStatus: Status
-  location: String
-  dueDate: DateTime
-  returnedDate: DateTime
-  loanId: UUID
-  userId: UUID!
-  itemId: UUID
-  materialTypeId: UUID
-  feeFineId: UUID!
-  ownerId: UUID!
-  id: UUID
-  holdingsRecordId: UUID
-  instanceId: UUID
+extend type Account {
   loanPolicyId: UUID
   overdueFinePolicyId: UUID
   lostItemFeePolicyId: UUID
   processId: UUID
 
   user: User
-  loan: CirculationLoan
+  loan: Loan
   item: Item
   feeFine: FeeFine
 }
 
-type Status {
-  name: String!
+extend type PatronLoan {
+  details: Loan!
 }
 
-type FeeFine {
-  id: UUID,
-  automatic: Boolean!,
-  feeFineType: String!,
-  defaultAmount: Float,
-  chargeNoticeId: UUID,
-  actionNoticeId: UUID,
-  ownerId: UUID,
-  metadata: Metadata
-}
-
-type Hold {
-  requestId: UUID!
-  item: RequestItem
-  requestDate: DateTime!
-  expirationDate: DateTime
-  status: String
-  pickupLocationId: UUID!
-  pickupLocation: ServicePoint
-  queuePosition: Int
-  cancellationReasonId: UUID
-  canceledByUserId: UUID
-  cancellationAdditionalInformation: String
-  canceledDate: DateTime
-  patronComments: String
-}
-
-type ServicePoint {
-  id: UUID
-  name: String!
-  code: String!
-  discoveryDisplayName: String!
-  description: String
-  shelvingLagTime: Int
-  pickupLocation: Boolean
-}
-
-type Loan {
-  id: UUID
-  item: RequestItem!
-  loanDate: DateTime!
-  dueDate: DateTime!
-  overdue: Boolean!
-  details: CirculationLoan!
-}
-
-type CirculationLoan {
-  id: UUID!
-  userId: UUID
-  proxyUserId: UUID
-  itemId: UUID
-  item: Item
-  loanPolicyId: UUID
-  loanPolicy: LoanPolicy
-  overdueFinePolicyId: UUID
-  lostItemPolicyId: UUID
-  itemEffectiveLocationIdAtCheckOut: UUID
+extend type Loan {
   itemEffectiveLocationAtCheckOut: Location
-  status: String
-  loanDate: DateTime!
-  dueDate: DateTime
-  returnDate: DateTime
-  systemReturnDate: DateTime
-  action: String!
-  actionComment: String
-  renewalCount: Int
-  dueDateChangedByRecall: Boolean
-  dueDateChangedByHold: Boolean
-  feesAndFines: CirculationLoanFeesAndFines
-  declaredLostDate: DateTime
 }
 
-type LoanPolicy {
-  id: UUID!
-  name: String
-  description: String
-  loansPolicy: LoansPolicy
-  renewalsPolicy: RenewalsPolicy
+extend type Hold {
+  pickupLocation: ServicePoint
 }
 
-type LoansPolicy {
-  profileId: String
-  period: Period
-  fixedDueDateScheduleId: UUID
-  fixedDueDateSchedule: FixedDueDateSchedule
-}
-
-type FixedDueDateSchedule {
-  id: UUID!
-  name: String!
-  description: String
-  schedules: [Schedule]
-}
-
-type Schedule {
-  from: DateTime!
-  to: DateTime!
-  due: DateTime!
-}
-
-type Period {
-  duration: Int!
-  intervalId: String!
-}
-
-type RenewalsPolicy {
-  unlimited: Boolean
-  numberAllowed: Int
-  renewable: Boolean
-  renewFromId: String
-  period: Period
-}
-
-type RequestPolicy {
-  id: String
-  name: String!
-  description: String
-  requestTypes: [String]
-}
-
-type CirculationLoanFeesAndFines {
-  amountRemainingToPay: Int
-}
-
-type Instance {
-  id: UUID!
-  _version: Int!
-  hrid: String!
-  matchKey: String
-  source: String!
-  title: String
-  indexTitle: String
-  alternativeTitles: [AlternativeTitle]
-  editions: [String]
-  series: [String]
-  identifiers: [Identifier]
-  contributors: [Contributor]
-  subjects: [String]
-  classifications: [Classification]
-  publication: [Publication]
-  publicationFrequency: [String]
-  publicationRange: [String]
-  publicationPeriod: [PublicationPeriod]
-  electronicAccess: [ElectronicAccess]
-  instanceTypeId: UUID
-  instanceFormatIds: [UUID]
-  physicalDescriptions: [String]
-  languages: [String]
-  notes: [InstanceNote]
-  administrativeNotes: [String]
-  modeOfIssuanceId: UUID
-  catalogedDate: String
-  previouslyHeld: Boolean
-  staffSuppress: Boolean
-  discoverySuppress: Boolean
-  statisticalCodeIds: [String]
-  sourceRecordFormat: String
-  statusId: UUID
-  statusUpdatedDate: String
-  tags: [Tag]
-  metadata: Metadata
-  natureOfContentTypeIds: [UUID]
+extend type Instance {
   holdingsRecords(params: CqlParams): [HoldingsRecord]
   items(params: CqlParams): [Item]
 }
 
-type AlternativeTitle {
-  alternativeTitleTypeId: UUID
-  alternativeTitle: String
-}
-
-type Identifier {
-  value: String!
-  identifierTypeId: UUID!
-}
-
-type Contributor {
-  name: String!
-  contributorTypeId: UUID!
-  contributorTypeText: String
-  contributorNameTypeId: String
-  authorityId: UUID
-  primary: Boolean
-}
-
-type Classification {
-  classificationNumber: String!
-  classificationTypeId: UUID!
-  classificationType: ClassificationType
-}
-
-type ClassificationType {
-  id: UUID!
-  name: String!
-  source: String
-  metadata: Metadata
-}
-
-type Publication {
-  publisher: String
-  place: String
-  dateOfPublication: String
-  role: String
-}
-
-type PublicationPeriod {
-  start: Int
-  end: Int
-}
-
-type ElectronicAccess {
-  uri: String!
-  linkText: String
-  materialsSpecification: String
-  publicNote: String
-  relationshipId: UUID
-}
-
-type InstanceNote {
-  instanceNoteTypeId: UUID
-  note: String
-  staffOnly: Boolean
-}
-
-type Tag {
-  tagList: [String]
-}
-
-type Item {
-  id: UUID!
-  _version: Int!
-  hrid: String
-  holdingsRecordId: String!
-  formerIds: [String]
-  discoverySuppress: Boolean
-  accessionNumber: String
-  barcode: String
-  effectiveShelvingOrder: String
-  itemLevelCallNumber: String
-  itemLevelCallNumberPrefix: String
-  itemLevelCallNumberSuffix: String
-  itemLevelCallNumberTypeId: String
-  effectiveCallNumberComponents: EffectiveCallNumberComponents
-  volume: String
-  enumeration: String
-  chronology: String
-  yearCaption: [String]
-  itemIdentifier: String
-  copyNumber: String
-  numberOfPieces: String
-  descriptionOfPieces: String
-  numberOfMissingPieces: String
-  missingPieces: String
-  missingPiecesDate: String
-  itemDamagedStatusId: String
-  itemDamagedStatusDate: String
-  administrativeNotes: [String]
-  notes: [ItemNote]
-  circulationNotes: [CirculationNote]
-  status: Status!
-  materialTypeId: String!
-  permanentLoanTypeId: String!
-  temporaryLoanTypeId: String
-  permanentLocationId: String
-  temporaryLocationId: String
-  effectiveLocationId: String
-  electronicAccess: [ElectronicAccess]
-  inTransitDestinationServicePointId: UUID
-  statisticalCodes: [UUID]
-  purchaseOrderLineIdentifier: String
-  tags: [Tag]
-  metadata: Metadata
-  lastCheckIn: CheckIn
+extend type Item {
   holdingsRecord: HoldingsRecord
   instance: Instance
-  permanentLocation: Location
-  temporaryLocation: Location
   effectiveLocation: Location
 }
 
-type EffectiveCallNumberComponents {
-  callNumber: String
-  prefix: String
-  suffix: String
-  typeId: UUID
-}
-
-type ItemNote {
-  itemNoteTypeId: String
-  note: String
-  staffOnly: Boolean
-}
-
-type CirculationNote {
-  id: String
-  noteType: String
-  note: String
-  source: Source
-  date: String
-  staffOnly: Boolean
-}
-
-type Source {
-  id: String
-  personal: Personal
-}
-
-type Personal {
-  lastName: String
-  firstName: String
-}
-
-type Status {
-  name: String!
-  date: String
-}
-
-type CheckIn {
-  dateTime: String
-  servicePointId: UUID
-  staffMemberId: UUID
-}
-
-type HoldingsRecord {
-  id: UUID
-  _version: Int
-  hrid: String
-  holdingsTypeId: UUID
-  formatIds: [String]
-  instanceId: UUID!
-  permanentLocationId: UUID!
-  temporaryLocationId: UUID
-  effectiveLocationId: UUID
-  electronicAccess: [ElectronicAccess]
-  callNumberTypeId: UUID
-  callNumberPrefix: String
-  callNumber: String
-  callNumberSuffix: String
-  shelvingTitle: String
-  acquisitionFormat: String
-  receiptStatus: String
-  administrativeNotes: [String]
-  notes: [HoldingsNote]
-  illPolicyId: UUID
-  retentionPolicy: String
-  digitizationPolicy: String
-  holdingsStatement: [HoldingsStatement]
-  holdingsStatementsForIndexes: [HoldingsStatement]
-  holdingsStatementsForSupplements: [HoldingsStatement]
-  copyNumber: String
-  numberOfItems: String
-  receivingHistory: ReceivingHistory
-  discoverySuppress: Boolean
-  statisticalCodeIds: [UUID]
-  tags: [Tag]
-  metadata: Metadata
-  sourceId: UUID
+extend type HoldingsRecord {
   instance: Instance,
   items(params: CqlParams): [Item]
   permanentLocation: Location
@@ -606,71 +2247,19 @@ type HoldingsRecord {
   effectiveLocation: Location
 }
 
-type HoldingsNote {
-  holdingsNoteTypeId: UUID
-  note: String
-  staffOnly: Boolean
-}
-
-type HoldingsStatement {
-  statement: String
-  note: String
-  staffNote: String
-}
-
-type ReceivingHistory {
-  displayType: String
-  entries: [ReceivingHistoryEntry]
-}
-
-type ReceivingHistoryEntry {
-  publicDisplay: Boolean
-  enumeration: String
-  chronology: String
-}
-
-type Location {
-  id: String
-  name: String!
-  code: String!
-  description: String
-  discoveryDisplayName: String
-  isActive: Boolean
-  institutionId: String!
-  campusId: String!
-  libraryId: String!
-  primaryServicePoint: UUID!
-  servicePointIds: [UUID]
-  metadata: Metadata
+extend type Campus {
   institution: Institution
-  campus: Campus
-  library: Library
-  primaryServicePointObject: ServicePoint
-  servicePoints: [ServicePoint]
 }
 
-type Institution {
-  id: String
-  name: String!
-  code: String!
-  metadata: Metadata
-}
-
-type Campus {
-  id: String
-  name: String!
-  code: String!
-  institutionId: String!
-  institution: Institution
-  metadata: Metadata
-}
-
-type Library {
-  id: String
-  name: String!
-  code: String!
-  campusId: String!
-  campus: Campus
+extend type Library {
   locations: [Location]
-  metadata: Metadata
+  campus: Campus
+}
+
+extend type LoanPolicyLoansPolicy {
+  fixedDueDateSchedule: FixedDueDateSchedule
+}
+
+extend type Block {
+  blockCondition: PatronBlockCondition
 }
