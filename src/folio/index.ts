@@ -1,5 +1,5 @@
 import { UUIDResolver } from "graphql-scalars"
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, PatronBlockLimit, PatronBlockCondition, FixedDueDateSchedule } from "../schema"
+import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, PatronBlockLimit, PatronBlockCondition, FixedDueDateSchedule, HoldStatus } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -103,6 +103,18 @@ export const resolvers: Resolvers = {
   Hold: {
     pickupLocation(parent, args, { dataSources }, info) {
       return dataSources.locations.getLocation(parent.pickupLocationId)
+    },
+    status(parent, args, { dataSources, typeCache }, info) {
+      switch(parent.status as unknown as string) {
+        case "Open - Not yet filled": return HoldStatus.OpenNotYetFilled
+        case "Open - Awaiting pickup": return HoldStatus.OpenAwaitingPickup
+        case "Open - Awaiting delivery": return HoldStatus.OpenAwaitingDelivery
+        case "Open - In transit": return HoldStatus.OpenInTransit
+        case "Closed - Filled": return HoldStatus.ClosedFilled
+        case "Closed - Cancelled": return HoldStatus.ClosedCancelled
+        case "Closed - Unfilled": return HoldStatus.ClosedUnfilled
+        case "Closed - Pickup expired": return HoldStatus.ClosedPickupExpired
+      }
     }
   },
   PatronLoan: {

@@ -881,33 +881,8 @@ export type ItemStatus = {
   __typename?: 'ItemStatus';
   /** Date and time when the status was last changed */
   date?: Maybe<Scalars['DateTime']['output']>;
-  /** Name of the status e.g. Available, Checked out, In transit */
-  name: ItemStatusName;
+  name: Scalars['String']['output'];
 };
-
-export enum ItemStatusName {
-  AgedToLost = 'Aged_to_lost',
-  Available = 'Available',
-  AwaitingDelivery = 'Awaiting_delivery',
-  AwaitingPickup = 'Awaiting_pickup',
-  CheckedOut = 'Checked_out',
-  ClaimedReturned = 'Claimed_returned',
-  DeclaredLost = 'Declared_lost',
-  InProcess = 'In_process',
-  InProcessNonRequestable = 'In_process__non_requestable_',
-  InTransit = 'In_transit',
-  IntellectualItem = 'Intellectual_item',
-  LongMissing = 'Long_missing',
-  LostAndPaid = 'Lost_and_paid',
-  Missing = 'Missing',
-  OnOrder = 'On_order',
-  OrderClosed = 'Order_closed',
-  Paged = 'Paged',
-  Restricted = 'Restricted',
-  Unavailable = 'Unavailable',
-  Unknown = 'Unknown',
-  Withdrawn = 'Withdrawn'
-}
 
 /** third-level location unit */
 export type Library = {
@@ -1819,7 +1794,6 @@ export type ResolversTypes = ResolversObject<{
   ItemNoteType: ResolverTypeWrapper<ItemNoteType>;
   ItemNotesItem: ResolverTypeWrapper<ItemNotesItem>;
   ItemStatus: ResolverTypeWrapper<ItemStatus>;
-  ItemStatusName: ItemStatusName;
   Library: ResolverTypeWrapper<Library>;
   Loan: ResolverTypeWrapper<Loan>;
   LoanBorrower: ResolverTypeWrapper<LoanBorrower>;
@@ -2477,7 +2451,7 @@ export type ItemNotesItemResolvers<ContextType = FolioContext, ParentType extend
 
 export type ItemStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemStatus'] = ResolversParentTypes['ItemStatus']> = ResolversObject<{
   date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['ItemStatusName'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

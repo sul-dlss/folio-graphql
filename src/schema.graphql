@@ -680,35 +680,10 @@ type ItemCirculationNotesItemSourcePersonal {
 
 """The status of the item"""
 type ItemStatus {
-  """Name of the status e.g. Available, Checked out, In transit"""
-  name: ItemStatusName!
+  name: String!
 
   """Date and time when the status was last changed"""
   date: DateTime
-}
-
-enum ItemStatusName {
-  Aged_to_lost
-  Available
-  Awaiting_pickup
-  Awaiting_delivery
-  Checked_out
-  Claimed_returned
-  Declared_lost
-  In_process
-  In_process__non_requestable_
-  In_transit
-  Intellectual_item
-  Long_missing
-  Lost_and_paid
-  Missing
-  On_order
-  Paged
-  Restricted
-  Order_closed
-  Unavailable
-  Unknown
-  Withdrawn
 }
 
 """A material type"""

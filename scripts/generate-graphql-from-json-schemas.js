@@ -172,6 +172,11 @@ files.sort().map(file => {
     json.properties.permanentLocation = { "$ref": "location.json" };
   }
 
+  // can't be bothered to map so many different enum types
+  if (file.includes('/mod-inventory-storage/ramls/item.json')) {
+    json.properties.status.properties.name = { "type": "string" };
+  }
+
   // library should be typed as library, not institution
   if (file.includes('/mod-inventory-storage/ramls/location.json')) {
     json.properties.library = { "$ref": "loclib.json" };
