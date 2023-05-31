@@ -57,12 +57,27 @@ function fixupStuff(file, json) {
       json.properties[key].type = json.properties[key].source;
     }
 
+    if (json.properties[key].format == 'date-time') {
+      json.properties[key] = {
+        'description': json.properties[key].description,
+        '$ref': '/date-time'
+      };
+    }
+
+    if (
+      json.properties[key].pattern == '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$' ||
+      json.properties[key].pattern == '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
+    ) {
+      json.properties[key] = { description: json.properties[key].description, '$ref': '/uuid.schema.json' };
+    }
+
     if (json.properties[key]['folio:$ref']) {
       json.properties[key]['$ref'] = json.properties[key]['folio:$ref']
     }
 
     if (json.properties[key]['$ref']) {
       json.properties[key] = {
+        'description': json.properties[key].description,
         '$ref': normalizeRef(file, json.properties[key]['$ref'])
       }
     }
@@ -76,12 +91,14 @@ function fixupStuff(file, json) {
 
       if (json.properties[key]['items']['$ref']) {
         json.properties[key]['items'] = {
+          'description': json.properties[key].description,
           '$ref': normalizeRef(file, json.properties[key]['items']['$ref'])
         }
       }
 
       if (json.properties[key]['items']['$dynamicRef']) {
         json.properties[key]['items'] = {
+          'description': json.properties[key].description,
           '$ref': normalizeRef(file, json.properties[key]['items']['$dynamicRef'])
         }
       }
@@ -96,6 +113,7 @@ function fixupStuff(file, json) {
 }
 
 context.types.set('/uuid.schema.json', new GraphQLScalarType({ name: 'UUID', description: 'A UUID' }))
+context.types.set('/date-time', new GraphQLScalarType({ name: 'DateTime', description: 'A date and time' }))
 
 context.types.set('/mod-circulation-storage/ramls/request-type.json', new GraphQLEnumType({ name: 'RequestType', values: { 'Hold': {}, 'Recall': {}, 'Page': {} } }))
 

@@ -15,7 +15,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** A date and time */
   DateTime: { input: any; output: any; }
+  /** A UUID */
   UUID: { input: any; output: any; }
 };
 
@@ -29,11 +31,11 @@ export type Account = {
   /** Identifier (Call number) assigned to an item */
   callNumber?: Maybe<Scalars['String']['output']>;
   /** Date and time the account of the fine/fee was created */
-  dateCreated?: Maybe<Scalars['String']['output']>;
+  dateCreated?: Maybe<Scalars['DateTime']['output']>;
   /** Date and time the account of the fine/fee was updated */
-  dateUpdated?: Maybe<Scalars['String']['output']>;
+  dateUpdated?: Maybe<Scalars['DateTime']['output']>;
   /** Date time when the item is due to be returned */
-  dueDate?: Maybe<Scalars['String']['output']>;
+  dueDate?: Maybe<Scalars['DateTime']['output']>;
   feeFine?: Maybe<FeeFine>;
   /** ID of the feefines */
   feeFineId: Scalars['String']['output'];
@@ -63,6 +65,7 @@ export type Account = {
   materialType?: Maybe<Scalars['String']['output']>;
   /** ID of the materialType */
   materialTypeId: Scalars['String']['output'];
+  /** Metadata about creation to user fine/fee account, provided by the server */
   metadata?: Maybe<Metadata>;
   overdueFinePolicyId?: Maybe<Scalars['UUID']['output']>;
   /** ID of the owner */
@@ -73,7 +76,7 @@ export type Account = {
   /** Remaining of the fine/fee */
   remaining: Scalars['Float']['output'];
   /** Date time when the item is returned and the loan ends, if the user does not have a loan associated, hyphen (-) is added as default */
-  returnedDate?: Maybe<Scalars['String']['output']>;
+  returnedDate?: Maybe<Scalars['DateTime']['output']>;
   /** Overall status of the fee/fine */
   status?: Maybe<AccountdataStatus>;
   /** The title associated with the item */
@@ -115,6 +118,7 @@ export type Block = {
   blockRequests: Scalars['Boolean']['output'];
   /** Message to be displayed if the patron should be blocked */
   message: Scalars['String']['output'];
+  /** Unique ID of patron block condition */
   patronBlockConditionId?: Maybe<Scalars['UUID']['output']>;
 };
 
@@ -164,16 +168,21 @@ export type CqlParams = {
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
 export type FeeFine = {
   __typename?: 'FeeFine';
+  /** ID of the action notice template */
   actionNoticeId?: Maybe<Scalars['UUID']['output']>;
   /** A flag to indicate that fee/fine was created automatically. */
   automatic: Scalars['Boolean']['output'];
+  /** ID of the charge notice template */
   chargeNoticeId?: Maybe<Scalars['UUID']['output']>;
   /** Amount of fee or fine, which may be overridden.  */
   defaultAmount?: Maybe<Scalars['Float']['output']>;
   /** Description of fee/fine that is up to the discretion of the user */
   feeFineType: Scalars['String']['output'];
+  /** Fee/fine id, UUID */
   id?: Maybe<Scalars['UUID']['output']>;
+  /** Metadata about creation to fee/fine, provided by the server */
   metadata?: Maybe<Metadata>;
+  /** ID of the owner */
   ownerId?: Maybe<Scalars['UUID']['output']>;
 };
 
@@ -182,7 +191,7 @@ export type FixedDueDateSchedule = {
   __typename?: 'FixedDueDateSchedule';
   description?: Maybe<Scalars['String']['output']>;
   /** Unique ID (generated UUID) */
-  id?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['UUID']['output']>;
   metadata?: Maybe<Metadata>;
   name: Scalars['String']['output'];
   schedules?: Maybe<Array<Schedule>>;
@@ -192,24 +201,26 @@ export type FixedDueDateSchedule = {
 export type Hold = {
   __typename?: 'Hold';
   /** The id of the user that cancelled the request */
-  canceledByUserId?: Maybe<Scalars['String']['output']>;
+  canceledByUserId?: Maybe<Scalars['UUID']['output']>;
   /** Date the request was cancelled */
-  canceledDate?: Maybe<Scalars['String']['output']>;
+  canceledDate?: Maybe<Scalars['DateTime']['output']>;
   /** Additional information about a cancellation */
   cancellationAdditionalInformation?: Maybe<Scalars['String']['output']>;
   /** The id of the request reason */
-  cancellationReasonId?: Maybe<Scalars['String']['output']>;
+  cancellationReasonId?: Maybe<Scalars['UUID']['output']>;
   /** The date when the request expires */
-  expirationDate?: Maybe<Scalars['String']['output']>;
+  expirationDate?: Maybe<Scalars['DateTime']['output']>;
+  /** The item that is checked out */
   item?: Maybe<PatronItem>;
   /** Comments made by the patron */
   patronComments?: Maybe<Scalars['String']['output']>;
+  pickupLocation?: Maybe<ServicePoint>;
   /** The UUID of the pick up location */
-  pickupLocationId: Scalars['String']['output'];
+  pickupLocationId: Scalars['UUID']['output'];
   /** The position in the queue for this patron */
   queuePosition?: Maybe<Scalars['Int']['output']>;
   /** The date when the request was made */
-  requestDate: Scalars['String']['output'];
+  requestDate: Scalars['DateTime']['output'];
   /** The UUID of the request */
   requestId?: Maybe<Scalars['String']['output']>;
   /** The status of the hold request */
@@ -258,6 +269,7 @@ export type HoldingsRecord = {
   callNumberPrefix?: Maybe<Scalars['String']['output']>;
   /** Suffix of the call number on the holding level. */
   callNumberSuffix?: Maybe<Scalars['String']['output']>;
+  /** unique ID for the type of call number on a holdings record, a UUID */
   callNumberTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Item/Piece ID (usually barcode) for systems that do not use item records. Ability to designate the copy number if institution chooses to use copy numbers. */
   copyNumber?: Maybe<Scalars['String']['output']>;
@@ -266,11 +278,13 @@ export type HoldingsRecord = {
   /** records the fact that the record should not be displayed in a discovery system */
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
   effectiveLocation?: Maybe<Location>;
+  /** Effective location is calculated by the system based on the values in the permanent and temporary locationId fields. */
   effectiveLocationId?: Maybe<Scalars['UUID']['output']>;
   /** List of electronic access items */
   electronicAccess?: Maybe<Array<HoldingsrecordElectronicAccessItem>>;
   /** Previous ID(s) assigned to the holdings record */
   formerIds?: Maybe<Array<Scalars['String']['output']>>;
+  /** Instance of holding record. This is a virtual field, accessible only when using mod-graphql. */
   holdingsInstance?: Maybe<Instance>;
   /** Items related to holdings record. This is a virtual field, accessible only when using mod-graphql. */
   holdingsItems?: Maybe<Array<Item>>;
@@ -280,13 +294,18 @@ export type HoldingsRecord = {
   holdingsStatementsForIndexes?: Maybe<Array<HoldingsrecordHoldingsStatementsForIndexesItem>>;
   /** Holdings record supplements statements */
   holdingsStatementsForSupplements?: Maybe<Array<HoldingsrecordHoldingsStatementsForSupplementsItem>>;
+  /** unique ID for the type of this holdings record, a UUID */
   holdingsTypeId?: Maybe<Scalars['UUID']['output']>;
   /** the human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID */
   hrid?: Maybe<Scalars['String']['output']>;
+  /** the unique ID of the holdings record; UUID */
   id?: Maybe<Scalars['UUID']['output']>;
+  /** expanded ILL Policy object corresponding to illPolicyId */
   illPolicy?: Maybe<IlLpolicy>;
+  /** unique ID for an ILL policy, a UUID */
   illPolicyId?: Maybe<Scalars['UUID']['output']>;
   instance?: Maybe<Instance>;
+  /** Inventory instances identifier */
   instanceId: Scalars['UUID']['output'];
   items?: Maybe<Array<Maybe<Item>>>;
   metadata?: Maybe<Metadata>;
@@ -294,7 +313,9 @@ export type HoldingsRecord = {
   notes?: Maybe<Array<HoldingsrecordNotesItem>>;
   /** Text (Number) */
   numberOfItems?: Maybe<Scalars['String']['output']>;
+  /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
+  /** The permanent shelving location in which an item resides. */
   permanentLocationId: Scalars['UUID']['output'];
   /** Receipt status (e.g. pending, awaiting receipt, partially received, fully received, receipt not required, and cancelled) */
   receiptStatus?: Maybe<Scalars['String']['output']>;
@@ -304,11 +325,14 @@ export type HoldingsRecord = {
   retentionPolicy?: Maybe<Scalars['String']['output']>;
   /** Indicates the shelving form of title. */
   shelvingTitle?: Maybe<Scalars['String']['output']>;
+  /** (A reference to) the source of a holdings record */
   sourceId?: Maybe<Scalars['UUID']['output']>;
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['UUID']['output']>>;
+  /** arbitrary tags associated with this holding */
   tags?: Maybe<Tags>;
   temporaryLocation?: Maybe<Location>;
+  /** Temporary location is the temporary location, shelving location, or holding which is a physical place where items are stored, or an Online location. */
   temporaryLocationId?: Maybe<Scalars['UUID']['output']>;
 };
 
@@ -364,7 +388,9 @@ export type HoldingsrecordHoldingsStatementsItem = {
 
 export type HoldingsrecordNotesItem = {
   __typename?: 'HoldingsrecordNotesItem';
+  /** expanded note-type object corresponding to holdingsNoteTypeId */
   holdingsNoteType?: Maybe<HoldingsNoteType>;
+  /** ID of the type of note */
   holdingsNoteTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Text content of the note */
   note?: Maybe<Scalars['String']['output']>;
@@ -429,6 +455,7 @@ export type Instance = {
   holdingsRecords2?: Maybe<Array<HoldingsRecord>>;
   /** The human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID */
   hrid?: Maybe<Scalars['String']['output']>;
+  /** The unique ID of the instance record; a UUID */
   id?: Maybe<Scalars['UUID']['output']>;
   /** An extensible set of name-value pairs of identifiers associated with the resource */
   identifiers?: Maybe<Array<InstanceIdentifiersItem>>;
@@ -438,6 +465,7 @@ export type Instance = {
   instanceFormatIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** List of dereferenced instance formats */
   instanceFormats?: Maybe<Array<InstanceFormat>>;
+  /** UUID of the unique term for the resource type whether it's from the RDA content term list of locally defined */
   instanceTypeId: Scalars['UUID']['output'];
   items?: Maybe<Array<Maybe<Item>>>;
   /** The set of languages used by the resource */
@@ -445,6 +473,7 @@ export type Instance = {
   /** A unique instance identifier matching a client-side bibliographic record identification scheme, in particular for a scenario where multiple separate catalogs with no shared record identifiers contribute to the same Instance in Inventory. A match key is typically generated from select, normalized pieces of metadata in bibliographic records */
   matchKey?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Metadata>;
+  /** UUID of the RDA mode of issuance, a categorization reflecting whether a resource is issued in one or more parts, the way it is updated, and whether its termination is predetermined or not (e.g. monograph,  sequential monograph, serial; integrating Resource, other) */
   modeOfIssuanceId?: Maybe<Scalars['UUID']['output']>;
   /** Array of UUID for the Instance nature of content (e.g. bibliography, biography, exhibition catalogue, festschrift, newspaper, proceedings, research report, thesis or website) */
   natureOfContentTermIds?: Maybe<Array<Scalars['UUID']['output']>>;
@@ -472,11 +501,13 @@ export type Instance = {
   staffSuppress?: Maybe<Scalars['Boolean']['output']>;
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['String']['output']>>;
+  /** UUID for the Instance status term (e.g. cataloged, uncatalogued, batch loaded, temporary, other, not yet assigned) */
   statusId?: Maybe<Scalars['UUID']['output']>;
   /** Date [or timestamp] for when the instance status was updated */
   statusUpdatedDate?: Maybe<Scalars['String']['output']>;
   /** List of subject headings */
   subjects?: Maybe<Array<InstanceSubjectsItem>>;
+  /** arbitrary tags associated with this instance */
   tags?: Maybe<Tags>;
   /** The primary title (or label) associated with the resource */
   title: Scalars['String']['output'];
@@ -498,7 +529,9 @@ export type InstanceAlternativeTitlesItem = {
   __typename?: 'InstanceAlternativeTitlesItem';
   /** An alternative title for the resource */
   alternativeTitle?: Maybe<Scalars['String']['output']>;
+  /** UUID for an alternative title qualifier */
   alternativeTitleTypeId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of authority record that controls an alternative title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
 };
 
@@ -506,15 +539,21 @@ export type InstanceClassificationsItem = {
   __typename?: 'InstanceClassificationsItem';
   /** Classification (e.g. classification scheme, classification schedule) */
   classificationNumber: Scalars['String']['output'];
+  /** Dereferenced classification schema */
   classificationType?: Maybe<ClassificationType>;
+  /** UUID of classification schema (e.g. LC, Canadian Classification, NLM, National Agricultural Library, UDC, and Dewey) */
   classificationTypeId: Scalars['UUID']['output'];
 };
 
 export type InstanceContributorsItem = {
   __typename?: 'InstanceContributorsItem';
+  /** UUID of authority record that controls the contributor */
   authorityId?: Maybe<Scalars['UUID']['output']>;
+  /** Dereferenced contributor-name type */
   contributorNameType?: Maybe<ContributorNameType>;
+  /** UUID of contributor name type term defined by the MARC code list for relators */
   contributorNameTypeId: Scalars['UUID']['output'];
+  /** UUID for the contributor type term defined in controlled vocabulary */
   contributorTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Free text element for adding contributor type terms other that defined by the MARC code list for relators */
   contributorTypeText?: Maybe<Scalars['String']['output']>;
@@ -532,6 +571,7 @@ export type InstanceElectronicAccessItem = {
   materialsSpecification?: Maybe<Scalars['String']['output']>;
   /** URL public note to be displayed in the discovery */
   publicNote?: Maybe<Scalars['String']['output']>;
+  /** UUID for the type of relationship between the electronic resource at the location identified and the item described in the record as a whole */
   relationshipId?: Maybe<Scalars['UUID']['output']>;
   /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
   uri: Scalars['String']['output'];
@@ -552,7 +592,9 @@ export type InstanceFormat = {
 
 export type InstanceIdentifiersItem = {
   __typename?: 'InstanceIdentifiersItem';
+  /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
   identifierTypeId: Scalars['UUID']['output'];
+  /** Information about identifier type, looked up from identifierTypeId */
   identifierTypeObject?: Maybe<IlLpolicy>;
   /** Resource identifier value */
   value: Scalars['String']['output'];
@@ -560,6 +602,7 @@ export type InstanceIdentifiersItem = {
 
 export type InstanceNotesItem = {
   __typename?: 'InstanceNotesItem';
+  /** ID of the type of note */
   instanceNoteTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Text content of the note */
   note?: Maybe<Scalars['String']['output']>;
@@ -590,6 +633,7 @@ export type InstancePublicationPeriod = {
 
 export type InstanceSeriesItem = {
   __typename?: 'InstanceSeriesItem';
+  /** UUID of authority record that controls an series title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Series title value */
   value: Scalars['String']['output'];
@@ -601,6 +645,7 @@ export enum InstanceSourceRecordFormat {
 
 export type InstanceSubjectsItem = {
   __typename?: 'InstanceSubjectsItem';
+  /** UUID of authority record that controls a subject heading */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Subject heading value */
   value: Scalars['String']['output'];
@@ -641,6 +686,7 @@ export type Item = {
   /** Elements of a full call number generated from the item or holding */
   effectiveCallNumberComponents?: Maybe<ItemEffectiveCallNumberComponents>;
   effectiveLocation?: Maybe<Location>;
+  /** Read only current home location for the item. */
   effectiveLocationId?: Maybe<Scalars['UUID']['output']>;
   /** A system generated normalization of the call number that allows for call number sorting in reports and search results */
   effectiveShelvingOrder?: Maybe<Scalars['String']['output']>;
@@ -651,6 +697,7 @@ export type Item = {
   /** Previous identifiers assigned to the item */
   formerIds?: Maybe<Array<Scalars['String']['output']>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
+  /** Item associated holdings record object. */
   holdingsRecord2?: Maybe<HoldingsRecord>;
   /** ID of the holdings record the item is a member of. */
   holdingsRecordId: Scalars['String']['output'];
@@ -659,7 +706,7 @@ export type Item = {
   /** Unique ID of the item record */
   id?: Maybe<Scalars['String']['output']>;
   /** Service point an item is intended to be transited to (should only be present when in transit) */
-  inTransitDestinationServicePointId?: Maybe<Scalars['String']['output']>;
+  inTransitDestinationServicePointId?: Maybe<Scalars['UUID']['output']>;
   instance?: Maybe<Instance>;
   /** Date and time when the item was damaged. */
   itemDamagedStatusDate?: Maybe<Scalars['String']['output']>;
@@ -677,6 +724,7 @@ export type Item = {
   itemLevelCallNumberTypeId?: Maybe<Scalars['String']['output']>;
   /** Information about when an item was last scanned in the Inventory app. */
   lastCheckIn?: Maybe<ItemLastCheckIn>;
+  /** Item's material type */
   materialType?: Maybe<MaterialType>;
   /** Material type, term. Define what type of thing the item is. */
   materialTypeId: Scalars['String']['output'];
@@ -702,9 +750,11 @@ export type Item = {
   statisticalCodeIds?: Maybe<Array<Scalars['String']['output']>>;
   /** The status of the item */
   status: ItemStatus;
+  /** arbitrary tags associated with this item */
   tags?: Maybe<Tags>;
   /** Temporary loan type, is the temporary loan type for a given item. */
   temporaryLoanTypeId?: Maybe<Scalars['String']['output']>;
+  /** Temporary location, shelving location, or holding which is a physical place where items are stored, or an Online location */
   temporaryLocation?: Maybe<Location>;
   /** Temporary item location is the temporarily location, shelving location, or holding which is a physical place where items are stored, or an Online location. */
   temporaryLocationId?: Maybe<Scalars['String']['output']>;
@@ -762,6 +812,7 @@ export type ItemEffectiveCallNumberComponents = {
   prefix?: Maybe<Scalars['String']['output']>;
   /** Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item. */
   suffix?: Maybe<Scalars['String']['output']>;
+  /** Effective Call Number Type Id is the call number type id of the item, if available, otherwise that of the holding. */
   typeId?: Maybe<Scalars['UUID']['output']>;
 };
 
@@ -783,8 +834,10 @@ export type ItemElectronicAccessItem = {
 export type ItemLastCheckIn = {
   __typename?: 'ItemLastCheckIn';
   /** Date and time of the last check in of the item. */
-  dateTime?: Maybe<Scalars['String']['output']>;
+  dateTime?: Maybe<Scalars['DateTime']['output']>;
+  /** Service point ID being used by a staff member when item was scanned in Check in app. */
   servicePointId?: Maybe<Scalars['UUID']['output']>;
+  /** ID a staff member who scanned the item */
   staffMemberId?: Maybe<Scalars['UUID']['output']>;
 };
 
@@ -802,6 +855,7 @@ export type ItemNoteType = {
 
 export type ItemNotesItem = {
   __typename?: 'ItemNotesItem';
+  /** Type of item's note */
   itemNoteType?: Maybe<ItemNoteType>;
   /** ID of the type of note */
   itemNoteTypeId?: Maybe<Scalars['String']['output']>;
@@ -815,7 +869,7 @@ export type ItemNotesItem = {
 export type ItemStatus = {
   __typename?: 'ItemStatus';
   /** Date and time when the status was last changed */
-  date?: Maybe<Scalars['String']['output']>;
+  date?: Maybe<Scalars['DateTime']['output']>;
   /** Name of the status e.g. Available, Checked out, In transit */
   name: ItemStatusName;
 };
@@ -868,14 +922,18 @@ export type Loan = {
   actionComment?: Maybe<Scalars['String']['output']>;
   /** Additional information about the borrower of the item, taken from the user referred to by the userId */
   borrower?: Maybe<LoanBorrower>;
+  /** Service Point where the last checkin occurred */
   checkinServicePoint?: Maybe<ServicePoint>;
+  /** ID of the Service Point where the last checkin occured */
   checkinServicePointId?: Maybe<Scalars['UUID']['output']>;
+  /** Service Point where the last checkout occurred */
   checkoutServicePoint?: Maybe<ServicePoint>;
+  /** ID of the Service Point where the last checkout occured */
   checkoutServicePointId?: Maybe<Scalars['UUID']['output']>;
   /** Date and time the item was declared lost during this loan */
-  declaredLostDate?: Maybe<Scalars['String']['output']>;
+  declaredLostDate?: Maybe<Scalars['DateTime']['output']>;
   /** Date and time when the item is due to be returned */
-  dueDate?: Maybe<Scalars['String']['output']>;
+  dueDate?: Maybe<Scalars['DateTime']['output']>;
   /** Is due date changed by hold request */
   dueDateChangedByHold?: Maybe<Scalars['Boolean']['output']>;
   /** Indicates whether or not this loan had its due date modified by a expired user */
@@ -884,33 +942,42 @@ export type Loan = {
   dueDateChangedByRecall?: Maybe<Scalars['Boolean']['output']>;
   /** Fees and fines associated with loans */
   feesAndFines?: Maybe<LoanFeesAndFines>;
+  /** Unique ID (generated UUID) of the loan */
   id?: Maybe<Scalars['UUID']['output']>;
   item?: Maybe<Item>;
   itemEffectiveLocationAtCheckOut?: Maybe<Location>;
+  /** The effective location, at the time of checkout, of the item loaned to the patron. */
   itemEffectiveLocationIdAtCheckOut?: Maybe<Scalars['UUID']['output']>;
+  /** ID of the item lent to the patron */
   itemId: Scalars['UUID']['output'];
   /** Date and time when the loan began */
-  loanDate: Scalars['String']['output'];
+  loanDate: Scalars['DateTime']['output'];
   loanPolicy?: Maybe<LoanPolicy>;
+  /** ID of last policy used in relation to this loan */
   loanPolicyId?: Maybe<Scalars['UUID']['output']>;
   /** Additional information about the lost item policy of the item, taken from the loan lostItemPolicyId */
   lostItemPolicy?: Maybe<LoanLostItemPolicy>;
+  /** ID of last lost item policy used in relation to this loan */
   lostItemPolicyId?: Maybe<Scalars['UUID']['output']>;
+  /** Metadata about creation and changes to loan, provided by the server (client should not provide) */
   metadata?: Maybe<Metadata>;
   /** Additional information about the overdue fine policy of the item, taken from the loan overdueFinePolicyId */
   overdueFinePolicy?: Maybe<LoanOverdueFinePolicy>;
+  /** ID of last overdue fine policy used in relation to this loan */
   overdueFinePolicyId?: Maybe<Scalars['UUID']['output']>;
   /** Patron Group at checkout */
   patronGroupAtCheckout?: Maybe<LoanPatronGroupAtCheckout>;
+  /** ID of the user representing a proxy for the patron */
   proxyUserId?: Maybe<Scalars['UUID']['output']>;
   /** Count of how many times a loan has been renewed (incremented by the client) */
   renewalCount?: Maybe<Scalars['Int']['output']>;
   /** Date and time when the item was returned */
-  returnDate?: Maybe<Scalars['String']['output']>;
+  returnDate?: Maybe<Scalars['DateTime']['output']>;
   /** Overall status of the loan */
   status?: Maybe<LoanStatus>;
   /** Date and time when return was processed */
-  systemReturnDate?: Maybe<Scalars['String']['output']>;
+  systemReturnDate?: Maybe<Scalars['DateTime']['output']>;
+  /** ID of the patron the item was lent to. Required for open loans, not required for closed loans (for anonymization). */
   userId?: Maybe<Scalars['UUID']['output']>;
 };
 
@@ -951,6 +1018,7 @@ export type LoanOverdueFinePolicy = {
 /** Patron Group at checkout */
 export type LoanPatronGroupAtCheckout = {
   __typename?: 'LoanPatronGroupAtCheckout';
+  /** Unique ID (generated UUID) of the patron group */
   id?: Maybe<Scalars['UUID']['output']>;
   /** Patron group name */
   name?: Maybe<Scalars['String']['output']>;
@@ -977,10 +1045,13 @@ export type LoanPolicyLoansPolicy = {
   fixedDueDateSchedule?: Maybe<FixedDueDateSchedule>;
   /** Fixed due date schedule (due date limit) */
   fixedDueDateScheduleId?: Maybe<Scalars['String']['output']>;
+  /** Grace period */
   gracePeriod?: Maybe<Period>;
   /** Number of items allowed */
   itemLimit?: Maybe<Scalars['Int']['output']>;
+  /** Opening offset time period */
   openingTimeOffset?: Maybe<Period>;
+  /** Loan period */
   period?: Maybe<Period>;
   /** Loan profile */
   profileId?: Maybe<Scalars['String']['output']>;
@@ -994,6 +1065,7 @@ export type LoanPolicyRenewalsPolicy = {
   differentPeriod?: Maybe<Scalars['Boolean']['output']>;
   /** Number of renewals allowed */
   numberAllowed?: Maybe<Scalars['Float']['output']>;
+  /** Alternate loan period for renewals */
   period?: Maybe<Period>;
   /** Renew from date */
   renewFromId?: Maybe<Scalars['String']['output']>;
@@ -1010,7 +1082,9 @@ export type LoanPolicyRequestManagement = {
 
 export type LoanPolicyRequestManagementHolds = {
   __typename?: 'LoanPolicyRequestManagementHolds';
+  /** Alternate loan period at checkout for items with active, pending hold request */
   alternateCheckoutLoanPeriod?: Maybe<Period>;
+  /** Alternate loan period at renewal for items with active, pending hold request */
   alternateRenewalLoanPeriod?: Maybe<Period>;
   /** Allow renewal of items with active, pending hold request */
   renewItemsWithRequest?: Maybe<Scalars['Boolean']['output']>;
@@ -1018,7 +1092,9 @@ export type LoanPolicyRequestManagementHolds = {
 
 export type LoanPolicyRequestManagementPages = {
   __typename?: 'LoanPolicyRequestManagementPages';
+  /** Alternate loan period at checkout for items with active, pending page request */
   alternateCheckoutLoanPeriod?: Maybe<Period>;
+  /** Alternate loan period at renewal for items with active, pending page request */
   alternateRenewalLoanPeriod?: Maybe<Period>;
   /** Allow renewal of items with active, pending page request */
   renewItemsWithRequest?: Maybe<Scalars['Boolean']['output']>;
@@ -1028,9 +1104,13 @@ export type LoanPolicyRequestManagementRecalls = {
   __typename?: 'LoanPolicyRequestManagementRecalls';
   /** Whether recalls are allowed to extend overdue loans */
   allowRecallsToExtendOverdueLoans?: Maybe<Scalars['Boolean']['output']>;
+  /** Alternate grace period for recalled items */
   alternateGracePeriod?: Maybe<Period>;
+  /** Alternate recall return interval for overdue loans */
   alternateRecallReturnInterval?: Maybe<Period>;
+  /** Minimum guaranteed loan period */
   minimumGuaranteedLoanPeriod?: Maybe<Period>;
+  /** Recall return interval */
   recallReturnInterval?: Maybe<Period>;
 };
 
@@ -1044,6 +1124,7 @@ export type LoanStatus = {
 /** A (shelf) location, the forth-level location unit below institution, campus, and library. */
 export type Location = {
   __typename?: 'Location';
+  /** The campus, the second-level location unit, this (shelf) location belongs to */
   campus?: Maybe<Campus>;
   /** The UUID of the campus, the second-level location unit, this (shelf) location belongs to. */
   campusId: Scalars['String']['output'];
@@ -1057,6 +1138,7 @@ export type Location = {
   discoveryDisplayName?: Maybe<Scalars['String']['output']>;
   /** id of this (shelf) location record as UUID. */
   id?: Maybe<Scalars['String']['output']>;
+  /** The institution, the first-level location unit, this (shelf) location belongs to. */
   institution?: Maybe<Institution>;
   /** The UUID of the institution, the first-level location unit, this (shelf) location belongs to. */
   institutionId: Scalars['String']['output'];
@@ -1069,7 +1151,8 @@ export type Location = {
   /** Name of the (shelf) location */
   name: Scalars['String']['output'];
   /** The UUID of the primary service point of this (shelf) location. */
-  primaryServicePoint: Scalars['String']['output'];
+  primaryServicePoint: Scalars['UUID']['output'];
+  /** Dereferenced object for primary service point. This should really just be called 'primaryServicePoint', but the field containing the ID of this object has that name -- it should really be called 'primaryServicePointId' -- so we need something different for this one. */
   primaryServicePointObject?: Maybe<ServicePoint>;
   /** All service points that this (shelf) location has. */
   servicePointIds?: Maybe<Array<Scalars['String']['output']>>;
@@ -1093,8 +1176,10 @@ export type ManualBlock = {
   /** Patron block description */
   desc: Scalars['String']['output'];
   /** Date and time the patron block expiration if is provided the patron block should be automatically removed on that date */
-  expirationDate?: Maybe<Scalars['String']['output']>;
+  expirationDate?: Maybe<Scalars['DateTime']['output']>;
+  /** Patron block id, UUID */
   id?: Maybe<Scalars['UUID']['output']>;
+  /** Metadata about creation to patron block, provided by the server */
   metadata?: Maybe<Metadata>;
   /** Message to patron (optional) */
   patronMessage?: Maybe<Scalars['String']['output']>;
@@ -1106,6 +1191,7 @@ export type ManualBlock = {
   staffInformation?: Maybe<Scalars['String']['output']>;
   /** Type of patron block */
   type?: Maybe<Scalars['String']['output']>;
+  /** ID of the user */
   userId: Scalars['UUID']['output'];
 };
 
@@ -1124,17 +1210,17 @@ export type MaterialType = {
 export type Metadata = {
   __typename?: 'Metadata';
   /** ID of the user who created the record (when available) */
-  createdByUserId?: Maybe<Scalars['String']['output']>;
+  createdByUserId?: Maybe<Scalars['UUID']['output']>;
   /** Username of the user who created the record (when available) */
   createdByUsername?: Maybe<Scalars['String']['output']>;
   /** Date and time when the record was created */
-  createdDate: Scalars['String']['output'];
+  createdDate: Scalars['DateTime']['output'];
   /** ID of the user who last updated the record (when available) */
-  updatedByUserId?: Maybe<Scalars['String']['output']>;
+  updatedByUserId?: Maybe<Scalars['UUID']['output']>;
   /** Username of the user who last updated the record (when available) */
   updatedByUsername?: Maybe<Scalars['String']['output']>;
   /** Date and time when the record was last updated */
-  updatedDate?: Maybe<Scalars['String']['output']>;
+  updatedDate?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** Money schema for patron portal integration */
@@ -1156,10 +1242,11 @@ export type Patron = {
   /** A list of the patron's item holds */
   holds: Array<Hold>;
   /** The FOLIO id of the patron */
-  id?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['UUID']['output']>;
   /** A list of the patron's item checked out items */
   loans: Array<PatronLoan>;
   manualBlocks: Array<ManualBlock>;
+  /** A patron's total outstanding fines and charges */
   totalCharges: Money;
   /** The total number of fines and charges for the patron */
   totalChargesCount: Scalars['Int']['output'];
@@ -1179,9 +1266,11 @@ export type PatronBlockCondition = {
   blockRenewals: Scalars['Boolean']['output'];
   /** This flag indicates the block for requests */
   blockRequests: Scalars['Boolean']['output'];
+  /** A UUID identifying the condition */
   id: Scalars['UUID']['output'];
   /** A message to be displayed */
   message?: Maybe<Scalars['String']['output']>;
+  /** Metadata about creation and changes to patron block conditions, provided by the server (client should not provide) */
   metadata?: Maybe<Metadata>;
   /** The name of the condition */
   name: Scalars['String']['output'];
@@ -1198,9 +1287,12 @@ export enum PatronBlockConditionValueType {
 export type PatronBlockLimit = {
   __typename?: 'PatronBlockLimit';
   condition?: Maybe<PatronBlockCondition>;
+  /** A UUID identifying the condition */
   conditionId: Scalars['UUID']['output'];
+  /** A UUID identifying the limit */
   id: Scalars['UUID']['output'];
   metadata?: Maybe<Metadata>;
+  /** A UUID identifying the patron group */
   patronGroupId: Scalars['UUID']['output'];
   /** Limit value */
   value: Scalars['Float']['output'];
@@ -1210,13 +1302,15 @@ export type PatronBlockLimit = {
 export type PatronCharge = {
   __typename?: 'PatronCharge';
   /** The date when charges begin to accrue */
-  accrualDate?: Maybe<Scalars['String']['output']>;
+  accrualDate?: Maybe<Scalars['DateTime']['output']>;
+  /** The outstanding balance on the item */
   chargeAmount?: Maybe<Money>;
   /** A description of the charge */
   description?: Maybe<Scalars['String']['output']>;
   feeFine?: Maybe<FeeFine>;
   /** The UUID of the fee/fine for this charge */
-  feeFineId?: Maybe<Scalars['String']['output']>;
+  feeFineId?: Maybe<Scalars['UUID']['output']>;
+  /** The item that is accruing the charge */
   item?: Maybe<PatronItem>;
   /** The reason for this charge */
   reason?: Maybe<Scalars['String']['output']>;
@@ -1246,12 +1340,12 @@ export type PatronItem = {
   author?: Maybe<Scalars['String']['output']>;
   instance?: Maybe<Instance>;
   /** The FOLIO id of the instance */
-  instanceId: Scalars['String']['output'];
+  instanceId: Scalars['UUID']['output'];
   /** The ISBN of the item */
   isbn?: Maybe<Scalars['String']['output']>;
   item?: Maybe<Item>;
   /** The FOLIO id of the item */
-  itemId?: Maybe<Scalars['String']['output']>;
+  itemId?: Maybe<Scalars['UUID']['output']>;
   /** The title of the item */
   title?: Maybe<Scalars['String']['output']>;
 };
@@ -1261,12 +1355,13 @@ export type PatronLoan = {
   __typename?: 'PatronLoan';
   details: Loan;
   /** The date the item is due */
-  dueDate: Scalars['String']['output'];
+  dueDate: Scalars['DateTime']['output'];
   /** The id of the loan */
-  id?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** The item that is loaned out */
   item: PatronItem;
   /** The date the item was loaned out */
-  loanDate: Scalars['String']['output'];
+  loanDate: Scalars['DateTime']['output'];
   /** Indicates if the item is overdue */
   overdue: Scalars['Boolean']['output'];
 };
@@ -1293,9 +1388,9 @@ export type ProxyFor = {
   /** Where fees and fines accrue */
   accrueTo?: Maybe<Scalars['String']['output']>;
   /** Deprecated */
-  createdDate?: Maybe<Scalars['String']['output']>;
+  createdDate?: Maybe<Scalars['DateTime']['output']>;
   /** The date this proxy relationship expires */
-  expirationDate?: Maybe<Scalars['String']['output']>;
+  expirationDate?: Maybe<Scalars['DateTime']['output']>;
   /** A UUID identifying this proxy relationship */
   id?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Metadata>;
@@ -1391,6 +1486,7 @@ export type RequestPolicy = {
   description?: Maybe<Scalars['String']['output']>;
   /** Unique request policy ID */
   id?: Maybe<Scalars['String']['output']>;
+  /** Metadata about creation and changes to request policy, provided by the server (client should not provide) */
   metadata?: Maybe<Metadata>;
   /** Unique request policy name, required */
   name: Scalars['String']['output'];
@@ -1408,11 +1504,11 @@ export enum RequestType {
 export type Schedule = {
   __typename?: 'Schedule';
   /** The due date for materials checked out in the date range between the 'from' and 'to' dates. Conforms to the ISO 8601 date and time format. */
-  due: Scalars['String']['output'];
+  due: Scalars['DateTime']['output'];
   /** The start of a date range during which materials checked out will be assigned the due date in the 'due' field. Conforms to the ISO 8601 date and time format. */
-  from: Scalars['String']['output'];
+  from: Scalars['DateTime']['output'];
   /** The end of a date range during which materials checked out will be assigned the due date in the 'due' field. Conforms to the ISO 8601 date and time format. */
-  to: Scalars['String']['output'];
+  to: Scalars['DateTime']['output'];
 };
 
 /** A service point */
@@ -1426,6 +1522,7 @@ export type ServicePoint = {
   discoveryDisplayName: Scalars['String']['output'];
   /** enum for closedLibraryDateManagement associated with hold shelf */
   holdShelfClosedLibraryDateManagement?: Maybe<ServicepointHoldShelfClosedLibraryDateManagement>;
+  /** expiration period for items on the hold shelf at the service point */
   holdShelfExpiryPeriod?: Maybe<TimePeriod>;
   /** Id of service-point object */
   id?: Maybe<Scalars['String']['output']>;
@@ -1452,7 +1549,7 @@ export enum ServicepointHoldShelfClosedLibraryDateManagement {
 export type ServicepointStaffSlipsItem = {
   __typename?: 'ServicepointStaffSlipsItem';
   /** The ID of the staff slip */
-  id: Scalars['String']['output'];
+  id: Scalars['UUID']['output'];
   /** Whether or not to print the staff slip by default */
   printByDefault: Scalars['Boolean']['output'];
 };
@@ -1491,16 +1588,16 @@ export type User = {
   barcode?: Maybe<Scalars['String']['output']>;
   blocks?: Maybe<Array<Maybe<Block>>>;
   /** Deprecated */
-  createdDate?: Maybe<Scalars['String']['output']>;
+  createdDate?: Maybe<Scalars['DateTime']['output']>;
   /** Object that contains custom field */
   customFields?: Maybe<UserdataCustomFields>;
   department?: Maybe<Array<Maybe<Scalars['UUID']['output']>>>;
   /** A list of UUIDs corresponding to the departments the user belongs to, see /departments API */
   departments?: Maybe<Array<Scalars['UUID']['output']>>;
   /** The date in which the user joined the organization */
-  enrollmentDate?: Maybe<Scalars['String']['output']>;
+  enrollmentDate?: Maybe<Scalars['DateTime']['output']>;
   /** The date for when the user becomes inactive */
-  expirationDate?: Maybe<Scalars['String']['output']>;
+  expirationDate?: Maybe<Scalars['DateTime']['output']>;
   /** A unique ID that corresponds to an external authority */
   externalSystemId?: Maybe<Scalars['String']['output']>;
   /** A globally unique (UUID) identifier for the user */
@@ -1510,6 +1607,7 @@ export type User = {
   meta?: Maybe<UserdataMeta>;
   metadata?: Maybe<Metadata>;
   patronGroup?: Maybe<PatronGroup>;
+  /** A UUID corresponding to the group the user belongs to, see /groups API, example groups are undergraduate and faculty; loan rules, patron blocks, fees/fines and expiration days can use the patron group */
   patronGroupId?: Maybe<Scalars['UUID']['output']>;
   /** Personal information about the user */
   personal?: Maybe<UserdataPersonal>;
@@ -1521,7 +1619,7 @@ export type User = {
   /** The class of user like staff or patron; this is different from patronGroup */
   type?: Maybe<Scalars['String']['output']>;
   /** Deprecated */
-  updatedDate?: Maybe<Scalars['String']['output']>;
+  updatedDate?: Maybe<Scalars['DateTime']['output']>;
   /** A unique name belonging to a user. Typically used for login */
   username?: Maybe<Scalars['String']['output']>;
 };
@@ -1544,7 +1642,7 @@ export type UserdataPersonal = {
   /** Physical addresses associated with the user */
   addresses?: Maybe<Array<UserdataPersonalAddressesItem>>;
   /** The user's birth date */
-  dateOfBirth?: Maybe<Scalars['String']['output']>;
+  dateOfBirth?: Maybe<Scalars['DateTime']['output']>;
   /** The user's email address */
   email?: Maybe<Scalars['String']['output']>;
   /** The user's given name */
@@ -1569,6 +1667,7 @@ export type UserdataPersonalAddressesItem = {
   addressLine1?: Maybe<Scalars['String']['output']>;
   /** Address, Line 2 */
   addressLine2?: Maybe<Scalars['String']['output']>;
+  /** A UUID that corresponds with an address type object */
   addressTypeId: Scalars['UUID']['output'];
   /** City name */
   city?: Maybe<Scalars['String']['output']>;
@@ -1861,9 +1960,9 @@ export type AccountResolvers<ContextType = FolioContext, ParentType extends Reso
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dateCreated?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dateUpdated?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dueDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dateCreated?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  dateUpdated?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  dueDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   feeFine?: Resolver<Maybe<ResolversTypes['FeeFine']>, ParentType, ContextType>;
   feeFineId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   feeFineOwner?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1887,7 +1986,7 @@ export type AccountResolvers<ContextType = FolioContext, ParentType extends Reso
   paymentStatus?: Resolver<Maybe<ResolversTypes['AccountdataPaymentStatus']>, ParentType, ContextType>;
   processId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   remaining?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  returnedDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  returnedDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['AccountdataStatus']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -1963,7 +2062,7 @@ export type FeeFineResolvers<ContextType = FolioContext, ParentType extends Reso
 
 export type FixedDueDateScheduleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FixedDueDateSchedule'] = ResolversParentTypes['FixedDueDateSchedule']> = ResolversObject<{
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   schedules?: Resolver<Maybe<Array<ResolversTypes['Schedule']>>, ParentType, ContextType>;
@@ -1971,16 +2070,17 @@ export type FixedDueDateScheduleResolvers<ContextType = FolioContext, ParentType
 }>;
 
 export type HoldResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Hold'] = ResolversParentTypes['Hold']> = ResolversObject<{
-  canceledByUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  canceledDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  canceledByUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  canceledDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   cancellationAdditionalInformation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  cancellationReasonId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expirationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  cancellationReasonId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  expirationDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   item?: Resolver<Maybe<ResolversTypes['PatronItem']>, ParentType, ContextType>;
   patronComments?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  pickupLocationId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pickupLocation?: Resolver<Maybe<ResolversTypes['ServicePoint']>, ParentType, ContextType>;
+  pickupLocationId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   queuePosition?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  requestDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  requestDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   requestId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['HoldStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2258,7 +2358,7 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   holdingsRecordId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   hrid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  inTransitDestinationServicePointId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  inTransitDestinationServicePointId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   instance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType>;
   itemDamagedStatusDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   itemDamagedStatusId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2331,7 +2431,7 @@ export type ItemElectronicAccessItemResolvers<ContextType = FolioContext, Parent
 }>;
 
 export type ItemLastCheckInResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemLastCheckIn'] = ResolversParentTypes['ItemLastCheckIn']> = ResolversObject<{
-  dateTime?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dateTime?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   servicePointId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   staffMemberId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2354,7 +2454,7 @@ export type ItemNotesItemResolvers<ContextType = FolioContext, ParentType extend
 }>;
 
 export type ItemStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemStatus'] = ResolversParentTypes['ItemStatus']> = ResolversObject<{
-  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['ItemStatusName'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2378,8 +2478,8 @@ export type LoanResolvers<ContextType = FolioContext, ParentType extends Resolve
   checkinServicePointId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   checkoutServicePoint?: Resolver<Maybe<ResolversTypes['ServicePoint']>, ParentType, ContextType>;
   checkoutServicePointId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  declaredLostDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dueDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  declaredLostDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  dueDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   dueDateChangedByHold?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   dueDateChangedByNearExpireUser?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   dueDateChangedByRecall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -2389,7 +2489,7 @@ export type LoanResolvers<ContextType = FolioContext, ParentType extends Resolve
   itemEffectiveLocationAtCheckOut?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   itemEffectiveLocationIdAtCheckOut?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   itemId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  loanDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  loanDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   loanPolicy?: Resolver<Maybe<ResolversTypes['LoanPolicy']>, ParentType, ContextType>;
   loanPolicyId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   lostItemPolicy?: Resolver<Maybe<ResolversTypes['LoanLostItemPolicy']>, ParentType, ContextType>;
@@ -2400,9 +2500,9 @@ export type LoanResolvers<ContextType = FolioContext, ParentType extends Resolve
   patronGroupAtCheckout?: Resolver<Maybe<ResolversTypes['LoanPatronGroupAtCheckout']>, ParentType, ContextType>;
   proxyUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   renewalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  returnDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  returnDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['LoanStatus']>, ParentType, ContextType>;
-  systemReturnDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  systemReturnDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2521,7 +2621,7 @@ export type LocationResolvers<ContextType = FolioContext, ParentType extends Res
   libraryId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  primaryServicePoint?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  primaryServicePoint?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   primaryServicePointObject?: Resolver<Maybe<ResolversTypes['ServicePoint']>, ParentType, ContextType>;
   servicePointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   servicePoints?: Resolver<Maybe<Array<ResolversTypes['ServicePoint']>>, ParentType, ContextType>;
@@ -2537,7 +2637,7 @@ export type ManualBlockResolvers<ContextType = FolioContext, ParentType extends 
   borrowing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   desc?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  expirationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  expirationDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   patronMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2558,12 +2658,12 @@ export type MaterialTypeResolvers<ContextType = FolioContext, ParentType extends
 }>;
 
 export type MetadataResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Metadata'] = ResolversParentTypes['Metadata']> = ResolversObject<{
-  createdByUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdByUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   createdByUsername?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedByUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  updatedByUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   updatedByUsername?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  updatedDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2578,7 +2678,7 @@ export type PatronResolvers<ContextType = FolioContext, ParentType extends Resol
   blocks?: Resolver<Array<ResolversTypes['Block']>, ParentType, ContextType>;
   charges?: Resolver<Array<ResolversTypes['PatronCharge']>, ParentType, ContextType>;
   holds?: Resolver<Array<ResolversTypes['Hold']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   loans?: Resolver<Array<ResolversTypes['PatronLoan']>, ParentType, ContextType>;
   manualBlocks?: Resolver<Array<ResolversTypes['ManualBlock']>, ParentType, ContextType>;
   totalCharges?: Resolver<ResolversTypes['Money'], ParentType, ContextType>;
@@ -2612,11 +2712,11 @@ export type PatronBlockLimitResolvers<ContextType = FolioContext, ParentType ext
 }>;
 
 export type PatronChargeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronCharge'] = ResolversParentTypes['PatronCharge']> = ResolversObject<{
-  accrualDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  accrualDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   chargeAmount?: Resolver<Maybe<ResolversTypes['Money']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   feeFine?: Resolver<Maybe<ResolversTypes['FeeFine']>, ParentType, ContextType>;
-  feeFineId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  feeFineId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   item?: Resolver<Maybe<ResolversTypes['PatronItem']>, ParentType, ContextType>;
   reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2636,20 +2736,20 @@ export type PatronGroupResolvers<ContextType = FolioContext, ParentType extends 
 export type PatronItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronItem'] = ResolversParentTypes['PatronItem']> = ResolversObject<{
   author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   instance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType>;
-  instanceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  instanceId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   isbn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   item?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType>;
-  itemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  itemId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronLoanResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronLoan'] = ResolversParentTypes['PatronLoan']> = ResolversObject<{
   details?: Resolver<ResolversTypes['Loan'], ParentType, ContextType>;
-  dueDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dueDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   item?: Resolver<ResolversTypes['PatronItem'], ParentType, ContextType>;
-  loanDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  loanDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   overdue?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2662,8 +2762,8 @@ export type PeriodResolvers<ContextType = FolioContext, ParentType extends Resol
 
 export type ProxyForResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ProxyFor'] = ResolversParentTypes['ProxyFor']> = ResolversObject<{
   accrueTo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expirationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  expirationDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   notificationsTo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2700,9 +2800,9 @@ export type RequestPolicyResolvers<ContextType = FolioContext, ParentType extend
 }>;
 
 export type ScheduleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Schedule'] = ResolversParentTypes['Schedule']> = ResolversObject<{
-  due?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  to?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  due?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  from?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  to?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2722,7 +2822,7 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
 }>;
 
 export type ServicepointStaffSlipsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicepointStaffSlipsItem'] = ResolversParentTypes['ServicepointStaffSlipsItem']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   printByDefault?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2747,12 +2847,12 @@ export type UserResolvers<ContextType = FolioContext, ParentType extends Resolve
   active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   blocks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Block']>>>, ParentType, ContextType>;
-  createdDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   customFields?: Resolver<Maybe<ResolversTypes['UserdataCustomFields']>, ParentType, ContextType>;
   department?: Resolver<Maybe<Array<Maybe<ResolversTypes['UUID']>>>, ParentType, ContextType>;
   departments?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
-  enrollmentDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expirationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  enrollmentDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  expirationDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   externalSystemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   manualBlocks?: Resolver<Maybe<Array<Maybe<ResolversTypes['ManualBlock']>>>, ParentType, ContextType>;
@@ -2766,7 +2866,7 @@ export type UserResolvers<ContextType = FolioContext, ParentType extends Resolve
   proxyFor?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<ResolversTypes['Tags']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  updatedDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2783,7 +2883,7 @@ export type UserdataMetaResolvers<ContextType = FolioContext, ParentType extends
 
 export type UserdataPersonalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['UserdataPersonal'] = ResolversParentTypes['UserdataPersonal']> = ResolversObject<{
   addresses?: Resolver<Maybe<Array<ResolversTypes['UserdataPersonalAddressesItem']>>, ParentType, ContextType>;
-  dateOfBirth?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dateOfBirth?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
