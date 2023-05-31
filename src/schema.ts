@@ -427,6 +427,17 @@ export type IlLpolicy = {
   source: Scalars['String']['output'];
 };
 
+/** An identifier type */
+export type IdentifierType = {
+  __typename?: 'IdentifierType';
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the identifier type */
+  name: Scalars['String']['output'];
+  /** label indicating where the identifier type entry originates from, i.e. 'folio' or 'local' */
+  source?: Maybe<Scalars['String']['output']>;
+};
+
 /** An instance record */
 export type Instance = {
   __typename?: 'Instance';
@@ -592,8 +603,7 @@ export type InstanceIdentifiersItem = {
   __typename?: 'InstanceIdentifiersItem';
   /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
   identifierTypeId: Scalars['UUID']['output'];
-  /** Information about identifier type, looked up from identifierTypeId */
-  identifierTypeObject?: Maybe<IlLpolicy>;
+  identifierTypeObject?: Maybe<IdentifierType>;
   /** Resource identifier value */
   value: Scalars['String']['output'];
 };

@@ -177,6 +177,10 @@ files.sort().map(file => {
     json.properties.library = { "$ref": "loclib.json" };
   }
 
+  if (file.includes('/mod-inventory-storage/ramls/instance.json')) {
+    json.properties.identifiers.items.properties.identifierTypeObject = { "$ref": "identifiertype.json" };
+  }
+
   // Loans has an internal definition of item, but we'd rather use the one from inventory
   if (file.includes('/mod-circulation/ramls/loan.json')) {
     json.properties.item = { "$ref": "/mod-inventory-storage/ramls/item.json" }

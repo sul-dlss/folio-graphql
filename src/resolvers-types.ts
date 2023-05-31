@@ -430,6 +430,17 @@ export type IlLpolicy = {
   source: Scalars['String']['output'];
 };
 
+/** An identifier type */
+export type IdentifierType = {
+  __typename?: 'IdentifierType';
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the identifier type */
+  name: Scalars['String']['output'];
+  /** label indicating where the identifier type entry originates from, i.e. 'folio' or 'local' */
+  source?: Maybe<Scalars['String']['output']>;
+};
+
 /** An instance record */
 export type Instance = {
   __typename?: 'Instance';
@@ -595,8 +606,7 @@ export type InstanceIdentifiersItem = {
   __typename?: 'InstanceIdentifiersItem';
   /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
   identifierTypeId: Scalars['UUID']['output'];
-  /** Information about identifier type, looked up from identifierTypeId */
-  identifierTypeObject?: Maybe<IlLpolicy>;
+  identifierTypeObject?: Maybe<IdentifierType>;
   /** Resource identifier value */
   value: Scalars['String']['output'];
 };
@@ -1782,6 +1792,7 @@ export type ResolversTypes = ResolversObject<{
   HoldingsrecordReceivingHistory: ResolverTypeWrapper<HoldingsrecordReceivingHistory>;
   HoldingsrecordReceivingHistoryEntriesItem: ResolverTypeWrapper<HoldingsrecordReceivingHistoryEntriesItem>;
   ILLpolicy: ResolverTypeWrapper<IlLpolicy>;
+  IdentifierType: ResolverTypeWrapper<IdentifierType>;
   Instance: ResolverTypeWrapper<Instance>;
   InstanceAlternativeTitlesItem: ResolverTypeWrapper<InstanceAlternativeTitlesItem>;
   InstanceClassificationsItem: ResolverTypeWrapper<InstanceClassificationsItem>;
@@ -1887,6 +1898,7 @@ export type ResolversParentTypes = ResolversObject<{
   HoldingsrecordReceivingHistory: HoldingsrecordReceivingHistory;
   HoldingsrecordReceivingHistoryEntriesItem: HoldingsrecordReceivingHistoryEntriesItem;
   ILLpolicy: IlLpolicy;
+  IdentifierType: IdentifierType;
   Instance: Instance;
   InstanceAlternativeTitlesItem: InstanceAlternativeTitlesItem;
   InstanceClassificationsItem: InstanceClassificationsItem;
@@ -2202,6 +2214,14 @@ export type IlLpolicyResolvers<ContextType = FolioContext, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type IdentifierTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['IdentifierType'] = ResolversParentTypes['IdentifierType']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type InstanceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Instance'] = ResolversParentTypes['Instance']> = ResolversObject<{
   _version?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
@@ -2292,7 +2312,7 @@ export type InstanceFormatResolvers<ContextType = FolioContext, ParentType exten
 
 export type InstanceIdentifiersItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceIdentifiersItem'] = ResolversParentTypes['InstanceIdentifiersItem']> = ResolversObject<{
   identifierTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  identifierTypeObject?: Resolver<Maybe<ResolversTypes['ILLpolicy']>, ParentType, ContextType>;
+  identifierTypeObject?: Resolver<Maybe<ResolversTypes['IdentifierType']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2933,6 +2953,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   HoldingsrecordReceivingHistory?: HoldingsrecordReceivingHistoryResolvers<ContextType>;
   HoldingsrecordReceivingHistoryEntriesItem?: HoldingsrecordReceivingHistoryEntriesItemResolvers<ContextType>;
   ILLpolicy?: IlLpolicyResolvers<ContextType>;
+  IdentifierType?: IdentifierTypeResolvers<ContextType>;
   Instance?: InstanceResolvers<ContextType>;
   InstanceAlternativeTitlesItem?: InstanceAlternativeTitlesItemResolvers<ContextType>;
   InstanceClassificationsItem?: InstanceClassificationsItemResolvers<ContextType>;

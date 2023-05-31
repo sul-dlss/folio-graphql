@@ -1397,9 +1397,21 @@ type InstanceIdentifiersItem {
   UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers)
   """
   identifierTypeId: UUID!
+  identifierTypeObject: IdentifierType
+}
 
-  """Information about identifier type, looked up from identifierTypeId"""
-  identifierTypeObject: ILLpolicy
+"""An identifier type"""
+type IdentifierType {
+  id: String
+
+  """label for the identifier type"""
+  name: String!
+
+  """
+  label indicating where the identifier type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String
+  metadata: Metadata
 }
 
 type InstanceContributorsItem {
