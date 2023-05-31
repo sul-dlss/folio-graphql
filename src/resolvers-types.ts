@@ -112,6 +112,7 @@ export type Block = {
   __typename?: 'Block';
   /** Indicates that borrowing is not allowed for patron */
   blockBorrowing: Scalars['Boolean']['output'];
+  blockCondition?: Maybe<PatronBlockCondition>;
   /** Indicates that renewals are not allowed for patron */
   blockRenewals: Scalars['Boolean']['output'];
   /** Indicates that requests are not allowed for patron */
@@ -2011,6 +2012,7 @@ export type AccountdataStatusResolvers<ContextType = FolioContext, ParentType ex
 
 export type BlockResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Block'] = ResolversParentTypes['Block']> = ResolversObject<{
   blockBorrowing?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  blockCondition?: Resolver<Maybe<ResolversTypes['PatronBlockCondition']>, ParentType, ContextType>;
   blockRenewals?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   blockRequests?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

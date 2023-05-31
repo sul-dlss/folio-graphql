@@ -2272,3 +2272,7 @@ extend type Library {
 extend type LoanPolicyLoansPolicy {
   fixedDueDateSchedule: FixedDueDateSchedule
 }
+
+extend type Block {
+  blockCondition: PatronBlockCondition
+}

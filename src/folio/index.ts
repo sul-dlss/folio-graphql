@@ -54,12 +54,17 @@ export const resolvers: Resolvers = {
       return dataSources.users.getAccounts(parent.id)
     }
   },
+  Block: {
+    blockCondition(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.patronBlockConditionId));
+    },
+  },
   User: {
     patronGroupId(parent, args, { dataSources }, info) {
       return parent.patronGroup;
     },
     patronGroup(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroupId));
+      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroup as unknown as string));
     },
     blocks(parent, args, { dataSources }, info) {
       return dataSources.users.getBlocks(parent.id)

@@ -109,6 +109,7 @@ export type Block = {
   __typename?: 'Block';
   /** Indicates that borrowing is not allowed for patron */
   blockBorrowing: Scalars['Boolean']['output'];
+  blockCondition?: Maybe<PatronBlockCondition>;
   /** Indicates that renewals are not allowed for patron */
   blockRenewals: Scalars['Boolean']['output'];
   /** Indicates that requests are not allowed for patron */
