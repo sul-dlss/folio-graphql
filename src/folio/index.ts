@@ -225,6 +225,8 @@ export const resolvers: Resolvers = {
   },
   PatronCharge: {
     feeFine(parent, args, { dataSources }, info) {
+      if (!parent.feeFineId) return;
+
       return dataSources.feefines.getFeeFine(parent.feeFineId)
     }
   },
@@ -236,6 +238,7 @@ export const resolvers: Resolvers = {
       return dataSources.circulation.getLoan(parent.id)
     },
     item(parent, args, { dataSources }, info) {
+      if (!parent.itemId) return null;
       return dataSources.items.getItem(parent.itemId)
     },
     feeFine(parent, args, { dataSources }, info) {
