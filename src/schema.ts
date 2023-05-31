@@ -690,7 +690,6 @@ export type Item = {
   numberOfPieces?: Maybe<Scalars['String']['output']>;
   /** The permanent loan type, is the default loan type for a given item. Loan types are tenant-defined. */
   permanentLoanTypeId: Scalars['String']['output'];
-  /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** Permanent item location is the default location, shelving location, or holding which is a physical place where items are stored, or an Online location. */
   permanentLocationId?: Maybe<Scalars['String']['output']>;
@@ -883,14 +882,12 @@ export type Loan = {
   /** Fees and fines associated with loans */
   feesAndFines?: Maybe<LoanFeesAndFines>;
   id?: Maybe<Scalars['UUID']['output']>;
-  /** Additional information about the item */
   item?: Maybe<Item>;
   itemEffectiveLocationAtCheckOut?: Maybe<Location>;
   itemEffectiveLocationIdAtCheckOut?: Maybe<Scalars['UUID']['output']>;
   itemId: Scalars['UUID']['output'];
   /** Date and time when the loan began */
   loanDate: Scalars['String']['output'];
-  /** Additional information about the loan policy of the item, taken from the loan loanPolicyId */
   loanPolicy?: Maybe<LoanPolicy>;
   loanPolicyId?: Maybe<Scalars['UUID']['output']>;
   /** Additional information about the lost item policy of the item, taken from the loan lostItemPolicyId */
@@ -960,7 +957,7 @@ export type LoanPolicy = {
   __typename?: 'LoanPolicy';
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  loanable?: Maybe<Scalars['Boolean']['output']>;
+  loanable: Scalars['Boolean']['output'];
   loansPolicy?: Maybe<LoanPolicyLoansPolicy>;
   metadata?: Maybe<Metadata>;
   name: Scalars['String']['output'];
@@ -1271,13 +1268,12 @@ export type PatronLoan = {
   overdue: Scalars['Boolean']['output'];
 };
 
-/** Period to lost item */
 export type Period = {
   __typename?: 'Period';
-  /** Duration of the number of times the interval repeats */
-  duration?: Maybe<Scalars['Int']['output']>;
-  /** Interval for the period, e.g. Hours, Days or Weeks */
-  intervalId?: Maybe<PeriodIntervalId>;
+  /** Duration of the period, number of times the interval repeats */
+  duration: Scalars['Int']['output'];
+  /** Interval for the period, e.g. hours, days or weeks */
+  intervalId: PeriodIntervalId;
 };
 
 export enum PeriodIntervalId {
@@ -1285,8 +1281,7 @@ export enum PeriodIntervalId {
   Hours = 'Hours',
   Minutes = 'Minutes',
   Months = 'Months',
-  Weeks = 'Weeks',
-  Years = 'Years'
+  Weeks = 'Weeks'
 }
 
 /** A proxy for a user */
@@ -1559,8 +1554,10 @@ export type UserdataPersonal = {
   mobilePhone?: Maybe<Scalars['String']['output']>;
   /** The user's primary phone number */
   phone?: Maybe<Scalars['String']['output']>;
-  /** Id of user's preferred contact type */
+  /** Id of user's preferred contact type like Email, Mail or Text Message, see /addresstypes API */
   preferredContactTypeId?: Maybe<Scalars['String']['output']>;
+  /** The user's preferred name */
+  preferredFirstName?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserdataPersonalAddressesItem = {
@@ -1569,7 +1566,7 @@ export type UserdataPersonalAddressesItem = {
   addressLine1?: Maybe<Scalars['String']['output']>;
   /** Address, Line 2 */
   addressLine2?: Maybe<Scalars['String']['output']>;
-  addressTypeId?: Maybe<Scalars['UUID']['output']>;
+  addressTypeId: Scalars['UUID']['output'];
   /** City name */
   city?: Maybe<Scalars['String']['output']>;
   /** The country code for this address */
