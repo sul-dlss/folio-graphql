@@ -1767,6 +1767,51 @@ type ManualBlock {
   id: UUID
 }
 
+"""An Instance note type"""
+type InstanceNoteType {
+  """unique ID of the Instance note type; a UUID"""
+  id: UUID
+
+  """name of the Instance note type"""
+  name: String!
+
+  """
+  label indicating where the Instance note type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+"""Cataloging status for Instance records"""
+type InstanceStatus {
+  id: String
+
+  """distinct code for an instance status"""
+  code: String!
+
+  """label for the instance status"""
+  name: String!
+
+  """origin of an instance status record"""
+  source: String!
+  metadata: Metadata
+}
+
+"""The resource type of an Instance"""
+type InstanceType {
+  id: String
+
+  """label for the resource type"""
+  name: String!
+
+  """distinct code for the resource type"""
+  code: String!
+
+  """origin of a resource type record"""
+  source: String!
+  metadata: Metadata
+}
+
 """Single automated patron block"""
 type Block {
   """Unique ID of patron block condition"""
@@ -2165,6 +2210,7 @@ type PatronGroup {
   metadata: Metadata
 }
 
+
 extend type Patron {
   user: User
   blocks: [Block!]!
@@ -2231,6 +2277,8 @@ extend type Hold {
 extend type Instance {
   holdingsRecords(params: CqlParams): [HoldingsRecord]
   items(params: CqlParams): [Item]
+  status: InstanceStatus
+  instanceType: InstanceType
 }
 
 extend type Item {
@@ -2262,4 +2310,8 @@ extend type LoanPolicyLoansPolicy {
 
 extend type Block {
   blockCondition: PatronBlockCondition
+}
+
+extend type InstanceNotesItem {
+  instanceNoteType: InstanceNoteType
 }
