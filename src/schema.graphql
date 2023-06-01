@@ -1767,6 +1767,21 @@ type ManualBlock {
   id: UUID
 }
 
+"""A call number type"""
+type CallNumberType {
+  """unique ID of the call number type; a UUID"""
+  id: String
+
+  """name of the call number type"""
+  name: String!
+
+  """
+  label indicating where the call number type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
 """An Instance note type"""
 type InstanceNoteType {
   """unique ID of the Instance note type; a UUID"""
@@ -1809,6 +1824,30 @@ type InstanceType {
 
   """origin of a resource type record"""
   source: String!
+  metadata: Metadata
+}
+
+"""An item damage status"""
+type ItemDamagedStatus {
+  """unique ID of the item damage status; a UUID"""
+  id: String
+
+  """name of the item damage status"""
+  name: String!
+
+  """
+  label indicating where the item damage status entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+"""A loan type"""
+type LoanType {
+  id: String
+
+  """label for the loan type"""
+  name: String!
   metadata: Metadata
 }
 
@@ -2210,7 +2249,6 @@ type PatronGroup {
   metadata: Metadata
 }
 
-
 extend type Patron {
   user: User
   blocks: [Block!]!
@@ -2268,6 +2306,8 @@ extend type PatronLoan {
 
 extend type Loan {
   itemEffectiveLocationAtCheckOut: Location
+  user: User
+  proxyUser: User
 }
 
 extend type Hold {
@@ -2285,6 +2325,14 @@ extend type Item {
   holdingsRecord: HoldingsRecord
   instance: Instance
   effectiveLocation: Location
+  itemDamagedStatus: ItemDamagedStatus
+  inTransitDestinationServicePoint: ServicePoint
+  permanentLoanType: LoanType
+  temporaryLoanType: LoanType
+}
+
+extend type ItemEffectiveCallNumberComponents {
+  type: CallNumberType
 }
 
 extend type HoldingsRecord {
@@ -2306,6 +2354,10 @@ extend type Library {
 
 extend type LoanPolicyLoansPolicy {
   fixedDueDateSchedule: FixedDueDateSchedule
+}
+
+extend type LoanPolicyRenewalsPolicy {
+  alternateFixedDueDateSchedule: FixedDueDateSchedule
 }
 
 extend type Block {

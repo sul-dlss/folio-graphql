@@ -120,6 +120,18 @@ export type Block = {
   patronBlockConditionId?: Maybe<Scalars['UUID']['output']>;
 };
 
+/** A call number type */
+export type CallNumberType = {
+  __typename?: 'CallNumberType';
+  /** unique ID of the call number type; a UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the call number type */
+  name: Scalars['String']['output'];
+  /** label indicating where the call number type entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
 /** second-level location unit */
 export type Campus = {
   __typename?: 'Campus';
@@ -754,9 +766,11 @@ export type Item = {
   hrid?: Maybe<Scalars['String']['output']>;
   /** Unique ID of the item record */
   id?: Maybe<Scalars['String']['output']>;
+  inTransitDestinationServicePoint?: Maybe<ServicePoint>;
   /** Service point an item is intended to be transited to (should only be present when in transit) */
   inTransitDestinationServicePointId?: Maybe<Scalars['UUID']['output']>;
   instance?: Maybe<Instance>;
+  itemDamagedStatus?: Maybe<ItemDamagedStatus>;
   /** Date and time when the item was damaged. */
   itemDamagedStatusDate?: Maybe<Scalars['String']['output']>;
   /** Item dame status id identifier. */
@@ -788,6 +802,7 @@ export type Item = {
   numberOfMissingPieces?: Maybe<Scalars['String']['output']>;
   /** Number of pieces. Used when an item is checked out or returned to verify that all parts are present (e.g. 7 CDs in a set). */
   numberOfPieces?: Maybe<Scalars['String']['output']>;
+  permanentLoanType?: Maybe<LoanType>;
   /** The permanent loan type, is the default loan type for a given item. Loan types are tenant-defined. */
   permanentLoanTypeId: Scalars['String']['output'];
   permanentLocation?: Maybe<Location>;
@@ -801,6 +816,7 @@ export type Item = {
   status: ItemStatus;
   /** arbitrary tags associated with this item */
   tags?: Maybe<Tags>;
+  temporaryLoanType?: Maybe<LoanType>;
   /** Temporary loan type, is the temporary loan type for a given item. */
   temporaryLoanTypeId?: Maybe<Scalars['String']['output']>;
   /** Temporary location, shelving location, or holding which is a physical place where items are stored, or an Online location */
@@ -852,6 +868,18 @@ export type ItemCirculationNotesItemSourcePersonal = {
   lastName?: Maybe<Scalars['String']['output']>;
 };
 
+/** An item damage status */
+export type ItemDamagedStatus = {
+  __typename?: 'ItemDamagedStatus';
+  /** unique ID of the item damage status; a UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the item damage status */
+  name: Scalars['String']['output'];
+  /** label indicating where the item damage status entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
 /** Elements of a full call number generated from the item or holding */
 export type ItemEffectiveCallNumberComponents = {
   __typename?: 'ItemEffectiveCallNumberComponents';
@@ -861,6 +889,7 @@ export type ItemEffectiveCallNumberComponents = {
   prefix?: Maybe<Scalars['String']['output']>;
   /** Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item. */
   suffix?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<CallNumberType>;
   /** Effective Call Number Type Id is the call number type id of the item, if available, otherwise that of the holding. */
   typeId?: Maybe<Scalars['UUID']['output']>;
 };
@@ -991,6 +1020,7 @@ export type Loan = {
   overdueFinePolicyId?: Maybe<Scalars['UUID']['output']>;
   /** Patron Group at checkout */
   patronGroupAtCheckout?: Maybe<LoanPatronGroupAtCheckout>;
+  proxyUser?: Maybe<User>;
   /** ID of the user representing a proxy for the patron */
   proxyUserId?: Maybe<Scalars['UUID']['output']>;
   /** Count of how many times a loan has been renewed (incremented by the client) */
@@ -1001,6 +1031,7 @@ export type Loan = {
   status?: Maybe<LoanStatus>;
   /** Date and time when return was processed */
   systemReturnDate?: Maybe<Scalars['DateTime']['output']>;
+  user?: Maybe<User>;
   /** ID of the patron the item was lent to. Required for open loans, not required for closed loans (for anonymization). */
   userId?: Maybe<Scalars['UUID']['output']>;
 };
@@ -1083,6 +1114,7 @@ export type LoanPolicyLoansPolicy = {
 
 export type LoanPolicyRenewalsPolicy = {
   __typename?: 'LoanPolicyRenewalsPolicy';
+  alternateFixedDueDateSchedule?: Maybe<FixedDueDateSchedule>;
   /** Alternate fixed due date schedule (due date limit) for renewals */
   alternateFixedDueDateScheduleId?: Maybe<Scalars['String']['output']>;
   /** Renewal period different from original loan */
@@ -1143,6 +1175,15 @@ export type LoanStatus = {
   __typename?: 'LoanStatus';
   /** Name of the status (currently can be any value, values commonly used are Open and Closed) */
   name?: Maybe<Scalars['String']['output']>;
+};
+
+/** A loan type */
+export type LoanType = {
+  __typename?: 'LoanType';
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the loan type */
+  name: Scalars['String']['output'];
 };
 
 /** A (shelf) location, the forth-level location unit below institution, campus, and library. */
