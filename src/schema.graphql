@@ -1767,6 +1767,242 @@ type ManualBlock {
   id: UUID
 }
 
+"""A call number type"""
+type AlternativeTitleType {
+  """unique ID of the alternative title type; a UUID"""
+  id: String
+
+  """name of the alternative title type"""
+  name: String!
+
+  """
+  label indicating where the alternative title type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+"""An authority record"""
+type Authority {
+  """Authority UUID"""
+  id: UUID
+
+  """Record version for optimistic locking"""
+  _version: Int
+
+  """
+  The metadata source of the underlying record to the authority record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in data-import)
+  """
+  source: AuthoritySource
+
+  """Heading personal name"""
+  personalName: String
+
+  """See from tracing personal name"""
+  sftPersonalName: [String!]
+
+  """See also from tracing personal name"""
+  saftPersonalName: [String!]
+
+  """Heading personal name title"""
+  personalNameTitle: String
+
+  """See from tracing personal name title"""
+  sftPersonalNameTitle: [String!]
+
+  """See also from tracing personal name title"""
+  saftPersonalNameTitle: [String!]
+
+  """Heading corporate name"""
+  corporateName: String
+
+  """See from tracing corporate name"""
+  sftCorporateName: [String!]
+
+  """See also from tracing corporate name"""
+  saftCorporateName: [String!]
+
+  """Heading corporate name title"""
+  corporateNameTitle: String
+
+  """See from tracing corporate name title"""
+  sftCorporateNameTitle: [String!]
+
+  """See also from tracing corporate name title"""
+  saftCorporateNameTitle: [String!]
+
+  """Heading meeting name"""
+  meetingName: String
+
+  """See from tracing meeting name"""
+  sftMeetingName: [String!]
+
+  """See also from tracing meeting name"""
+  saftMeetingName: [String!]
+
+  """Heading meeting name title"""
+  meetingNameTitle: String
+
+  """See from tracing meeting name title"""
+  sftMeetingNameTitle: [String!]
+
+  """See also from tracing meeting name title"""
+  saftMeetingNameTitle: [String!]
+
+  """Heading uniform title"""
+  uniformTitle: String
+
+  """See from tracing uniform title"""
+  sftUniformTitle: [String!]
+
+  """See also from tracing uniform title"""
+  saftUniformTitle: [String!]
+
+  """Heading topical term"""
+  topicalTerm: String
+
+  """See from tracing topical term"""
+  sftTopicalTerm: [String!]
+
+  """See also from tracing topical term"""
+  saftTopicalTerm: [String!]
+
+  """Children's subject headings"""
+  subjectHeadings: String
+
+  """Heading geographic name"""
+  geographicName: String
+
+  """See from tracing geographic name"""
+  sftGeographicName: [String!]
+
+  """See also from tracing geographic name"""
+  saftGeographicName: [String!]
+
+  """Heading genre/form term"""
+  genreTerm: String
+
+  """See from tracing genre/form term"""
+  sftGenreTerm: [String!]
+
+  """See also from tracing genre/form term"""
+  saftGenreTerm: [String!]
+
+  """
+  An extensible set of name-value pairs of identifiers associated with the resource
+  """
+  identifiers: [AuthorityIdentifiersItem!]
+
+  """Notes (e.g. nonpublic general note)"""
+  notes: [AuthorityNotesItem!]
+
+  """Authority source file id; UUID"""
+  sourceFileId: UUID
+
+  """Authority Natural ID"""
+  naturalId: String
+
+  """Creater, updater, creation date, last updated date"""
+  metadata: Metadata
+}
+
+enum AuthoritySource {
+  MARC
+  FOLIO
+}
+
+type AuthorityIdentifiersItem {
+  """Resource identifier value"""
+  value: String!
+
+  """
+  Resource identifier type (e.g. Control number, LCCN, Other standard identifier, System control number)
+  """
+  identifierTypeId: UUID!
+}
+
+type AuthorityNotesItem {
+  """ID of the type of note"""
+  noteTypeId: UUID!
+
+  """Text content of the note"""
+  note: String!
+}
+
+"""A call number type"""
+type CallNumberType {
+  """unique ID of the call number type; a UUID"""
+  id: String
+
+  """name of the call number type"""
+  name: String!
+
+  """
+  label indicating where the call number type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+"""A contributor type"""
+type ContributorType {
+  id: String
+
+  """label for the contributor type"""
+  name: String!
+
+  """distinct code for the contributor type"""
+  code: String!
+
+  """origin of the contributor type record"""
+  source: String!
+  metadata: Metadata
+}
+
+"""
+A qualifier indicating the type of relationship that an electronic resource at a given URL has to an Instance
+"""
+type ElectronicAccessRelationship {
+  id: String
+
+  """label for the type of relationship between a URL and an Instance"""
+  name: String!
+  metadata: Metadata
+}
+
+"""A holdings records source"""
+type HoldingsRecordsSource {
+  """The unique ID of the holdings records source; UUID"""
+  id: UUID
+
+  """Name of the holdings records source"""
+  name: String!
+
+  """The holdings records source"""
+  source: HoldingsrecordssourceSource
+  metadata: Metadata
+}
+
+enum HoldingsrecordssourceSource {
+  folio
+  local
+}
+
+"""A holdings type"""
+type HoldingsType {
+  """unique ID of the holdings type; a UUID"""
+  id: String
+
+  """name of the holdings type"""
+  name: String!
+
+  """
+  label indicating where the holdings type entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
 """An Instance note type"""
 type InstanceNoteType {
   """unique ID of the Instance note type; a UUID"""
@@ -1809,6 +2045,44 @@ type InstanceType {
 
   """origin of a resource type record"""
   source: String!
+  metadata: Metadata
+}
+
+"""An item damage status"""
+type ItemDamagedStatus {
+  """unique ID of the item damage status; a UUID"""
+  id: String
+
+  """name of the item damage status"""
+  name: String!
+
+  """
+  label indicating where the item damage status entry originates from, i.e. 'folio' or 'local'
+  """
+  source: String!
+  metadata: Metadata
+}
+
+"""A loan type"""
+type LoanType {
+  id: String
+
+  """label for the loan type"""
+  name: String!
+  metadata: Metadata
+}
+
+"""A mode of issuance to be assigned to an Instance"""
+type ModeOfIssuance {
+  id: String
+
+  """label for the mode of issuance"""
+  name: String!
+
+  """
+  label indicating where the mode of issuance entry originates from, i.e. 'rdamodeissue' or 'local'
+  """
+  source: String
   metadata: Metadata
 }
 
@@ -2210,7 +2484,6 @@ type PatronGroup {
   metadata: Metadata
 }
 
-
 extend type Patron {
   user: User
   blocks: [Block!]!
@@ -2268,6 +2541,8 @@ extend type PatronLoan {
 
 extend type Loan {
   itemEffectiveLocationAtCheckOut: Location
+  user: User
+  proxyUser: User
 }
 
 extend type Hold {
@@ -2279,12 +2554,48 @@ extend type Instance {
   items(params: CqlParams): [Item]
   status: InstanceStatus
   instanceType: InstanceType
+  modeOfIssuance: ModeOfIssuance
+}
+
+extend type InstanceAlternativeTitlesItem {
+  alternativeTitleType: AlternativeTitleType
+  authority: Authority
+}
+
+extend type InstanceContributorsItem {
+  contributorType: ContributorType
+  authority: Authority
+}
+
+extend type InstanceSeriesItem {
+  authority: Authority
+}
+
+extend type InstanceSubjectsItem {
+  authority: Authority
+}
+
+extend type InstanceElectronicAccessItem {
+  relationship: ElectronicAccessRelationship
+}
+
+extend type InstanceNotesItem {
+  instanceNoteType: InstanceNoteType
 }
 
 extend type Item {
   holdingsRecord: HoldingsRecord
   instance: Instance
   effectiveLocation: Location
+  itemDamagedStatus: ItemDamagedStatus
+  inTransitDestinationServicePoint: ServicePoint
+  permanentLoanType: LoanType
+  temporaryLoanType: LoanType
+  itemLevelCallNumberType: CallNumberType
+}
+
+extend type ItemEffectiveCallNumberComponents {
+  type: CallNumberType
 }
 
 extend type HoldingsRecord {
@@ -2293,6 +2604,13 @@ extend type HoldingsRecord {
   permanentLocation: Location
   temporaryLocation: Location
   effectiveLocation: Location
+  holdingsType: HoldingsType
+  callNumberType: CallNumberType
+  source: HoldingsRecordsSource
+}
+
+extend type HoldingsrecordElectronicAccessItem {
+  relationship: ElectronicAccessRelationship
 }
 
 extend type Campus {
@@ -2308,10 +2626,10 @@ extend type LoanPolicyLoansPolicy {
   fixedDueDateSchedule: FixedDueDateSchedule
 }
 
-extend type Block {
-  blockCondition: PatronBlockCondition
+extend type LoanPolicyRenewalsPolicy {
+  alternateFixedDueDateSchedule: FixedDueDateSchedule
 }
 
-extend type InstanceNotesItem {
-  instanceNoteType: InstanceNoteType
+extend type Block {
+  blockCondition: PatronBlockCondition
 }
