@@ -8,6 +8,9 @@ import {
   ServicePoint,
   LoanPolicy,
   RequestPolicy,
+  OverdueFinePolicy,
+  LostItemFeePolicy,
+  PatronNoticePolicy,
   PatronGroup,
   PatronBlockLimit,
   PatronBlockCondition,
@@ -27,6 +30,7 @@ import {
   HoldingsType,
   AlternativeTitleType,
   ContributorType,
+  MaterialType,
 } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
@@ -55,17 +59,45 @@ export const resolvers: Resolvers = {
     items(parent, args, { dataSources }, info) {
       return dataSources.items.getItems(args)
     },
+
+    // circ rule policies
     loanPolicies(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache })
     },
     requestPolicies(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<RequestPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies', cache: typeCache })
     },
+    overdueFinePolicies(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<OverdueFinePolicy>("overdue-fines-policies", { key: 'overdueFinePolicies', cache: typeCache })
+    },
+    lostItemFeesPolicies(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<LostItemFeePolicy>("lost-item-fees-policies", { key: 'lostItemFeePolicies', cache: typeCache })
+    },
+    patronNoticePolicies(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<PatronNoticePolicy>("patron-notice-policy-storage/patron-notice-policies", { key: 'patronNoticePolicies', cache: typeCache })
+    },
+
+    // circ rule criteria
+    patronGroups(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache })
+    },
+    materialTypes(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<MaterialType>("material-types", { key: "mtypes", cache: typeCache })
+    },
+    loanTypes(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<LoanType>("loan-types", { key: "loantypes", cache: typeCache })
+    },
+    institutions(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache })
+    },
+    campuses(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache })
+    },
     libraries(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
     },
-    patronGroups(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache })
+    locations(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache })
     }
   },
   Patron: {

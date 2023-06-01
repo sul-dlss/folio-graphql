@@ -262,6 +262,15 @@ export type Campus = {
   name: Scalars['String']['output'];
 };
 
+/** Charge amount for item */
+export type Charge = {
+  __typename?: 'Charge';
+  /** Charge amount for item may be Actual cost or an amount */
+  amount?: Maybe<Scalars['Float']['output']>;
+  /** Charge type amount for item may be Actual cost or an amount */
+  chargeType?: Maybe<Scalars['String']['output']>;
+};
+
 /** A classification type */
 export type ClassificationType = {
   __typename?: 'ClassificationType';
@@ -902,6 +911,24 @@ export type Institution = {
   name: Scalars['String']['output'];
 };
 
+/** Time interval */
+export type Interval = {
+  __typename?: 'Interval';
+  /** Interval duration, number of time units */
+  duration: Scalars['Int']['output'];
+  /** Unit of time */
+  intervalId: IntervalIntervalId;
+};
+
+export enum IntervalIntervalId {
+  Days = 'Days',
+  Hours = 'Hours',
+  Minutes = 'Minutes',
+  Months = 'Months',
+  Weeks = 'Weeks',
+  Years = 'Years'
+}
+
 /** An item record */
 export type Item = {
   __typename?: 'Item';
@@ -1411,6 +1438,49 @@ export type LocationDetails = {
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
 };
 
+/** CRUD to lost item fee policies */
+export type LostItemFeePolicy = {
+  __typename?: 'LostItemFeePolicy';
+  /** Option to charge amount for item */
+  chargeAmountItem?: Maybe<Charge>;
+  /** A flag to determine charge lost item processing fee if item declared lost by patron must be Yes or No, with default set to Yes */
+  chargeAmountItemPatron?: Maybe<Scalars['Boolean']['output']>;
+  /** A flag to determine charge lost item processing fee if item aged to lost by system must be Yes or No, with default set to Yes */
+  chargeAmountItemSystem?: Maybe<Scalars['Boolean']['output']>;
+  /** Lost item fee policy description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Fees/fines shall be refunded if a lost item is returned more than entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  feesFinesShallRefunded?: Maybe<Period>;
+  /** Lost item fee policy id, UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** Items aged to lost after overdue entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  itemAgedLostOverdue?: Maybe<Period>;
+  /** For items not charged a fee/fine, close the loan after entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  lostItemChargeFeeFine?: Maybe<Period>;
+  /** Lost item processing fee, must be = 0 or > 0 */
+  lostItemProcessingFee?: Maybe<Scalars['Float']['output']>;
+  /** Option to lost item returned may be Charge overdues based on returned date up to maximum (if applicable) or Remove overdue fines, with a default of _Charge overdues based on returned date up to maximum (if applicable) */
+  lostItemReturned?: Maybe<Scalars['String']['output']>;
+  /** Metadata about creation to lost item fee policy, provided by the server */
+  metadata?: Maybe<Metadata>;
+  /** Lost item fee policy name, is a required field */
+  name: Scalars['String']['output'];
+  /** Patron billed after aged to lost entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  patronBilledAfterAgedLost?: Maybe<Period>;
+  /** Patron billed after a recalled item aged to lost entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  patronBilledAfterRecalledItemAgedLost?: Maybe<Period>;
+  /** Recalled items aged to lost after overdue entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  recalledItemAgedLostOverdue?: Maybe<Period>;
+  /** A flag to determine if lost item replaced, remove lost item processing fee */
+  replacedLostItemProcessingFee?: Maybe<Scalars['Boolean']['output']>;
+  /** A flag to determine replacement allowed */
+  replacementAllowed?: Maybe<Scalars['Boolean']['output']>;
+  /** Amount for replacement process fee */
+  replacementProcessingFee?: Maybe<Scalars['Float']['output']>;
+  /** A flag to determine if lost item returned, remove lost item processing fee */
+  returnedLostItemProcessingFee?: Maybe<Scalars['Boolean']['output']>;
+};
+
 /** Allows institution to manually block a patron from borrowing, renewing, and/or requesting until specified issue is resolved */
 export type ManualBlock = {
   __typename?: 'ManualBlock';
@@ -1486,6 +1556,33 @@ export type Money = {
   amount: Scalars['Float']['output'];
   /** An ISO 4217 standard currency code */
   isoCurrencyCode: Scalars['String']['output'];
+};
+
+/** Overdue fine policy to be associated with a loan policy by the Circulation Rules Editor */
+export type OverdueFinePolicy = {
+  __typename?: 'OverdueFinePolicy';
+  /** A flag to determine if a fine is count closed */
+  countClosed?: Maybe<Scalars['Boolean']['output']>;
+  /** Overdue fine policy description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** A flag to determine forgive overdue fine if item renewed */
+  forgiveOverdueFine?: Maybe<Scalars['Boolean']['output']>;
+  /** Grace period for recall */
+  gracePeriodRecall?: Maybe<Scalars['Boolean']['output']>;
+  /** Overdue fine policy id, UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** Maximum overdue fine */
+  maxOverdueFine?: Maybe<Scalars['Float']['output']>;
+  /** Maximum overdue recall fine */
+  maxOverdueRecallFine?: Maybe<Scalars['Float']['output']>;
+  /** Metadata about creation to overdue fine policy, provided by the server */
+  metadata?: Maybe<Metadata>;
+  /** Overdue fine policy name */
+  name: Scalars['String']['output'];
+  /** Fine for overdue */
+  overdueFine?: Maybe<Quantity>;
+  /** Fine overdue recall fine */
+  overdueRecallFine?: Maybe<Quantity>;
 };
 
 /** Account schema for patron portal integration */
@@ -1622,6 +1719,186 @@ export type PatronLoan = {
   overdue: Scalars['Boolean']['output'];
 };
 
+/** Patron notice policy */
+export type PatronNoticePolicy = {
+  __typename?: 'PatronNoticePolicy';
+  /** A flag to determine if a patron notice policy is active */
+  active?: Maybe<Scalars['Boolean']['output']>;
+  /** Patron notice policy description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** List of fee/fine notices */
+  feeFineNotices?: Maybe<Array<PatronNoticePolicyFeeFineNoticesItem>>;
+  /** Patron notice policy id, UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  /** List of loan notices */
+  loanNotices?: Maybe<Array<PatronNoticePolicyLoanNoticesItem>>;
+  /** Metadata about creation and changes to policy, provided by the server (client should not provide) */
+  metadata?: Maybe<Metadata>;
+  /** Patron notice policy name */
+  name: Scalars['String']['output'];
+  /** List of request notice */
+  requestNotices?: Maybe<Array<PatronNoticePolicyRequestNoticesItem>>;
+};
+
+export type PatronNoticePolicyFeeFineNoticesItem = {
+  __typename?: 'PatronNoticePolicyFeeFineNoticesItem';
+  /** Notice format, send through email, sms etc. */
+  format: PatronNoticePolicyFeeFineNoticesItemFormat;
+  /** Frequency, send it once or more */
+  frequency?: Maybe<PatronNoticePolicyFeeFineNoticesItemFrequency>;
+  /** Notice name */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Is this real time event */
+  realTime: Scalars['Boolean']['output'];
+  sendOptions?: Maybe<PatronNoticePolicyFeeFineNoticesItemSendOptions>;
+  /** Template id, UUID */
+  templateId: Scalars['String']['output'];
+  /** Template name */
+  templateName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PatronNoticePolicyFeeFineNoticesItemFormat {
+  Email = 'Email',
+  Print = 'Print',
+  Sms = 'SMS'
+}
+
+export enum PatronNoticePolicyFeeFineNoticesItemFrequency {
+  OneTime = 'One_time',
+  Recurring = 'Recurring'
+}
+
+export type PatronNoticePolicyFeeFineNoticesItemSendOptions = {
+  __typename?: 'PatronNoticePolicyFeeFineNoticesItemSendOptions';
+  sendBy?: Maybe<Interval>;
+  sendEvery?: Maybe<Interval>;
+  /** Defines how notice should be sent: after or upon */
+  sendHow?: Maybe<PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow>;
+  /** Triggering event */
+  sendWhen: PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen;
+};
+
+export enum PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow {
+  After = 'After',
+  UponAt = 'Upon_At'
+}
+
+export enum PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen {
+  AgedToLostFineCharged = 'Aged_to_lost___fine_charged',
+  AgedToLostItemReplacedFineAdjusted = 'Aged_to_lost___item_replaced___fine_adjusted',
+  AgedToLostItemReturnedFineAdjusted = 'Aged_to_lost___item_returned___fine_adjusted',
+  OverdueFineRenewed = 'Overdue_fine_renewed',
+  OverdueFineReturned = 'Overdue_fine_returned'
+}
+
+export type PatronNoticePolicyLoanNoticesItem = {
+  __typename?: 'PatronNoticePolicyLoanNoticesItem';
+  /** Notice format, send through email, sms etc. */
+  format: PatronNoticePolicyLoanNoticesItemFormat;
+  /** Frequency, send it once or more */
+  frequency?: Maybe<PatronNoticePolicyLoanNoticesItemFrequency>;
+  /** Notice name */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Is this real time event */
+  realTime: Scalars['Boolean']['output'];
+  sendOptions?: Maybe<PatronNoticePolicyLoanNoticesItemSendOptions>;
+  /** Template id, UUID */
+  templateId: Scalars['String']['output'];
+  /** Template name */
+  templateName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PatronNoticePolicyLoanNoticesItemFormat {
+  Email = 'Email',
+  Print = 'Print',
+  Sms = 'SMS'
+}
+
+export enum PatronNoticePolicyLoanNoticesItemFrequency {
+  OneTime = 'One_time',
+  Recurring = 'Recurring'
+}
+
+export type PatronNoticePolicyLoanNoticesItemSendOptions = {
+  __typename?: 'PatronNoticePolicyLoanNoticesItemSendOptions';
+  sendBy?: Maybe<Interval>;
+  sendEvery?: Maybe<Interval>;
+  /** Defines how notice should be sent, before, after or upon */
+  sendHow?: Maybe<PatronNoticePolicyLoanNoticesItemSendOptionsSendHow>;
+  /** Triggering event */
+  sendWhen: PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen;
+};
+
+export enum PatronNoticePolicyLoanNoticesItemSendOptionsSendHow {
+  After = 'After',
+  Before = 'Before',
+  UponAt = 'Upon_At'
+}
+
+export enum PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen {
+  AgedToLost = 'Aged_to_lost',
+  CheckIn = 'Check_in',
+  CheckOut = 'Check_out',
+  DueDate = 'Due_date',
+  ItemRecalled = 'Item_recalled',
+  ManualDueDateChange = 'Manual_due_date_change',
+  Renewed = 'Renewed'
+}
+
+export type PatronNoticePolicyRequestNoticesItem = {
+  __typename?: 'PatronNoticePolicyRequestNoticesItem';
+  /** Notice format, send through email, sms etc. */
+  format: PatronNoticePolicyRequestNoticesItemFormat;
+  /** Frequency, send it once or more */
+  frequency?: Maybe<PatronNoticePolicyRequestNoticesItemFrequency>;
+  /** Notice name */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Is this real time event */
+  realTime: Scalars['Boolean']['output'];
+  sendOptions?: Maybe<PatronNoticePolicyRequestNoticesItemSendOptions>;
+  /** Template id, UUID */
+  templateId: Scalars['String']['output'];
+  /** Template name */
+  templateName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PatronNoticePolicyRequestNoticesItemFormat {
+  Email = 'Email',
+  Print = 'Print',
+  Sms = 'SMS'
+}
+
+export enum PatronNoticePolicyRequestNoticesItemFrequency {
+  OneTime = 'One_time',
+  Recurring = 'Recurring'
+}
+
+export type PatronNoticePolicyRequestNoticesItemSendOptions = {
+  __typename?: 'PatronNoticePolicyRequestNoticesItemSendOptions';
+  sendBy?: Maybe<Interval>;
+  sendEvery?: Maybe<Interval>;
+  /** Defines how notice should be sent, before, after or upon */
+  sendHow?: Maybe<PatronNoticePolicyRequestNoticesItemSendOptionsSendHow>;
+  /** User initiated and time driven events for request related notices */
+  sendWhen: PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen;
+};
+
+export enum PatronNoticePolicyRequestNoticesItemSendOptionsSendHow {
+  After = 'After',
+  Before = 'Before',
+  UponAt = 'Upon_At'
+}
+
+export enum PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen {
+  Available = 'Available',
+  HoldExpiration = 'Hold_expiration',
+  HoldRequest = 'Hold_request',
+  PagingRequest = 'Paging_request',
+  RecallRequest = 'Recall_request',
+  RequestCancellation = 'Request_cancellation',
+  RequestExpiration = 'Request_expiration'
+}
+
 export type Period = {
   __typename?: 'Period';
   /** Duration of the period, number of times the interval repeats */
@@ -1664,18 +1941,44 @@ export type ProxyFor = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
+/** Amount of times the interval repeats */
+export type Quantity = {
+  __typename?: 'Quantity';
+  /** Interval for the period, e.g. hour, day, week, month or year */
+  intervalId?: Maybe<QuantityIntervalId>;
+  /** Fine amount per interval */
+  quantity?: Maybe<Scalars['Float']['output']>;
+};
+
+export enum QuantityIntervalId {
+  Day = 'day',
+  Hour = 'hour',
+  Minute = 'minute',
+  Month = 'month',
+  Week = 'week',
+  Year = 'year'
+}
+
 export type Query = {
   __typename?: 'Query';
+  campuses?: Maybe<Array<Maybe<Campus>>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
   holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
   instance?: Maybe<Instance>;
   instances?: Maybe<Array<Maybe<Instance>>>;
+  institutions?: Maybe<Array<Maybe<Institution>>>;
   item?: Maybe<Item>;
   items?: Maybe<Array<Maybe<Item>>>;
   libraries?: Maybe<Array<Maybe<Library>>>;
   loanPolicies?: Maybe<Array<Maybe<LoanPolicy>>>;
+  loanTypes?: Maybe<Array<Maybe<LoanType>>>;
+  locations?: Maybe<Array<Maybe<Location>>>;
+  lostItemFeesPolicies?: Maybe<Array<Maybe<LostItemFeePolicy>>>;
+  materialTypes?: Maybe<Array<Maybe<MaterialType>>>;
+  overdueFinePolicies?: Maybe<Array<Maybe<OverdueFinePolicy>>>;
   patron?: Maybe<Patron>;
   patronGroups?: Maybe<Array<Maybe<PatronGroup>>>;
+  patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
 };
 
@@ -1716,23 +2019,8 @@ export type QueryItemsArgs = {
 };
 
 
-export type QueryLibrariesArgs = {
-  params?: InputMaybe<CqlParams>;
-};
-
-
-export type QueryLoanPoliciesArgs = {
-  params?: InputMaybe<CqlParams>;
-};
-
-
 export type QueryPatronArgs = {
   id: Scalars['UUID']['input'];
-};
-
-
-export type QueryRequestPoliciesArgs = {
-  params?: InputMaybe<CqlParams>;
 };
 
 /** request policy schema */

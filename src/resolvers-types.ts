@@ -265,6 +265,15 @@ export type Campus = {
   name: Scalars['String']['output'];
 };
 
+/** Charge amount for item */
+export type Charge = {
+  __typename?: 'Charge';
+  /** Charge amount for item may be Actual cost or an amount */
+  amount?: Maybe<Scalars['Float']['output']>;
+  /** Charge type amount for item may be Actual cost or an amount */
+  chargeType?: Maybe<Scalars['String']['output']>;
+};
+
 /** A classification type */
 export type ClassificationType = {
   __typename?: 'ClassificationType';
@@ -905,6 +914,24 @@ export type Institution = {
   name: Scalars['String']['output'];
 };
 
+/** Time interval */
+export type Interval = {
+  __typename?: 'Interval';
+  /** Interval duration, number of time units */
+  duration: Scalars['Int']['output'];
+  /** Unit of time */
+  intervalId: IntervalIntervalId;
+};
+
+export enum IntervalIntervalId {
+  Days = 'Days',
+  Hours = 'Hours',
+  Minutes = 'Minutes',
+  Months = 'Months',
+  Weeks = 'Weeks',
+  Years = 'Years'
+}
+
 /** An item record */
 export type Item = {
   __typename?: 'Item';
@@ -1414,6 +1441,49 @@ export type LocationDetails = {
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
 };
 
+/** CRUD to lost item fee policies */
+export type LostItemFeePolicy = {
+  __typename?: 'LostItemFeePolicy';
+  /** Option to charge amount for item */
+  chargeAmountItem?: Maybe<Charge>;
+  /** A flag to determine charge lost item processing fee if item declared lost by patron must be Yes or No, with default set to Yes */
+  chargeAmountItemPatron?: Maybe<Scalars['Boolean']['output']>;
+  /** A flag to determine charge lost item processing fee if item aged to lost by system must be Yes or No, with default set to Yes */
+  chargeAmountItemSystem?: Maybe<Scalars['Boolean']['output']>;
+  /** Lost item fee policy description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Fees/fines shall be refunded if a lost item is returned more than entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  feesFinesShallRefunded?: Maybe<Period>;
+  /** Lost item fee policy id, UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** Items aged to lost after overdue entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  itemAgedLostOverdue?: Maybe<Period>;
+  /** For items not charged a fee/fine, close the loan after entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  lostItemChargeFeeFine?: Maybe<Period>;
+  /** Lost item processing fee, must be = 0 or > 0 */
+  lostItemProcessingFee?: Maybe<Scalars['Float']['output']>;
+  /** Option to lost item returned may be Charge overdues based on returned date up to maximum (if applicable) or Remove overdue fines, with a default of _Charge overdues based on returned date up to maximum (if applicable) */
+  lostItemReturned?: Maybe<Scalars['String']['output']>;
+  /** Metadata about creation to lost item fee policy, provided by the server */
+  metadata?: Maybe<Metadata>;
+  /** Lost item fee policy name, is a required field */
+  name: Scalars['String']['output'];
+  /** Patron billed after aged to lost entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  patronBilledAfterAgedLost?: Maybe<Period>;
+  /** Patron billed after a recalled item aged to lost entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  patronBilledAfterRecalledItemAgedLost?: Maybe<Period>;
+  /** Recalled items aged to lost after overdue entered, must be 0 or > 0 and, if > 0 must have interval selected */
+  recalledItemAgedLostOverdue?: Maybe<Period>;
+  /** A flag to determine if lost item replaced, remove lost item processing fee */
+  replacedLostItemProcessingFee?: Maybe<Scalars['Boolean']['output']>;
+  /** A flag to determine replacement allowed */
+  replacementAllowed?: Maybe<Scalars['Boolean']['output']>;
+  /** Amount for replacement process fee */
+  replacementProcessingFee?: Maybe<Scalars['Float']['output']>;
+  /** A flag to determine if lost item returned, remove lost item processing fee */
+  returnedLostItemProcessingFee?: Maybe<Scalars['Boolean']['output']>;
+};
+
 /** Allows institution to manually block a patron from borrowing, renewing, and/or requesting until specified issue is resolved */
 export type ManualBlock = {
   __typename?: 'ManualBlock';
@@ -1489,6 +1559,33 @@ export type Money = {
   amount: Scalars['Float']['output'];
   /** An ISO 4217 standard currency code */
   isoCurrencyCode: Scalars['String']['output'];
+};
+
+/** Overdue fine policy to be associated with a loan policy by the Circulation Rules Editor */
+export type OverdueFinePolicy = {
+  __typename?: 'OverdueFinePolicy';
+  /** A flag to determine if a fine is count closed */
+  countClosed?: Maybe<Scalars['Boolean']['output']>;
+  /** Overdue fine policy description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** A flag to determine forgive overdue fine if item renewed */
+  forgiveOverdueFine?: Maybe<Scalars['Boolean']['output']>;
+  /** Grace period for recall */
+  gracePeriodRecall?: Maybe<Scalars['Boolean']['output']>;
+  /** Overdue fine policy id, UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** Maximum overdue fine */
+  maxOverdueFine?: Maybe<Scalars['Float']['output']>;
+  /** Maximum overdue recall fine */
+  maxOverdueRecallFine?: Maybe<Scalars['Float']['output']>;
+  /** Metadata about creation to overdue fine policy, provided by the server */
+  metadata?: Maybe<Metadata>;
+  /** Overdue fine policy name */
+  name: Scalars['String']['output'];
+  /** Fine for overdue */
+  overdueFine?: Maybe<Quantity>;
+  /** Fine overdue recall fine */
+  overdueRecallFine?: Maybe<Quantity>;
 };
 
 /** Account schema for patron portal integration */
@@ -1625,6 +1722,186 @@ export type PatronLoan = {
   overdue: Scalars['Boolean']['output'];
 };
 
+/** Patron notice policy */
+export type PatronNoticePolicy = {
+  __typename?: 'PatronNoticePolicy';
+  /** A flag to determine if a patron notice policy is active */
+  active?: Maybe<Scalars['Boolean']['output']>;
+  /** Patron notice policy description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** List of fee/fine notices */
+  feeFineNotices?: Maybe<Array<PatronNoticePolicyFeeFineNoticesItem>>;
+  /** Patron notice policy id, UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  /** List of loan notices */
+  loanNotices?: Maybe<Array<PatronNoticePolicyLoanNoticesItem>>;
+  /** Metadata about creation and changes to policy, provided by the server (client should not provide) */
+  metadata?: Maybe<Metadata>;
+  /** Patron notice policy name */
+  name: Scalars['String']['output'];
+  /** List of request notice */
+  requestNotices?: Maybe<Array<PatronNoticePolicyRequestNoticesItem>>;
+};
+
+export type PatronNoticePolicyFeeFineNoticesItem = {
+  __typename?: 'PatronNoticePolicyFeeFineNoticesItem';
+  /** Notice format, send through email, sms etc. */
+  format: PatronNoticePolicyFeeFineNoticesItemFormat;
+  /** Frequency, send it once or more */
+  frequency?: Maybe<PatronNoticePolicyFeeFineNoticesItemFrequency>;
+  /** Notice name */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Is this real time event */
+  realTime: Scalars['Boolean']['output'];
+  sendOptions?: Maybe<PatronNoticePolicyFeeFineNoticesItemSendOptions>;
+  /** Template id, UUID */
+  templateId: Scalars['String']['output'];
+  /** Template name */
+  templateName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PatronNoticePolicyFeeFineNoticesItemFormat {
+  Email = 'Email',
+  Print = 'Print',
+  Sms = 'SMS'
+}
+
+export enum PatronNoticePolicyFeeFineNoticesItemFrequency {
+  OneTime = 'One_time',
+  Recurring = 'Recurring'
+}
+
+export type PatronNoticePolicyFeeFineNoticesItemSendOptions = {
+  __typename?: 'PatronNoticePolicyFeeFineNoticesItemSendOptions';
+  sendBy?: Maybe<Interval>;
+  sendEvery?: Maybe<Interval>;
+  /** Defines how notice should be sent: after or upon */
+  sendHow?: Maybe<PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow>;
+  /** Triggering event */
+  sendWhen: PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen;
+};
+
+export enum PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow {
+  After = 'After',
+  UponAt = 'Upon_At'
+}
+
+export enum PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen {
+  AgedToLostFineCharged = 'Aged_to_lost___fine_charged',
+  AgedToLostItemReplacedFineAdjusted = 'Aged_to_lost___item_replaced___fine_adjusted',
+  AgedToLostItemReturnedFineAdjusted = 'Aged_to_lost___item_returned___fine_adjusted',
+  OverdueFineRenewed = 'Overdue_fine_renewed',
+  OverdueFineReturned = 'Overdue_fine_returned'
+}
+
+export type PatronNoticePolicyLoanNoticesItem = {
+  __typename?: 'PatronNoticePolicyLoanNoticesItem';
+  /** Notice format, send through email, sms etc. */
+  format: PatronNoticePolicyLoanNoticesItemFormat;
+  /** Frequency, send it once or more */
+  frequency?: Maybe<PatronNoticePolicyLoanNoticesItemFrequency>;
+  /** Notice name */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Is this real time event */
+  realTime: Scalars['Boolean']['output'];
+  sendOptions?: Maybe<PatronNoticePolicyLoanNoticesItemSendOptions>;
+  /** Template id, UUID */
+  templateId: Scalars['String']['output'];
+  /** Template name */
+  templateName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PatronNoticePolicyLoanNoticesItemFormat {
+  Email = 'Email',
+  Print = 'Print',
+  Sms = 'SMS'
+}
+
+export enum PatronNoticePolicyLoanNoticesItemFrequency {
+  OneTime = 'One_time',
+  Recurring = 'Recurring'
+}
+
+export type PatronNoticePolicyLoanNoticesItemSendOptions = {
+  __typename?: 'PatronNoticePolicyLoanNoticesItemSendOptions';
+  sendBy?: Maybe<Interval>;
+  sendEvery?: Maybe<Interval>;
+  /** Defines how notice should be sent, before, after or upon */
+  sendHow?: Maybe<PatronNoticePolicyLoanNoticesItemSendOptionsSendHow>;
+  /** Triggering event */
+  sendWhen: PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen;
+};
+
+export enum PatronNoticePolicyLoanNoticesItemSendOptionsSendHow {
+  After = 'After',
+  Before = 'Before',
+  UponAt = 'Upon_At'
+}
+
+export enum PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen {
+  AgedToLost = 'Aged_to_lost',
+  CheckIn = 'Check_in',
+  CheckOut = 'Check_out',
+  DueDate = 'Due_date',
+  ItemRecalled = 'Item_recalled',
+  ManualDueDateChange = 'Manual_due_date_change',
+  Renewed = 'Renewed'
+}
+
+export type PatronNoticePolicyRequestNoticesItem = {
+  __typename?: 'PatronNoticePolicyRequestNoticesItem';
+  /** Notice format, send through email, sms etc. */
+  format: PatronNoticePolicyRequestNoticesItemFormat;
+  /** Frequency, send it once or more */
+  frequency?: Maybe<PatronNoticePolicyRequestNoticesItemFrequency>;
+  /** Notice name */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Is this real time event */
+  realTime: Scalars['Boolean']['output'];
+  sendOptions?: Maybe<PatronNoticePolicyRequestNoticesItemSendOptions>;
+  /** Template id, UUID */
+  templateId: Scalars['String']['output'];
+  /** Template name */
+  templateName?: Maybe<Scalars['String']['output']>;
+};
+
+export enum PatronNoticePolicyRequestNoticesItemFormat {
+  Email = 'Email',
+  Print = 'Print',
+  Sms = 'SMS'
+}
+
+export enum PatronNoticePolicyRequestNoticesItemFrequency {
+  OneTime = 'One_time',
+  Recurring = 'Recurring'
+}
+
+export type PatronNoticePolicyRequestNoticesItemSendOptions = {
+  __typename?: 'PatronNoticePolicyRequestNoticesItemSendOptions';
+  sendBy?: Maybe<Interval>;
+  sendEvery?: Maybe<Interval>;
+  /** Defines how notice should be sent, before, after or upon */
+  sendHow?: Maybe<PatronNoticePolicyRequestNoticesItemSendOptionsSendHow>;
+  /** User initiated and time driven events for request related notices */
+  sendWhen: PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen;
+};
+
+export enum PatronNoticePolicyRequestNoticesItemSendOptionsSendHow {
+  After = 'After',
+  Before = 'Before',
+  UponAt = 'Upon_At'
+}
+
+export enum PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen {
+  Available = 'Available',
+  HoldExpiration = 'Hold_expiration',
+  HoldRequest = 'Hold_request',
+  PagingRequest = 'Paging_request',
+  RecallRequest = 'Recall_request',
+  RequestCancellation = 'Request_cancellation',
+  RequestExpiration = 'Request_expiration'
+}
+
 export type Period = {
   __typename?: 'Period';
   /** Duration of the period, number of times the interval repeats */
@@ -1667,18 +1944,44 @@ export type ProxyFor = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
+/** Amount of times the interval repeats */
+export type Quantity = {
+  __typename?: 'Quantity';
+  /** Interval for the period, e.g. hour, day, week, month or year */
+  intervalId?: Maybe<QuantityIntervalId>;
+  /** Fine amount per interval */
+  quantity?: Maybe<Scalars['Float']['output']>;
+};
+
+export enum QuantityIntervalId {
+  Day = 'day',
+  Hour = 'hour',
+  Minute = 'minute',
+  Month = 'month',
+  Week = 'week',
+  Year = 'year'
+}
+
 export type Query = {
   __typename?: 'Query';
+  campuses?: Maybe<Array<Maybe<Campus>>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
   holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
   instance?: Maybe<Instance>;
   instances?: Maybe<Array<Maybe<Instance>>>;
+  institutions?: Maybe<Array<Maybe<Institution>>>;
   item?: Maybe<Item>;
   items?: Maybe<Array<Maybe<Item>>>;
   libraries?: Maybe<Array<Maybe<Library>>>;
   loanPolicies?: Maybe<Array<Maybe<LoanPolicy>>>;
+  loanTypes?: Maybe<Array<Maybe<LoanType>>>;
+  locations?: Maybe<Array<Maybe<Location>>>;
+  lostItemFeesPolicies?: Maybe<Array<Maybe<LostItemFeePolicy>>>;
+  materialTypes?: Maybe<Array<Maybe<MaterialType>>>;
+  overdueFinePolicies?: Maybe<Array<Maybe<OverdueFinePolicy>>>;
   patron?: Maybe<Patron>;
   patronGroups?: Maybe<Array<Maybe<PatronGroup>>>;
+  patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
 };
 
@@ -1719,23 +2022,8 @@ export type QueryItemsArgs = {
 };
 
 
-export type QueryLibrariesArgs = {
-  params?: InputMaybe<CqlParams>;
-};
-
-
-export type QueryLoanPoliciesArgs = {
-  params?: InputMaybe<CqlParams>;
-};
-
-
 export type QueryPatronArgs = {
   id: Scalars['UUID']['input'];
-};
-
-
-export type QueryRequestPoliciesArgs = {
-  params?: InputMaybe<CqlParams>;
 };
 
 /** request policy schema */
@@ -2027,6 +2315,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CallNumberType: ResolverTypeWrapper<CallNumberType>;
   Campus: ResolverTypeWrapper<Campus>;
+  Charge: ResolverTypeWrapper<Charge>;
   ClassificationType: ResolverTypeWrapper<ClassificationType>;
   ContributorNameType: ResolverTypeWrapper<ContributorNameType>;
   ContributorType: ResolverTypeWrapper<ContributorType>;
@@ -2070,6 +2359,8 @@ export type ResolversTypes = ResolversObject<{
   InstanceType: ResolverTypeWrapper<InstanceType>;
   Institution: ResolverTypeWrapper<Institution>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Interval: ResolverTypeWrapper<Interval>;
+  IntervalIntervalId: IntervalIntervalId;
   Item: ResolverTypeWrapper<Item>;
   ItemCirculationNotesItem: ResolverTypeWrapper<ItemCirculationNotesItem>;
   ItemCirculationNotesItemNoteType: ItemCirculationNotesItemNoteType;
@@ -2100,11 +2391,13 @@ export type ResolversTypes = ResolversObject<{
   LoanType: ResolverTypeWrapper<LoanType>;
   Location: ResolverTypeWrapper<Location>;
   LocationDetails: ResolverTypeWrapper<LocationDetails>;
+  LostItemFeePolicy: ResolverTypeWrapper<LostItemFeePolicy>;
   ManualBlock: ResolverTypeWrapper<ManualBlock>;
   MaterialType: ResolverTypeWrapper<MaterialType>;
   Metadata: ResolverTypeWrapper<Metadata>;
   ModeOfIssuance: ResolverTypeWrapper<ModeOfIssuance>;
   Money: ResolverTypeWrapper<Money>;
+  OverdueFinePolicy: ResolverTypeWrapper<OverdueFinePolicy>;
   Patron: ResolverTypeWrapper<Patron>;
   PatronBlockCondition: ResolverTypeWrapper<PatronBlockCondition>;
   PatronBlockConditionValueType: PatronBlockConditionValueType;
@@ -2113,9 +2406,30 @@ export type ResolversTypes = ResolversObject<{
   PatronGroup: ResolverTypeWrapper<PatronGroup>;
   PatronItem: ResolverTypeWrapper<PatronItem>;
   PatronLoan: ResolverTypeWrapper<PatronLoan>;
+  PatronNoticePolicy: ResolverTypeWrapper<PatronNoticePolicy>;
+  PatronNoticePolicyFeeFineNoticesItem: ResolverTypeWrapper<PatronNoticePolicyFeeFineNoticesItem>;
+  PatronNoticePolicyFeeFineNoticesItemFormat: PatronNoticePolicyFeeFineNoticesItemFormat;
+  PatronNoticePolicyFeeFineNoticesItemFrequency: PatronNoticePolicyFeeFineNoticesItemFrequency;
+  PatronNoticePolicyFeeFineNoticesItemSendOptions: ResolverTypeWrapper<PatronNoticePolicyFeeFineNoticesItemSendOptions>;
+  PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow: PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow;
+  PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen: PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen;
+  PatronNoticePolicyLoanNoticesItem: ResolverTypeWrapper<PatronNoticePolicyLoanNoticesItem>;
+  PatronNoticePolicyLoanNoticesItemFormat: PatronNoticePolicyLoanNoticesItemFormat;
+  PatronNoticePolicyLoanNoticesItemFrequency: PatronNoticePolicyLoanNoticesItemFrequency;
+  PatronNoticePolicyLoanNoticesItemSendOptions: ResolverTypeWrapper<PatronNoticePolicyLoanNoticesItemSendOptions>;
+  PatronNoticePolicyLoanNoticesItemSendOptionsSendHow: PatronNoticePolicyLoanNoticesItemSendOptionsSendHow;
+  PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen: PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen;
+  PatronNoticePolicyRequestNoticesItem: ResolverTypeWrapper<PatronNoticePolicyRequestNoticesItem>;
+  PatronNoticePolicyRequestNoticesItemFormat: PatronNoticePolicyRequestNoticesItemFormat;
+  PatronNoticePolicyRequestNoticesItemFrequency: PatronNoticePolicyRequestNoticesItemFrequency;
+  PatronNoticePolicyRequestNoticesItemSendOptions: ResolverTypeWrapper<PatronNoticePolicyRequestNoticesItemSendOptions>;
+  PatronNoticePolicyRequestNoticesItemSendOptionsSendHow: PatronNoticePolicyRequestNoticesItemSendOptionsSendHow;
+  PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen: PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen;
   Period: ResolverTypeWrapper<Period>;
   PeriodIntervalId: PeriodIntervalId;
   ProxyFor: ResolverTypeWrapper<ProxyFor>;
+  Quantity: ResolverTypeWrapper<Quantity>;
+  QuantityIntervalId: QuantityIntervalId;
   Query: ResolverTypeWrapper<{}>;
   RequestPolicy: ResolverTypeWrapper<RequestPolicy>;
   RequestType: RequestType;
@@ -2149,6 +2463,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
   CallNumberType: CallNumberType;
   Campus: Campus;
+  Charge: Charge;
   ClassificationType: ClassificationType;
   ContributorNameType: ContributorNameType;
   ContributorType: ContributorType;
@@ -2189,6 +2504,7 @@ export type ResolversParentTypes = ResolversObject<{
   InstanceType: InstanceType;
   Institution: Institution;
   Int: Scalars['Int']['output'];
+  Interval: Interval;
   Item: Item;
   ItemCirculationNotesItem: ItemCirculationNotesItem;
   ItemCirculationNotesItemSource: ItemCirculationNotesItemSource;
@@ -2218,11 +2534,13 @@ export type ResolversParentTypes = ResolversObject<{
   LoanType: LoanType;
   Location: Location;
   LocationDetails: LocationDetails;
+  LostItemFeePolicy: LostItemFeePolicy;
   ManualBlock: ManualBlock;
   MaterialType: MaterialType;
   Metadata: Metadata;
   ModeOfIssuance: ModeOfIssuance;
   Money: Money;
+  OverdueFinePolicy: OverdueFinePolicy;
   Patron: Patron;
   PatronBlockCondition: PatronBlockCondition;
   PatronBlockLimit: PatronBlockLimit;
@@ -2230,8 +2548,16 @@ export type ResolversParentTypes = ResolversObject<{
   PatronGroup: PatronGroup;
   PatronItem: PatronItem;
   PatronLoan: PatronLoan;
+  PatronNoticePolicy: PatronNoticePolicy;
+  PatronNoticePolicyFeeFineNoticesItem: PatronNoticePolicyFeeFineNoticesItem;
+  PatronNoticePolicyFeeFineNoticesItemSendOptions: PatronNoticePolicyFeeFineNoticesItemSendOptions;
+  PatronNoticePolicyLoanNoticesItem: PatronNoticePolicyLoanNoticesItem;
+  PatronNoticePolicyLoanNoticesItemSendOptions: PatronNoticePolicyLoanNoticesItemSendOptions;
+  PatronNoticePolicyRequestNoticesItem: PatronNoticePolicyRequestNoticesItem;
+  PatronNoticePolicyRequestNoticesItemSendOptions: PatronNoticePolicyRequestNoticesItemSendOptions;
   Period: Period;
   ProxyFor: ProxyFor;
+  Quantity: Quantity;
   Query: {};
   RequestPolicy: RequestPolicy;
   Schedule: Schedule;
@@ -2389,6 +2715,12 @@ export type CampusResolvers<ContextType = FolioContext, ParentType extends Resol
   institutionId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ChargeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Charge'] = ResolversParentTypes['Charge']> = ResolversObject<{
+  amount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  chargeType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2781,6 +3113,12 @@ export type InstitutionResolvers<ContextType = FolioContext, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type IntervalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Interval'] = ResolversParentTypes['Interval']> = ResolversObject<{
+  duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  intervalId?: Resolver<ResolversTypes['IntervalIntervalId'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Item'] = ResolversParentTypes['Item']> = ResolversObject<{
   _version?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   accessionNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -3102,6 +3440,29 @@ export type LocationDetailsResolvers<ContextType = FolioContext, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type LostItemFeePolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LostItemFeePolicy'] = ResolversParentTypes['LostItemFeePolicy']> = ResolversObject<{
+  chargeAmountItem?: Resolver<Maybe<ResolversTypes['Charge']>, ParentType, ContextType>;
+  chargeAmountItemPatron?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  chargeAmountItemSystem?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  feesFinesShallRefunded?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  itemAgedLostOverdue?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
+  lostItemChargeFeeFine?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
+  lostItemProcessingFee?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lostItemReturned?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  patronBilledAfterAgedLost?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
+  patronBilledAfterRecalledItemAgedLost?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
+  recalledItemAgedLostOverdue?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
+  replacedLostItemProcessingFee?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  replacementAllowed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  replacementProcessingFee?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  returnedLostItemProcessingFee?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ManualBlockResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ManualBlock'] = ResolversParentTypes['ManualBlock']> = ResolversObject<{
   borrowing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -3147,6 +3508,21 @@ export type ModeOfIssuanceResolvers<ContextType = FolioContext, ParentType exten
 export type MoneyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Money'] = ResolversParentTypes['Money']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   isoCurrencyCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type OverdueFinePolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['OverdueFinePolicy'] = ResolversParentTypes['OverdueFinePolicy']> = ResolversObject<{
+  countClosed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  forgiveOverdueFine?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  gracePeriodRecall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  maxOverdueFine?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  maxOverdueRecallFine?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  overdueFine?: Resolver<Maybe<ResolversTypes['Quantity']>, ParentType, ContextType>;
+  overdueRecallFine?: Resolver<Maybe<ResolversTypes['Quantity']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -3231,6 +3607,75 @@ export type PatronLoanResolvers<ContextType = FolioContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type PatronNoticePolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicy'] = ResolversParentTypes['PatronNoticePolicy']> = ResolversObject<{
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  feeFineNotices?: Resolver<Maybe<Array<ResolversTypes['PatronNoticePolicyFeeFineNoticesItem']>>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  loanNotices?: Resolver<Maybe<Array<ResolversTypes['PatronNoticePolicyLoanNoticesItem']>>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  requestNotices?: Resolver<Maybe<Array<ResolversTypes['PatronNoticePolicyRequestNoticesItem']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PatronNoticePolicyFeeFineNoticesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItem'] = ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItem']> = ResolversObject<{
+  format?: Resolver<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemFormat'], ParentType, ContextType>;
+  frequency?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemFrequency']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  realTime?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  sendOptions?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemSendOptions']>, ParentType, ContextType>;
+  templateId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  templateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PatronNoticePolicyFeeFineNoticesItemSendOptionsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItemSendOptions'] = ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItemSendOptions']> = ResolversObject<{
+  sendBy?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
+  sendEvery?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
+  sendHow?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow']>, ParentType, ContextType>;
+  sendWhen?: Resolver<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PatronNoticePolicyLoanNoticesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyLoanNoticesItem'] = ResolversParentTypes['PatronNoticePolicyLoanNoticesItem']> = ResolversObject<{
+  format?: Resolver<ResolversTypes['PatronNoticePolicyLoanNoticesItemFormat'], ParentType, ContextType>;
+  frequency?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyLoanNoticesItemFrequency']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  realTime?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  sendOptions?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyLoanNoticesItemSendOptions']>, ParentType, ContextType>;
+  templateId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  templateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PatronNoticePolicyLoanNoticesItemSendOptionsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyLoanNoticesItemSendOptions'] = ResolversParentTypes['PatronNoticePolicyLoanNoticesItemSendOptions']> = ResolversObject<{
+  sendBy?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
+  sendEvery?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
+  sendHow?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyLoanNoticesItemSendOptionsSendHow']>, ParentType, ContextType>;
+  sendWhen?: Resolver<ResolversTypes['PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PatronNoticePolicyRequestNoticesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyRequestNoticesItem'] = ResolversParentTypes['PatronNoticePolicyRequestNoticesItem']> = ResolversObject<{
+  format?: Resolver<ResolversTypes['PatronNoticePolicyRequestNoticesItemFormat'], ParentType, ContextType>;
+  frequency?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyRequestNoticesItemFrequency']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  realTime?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  sendOptions?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyRequestNoticesItemSendOptions']>, ParentType, ContextType>;
+  templateId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  templateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PatronNoticePolicyRequestNoticesItemSendOptionsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyRequestNoticesItemSendOptions'] = ResolversParentTypes['PatronNoticePolicyRequestNoticesItemSendOptions']> = ResolversObject<{
+  sendBy?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
+  sendEvery?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
+  sendHow?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyRequestNoticesItemSendOptionsSendHow']>, ParentType, ContextType>;
+  sendWhen?: Resolver<ResolversTypes['PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type PeriodResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Period'] = ResolversParentTypes['Period']> = ResolversObject<{
   duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   intervalId?: Resolver<ResolversTypes['PeriodIntervalId'], ParentType, ContextType>;
@@ -3253,18 +3698,32 @@ export type ProxyForResolvers<ContextType = FolioContext, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type QuantityResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Quantity'] = ResolversParentTypes['Quantity']> = ResolversObject<{
+  intervalId?: Resolver<Maybe<ResolversTypes['QuantityIntervalId']>, ParentType, ContextType>;
+  quantity?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  campuses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Campus']>>>, ParentType, ContextType>;
   holdingsRecord?: Resolver<Maybe<ResolversTypes['HoldingsRecord']>, ParentType, ContextType, RequireFields<QueryHoldingsRecordArgs, 'id'>>;
   holdingsRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['HoldingsRecord']>>>, ParentType, ContextType, Partial<QueryHoldingsRecordsArgs>>;
   instance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType, RequireFields<QueryInstanceArgs, 'id'>>;
   instances?: Resolver<Maybe<Array<Maybe<ResolversTypes['Instance']>>>, ParentType, ContextType, Partial<QueryInstancesArgs>>;
+  institutions?: Resolver<Maybe<Array<Maybe<ResolversTypes['Institution']>>>, ParentType, ContextType>;
   item?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType, RequireFields<QueryItemArgs, 'id'>>;
   items?: Resolver<Maybe<Array<Maybe<ResolversTypes['Item']>>>, ParentType, ContextType, Partial<QueryItemsArgs>>;
-  libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType, Partial<QueryLibrariesArgs>>;
-  loanPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['LoanPolicy']>>>, ParentType, ContextType, Partial<QueryLoanPoliciesArgs>>;
+  libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
+  loanPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['LoanPolicy']>>>, ParentType, ContextType>;
+  loanTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['LoanType']>>>, ParentType, ContextType>;
+  locations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Location']>>>, ParentType, ContextType>;
+  lostItemFeesPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['LostItemFeePolicy']>>>, ParentType, ContextType>;
+  materialTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['MaterialType']>>>, ParentType, ContextType>;
+  overdueFinePolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['OverdueFinePolicy']>>>, ParentType, ContextType>;
   patron?: Resolver<Maybe<ResolversTypes['Patron']>, ParentType, ContextType, RequireFields<QueryPatronArgs, 'id'>>;
   patronGroups?: Resolver<Maybe<Array<Maybe<ResolversTypes['PatronGroup']>>>, ParentType, ContextType>;
-  requestPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['RequestPolicy']>>>, ParentType, ContextType, Partial<QueryRequestPoliciesArgs>>;
+  patronNoticePolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['PatronNoticePolicy']>>>, ParentType, ContextType>;
+  requestPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['RequestPolicy']>>>, ParentType, ContextType>;
 }>;
 
 export type RequestPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestPolicy'] = ResolversParentTypes['RequestPolicy']> = ResolversObject<{
@@ -3397,6 +3856,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   Block?: BlockResolvers<ContextType>;
   CallNumberType?: CallNumberTypeResolvers<ContextType>;
   Campus?: CampusResolvers<ContextType>;
+  Charge?: ChargeResolvers<ContextType>;
   ClassificationType?: ClassificationTypeResolvers<ContextType>;
   ContributorNameType?: ContributorNameTypeResolvers<ContextType>;
   ContributorType?: ContributorTypeResolvers<ContextType>;
@@ -3434,6 +3894,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   InstanceSubjectsItem?: InstanceSubjectsItemResolvers<ContextType>;
   InstanceType?: InstanceTypeResolvers<ContextType>;
   Institution?: InstitutionResolvers<ContextType>;
+  Interval?: IntervalResolvers<ContextType>;
   Item?: ItemResolvers<ContextType>;
   ItemCirculationNotesItem?: ItemCirculationNotesItemResolvers<ContextType>;
   ItemCirculationNotesItemSource?: ItemCirculationNotesItemSourceResolvers<ContextType>;
@@ -3463,11 +3924,13 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   LoanType?: LoanTypeResolvers<ContextType>;
   Location?: LocationResolvers<ContextType>;
   LocationDetails?: LocationDetailsResolvers<ContextType>;
+  LostItemFeePolicy?: LostItemFeePolicyResolvers<ContextType>;
   ManualBlock?: ManualBlockResolvers<ContextType>;
   MaterialType?: MaterialTypeResolvers<ContextType>;
   Metadata?: MetadataResolvers<ContextType>;
   ModeOfIssuance?: ModeOfIssuanceResolvers<ContextType>;
   Money?: MoneyResolvers<ContextType>;
+  OverdueFinePolicy?: OverdueFinePolicyResolvers<ContextType>;
   Patron?: PatronResolvers<ContextType>;
   PatronBlockCondition?: PatronBlockConditionResolvers<ContextType>;
   PatronBlockLimit?: PatronBlockLimitResolvers<ContextType>;
@@ -3475,8 +3938,16 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   PatronGroup?: PatronGroupResolvers<ContextType>;
   PatronItem?: PatronItemResolvers<ContextType>;
   PatronLoan?: PatronLoanResolvers<ContextType>;
+  PatronNoticePolicy?: PatronNoticePolicyResolvers<ContextType>;
+  PatronNoticePolicyFeeFineNoticesItem?: PatronNoticePolicyFeeFineNoticesItemResolvers<ContextType>;
+  PatronNoticePolicyFeeFineNoticesItemSendOptions?: PatronNoticePolicyFeeFineNoticesItemSendOptionsResolvers<ContextType>;
+  PatronNoticePolicyLoanNoticesItem?: PatronNoticePolicyLoanNoticesItemResolvers<ContextType>;
+  PatronNoticePolicyLoanNoticesItemSendOptions?: PatronNoticePolicyLoanNoticesItemSendOptionsResolvers<ContextType>;
+  PatronNoticePolicyRequestNoticesItem?: PatronNoticePolicyRequestNoticesItemResolvers<ContextType>;
+  PatronNoticePolicyRequestNoticesItemSendOptions?: PatronNoticePolicyRequestNoticesItemSendOptionsResolvers<ContextType>;
   Period?: PeriodResolvers<ContextType>;
   ProxyFor?: ProxyForResolvers<ContextType>;
+  Quantity?: QuantityResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RequestPolicy?: RequestPolicyResolvers<ContextType>;
   Schedule?: ScheduleResolvers<ContextType>;
