@@ -474,6 +474,7 @@ export type Instance = {
   instanceFormatIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** List of dereferenced instance formats */
   instanceFormats?: Maybe<Array<InstanceFormat>>;
+  instanceType?: Maybe<InstanceType>;
   /** UUID of the unique term for the resource type whether it's from the RDA content term list of locally defined */
   instanceTypeId: Scalars['UUID']['output'];
   items?: Maybe<Array<Maybe<Item>>>;
@@ -510,6 +511,7 @@ export type Instance = {
   staffSuppress?: Maybe<Scalars['Boolean']['output']>;
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['String']['output']>>;
+  status?: Maybe<InstanceStatus>;
   /** UUID for the Instance status term (e.g. cataloged, uncatalogued, batch loaded, temporary, other, not yet assigned) */
   statusId?: Maybe<Scalars['UUID']['output']>;
   /** Date [or timestamp] for when the instance status was updated */
@@ -608,8 +610,21 @@ export type InstanceIdentifiersItem = {
   value: Scalars['String']['output'];
 };
 
+/** An Instance note type */
+export type InstanceNoteType = {
+  __typename?: 'InstanceNoteType';
+  /** unique ID of the Instance note type; a UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the Instance note type */
+  name: Scalars['String']['output'];
+  /** label indicating where the Instance note type entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
 export type InstanceNotesItem = {
   __typename?: 'InstanceNotesItem';
+  instanceNoteType?: Maybe<InstanceNoteType>;
   /** ID of the type of note */
   instanceNoteTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Text content of the note */
@@ -651,12 +666,38 @@ export enum InstanceSourceRecordFormat {
   MarcJson = 'MARC_JSON'
 }
 
+/** Cataloging status for Instance records */
+export type InstanceStatus = {
+  __typename?: 'InstanceStatus';
+  /** distinct code for an instance status */
+  code: Scalars['String']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the instance status */
+  name: Scalars['String']['output'];
+  /** origin of an instance status record */
+  source: Scalars['String']['output'];
+};
+
 export type InstanceSubjectsItem = {
   __typename?: 'InstanceSubjectsItem';
   /** UUID of authority record that controls a subject heading */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Subject heading value */
   value: Scalars['String']['output'];
+};
+
+/** The resource type of an Instance */
+export type InstanceType = {
+  __typename?: 'InstanceType';
+  /** distinct code for the resource type */
+  code: Scalars['String']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the resource type */
+  name: Scalars['String']['output'];
+  /** origin of a resource type record */
+  source: Scalars['String']['output'];
 };
 
 /** highest-level location unit */

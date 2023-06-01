@@ -477,6 +477,7 @@ export type Instance = {
   instanceFormatIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** List of dereferenced instance formats */
   instanceFormats?: Maybe<Array<InstanceFormat>>;
+  instanceType?: Maybe<InstanceType>;
   /** UUID of the unique term for the resource type whether it's from the RDA content term list of locally defined */
   instanceTypeId: Scalars['UUID']['output'];
   items?: Maybe<Array<Maybe<Item>>>;
@@ -513,6 +514,7 @@ export type Instance = {
   staffSuppress?: Maybe<Scalars['Boolean']['output']>;
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['String']['output']>>;
+  status?: Maybe<InstanceStatus>;
   /** UUID for the Instance status term (e.g. cataloged, uncatalogued, batch loaded, temporary, other, not yet assigned) */
   statusId?: Maybe<Scalars['UUID']['output']>;
   /** Date [or timestamp] for when the instance status was updated */
@@ -611,8 +613,21 @@ export type InstanceIdentifiersItem = {
   value: Scalars['String']['output'];
 };
 
+/** An Instance note type */
+export type InstanceNoteType = {
+  __typename?: 'InstanceNoteType';
+  /** unique ID of the Instance note type; a UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the Instance note type */
+  name: Scalars['String']['output'];
+  /** label indicating where the Instance note type entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
 export type InstanceNotesItem = {
   __typename?: 'InstanceNotesItem';
+  instanceNoteType?: Maybe<InstanceNoteType>;
   /** ID of the type of note */
   instanceNoteTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Text content of the note */
@@ -654,12 +669,38 @@ export enum InstanceSourceRecordFormat {
   MarcJson = 'MARC_JSON'
 }
 
+/** Cataloging status for Instance records */
+export type InstanceStatus = {
+  __typename?: 'InstanceStatus';
+  /** distinct code for an instance status */
+  code: Scalars['String']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the instance status */
+  name: Scalars['String']['output'];
+  /** origin of an instance status record */
+  source: Scalars['String']['output'];
+};
+
 export type InstanceSubjectsItem = {
   __typename?: 'InstanceSubjectsItem';
   /** UUID of authority record that controls a subject heading */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Subject heading value */
   value: Scalars['String']['output'];
+};
+
+/** The resource type of an Instance */
+export type InstanceType = {
+  __typename?: 'InstanceType';
+  /** distinct code for the resource type */
+  code: Scalars['String']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the resource type */
+  name: Scalars['String']['output'];
+  /** origin of a resource type record */
+  source: Scalars['String']['output'];
 };
 
 /** highest-level location unit */
@@ -1775,12 +1816,15 @@ export type ResolversTypes = ResolversObject<{
   InstanceElectronicAccessItem: ResolverTypeWrapper<InstanceElectronicAccessItem>;
   InstanceFormat: ResolverTypeWrapper<InstanceFormat>;
   InstanceIdentifiersItem: ResolverTypeWrapper<InstanceIdentifiersItem>;
+  InstanceNoteType: ResolverTypeWrapper<InstanceNoteType>;
   InstanceNotesItem: ResolverTypeWrapper<InstanceNotesItem>;
   InstancePublicationItem: ResolverTypeWrapper<InstancePublicationItem>;
   InstancePublicationPeriod: ResolverTypeWrapper<InstancePublicationPeriod>;
   InstanceSeriesItem: ResolverTypeWrapper<InstanceSeriesItem>;
   InstanceSourceRecordFormat: InstanceSourceRecordFormat;
+  InstanceStatus: ResolverTypeWrapper<InstanceStatus>;
   InstanceSubjectsItem: ResolverTypeWrapper<InstanceSubjectsItem>;
+  InstanceType: ResolverTypeWrapper<InstanceType>;
   Institution: ResolverTypeWrapper<Institution>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Item: ResolverTypeWrapper<Item>;
@@ -1880,11 +1924,14 @@ export type ResolversParentTypes = ResolversObject<{
   InstanceElectronicAccessItem: InstanceElectronicAccessItem;
   InstanceFormat: InstanceFormat;
   InstanceIdentifiersItem: InstanceIdentifiersItem;
+  InstanceNoteType: InstanceNoteType;
   InstanceNotesItem: InstanceNotesItem;
   InstancePublicationItem: InstancePublicationItem;
   InstancePublicationPeriod: InstancePublicationPeriod;
   InstanceSeriesItem: InstanceSeriesItem;
+  InstanceStatus: InstanceStatus;
   InstanceSubjectsItem: InstanceSubjectsItem;
+  InstanceType: InstanceType;
   Institution: Institution;
   Int: Scalars['Int']['output'];
   Item: Item;
@@ -2214,6 +2261,7 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   indexTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   instanceFormatIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   instanceFormats?: Resolver<Maybe<Array<ResolversTypes['InstanceFormat']>>, ParentType, ContextType>;
+  instanceType?: Resolver<Maybe<ResolversTypes['InstanceType']>, ParentType, ContextType>;
   instanceTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   items?: Resolver<Maybe<Array<Maybe<ResolversTypes['Item']>>>, ParentType, ContextType, Partial<InstanceItemsArgs>>;
   languages?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
@@ -2233,6 +2281,7 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   sourceRecordFormat?: Resolver<Maybe<ResolversTypes['InstanceSourceRecordFormat']>, ParentType, ContextType>;
   staffSuppress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   statisticalCodeIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['InstanceStatus']>, ParentType, ContextType>;
   statusId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   statusUpdatedDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   subjects?: Resolver<Maybe<Array<ResolversTypes['InstanceSubjectsItem']>>, ParentType, ContextType>;
@@ -2291,7 +2340,16 @@ export type InstanceIdentifiersItemResolvers<ContextType = FolioContext, ParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type InstanceNoteTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceNoteType'] = ResolversParentTypes['InstanceNoteType']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type InstanceNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceNotesItem'] = ResolversParentTypes['InstanceNotesItem']> = ResolversObject<{
+  instanceNoteType?: Resolver<Maybe<ResolversTypes['InstanceNoteType']>, ParentType, ContextType>;
   instanceNoteTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -2318,9 +2376,27 @@ export type InstanceSeriesItemResolvers<ContextType = FolioContext, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type InstanceStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceStatus'] = ResolversParentTypes['InstanceStatus']> = ResolversObject<{
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type InstanceSubjectsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceSubjectsItem'] = ResolversParentTypes['InstanceSubjectsItem']> = ResolversObject<{
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type InstanceTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceType'] = ResolversParentTypes['InstanceType']> = ResolversObject<{
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2935,11 +3011,14 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   InstanceElectronicAccessItem?: InstanceElectronicAccessItemResolvers<ContextType>;
   InstanceFormat?: InstanceFormatResolvers<ContextType>;
   InstanceIdentifiersItem?: InstanceIdentifiersItemResolvers<ContextType>;
+  InstanceNoteType?: InstanceNoteTypeResolvers<ContextType>;
   InstanceNotesItem?: InstanceNotesItemResolvers<ContextType>;
   InstancePublicationItem?: InstancePublicationItemResolvers<ContextType>;
   InstancePublicationPeriod?: InstancePublicationPeriodResolvers<ContextType>;
   InstanceSeriesItem?: InstanceSeriesItemResolvers<ContextType>;
+  InstanceStatus?: InstanceStatusResolvers<ContextType>;
   InstanceSubjectsItem?: InstanceSubjectsItemResolvers<ContextType>;
+  InstanceType?: InstanceTypeResolvers<ContextType>;
   Institution?: InstitutionResolvers<ContextType>;
   Item?: ItemResolvers<ContextType>;
   ItemCirculationNotesItem?: ItemCirculationNotesItemResolvers<ContextType>;

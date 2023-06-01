@@ -1,5 +1,22 @@
 import { UUIDResolver } from "graphql-scalars"
-import { Campus, ClassificationType, Institution, Library, Location, ServicePoint, LoanPolicy, RequestPolicy, PatronGroup, PatronBlockLimit, PatronBlockCondition, FixedDueDateSchedule, HoldStatus } from "../schema.js"
+import {
+  Campus,
+  ClassificationType,
+  Institution,
+  Library,
+  Location,
+  ServicePoint,
+  LoanPolicy,
+  RequestPolicy,
+  PatronGroup,
+  PatronBlockLimit,
+  PatronBlockCondition,
+  FixedDueDateSchedule,
+  HoldStatus,
+  InstanceNoteType,
+  InstanceFormat,
+  InstanceType,
+} from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -152,6 +169,18 @@ export const resolvers: Resolvers = {
     },
     items(parent, args, { dataSources }, info) {
       return dataSources.items.getByInstanceId(parent.id, args)
+    },
+    async instanceFormats(parent, args, { dataSources, typeCache }, info) {
+      const map = await dataSources.types.getMapFor<InstanceFormat>("instance-formats", { key: 'instanceFormats', cache: typeCache })
+      return parent.instanceFormatIds.map(id => map.get(id))
+    },
+    instanceType(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<InstanceType>("instance-types", { key: 'instanceTypes', cache: typeCache }).then(map => map.get(parent.instanceTypeId))
+    }
+  },
+  InstanceNotesItem: {
+    instanceNoteType(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<InstanceNoteType>("instance-note-types", { key: 'instanceNoteTypes', cache: typeCache }).then(map => map.get(parent.instanceNoteTypeId))
     }
   },
   HoldingsRecord: {

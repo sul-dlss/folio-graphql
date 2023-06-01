@@ -319,7 +319,7 @@ const queryType = new GraphQLObjectType({
       // After all that work, we filter out models that we just don't need. These are the
       // "top level" models we care about, and the GraphQL implementation will figure out
       // their dependencies and drop the rest on the floor.
-      if (['Patron', 'User', 'PatronGroup', 'Instance', 'HoldingsRecord', 'Item', 'LoanPolicy', 'RequestPolicy', 'Library', 'Loan', 'PatronGroup', 'Block', 'Account', 'ManualBlock', 'PatronBlockCondition', 'PatronBlockLimit', 'FeeFine', 'ProxyFor', 'FixedDueDateSchedule'].includes(type.name)) {
+      if (['Patron', 'User', 'PatronGroup', 'Instance', 'InstanceNoteType', 'InstanceStatus', 'InstanceType', 'HoldingsRecord', 'Item', 'LoanPolicy', 'RequestPolicy', 'Library', 'Loan', 'PatronGroup', 'Block', 'Account', 'ManualBlock', 'PatronBlockCondition', 'PatronBlockLimit', 'FeeFine', 'ProxyFor', 'FixedDueDateSchedule'].includes(type.name)) {
         const n = type.name.charAt(0).toLowerCase() + type.name.slice(1);
 
         result[n] = { type };
