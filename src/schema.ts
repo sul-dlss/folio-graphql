@@ -104,6 +104,122 @@ export type AccountdataStatus = {
   name: Scalars['String']['output'];
 };
 
+/** A call number type */
+export type AlternativeTitleType = {
+  __typename?: 'AlternativeTitleType';
+  /** unique ID of the alternative title type; a UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the alternative title type */
+  name: Scalars['String']['output'];
+  /** label indicating where the alternative title type entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
+/** An authority record */
+export type Authority = {
+  __typename?: 'Authority';
+  /** Record version for optimistic locking */
+  _version?: Maybe<Scalars['Int']['output']>;
+  /** Heading corporate name */
+  corporateName?: Maybe<Scalars['String']['output']>;
+  /** Heading corporate name title */
+  corporateNameTitle?: Maybe<Scalars['String']['output']>;
+  /** Heading genre/form term */
+  genreTerm?: Maybe<Scalars['String']['output']>;
+  /** Heading geographic name */
+  geographicName?: Maybe<Scalars['String']['output']>;
+  /** Authority UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** An extensible set of name-value pairs of identifiers associated with the resource */
+  identifiers?: Maybe<Array<AuthorityIdentifiersItem>>;
+  /** Heading meeting name */
+  meetingName?: Maybe<Scalars['String']['output']>;
+  /** Heading meeting name title */
+  meetingNameTitle?: Maybe<Scalars['String']['output']>;
+  /** Creater, updater, creation date, last updated date */
+  metadata?: Maybe<Metadata>;
+  /** Authority Natural ID */
+  naturalId?: Maybe<Scalars['String']['output']>;
+  /** Notes (e.g. nonpublic general note) */
+  notes?: Maybe<Array<AuthorityNotesItem>>;
+  /** Heading personal name */
+  personalName?: Maybe<Scalars['String']['output']>;
+  /** Heading personal name title */
+  personalNameTitle?: Maybe<Scalars['String']['output']>;
+  /** See also from tracing corporate name */
+  saftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing corporate name title */
+  saftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing genre/form term */
+  saftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing geographic name */
+  saftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing meeting name */
+  saftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing meeting name title */
+  saftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing personal name */
+  saftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing personal name title */
+  saftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing topical term */
+  saftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing uniform title */
+  saftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing corporate name */
+  sftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing corporate name title */
+  sftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing genre/form term */
+  sftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing geographic name */
+  sftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing meeting name */
+  sftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing meeting name title */
+  sftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing personal name */
+  sftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing personal name title */
+  sftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing topical term */
+  sftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing uniform title */
+  sftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** The metadata source of the underlying record to the authority record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in data-import) */
+  source?: Maybe<AuthoritySource>;
+  /** Authority source file id; UUID */
+  sourceFileId?: Maybe<Scalars['UUID']['output']>;
+  /** Children's subject headings */
+  subjectHeadings?: Maybe<Scalars['String']['output']>;
+  /** Heading topical term */
+  topicalTerm?: Maybe<Scalars['String']['output']>;
+  /** Heading uniform title */
+  uniformTitle?: Maybe<Scalars['String']['output']>;
+};
+
+export type AuthorityIdentifiersItem = {
+  __typename?: 'AuthorityIdentifiersItem';
+  /** Resource identifier type (e.g. Control number, LCCN, Other standard identifier, System control number) */
+  identifierTypeId: Scalars['UUID']['output'];
+  /** Resource identifier value */
+  value: Scalars['String']['output'];
+};
+
+export type AuthorityNotesItem = {
+  __typename?: 'AuthorityNotesItem';
+  /** Text content of the note */
+  note: Scalars['String']['output'];
+  /** ID of the type of note */
+  noteTypeId: Scalars['UUID']['output'];
+};
+
+export enum AuthoritySource {
+  Folio = 'FOLIO',
+  Marc = 'MARC'
+}
+
 /** Single automated patron block */
 export type Block = {
   __typename?: 'Block';
@@ -168,11 +284,33 @@ export type ContributorNameType = {
   ordering?: Maybe<Scalars['String']['output']>;
 };
 
+/** A contributor type */
+export type ContributorType = {
+  __typename?: 'ContributorType';
+  /** distinct code for the contributor type */
+  code: Scalars['String']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the contributor type */
+  name: Scalars['String']['output'];
+  /** origin of the contributor type record */
+  source: Scalars['String']['output'];
+};
+
 export type CqlParams = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   sortby?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** A qualifier indicating the type of relationship that an electronic resource at a given URL has to an Instance */
+export type ElectronicAccessRelationship = {
+  __typename?: 'ElectronicAccessRelationship';
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the type of relationship between a URL and an Instance */
+  name: Scalars['String']['output'];
 };
 
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
@@ -279,6 +417,7 @@ export type HoldingsRecord = {
   callNumberPrefix?: Maybe<Scalars['String']['output']>;
   /** Suffix of the call number on the holding level. */
   callNumberSuffix?: Maybe<Scalars['String']['output']>;
+  callNumberType?: Maybe<CallNumberType>;
   /** unique ID for the type of call number on a holdings record, a UUID */
   callNumberTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Item/Piece ID (usually barcode) for systems that do not use item records. Ability to designate the copy number if institution chooses to use copy numbers. */
@@ -304,6 +443,7 @@ export type HoldingsRecord = {
   holdingsStatementsForIndexes?: Maybe<Array<HoldingsrecordHoldingsStatementsForIndexesItem>>;
   /** Holdings record supplements statements */
   holdingsStatementsForSupplements?: Maybe<Array<HoldingsrecordHoldingsStatementsForSupplementsItem>>;
+  holdingsType?: Maybe<HoldingsType>;
   /** unique ID for the type of this holdings record, a UUID */
   holdingsTypeId?: Maybe<Scalars['UUID']['output']>;
   /** the human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID */
@@ -335,6 +475,7 @@ export type HoldingsRecord = {
   retentionPolicy?: Maybe<Scalars['String']['output']>;
   /** Indicates the shelving form of title. */
   shelvingTitle?: Maybe<Scalars['String']['output']>;
+  source?: Maybe<HoldingsRecordsSource>;
   /** (A reference to) the source of a holdings record */
   sourceId?: Maybe<Scalars['UUID']['output']>;
   /** List of statistical code IDs */
@@ -352,6 +493,30 @@ export type HoldingsRecordItemsArgs = {
   params?: InputMaybe<CqlParams>;
 };
 
+/** A holdings records source */
+export type HoldingsRecordsSource = {
+  __typename?: 'HoldingsRecordsSource';
+  /** The unique ID of the holdings records source; UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** Name of the holdings records source */
+  name: Scalars['String']['output'];
+  /** The holdings records source */
+  source?: Maybe<HoldingsrecordssourceSource>;
+};
+
+/** A holdings type */
+export type HoldingsType = {
+  __typename?: 'HoldingsType';
+  /** unique ID of the holdings type; a UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the holdings type */
+  name: Scalars['String']['output'];
+  /** label indicating where the holdings type entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
 export type HoldingsrecordElectronicAccessItem = {
   __typename?: 'HoldingsrecordElectronicAccessItem';
   /** the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
@@ -360,6 +525,7 @@ export type HoldingsrecordElectronicAccessItem = {
   materialsSpecification?: Maybe<Scalars['String']['output']>;
   /** URL public note to be displayed in the discovery */
   publicNote?: Maybe<Scalars['String']['output']>;
+  relationship?: Maybe<ElectronicAccessRelationship>;
   /** relationship between the electronic resource at the location identified and the item described in the record as a whole */
   relationshipId?: Maybe<Scalars['String']['output']>;
   /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
@@ -426,6 +592,11 @@ export type HoldingsrecordReceivingHistoryEntriesItem = {
   /** Defines if the receivingHistory should be visible to the public. */
   publicDisplay?: Maybe<Scalars['Boolean']['output']>;
 };
+
+export enum HoldingsrecordssourceSource {
+  Folio = 'folio',
+  Local = 'local'
+}
 
 /** An ILL policy */
 export type IlLpolicy = {
@@ -495,6 +666,7 @@ export type Instance = {
   /** A unique instance identifier matching a client-side bibliographic record identification scheme, in particular for a scenario where multiple separate catalogs with no shared record identifiers contribute to the same Instance in Inventory. A match key is typically generated from select, normalized pieces of metadata in bibliographic records */
   matchKey?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Metadata>;
+  modeOfIssuance?: Maybe<ModeOfIssuance>;
   /** UUID of the RDA mode of issuance, a categorization reflecting whether a resource is issued in one or more parts, the way it is updated, and whether its termination is predetermined or not (e.g. monograph,  sequential monograph, serial; integrating Resource, other) */
   modeOfIssuanceId?: Maybe<Scalars['UUID']['output']>;
   /** Array of UUID for the Instance nature of content (e.g. bibliography, biography, exhibition catalogue, festschrift, newspaper, proceedings, research report, thesis or website) */
@@ -552,8 +724,10 @@ export type InstanceAlternativeTitlesItem = {
   __typename?: 'InstanceAlternativeTitlesItem';
   /** An alternative title for the resource */
   alternativeTitle?: Maybe<Scalars['String']['output']>;
+  alternativeTitleType?: Maybe<AlternativeTitleType>;
   /** UUID for an alternative title qualifier */
   alternativeTitleTypeId?: Maybe<Scalars['UUID']['output']>;
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls an alternative title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
 };
@@ -570,12 +744,14 @@ export type InstanceClassificationsItem = {
 
 export type InstanceContributorsItem = {
   __typename?: 'InstanceContributorsItem';
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls the contributor */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Dereferenced contributor-name type */
   contributorNameType?: Maybe<ContributorNameType>;
   /** UUID of contributor name type term defined by the MARC code list for relators */
   contributorNameTypeId: Scalars['UUID']['output'];
+  contributorType?: Maybe<ContributorType>;
   /** UUID for the contributor type term defined in controlled vocabulary */
   contributorTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Free text element for adding contributor type terms other that defined by the MARC code list for relators */
@@ -594,6 +770,7 @@ export type InstanceElectronicAccessItem = {
   materialsSpecification?: Maybe<Scalars['String']['output']>;
   /** URL public note to be displayed in the discovery */
   publicNote?: Maybe<Scalars['String']['output']>;
+  relationship?: Maybe<ElectronicAccessRelationship>;
   /** UUID for the type of relationship between the electronic resource at the location identified and the item described in the record as a whole */
   relationshipId?: Maybe<Scalars['UUID']['output']>;
   /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
@@ -668,6 +845,7 @@ export type InstancePublicationPeriod = {
 
 export type InstanceSeriesItem = {
   __typename?: 'InstanceSeriesItem';
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls an series title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Series title value */
@@ -693,6 +871,7 @@ export type InstanceStatus = {
 
 export type InstanceSubjectsItem = {
   __typename?: 'InstanceSubjectsItem';
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls a subject heading */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Subject heading value */
@@ -783,6 +962,7 @@ export type Item = {
   itemLevelCallNumberPrefix?: Maybe<Scalars['String']['output']>;
   /** Suffix of the call number on the item level. */
   itemLevelCallNumberSuffix?: Maybe<Scalars['String']['output']>;
+  itemLevelCallNumberType?: Maybe<CallNumberType>;
   /** Identifies the source of the call number, e.g., LCC, Dewey, NLM, etc. */
   itemLevelCallNumberTypeId?: Maybe<Scalars['String']['output']>;
   /** Information about when an item was last scanned in the Inventory app. */
@@ -1286,6 +1466,17 @@ export type Metadata = {
   updatedByUsername?: Maybe<Scalars['String']['output']>;
   /** Date and time when the record was last updated */
   updatedDate?: Maybe<Scalars['DateTime']['output']>;
+};
+
+/** A mode of issuance to be assigned to an Instance */
+export type ModeOfIssuance = {
+  __typename?: 'ModeOfIssuance';
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the mode of issuance */
+  name: Scalars['String']['output'];
+  /** label indicating where the mode of issuance entry originates from, i.e. 'rdamodeissue' or 'local' */
+  source?: Maybe<Scalars['String']['output']>;
 };
 
 /** Money schema for patron portal integration */

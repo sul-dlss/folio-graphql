@@ -19,6 +19,14 @@ import {
   ItemDamagedStatus,
   LoanType,
   CallNumberType,
+  HoldingsRecordsSource,
+  IlLpolicy,
+  ElectronicAccessRelationship,
+  ModeOfIssuance,
+  Authority,
+  HoldingsType,
+  AlternativeTitleType,
+  ContributorType,
 } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
@@ -190,7 +198,41 @@ export const resolvers: Resolvers = {
     },
     instanceType(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<InstanceType>("instance-types", { key: 'instanceTypes', cache: typeCache }).then(map => map.get(parent.instanceTypeId))
+    },
+    modeOfIssuance(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<ModeOfIssuance>("modes-of-issuance", { key: 'modesOfIssuance', cache: typeCache }).then(map => map.get(parent.modeOfIssuanceId))
     }
+  },
+  InstanceAlternativeTitlesItem: {
+    alternativeTitleType(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<AlternativeTitleType>("alternative-title-types", { key: 'alternativeTitleTypes', cache: typeCache }).then(map => map.get(parent.alternativeTitleTypeId))
+    },
+    authority(parent, args, { dataSources }, info) {
+      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    },
+  },
+  InstanceContributorsItem: {
+    contributorType(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<ContributorType>("contributor-types", { key: 'contributorTypes', cache: typeCache }).then(map => map.get(parent.contributorTypeId))
+    },
+    authority(parent, args, { dataSources }, info) {
+      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    },
+  },
+  InstanceSeriesItem: {
+    authority(parent, args, { dataSources }, info) {
+      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    },
+  },
+  InstanceSubjectsItem: {
+    authority(parent, args, { dataSources }, info) {
+      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    },
+  },
+  InstanceElectronicAccessItem: {
+    relationship(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships', cache: typeCache }).then(map => map.get(parent.relationshipId))
+    },
   },
   InstanceNotesItem: {
     instanceNoteType(parent, args, { dataSources, typeCache }, info) {
@@ -212,6 +254,24 @@ export const resolvers: Resolvers = {
     },
     effectiveLocation(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
+    },
+    callNumberType(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<CallNumberType>("call-number-types", { key: 'callNumberTypes', cache: typeCache }).then(map => map.get(parent.callNumberTypeId))
+    },
+    illPolicy(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<IlLpolicy>("ill-policies", { key: 'illPolicies', cache: typeCache }).then(map => map.get(parent.illPolicyId))
+    },
+    holdingsType(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<HoldingsType>("holdings-types", { key: 'holdingsTypes', cache: typeCache }).then(map => map.get(parent.holdingsTypeId))
+    },
+    source(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<HoldingsRecordsSource>("holdings-sources", {
+        key: 'holdingsRecordsSources', cache: typeCache }).then(map => map.get(parent.sourceId))
+    }
+  },
+  HoldingsrecordElectronicAccessItem: {
+    relationship(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships', cache: typeCache }).then(map => map.get(parent.relationshipId))
     }
   },
   Item: {
@@ -241,6 +301,9 @@ export const resolvers: Resolvers = {
     },
     temporaryLoanType(parent, args, { dataSources, typeCache }, info) {
       return dataSources.types.getMapFor<LoanType>("loan-types", { cache: typeCache }).then(map => map.get(parent.temporaryLoanTypeId))
+    },
+    itemLevelCallNumberType(parent, args, { dataSources, typeCache }, info) {
+      return dataSources.types.getMapFor<CallNumberType>("call-number-types", { key: 'callNumberTypes', cache: typeCache }).then(map => map.get(parent.itemLevelCallNumberTypeId))
     }
   },
   ItemEffectiveCallNumberComponents: {

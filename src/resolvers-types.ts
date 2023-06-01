@@ -107,6 +107,122 @@ export type AccountdataStatus = {
   name: Scalars['String']['output'];
 };
 
+/** A call number type */
+export type AlternativeTitleType = {
+  __typename?: 'AlternativeTitleType';
+  /** unique ID of the alternative title type; a UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the alternative title type */
+  name: Scalars['String']['output'];
+  /** label indicating where the alternative title type entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
+/** An authority record */
+export type Authority = {
+  __typename?: 'Authority';
+  /** Record version for optimistic locking */
+  _version?: Maybe<Scalars['Int']['output']>;
+  /** Heading corporate name */
+  corporateName?: Maybe<Scalars['String']['output']>;
+  /** Heading corporate name title */
+  corporateNameTitle?: Maybe<Scalars['String']['output']>;
+  /** Heading genre/form term */
+  genreTerm?: Maybe<Scalars['String']['output']>;
+  /** Heading geographic name */
+  geographicName?: Maybe<Scalars['String']['output']>;
+  /** Authority UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** An extensible set of name-value pairs of identifiers associated with the resource */
+  identifiers?: Maybe<Array<AuthorityIdentifiersItem>>;
+  /** Heading meeting name */
+  meetingName?: Maybe<Scalars['String']['output']>;
+  /** Heading meeting name title */
+  meetingNameTitle?: Maybe<Scalars['String']['output']>;
+  /** Creater, updater, creation date, last updated date */
+  metadata?: Maybe<Metadata>;
+  /** Authority Natural ID */
+  naturalId?: Maybe<Scalars['String']['output']>;
+  /** Notes (e.g. nonpublic general note) */
+  notes?: Maybe<Array<AuthorityNotesItem>>;
+  /** Heading personal name */
+  personalName?: Maybe<Scalars['String']['output']>;
+  /** Heading personal name title */
+  personalNameTitle?: Maybe<Scalars['String']['output']>;
+  /** See also from tracing corporate name */
+  saftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing corporate name title */
+  saftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing genre/form term */
+  saftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing geographic name */
+  saftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing meeting name */
+  saftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing meeting name title */
+  saftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing personal name */
+  saftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing personal name title */
+  saftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing topical term */
+  saftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See also from tracing uniform title */
+  saftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing corporate name */
+  sftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing corporate name title */
+  sftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing genre/form term */
+  sftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing geographic name */
+  sftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing meeting name */
+  sftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing meeting name title */
+  sftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing personal name */
+  sftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing personal name title */
+  sftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing topical term */
+  sftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
+  /** See from tracing uniform title */
+  sftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
+  /** The metadata source of the underlying record to the authority record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in data-import) */
+  source?: Maybe<AuthoritySource>;
+  /** Authority source file id; UUID */
+  sourceFileId?: Maybe<Scalars['UUID']['output']>;
+  /** Children's subject headings */
+  subjectHeadings?: Maybe<Scalars['String']['output']>;
+  /** Heading topical term */
+  topicalTerm?: Maybe<Scalars['String']['output']>;
+  /** Heading uniform title */
+  uniformTitle?: Maybe<Scalars['String']['output']>;
+};
+
+export type AuthorityIdentifiersItem = {
+  __typename?: 'AuthorityIdentifiersItem';
+  /** Resource identifier type (e.g. Control number, LCCN, Other standard identifier, System control number) */
+  identifierTypeId: Scalars['UUID']['output'];
+  /** Resource identifier value */
+  value: Scalars['String']['output'];
+};
+
+export type AuthorityNotesItem = {
+  __typename?: 'AuthorityNotesItem';
+  /** Text content of the note */
+  note: Scalars['String']['output'];
+  /** ID of the type of note */
+  noteTypeId: Scalars['UUID']['output'];
+};
+
+export enum AuthoritySource {
+  Folio = 'FOLIO',
+  Marc = 'MARC'
+}
+
 /** Single automated patron block */
 export type Block = {
   __typename?: 'Block';
@@ -171,11 +287,33 @@ export type ContributorNameType = {
   ordering?: Maybe<Scalars['String']['output']>;
 };
 
+/** A contributor type */
+export type ContributorType = {
+  __typename?: 'ContributorType';
+  /** distinct code for the contributor type */
+  code: Scalars['String']['output'];
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the contributor type */
+  name: Scalars['String']['output'];
+  /** origin of the contributor type record */
+  source: Scalars['String']['output'];
+};
+
 export type CqlParams = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   sortby?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** A qualifier indicating the type of relationship that an electronic resource at a given URL has to an Instance */
+export type ElectronicAccessRelationship = {
+  __typename?: 'ElectronicAccessRelationship';
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the type of relationship between a URL and an Instance */
+  name: Scalars['String']['output'];
 };
 
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
@@ -282,6 +420,7 @@ export type HoldingsRecord = {
   callNumberPrefix?: Maybe<Scalars['String']['output']>;
   /** Suffix of the call number on the holding level. */
   callNumberSuffix?: Maybe<Scalars['String']['output']>;
+  callNumberType?: Maybe<CallNumberType>;
   /** unique ID for the type of call number on a holdings record, a UUID */
   callNumberTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Item/Piece ID (usually barcode) for systems that do not use item records. Ability to designate the copy number if institution chooses to use copy numbers. */
@@ -307,6 +446,7 @@ export type HoldingsRecord = {
   holdingsStatementsForIndexes?: Maybe<Array<HoldingsrecordHoldingsStatementsForIndexesItem>>;
   /** Holdings record supplements statements */
   holdingsStatementsForSupplements?: Maybe<Array<HoldingsrecordHoldingsStatementsForSupplementsItem>>;
+  holdingsType?: Maybe<HoldingsType>;
   /** unique ID for the type of this holdings record, a UUID */
   holdingsTypeId?: Maybe<Scalars['UUID']['output']>;
   /** the human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID */
@@ -338,6 +478,7 @@ export type HoldingsRecord = {
   retentionPolicy?: Maybe<Scalars['String']['output']>;
   /** Indicates the shelving form of title. */
   shelvingTitle?: Maybe<Scalars['String']['output']>;
+  source?: Maybe<HoldingsRecordsSource>;
   /** (A reference to) the source of a holdings record */
   sourceId?: Maybe<Scalars['UUID']['output']>;
   /** List of statistical code IDs */
@@ -355,6 +496,30 @@ export type HoldingsRecordItemsArgs = {
   params?: InputMaybe<CqlParams>;
 };
 
+/** A holdings records source */
+export type HoldingsRecordsSource = {
+  __typename?: 'HoldingsRecordsSource';
+  /** The unique ID of the holdings records source; UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** Name of the holdings records source */
+  name: Scalars['String']['output'];
+  /** The holdings records source */
+  source?: Maybe<HoldingsrecordssourceSource>;
+};
+
+/** A holdings type */
+export type HoldingsType = {
+  __typename?: 'HoldingsType';
+  /** unique ID of the holdings type; a UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the holdings type */
+  name: Scalars['String']['output'];
+  /** label indicating where the holdings type entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+};
+
 export type HoldingsrecordElectronicAccessItem = {
   __typename?: 'HoldingsrecordElectronicAccessItem';
   /** the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
@@ -363,6 +528,7 @@ export type HoldingsrecordElectronicAccessItem = {
   materialsSpecification?: Maybe<Scalars['String']['output']>;
   /** URL public note to be displayed in the discovery */
   publicNote?: Maybe<Scalars['String']['output']>;
+  relationship?: Maybe<ElectronicAccessRelationship>;
   /** relationship between the electronic resource at the location identified and the item described in the record as a whole */
   relationshipId?: Maybe<Scalars['String']['output']>;
   /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
@@ -429,6 +595,11 @@ export type HoldingsrecordReceivingHistoryEntriesItem = {
   /** Defines if the receivingHistory should be visible to the public. */
   publicDisplay?: Maybe<Scalars['Boolean']['output']>;
 };
+
+export enum HoldingsrecordssourceSource {
+  Folio = 'folio',
+  Local = 'local'
+}
 
 /** An ILL policy */
 export type IlLpolicy = {
@@ -498,6 +669,7 @@ export type Instance = {
   /** A unique instance identifier matching a client-side bibliographic record identification scheme, in particular for a scenario where multiple separate catalogs with no shared record identifiers contribute to the same Instance in Inventory. A match key is typically generated from select, normalized pieces of metadata in bibliographic records */
   matchKey?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Metadata>;
+  modeOfIssuance?: Maybe<ModeOfIssuance>;
   /** UUID of the RDA mode of issuance, a categorization reflecting whether a resource is issued in one or more parts, the way it is updated, and whether its termination is predetermined or not (e.g. monograph,  sequential monograph, serial; integrating Resource, other) */
   modeOfIssuanceId?: Maybe<Scalars['UUID']['output']>;
   /** Array of UUID for the Instance nature of content (e.g. bibliography, biography, exhibition catalogue, festschrift, newspaper, proceedings, research report, thesis or website) */
@@ -555,8 +727,10 @@ export type InstanceAlternativeTitlesItem = {
   __typename?: 'InstanceAlternativeTitlesItem';
   /** An alternative title for the resource */
   alternativeTitle?: Maybe<Scalars['String']['output']>;
+  alternativeTitleType?: Maybe<AlternativeTitleType>;
   /** UUID for an alternative title qualifier */
   alternativeTitleTypeId?: Maybe<Scalars['UUID']['output']>;
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls an alternative title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
 };
@@ -573,12 +747,14 @@ export type InstanceClassificationsItem = {
 
 export type InstanceContributorsItem = {
   __typename?: 'InstanceContributorsItem';
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls the contributor */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Dereferenced contributor-name type */
   contributorNameType?: Maybe<ContributorNameType>;
   /** UUID of contributor name type term defined by the MARC code list for relators */
   contributorNameTypeId: Scalars['UUID']['output'];
+  contributorType?: Maybe<ContributorType>;
   /** UUID for the contributor type term defined in controlled vocabulary */
   contributorTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Free text element for adding contributor type terms other that defined by the MARC code list for relators */
@@ -597,6 +773,7 @@ export type InstanceElectronicAccessItem = {
   materialsSpecification?: Maybe<Scalars['String']['output']>;
   /** URL public note to be displayed in the discovery */
   publicNote?: Maybe<Scalars['String']['output']>;
+  relationship?: Maybe<ElectronicAccessRelationship>;
   /** UUID for the type of relationship between the electronic resource at the location identified and the item described in the record as a whole */
   relationshipId?: Maybe<Scalars['UUID']['output']>;
   /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
@@ -671,6 +848,7 @@ export type InstancePublicationPeriod = {
 
 export type InstanceSeriesItem = {
   __typename?: 'InstanceSeriesItem';
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls an series title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Series title value */
@@ -696,6 +874,7 @@ export type InstanceStatus = {
 
 export type InstanceSubjectsItem = {
   __typename?: 'InstanceSubjectsItem';
+  authority?: Maybe<Authority>;
   /** UUID of authority record that controls a subject heading */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Subject heading value */
@@ -786,6 +965,7 @@ export type Item = {
   itemLevelCallNumberPrefix?: Maybe<Scalars['String']['output']>;
   /** Suffix of the call number on the item level. */
   itemLevelCallNumberSuffix?: Maybe<Scalars['String']['output']>;
+  itemLevelCallNumberType?: Maybe<CallNumberType>;
   /** Identifies the source of the call number, e.g., LCC, Dewey, NLM, etc. */
   itemLevelCallNumberTypeId?: Maybe<Scalars['String']['output']>;
   /** Information about when an item was last scanned in the Inventory app. */
@@ -1289,6 +1469,17 @@ export type Metadata = {
   updatedByUsername?: Maybe<Scalars['String']['output']>;
   /** Date and time when the record was last updated */
   updatedDate?: Maybe<Scalars['DateTime']['output']>;
+};
+
+/** A mode of issuance to be assigned to an Instance */
+export type ModeOfIssuance = {
+  __typename?: 'ModeOfIssuance';
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** label for the mode of issuance */
+  name: Scalars['String']['output'];
+  /** label indicating where the mode of issuance entry originates from, i.e. 'rdamodeissue' or 'local' */
+  source?: Maybe<Scalars['String']['output']>;
 };
 
 /** Money schema for patron portal integration */
@@ -1827,14 +2018,21 @@ export type ResolversTypes = ResolversObject<{
   AccountdataItemStatus: ResolverTypeWrapper<AccountdataItemStatus>;
   AccountdataPaymentStatus: ResolverTypeWrapper<AccountdataPaymentStatus>;
   AccountdataStatus: ResolverTypeWrapper<AccountdataStatus>;
+  AlternativeTitleType: ResolverTypeWrapper<AlternativeTitleType>;
+  Authority: ResolverTypeWrapper<Authority>;
+  AuthorityIdentifiersItem: ResolverTypeWrapper<AuthorityIdentifiersItem>;
+  AuthorityNotesItem: ResolverTypeWrapper<AuthorityNotesItem>;
+  AuthoritySource: AuthoritySource;
   Block: ResolverTypeWrapper<Block>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CallNumberType: ResolverTypeWrapper<CallNumberType>;
   Campus: ResolverTypeWrapper<Campus>;
   ClassificationType: ResolverTypeWrapper<ClassificationType>;
   ContributorNameType: ResolverTypeWrapper<ContributorNameType>;
+  ContributorType: ResolverTypeWrapper<ContributorType>;
   CqlParams: CqlParams;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
+  ElectronicAccessRelationship: ResolverTypeWrapper<ElectronicAccessRelationship>;
   FeeFine: ResolverTypeWrapper<FeeFine>;
   FixedDueDateSchedule: ResolverTypeWrapper<FixedDueDateSchedule>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
@@ -1842,6 +2040,8 @@ export type ResolversTypes = ResolversObject<{
   HoldStatus: HoldStatus;
   HoldingsNoteType: ResolverTypeWrapper<HoldingsNoteType>;
   HoldingsRecord: ResolverTypeWrapper<HoldingsRecord>;
+  HoldingsRecordsSource: ResolverTypeWrapper<HoldingsRecordsSource>;
+  HoldingsType: ResolverTypeWrapper<HoldingsType>;
   HoldingsrecordElectronicAccessItem: ResolverTypeWrapper<HoldingsrecordElectronicAccessItem>;
   HoldingsrecordHoldingsStatementsForIndexesItem: ResolverTypeWrapper<HoldingsrecordHoldingsStatementsForIndexesItem>;
   HoldingsrecordHoldingsStatementsForSupplementsItem: ResolverTypeWrapper<HoldingsrecordHoldingsStatementsForSupplementsItem>;
@@ -1849,6 +2049,7 @@ export type ResolversTypes = ResolversObject<{
   HoldingsrecordNotesItem: ResolverTypeWrapper<HoldingsrecordNotesItem>;
   HoldingsrecordReceivingHistory: ResolverTypeWrapper<HoldingsrecordReceivingHistory>;
   HoldingsrecordReceivingHistoryEntriesItem: ResolverTypeWrapper<HoldingsrecordReceivingHistoryEntriesItem>;
+  HoldingsrecordssourceSource: HoldingsrecordssourceSource;
   ILLpolicy: ResolverTypeWrapper<IlLpolicy>;
   IdentifierType: ResolverTypeWrapper<IdentifierType>;
   Instance: ResolverTypeWrapper<Instance>;
@@ -1902,6 +2103,7 @@ export type ResolversTypes = ResolversObject<{
   ManualBlock: ResolverTypeWrapper<ManualBlock>;
   MaterialType: ResolverTypeWrapper<MaterialType>;
   Metadata: ResolverTypeWrapper<Metadata>;
+  ModeOfIssuance: ResolverTypeWrapper<ModeOfIssuance>;
   Money: ResolverTypeWrapper<Money>;
   Patron: ResolverTypeWrapper<Patron>;
   PatronBlockCondition: ResolverTypeWrapper<PatronBlockCondition>;
@@ -1939,20 +2141,28 @@ export type ResolversParentTypes = ResolversObject<{
   AccountdataItemStatus: AccountdataItemStatus;
   AccountdataPaymentStatus: AccountdataPaymentStatus;
   AccountdataStatus: AccountdataStatus;
+  AlternativeTitleType: AlternativeTitleType;
+  Authority: Authority;
+  AuthorityIdentifiersItem: AuthorityIdentifiersItem;
+  AuthorityNotesItem: AuthorityNotesItem;
   Block: Block;
   Boolean: Scalars['Boolean']['output'];
   CallNumberType: CallNumberType;
   Campus: Campus;
   ClassificationType: ClassificationType;
   ContributorNameType: ContributorNameType;
+  ContributorType: ContributorType;
   CqlParams: CqlParams;
   DateTime: Scalars['DateTime']['output'];
+  ElectronicAccessRelationship: ElectronicAccessRelationship;
   FeeFine: FeeFine;
   FixedDueDateSchedule: FixedDueDateSchedule;
   Float: Scalars['Float']['output'];
   Hold: Hold;
   HoldingsNoteType: HoldingsNoteType;
   HoldingsRecord: HoldingsRecord;
+  HoldingsRecordsSource: HoldingsRecordsSource;
+  HoldingsType: HoldingsType;
   HoldingsrecordElectronicAccessItem: HoldingsrecordElectronicAccessItem;
   HoldingsrecordHoldingsStatementsForIndexesItem: HoldingsrecordHoldingsStatementsForIndexesItem;
   HoldingsrecordHoldingsStatementsForSupplementsItem: HoldingsrecordHoldingsStatementsForSupplementsItem;
@@ -2011,6 +2221,7 @@ export type ResolversParentTypes = ResolversObject<{
   ManualBlock: ManualBlock;
   MaterialType: MaterialType;
   Metadata: Metadata;
+  ModeOfIssuance: ModeOfIssuance;
   Money: Money;
   Patron: Patron;
   PatronBlockCondition: PatronBlockCondition;
@@ -2090,6 +2301,69 @@ export type AccountdataStatusResolvers<ContextType = FolioContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type AlternativeTitleTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AlternativeTitleType'] = ResolversParentTypes['AlternativeTitleType']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AuthorityResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Authority'] = ResolversParentTypes['Authority']> = ResolversObject<{
+  _version?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  corporateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  corporateNameTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  genreTerm?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  geographicName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  identifiers?: Resolver<Maybe<Array<ResolversTypes['AuthorityIdentifiersItem']>>, ParentType, ContextType>;
+  meetingName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meetingNameTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  naturalId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  notes?: Resolver<Maybe<Array<ResolversTypes['AuthorityNotesItem']>>, ParentType, ContextType>;
+  personalName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  personalNameTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  saftCorporateName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftCorporateNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftGenreTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftGeographicName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftMeetingName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftMeetingNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftPersonalName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftPersonalNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftTopicalTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  saftUniformTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftCorporateName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftCorporateNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftGenreTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftGeographicName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftMeetingName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftMeetingNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftPersonalName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftPersonalNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftTopicalTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  sftUniformTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['AuthoritySource']>, ParentType, ContextType>;
+  sourceFileId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  subjectHeadings?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  topicalTerm?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  uniformTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AuthorityIdentifiersItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AuthorityIdentifiersItem'] = ResolversParentTypes['AuthorityIdentifiersItem']> = ResolversObject<{
+  identifierTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AuthorityNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AuthorityNotesItem'] = ResolversParentTypes['AuthorityNotesItem']> = ResolversObject<{
+  note?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  noteTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type BlockResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Block'] = ResolversParentTypes['Block']> = ResolversObject<{
   blockBorrowing?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   blockCondition?: Resolver<Maybe<ResolversTypes['PatronBlockCondition']>, ParentType, ContextType>;
@@ -2134,9 +2408,25 @@ export type ContributorNameTypeResolvers<ContextType = FolioContext, ParentType 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ContributorTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ContributorType'] = ResolversParentTypes['ContributorType']> = ResolversObject<{
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
+
+export type ElectronicAccessRelationshipResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ElectronicAccessRelationship'] = ResolversParentTypes['ElectronicAccessRelationship']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type FeeFineResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FeeFine'] = ResolversParentTypes['FeeFine']> = ResolversObject<{
   actionNoticeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
@@ -2193,6 +2483,7 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumberPrefix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumberSuffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  callNumberType?: Resolver<Maybe<ResolversTypes['CallNumberType']>, ParentType, ContextType>;
   callNumberTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   copyNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   digitizationPolicy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2206,6 +2497,7 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   holdingsStatements?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordHoldingsStatementsItem']>>, ParentType, ContextType>;
   holdingsStatementsForIndexes?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordHoldingsStatementsForIndexesItem']>>, ParentType, ContextType>;
   holdingsStatementsForSupplements?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordHoldingsStatementsForSupplementsItem']>>, ParentType, ContextType>;
+  holdingsType?: Resolver<Maybe<ResolversTypes['HoldingsType']>, ParentType, ContextType>;
   holdingsTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   hrid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
@@ -2223,6 +2515,7 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   receivingHistory?: Resolver<Maybe<ResolversTypes['HoldingsrecordReceivingHistory']>, ParentType, ContextType>;
   retentionPolicy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   shelvingTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['HoldingsRecordsSource']>, ParentType, ContextType>;
   sourceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   statisticalCodeIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<ResolversTypes['Tags']>, ParentType, ContextType>;
@@ -2231,10 +2524,27 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type HoldingsRecordsSourceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsRecordsSource'] = ResolversParentTypes['HoldingsRecordsSource']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['HoldingsrecordssourceSource']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type HoldingsTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsType'] = ResolversParentTypes['HoldingsType']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type HoldingsrecordElectronicAccessItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordElectronicAccessItem'] = ResolversParentTypes['HoldingsrecordElectronicAccessItem']> = ResolversObject<{
   linkText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   materialsSpecification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publicNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  relationship?: Resolver<Maybe<ResolversTypes['ElectronicAccessRelationship']>, ParentType, ContextType>;
   relationshipId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2322,6 +2632,7 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   languages?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   matchKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  modeOfIssuance?: Resolver<Maybe<ResolversTypes['ModeOfIssuance']>, ParentType, ContextType>;
   modeOfIssuanceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   natureOfContentTermIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   notes?: Resolver<Maybe<Array<ResolversTypes['InstanceNotesItem']>>, ParentType, ContextType>;
@@ -2347,7 +2658,9 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
 
 export type InstanceAlternativeTitlesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceAlternativeTitlesItem'] = ResolversParentTypes['InstanceAlternativeTitlesItem']> = ResolversObject<{
   alternativeTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  alternativeTitleType?: Resolver<Maybe<ResolversTypes['AlternativeTitleType']>, ParentType, ContextType>;
   alternativeTitleTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  authority?: Resolver<Maybe<ResolversTypes['Authority']>, ParentType, ContextType>;
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2360,9 +2673,11 @@ export type InstanceClassificationsItemResolvers<ContextType = FolioContext, Par
 }>;
 
 export type InstanceContributorsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceContributorsItem'] = ResolversParentTypes['InstanceContributorsItem']> = ResolversObject<{
+  authority?: Resolver<Maybe<ResolversTypes['Authority']>, ParentType, ContextType>;
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   contributorNameType?: Resolver<Maybe<ResolversTypes['ContributorNameType']>, ParentType, ContextType>;
   contributorNameTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  contributorType?: Resolver<Maybe<ResolversTypes['ContributorType']>, ParentType, ContextType>;
   contributorTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   contributorTypeText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2374,6 +2689,7 @@ export type InstanceElectronicAccessItemResolvers<ContextType = FolioContext, Pa
   linkText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   materialsSpecification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publicNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  relationship?: Resolver<Maybe<ResolversTypes['ElectronicAccessRelationship']>, ParentType, ContextType>;
   relationshipId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2426,6 +2742,7 @@ export type InstancePublicationPeriodResolvers<ContextType = FolioContext, Paren
 }>;
 
 export type InstanceSeriesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceSeriesItem'] = ResolversParentTypes['InstanceSeriesItem']> = ResolversObject<{
+  authority?: Resolver<Maybe<ResolversTypes['Authority']>, ParentType, ContextType>;
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2441,6 +2758,7 @@ export type InstanceStatusResolvers<ContextType = FolioContext, ParentType exten
 }>;
 
 export type InstanceSubjectsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceSubjectsItem'] = ResolversParentTypes['InstanceSubjectsItem']> = ResolversObject<{
+  authority?: Resolver<Maybe<ResolversTypes['Authority']>, ParentType, ContextType>;
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2495,6 +2813,7 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   itemLevelCallNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   itemLevelCallNumberPrefix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   itemLevelCallNumberSuffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  itemLevelCallNumberType?: Resolver<Maybe<ResolversTypes['CallNumberType']>, ParentType, ContextType>;
   itemLevelCallNumberTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastCheckIn?: Resolver<Maybe<ResolversTypes['ItemLastCheckIn']>, ParentType, ContextType>;
   materialType?: Resolver<Maybe<ResolversTypes['MaterialType']>, ParentType, ContextType>;
@@ -2817,6 +3136,14 @@ export type MetadataResolvers<ContextType = FolioContext, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ModeOfIssuanceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ModeOfIssuance'] = ResolversParentTypes['ModeOfIssuance']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MoneyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Money'] = ResolversParentTypes['Money']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   isoCurrencyCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -3063,17 +3390,25 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   AccountdataItemStatus?: AccountdataItemStatusResolvers<ContextType>;
   AccountdataPaymentStatus?: AccountdataPaymentStatusResolvers<ContextType>;
   AccountdataStatus?: AccountdataStatusResolvers<ContextType>;
+  AlternativeTitleType?: AlternativeTitleTypeResolvers<ContextType>;
+  Authority?: AuthorityResolvers<ContextType>;
+  AuthorityIdentifiersItem?: AuthorityIdentifiersItemResolvers<ContextType>;
+  AuthorityNotesItem?: AuthorityNotesItemResolvers<ContextType>;
   Block?: BlockResolvers<ContextType>;
   CallNumberType?: CallNumberTypeResolvers<ContextType>;
   Campus?: CampusResolvers<ContextType>;
   ClassificationType?: ClassificationTypeResolvers<ContextType>;
   ContributorNameType?: ContributorNameTypeResolvers<ContextType>;
+  ContributorType?: ContributorTypeResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  ElectronicAccessRelationship?: ElectronicAccessRelationshipResolvers<ContextType>;
   FeeFine?: FeeFineResolvers<ContextType>;
   FixedDueDateSchedule?: FixedDueDateScheduleResolvers<ContextType>;
   Hold?: HoldResolvers<ContextType>;
   HoldingsNoteType?: HoldingsNoteTypeResolvers<ContextType>;
   HoldingsRecord?: HoldingsRecordResolvers<ContextType>;
+  HoldingsRecordsSource?: HoldingsRecordsSourceResolvers<ContextType>;
+  HoldingsType?: HoldingsTypeResolvers<ContextType>;
   HoldingsrecordElectronicAccessItem?: HoldingsrecordElectronicAccessItemResolvers<ContextType>;
   HoldingsrecordHoldingsStatementsForIndexesItem?: HoldingsrecordHoldingsStatementsForIndexesItemResolvers<ContextType>;
   HoldingsrecordHoldingsStatementsForSupplementsItem?: HoldingsrecordHoldingsStatementsForSupplementsItemResolvers<ContextType>;
@@ -3131,6 +3466,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   ManualBlock?: ManualBlockResolvers<ContextType>;
   MaterialType?: MaterialTypeResolvers<ContextType>;
   Metadata?: MetadataResolvers<ContextType>;
+  ModeOfIssuance?: ModeOfIssuanceResolvers<ContextType>;
   Money?: MoneyResolvers<ContextType>;
   Patron?: PatronResolvers<ContextType>;
   PatronBlockCondition?: PatronBlockConditionResolvers<ContextType>;
