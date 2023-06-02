@@ -124,7 +124,7 @@ files.sort().map(file => {
   if (file.includes('mod-feesfines/ramls/loan.json')) return;
 
   // exclude non-policy files, which are covered in mod-circulation just fine
-  if (file.includes('mod-circulation-storage') && !(file.includes('-policy.json') || file.includes('schedule.json') || file.includes('period.json'))) return;
+  if (file.includes('mod-circulation-storage') && !(file.includes('-policy.json') || file.includes('schedule.json') || file.includes('period.json') || file.includes('interval.json'))) return;
 
   // omitting because they aren't valid json schema
   if (file.includes('example') || file.includes('codex/') || file.includes('codex-next/') || file.includes('ramls/schema/anonymize-loans-response.json') || file.includes('ramls/events') || file.includes('ramls/migration') || file.includes('actions/')) return;
@@ -290,6 +290,9 @@ const nameMap = {
   'Proxyfor': 'ProxyFor',
   'Userdata': 'User',
   'Usergroup': 'PatronGroup',
+  'Overduefinepolicy': 'OverdueFinePolicy',
+  'Lostitemfeepolicy': 'LostItemFeePolicy',
+  'Patronnoticepolicy': 'PatronNoticePolicy'
 }
 
 // GraphQL can't handle multiple types with the same name; if they
@@ -319,7 +322,7 @@ const queryType = new GraphQLObjectType({
       // After all that work, we filter out models that we just don't need. These are the
       // "top level" models we care about, and the GraphQL implementation will figure out
       // their dependencies and drop the rest on the floor.
-      if (['Patron', 'User', 'PatronGroup', 'Instance', 'InstanceNoteType', 'InstanceStatus', 'InstanceType', 'ModeOfIssuance', 'AlternativeTitleType', 'Authority', 'ContributorType', 'HoldingsRecord', 'HoldingsType', 'HoldingsRecordsSource', 'Item', 'ItemDamagedStatus', 'LoanPolicy', 'RequestPolicy', 'Library', 'Loan', 'LoanType', 'CallNumberType', 'ElectronicAccessRelationship', 'PatronGroup', 'Block', 'Account', 'ManualBlock', 'PatronBlockCondition', 'PatronBlockLimit', 'FeeFine', 'ProxyFor', 'FixedDueDateSchedule'].includes(type.name)) {
+      if (['Patron', 'User', 'PatronGroup', 'Instance', 'InstanceNoteType', 'InstanceStatus', 'InstanceType', 'ModeOfIssuance', 'AlternativeTitleType', 'Authority', 'ContributorType', 'HoldingsRecord', 'HoldingsType', 'HoldingsRecordsSource', 'Item', 'ItemDamagedStatus', 'LoanPolicy', 'RequestPolicy', 'Library', 'Loan', 'LoanType', 'CallNumberType', 'ElectronicAccessRelationship', 'PatronGroup', 'Block', 'Account', 'ManualBlock', 'PatronBlockCondition', 'PatronBlockLimit', 'FeeFine', 'ProxyFor', 'FixedDueDateSchedule', 'OverdueFinePolicy', 'LostItemFeePolicy', 'PatronNoticePolicy'].includes(type.name)) {
         const n = type.name.charAt(0).toLowerCase() + type.name.slice(1);
 
         result[n] = { type };
