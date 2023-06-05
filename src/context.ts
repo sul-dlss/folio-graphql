@@ -21,5 +21,4 @@ export interface FolioContext {
     feefines: FeeFinesAPI;
     circulation: CirculationAPI;
   };
-  typeCache: any;
 }

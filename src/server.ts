@@ -67,6 +67,7 @@ async function getTokenFromRequest(req: express.Request): Promise<{ token: strin
 
 const context = async ({ req }: Partial<{ req: express.Request }>) => {
   const { token } = await getTokenFromRequest(req);
+  const typeCache = new Map()
   const { cache } = server;
 
   return {
@@ -78,11 +79,10 @@ const context = async ({ req }: Partial<{ req: express.Request }>) => {
       instances: new InstancesAPI({ cache, token }),
       items: new ItemsAPI({ cache, token }),
       holdings: new HoldingsAPI({ cache, token }),
-      types: new TypeAPI({ cache, token }),
+      types: new TypeAPI({ cache, token, typeCache }),
       feefines: new FeeFinesAPI({ cache, token }),
       circulation: new CirculationAPI({ cache, token }),
-    },
-    typeCache: new Map()
+    }
   }
 }
 
