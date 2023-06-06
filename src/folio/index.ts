@@ -38,134 +38,135 @@ import { Resolvers } from '../resolvers-types'
 // Resolvers define how to fetch the types defined in your schema.
 export const resolvers: Resolvers = {
   Query: {
-    patron(parent, args, { dataSources }, info) {
-      return dataSources.patrons.getPatron(args.id)
+    patron(parent, { id }, { dataSources: { patrons } }, info) {
+      return patrons.getPatron(id)
     },
-    instance(parent, args, { dataSources }, info) {
-      return dataSources.instances.getInstance(args.id)
+    instance(parent, { id }, { dataSources: { instances } }, info) {
+      return instances.getInstance(id)
     },
-    instances(parent, args, { dataSources }, info) {
-      return dataSources.instances.getInstances(args)
+    instances(parent, args, { dataSources: { instances } }, info) {
+      return instances.getInstances(args)
     },
-    holdingsRecord(parent, args, { dataSources }, info) {
-      return dataSources.holdings.getHoldingsRecord(args.id)
+    holdingsRecord(parent, { id }, { dataSources: { holdings } }, info) {
+      return holdings.getHoldingsRecord(id)
     },
-    holdingsRecords(parent, args, { dataSources }, info) {
-      return dataSources.holdings.getHoldingsRecords(args)
+    holdingsRecords(parent, args, { dataSources: { holdings } }, info) {
+      return holdings.getHoldingsRecords(args)
     },
-    item(parent, args, { dataSources }, info) {
-      return dataSources.items.getItem(args.id)
+    item(parent, { id }, { dataSources: { items } }, info) {
+      return items.getItem(id)
     },
-    items(parent, args, { dataSources }, info) {
-      return dataSources.items.getItems(args)
+    items(parent, args, { dataSources: { items } }, info) {
+      return items.getItems(args)
     },
 
     // circ rule policies
-    loanPolicies(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache })
+    loanPolicies(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies' })
     },
-    requestPolicies(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<RequestPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies', cache: typeCache })
+    requestPolicies(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<RequestPolicy>("request-policy-storage/request-policies", { key: 'requestPolicies' })
     },
-    overdueFinePolicies(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<OverdueFinePolicy>("overdue-fines-policies", { key: 'overdueFinePolicies', cache: typeCache })
+    overdueFinePolicies(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<OverdueFinePolicy>("overdue-fines-policies", { key: 'overdueFinePolicies' })
     },
-    lostItemFeesPolicies(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<LostItemFeePolicy>("lost-item-fees-policies", { key: 'lostItemFeePolicies', cache: typeCache })
+    lostItemFeesPolicies(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<LostItemFeePolicy>("lost-item-fees-policies", { key: 'lostItemFeePolicies' })
     },
-    patronNoticePolicies(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<PatronNoticePolicy>("patron-notice-policy-storage/patron-notice-policies", { key: 'patronNoticePolicies', cache: typeCache })
+    patronNoticePolicies(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<PatronNoticePolicy>("patron-notice-policy-storage/patron-notice-policies", { key: 'patronNoticePolicies' })
     },
 
     // circ rule criteria
-    patronGroups(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache })
+    patronGroups(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<PatronGroup>("groups", { key: "usergroups" })
     },
-    materialTypes(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<MaterialType>("material-types", { key: "mtypes", cache: typeCache })
+    materialTypes(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<MaterialType>("material-types", { key: "mtypes" })
     },
-    loanTypes(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<LoanType>("loan-types", { key: "loantypes", cache: typeCache })
+    loanTypes(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<LoanType>("loan-types", { key: "loantypes" })
     },
-    institutions(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache })
+    institutions(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<Institution>("location-units/institutions", { key: "locinsts" })
     },
-    campuses(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache })
+    campuses(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<Campus>("location-units/campuses", { key: "loccamps" })
     },
-    libraries(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache })
+    libraries(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<Library>("location-units/libraries", { key: "loclibs" })
     },
-    locations(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache })
+    locations(parent, args, { dataSources: { types } }, info) {
+      return types.getValuesFor<Location>("locations", {})
     }
   },
   Patron: {
-    user(parent, args, { dataSources }, info) {
-      return dataSources.users.getUser(parent.id)
+    user({ id }, args, { dataSources: { users } }, info) {
+      return users.getUser(id)
     },
-    blocks(parent, args, { dataSources }, info) {
-      return dataSources.users.getBlocks(parent.id)
+    blocks({ id }, args, { dataSources: { users } }, info) {
+      return users.getBlocks(id)
     },
-    manualBlocks(parent, args, { dataSources }, info) {
-      return dataSources.users.getManualBlocks(parent.id)
+    manualBlocks({ id }, args, { dataSources: { users } }, info) {
+      return users.getManualBlocks(id)
     },
-    accounts(parent, args, { dataSources }, info) {
-      return dataSources.users.getAccounts(parent.id)
+    accounts({ id }, args, { dataSources: { users } }, info) {
+      return users.getAccounts(id)
     }
   },
   Block: {
-    blockCondition(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.patronBlockConditionId));
+    blockCondition({ patronBlockConditionId }, args, { dataSources: { types } }, info) {
+      return types.getById<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions" }, patronBlockConditionId);
     },
   },
   User: {
-    patronGroupId(parent, args, { dataSources }, info) {
-      return parent.patronGroup;
+    patronGroupId({ patronGroup }, args, context, info) {
+      return patronGroup;
     },
-    patronGroup(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<PatronGroup>("groups", { key: "usergroups", cache: typeCache }).then(map => map.get(parent.patronGroup as unknown as string));
+    patronGroup({ patronGroup }, args, { dataSources: { types } }, info) {
+      return types.getById<PatronGroup>("groups", { key: "usergroups" }, patronGroup as unknown as string);
     },
-    blocks(parent, args, { dataSources }, info) {
-      return dataSources.users.getBlocks(parent.id)
+    blocks({ id }, args, { dataSources: { users } }, info) {
+      return users.getBlocks(id)
     },
-    manualBlocks(parent, args, { dataSources }, info) {
-      return dataSources.users.getManualBlocks(parent.id)
+    manualBlocks({ id }, args, { dataSources: { users } }, info) {
+      return users.getManualBlocks(id)
     },
-    accounts(parent, args, { dataSources }, info) {
-      return dataSources.users.getAccounts(parent.id)
+    accounts({ id }, args, { dataSources: { users } }, info) {
+      return users.getAccounts(id)
     },
-    proxiesFor(parent, args, { dataSources }, info) {
-      return dataSources.users.getProxiesFor(parent.id)
+    proxiesFor({ id }, args, { dataSources: { users } }, info) {
+      return users.getProxiesFor(id)
     },
-    proxiesOf(parent, args, { dataSources }, info) {
-      return dataSources.users.getProxiesOf(parent.id)
+    proxiesOf({ id }, args, { dataSources: { users } }, info) {
+      return users.getProxiesOf(id)
     }
   },
   PatronGroup: {
-    limits(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<PatronBlockLimit>("patron-block-limits", { key: "patronBlockLimits", cache: typeCache }).then(arr => arr.filter(l => l.patronGroupId == parent.id));
+    async limits({ id }, args, { dataSources: { types } }, info) {
+      const arr = await types.getValuesFor<PatronBlockLimit>("patron-block-limits", { key: "patronBlockLimits" })
+      return arr.filter(l => l.patronGroupId == id)
     }
   },
   PatronBlockLimit: {
-    condition(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions", cache: typeCache }).then(map => map.get(parent.conditionId));
+    condition({ conditionId }, args, { dataSources: { types } }, info) {
+      return types.getById<PatronBlockCondition>("patron-block-conditions", { key: "patronBlockConditions" }, conditionId);
     }
   },
   ProxyFor: {
-    user(parent, args, { dataSources }, info) {
-      return dataSources.users.getUser(parent.userId)
+    user({ userId }, args, { dataSources: { users } }, info) {
+      return users.getUser(userId)
     },
-    proxyUser(parent, args, { dataSources }, info) {
-      return dataSources.users.getUser(parent.proxyUserId)
+    proxyUser({ proxyUserId }, args, { dataSources: { users } }, info) {
+      return users.getUser(proxyUserId)
     }
   },
   Hold: {
-    pickupLocation(parent, args, { dataSources }, info) {
-      return dataSources.locations.getLocation(parent.pickupLocationId)
+    pickupLocation({ pickupLocationId }, args, { dataSources: { locations } }, info) {
+      return locations.getLocation(pickupLocationId)
     },
-    status(parent, args, { dataSources, typeCache }, info) {
-      switch(parent.status as unknown as string) {
+    status({ status }, args, context, info) {
+      switch(status as unknown as string) {
         case "Open - Not yet filled": return HoldStatus.OpenNotYetFilled
         case "Open - Awaiting pickup": return HoldStatus.OpenAwaitingPickup
         case "Open - Awaiting delivery": return HoldStatus.OpenAwaitingDelivery
@@ -178,226 +179,226 @@ export const resolvers: Resolvers = {
     }
   },
   PatronLoan: {
-    details(parent, args, { dataSources }, info) {
-      return dataSources.circulation.getLoan(parent.id)
+    details({ id }, args, { dataSources: { circulation  } }, info) {
+      return circulation.getLoan(id)
     }
   },
   Loan: {
-    item(parent, args, { dataSources }, info) {
-      return dataSources.items.getItem(parent.itemId)
+    item({ itemId }, args, { dataSources: { items } }, info) {
+      return items.getItem(itemId)
     },
-    itemEffectiveLocationAtCheckOut(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.itemEffectiveLocationIdAtCheckOut))
+    itemEffectiveLocationAtCheckOut({ itemEffectiveLocationIdAtCheckOut }, args, { dataSources: { types } }, info) {
+      return types.getById<Location>("locations", {}, itemEffectiveLocationIdAtCheckOut)
     },
-    loanPolicy(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies', cache: typeCache }).then(map => map.get(parent.loanPolicyId))
+    loanPolicy({ loanPolicyId }, args, { dataSources: { types } }, info) {
+      return types.getById<LoanPolicy>("loan-policy-storage/loan-policies", { key: 'loanPolicies' }, loanPolicyId)
     },
-    user(parent, args, { dataSources }, info) {
-      return dataSources.users.getUser(parent.userId)
+    user({ userId }, args, { dataSources: { users } }, info) {
+      return users.getUser(userId)
     },
-    proxyUser(parent, args, { dataSources }, info) {
-      return dataSources.users.getUser(parent.proxyUserId)
+    proxyUser({ proxyUserId }, args, { dataSources: { users } }, info) {
+      return users.getUser(proxyUserId)
     }
   },
   LoanPolicyLoansPolicy: {
-    fixedDueDateSchedule(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.fixedDueDateScheduleId))
+    fixedDueDateSchedule({ fixedDueDateScheduleId }, args, { dataSources: { types } }, info) {
+      return types.getById<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules' }, fixedDueDateScheduleId)
     }
   },
   LoanPolicyRenewalsPolicy: {
-    alternateFixedDueDateSchedule(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules', cache: typeCache }).then(map => map.get(parent.alternateFixedDueDateScheduleId))
+    alternateFixedDueDateSchedule({ alternateFixedDueDateScheduleId }, args, { dataSources: { types } }, info) {
+      return types.getById<FixedDueDateSchedule>("fixed-due-date-schedule-storage/fixed-due-date-schedules", { key: 'fixedDueDateSchedules' }, alternateFixedDueDateScheduleId)
     }
   },
   PatronItem: {
-    instance(parent, args, { dataSources }, info) {
-      return dataSources.instances.getInstance(parent.instanceId)
+    instance({ instanceId }, args, { dataSources: { instances } }, info) {
+      return instances.getInstance(instanceId)
     },
-    item(parent, args, { dataSources }, info) {
-      return dataSources.items.getItem(parent.itemId)
+    item({ itemId }, args, { dataSources: { items } }, info) {
+      return items.getItem(itemId)
     }
   },
   Instance: {
-    holdingsRecords(parent, args, { dataSources }, info) {
-      return dataSources.holdings.getByInstanceId(parent.id, args)
+    holdingsRecords({ id }, args, { dataSources: { holdings } }, info) {
+      return holdings.getByInstanceId(id, args)
     },
-    items(parent, args, { dataSources }, info) {
-      return dataSources.items.getByInstanceId(parent.id, args)
+    items({ id }, args, { dataSources: { items } }, info) {
+      return items.getByInstanceId(id, args)
     },
-    async instanceFormats(parent, args, { dataSources, typeCache }, info) {
-      const map = await dataSources.types.getMapFor<InstanceFormat>("instance-formats", { key: 'instanceFormats', cache: typeCache })
-      return parent.instanceFormatIds.map(id => map.get(id))
+    async instanceFormats({ instanceFormatIds }, args, { dataSources: { types } }, info) {
+      const map = await types.getMapFor<InstanceFormat>("instance-formats", { key: 'instanceFormats' })
+      return instanceFormatIds.map(id => map.get(id))
     },
-    instanceType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<InstanceType>("instance-types", { key: 'instanceTypes', cache: typeCache }).then(map => map.get(parent.instanceTypeId))
+    instanceType({ instanceTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<InstanceType>("instance-types", { key: 'instanceTypes' }, instanceTypeId)
     },
-    modeOfIssuance(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ModeOfIssuance>("modes-of-issuance", { key: 'modesOfIssuance', cache: typeCache }).then(map => map.get(parent.modeOfIssuanceId))
+    modeOfIssuance({ modeOfIssuanceId }, args, { dataSources: { types } }, info) {
+      return types.getById<ModeOfIssuance>("modes-of-issuance", { key: 'modesOfIssuance' }, modeOfIssuanceId)
     }
   },
   InstanceAlternativeTitlesItem: {
-    alternativeTitleType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<AlternativeTitleType>("alternative-title-types", { key: 'alternativeTitleTypes', cache: typeCache }).then(map => map.get(parent.alternativeTitleTypeId))
+    alternativeTitleType({ alternativeTitleTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<AlternativeTitleType>("alternative-title-types", { key: 'alternativeTitleTypes' }, alternativeTitleTypeId)
     },
-    authority(parent, args, { dataSources }, info) {
-      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    authority({ authorityId }, args, { dataSources: { types } }, info) {
+      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
     },
   },
   InstanceContributorsItem: {
-    contributorType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ContributorType>("contributor-types", { key: 'contributorTypes', cache: typeCache }).then(map => map.get(parent.contributorTypeId))
+    contributorType({ contributorTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<ContributorType>("contributor-types", { key: 'contributorTypes' }, contributorTypeId)
     },
-    authority(parent, args, { dataSources }, info) {
-      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    authority({ authorityId }, args, { dataSources: { types } }, info) {
+      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
     },
   },
   InstanceSeriesItem: {
-    authority(parent, args, { dataSources }, info) {
-      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    authority({ authorityId }, args, { dataSources: { types } }, info) {
+      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
     },
   },
   InstanceSubjectsItem: {
-    authority(parent, args, { dataSources }, info) {
-      return dataSources.types.getMapFor<Authority>("authorities", { key: 'authorities' }).then(map => map.get(parent.authorityId))
+    authority({ authorityId }, args, { dataSources: { types } }, info) {
+      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
     },
   },
   InstanceElectronicAccessItem: {
-    relationship(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships', cache: typeCache }).then(map => map.get(parent.relationshipId))
+    relationship({ relationshipId }, args, { dataSources: { types } }, info) {
+      return types.getById<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships' }, relationshipId)
     },
   },
   InstanceNotesItem: {
-    instanceNoteType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<InstanceNoteType>("instance-note-types", { key: 'instanceNoteTypes', cache: typeCache }).then(map => map.get(parent.instanceNoteTypeId))
+    instanceNoteType({ instanceNoteTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<InstanceNoteType>("instance-note-types", { key: 'instanceNoteTypes' }, instanceNoteTypeId)
     }
   },
   HoldingsRecord: {
-    items(parent, args, { dataSources }, info) {
-      return dataSources.items.getByHoldingsRecordId(parent.id, args)
+    items({ id }, args, { dataSources: { items } }, info) {
+      return items.getByHoldingsRecordId(id, args)
     },
-    instance(parent, args, { dataSources }, info) {
-      return dataSources.instances.getInstance(parent.instanceId)
+    instance({ instanceId }, args, { dataSources: { instances } }, info) {
+      return instances.getInstance(instanceId)
     },
-    permanentLocation(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.permanentLocationId))
+    permanentLocation({ permanentLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<Location>("locations", {}, permanentLocationId)
     },
-    temporaryLocation(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.temporaryLocationId))
+    temporaryLocation({ temporaryLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<Location>("locations", {}, temporaryLocationId)
     },
-    effectiveLocation(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
+    effectiveLocation({ effectiveLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<Location>("locations", {}, effectiveLocationId)
     },
-    callNumberType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<CallNumberType>("call-number-types", { key: 'callNumberTypes', cache: typeCache }).then(map => map.get(parent.callNumberTypeId))
+    callNumberType({ callNumberTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, callNumberTypeId)
     },
-    illPolicy(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<IlLpolicy>("ill-policies", { key: 'illPolicies', cache: typeCache }).then(map => map.get(parent.illPolicyId))
+    illPolicy({ illPolicyId }, args, { dataSources: { types } }, info) {
+      return types.getById<IlLpolicy>("ill-policies", { key: 'illPolicies' }, illPolicyId)
     },
-    holdingsType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<HoldingsType>("holdings-types", { key: 'holdingsTypes', cache: typeCache }).then(map => map.get(parent.holdingsTypeId))
+    holdingsType({ holdingsTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<HoldingsType>("holdings-types", { key: 'holdingsTypes' }, holdingsTypeId)
     },
-    source(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<HoldingsRecordsSource>("holdings-sources", {
-        key: 'holdingsRecordsSources', cache: typeCache }).then(map => map.get(parent.sourceId))
+    source({ sourceId }, args, { dataSources: { types } }, info) {
+      return types.getById<HoldingsRecordsSource>("holdings-sources", { key: 'holdingsRecordsSources' }, sourceId)
     }
   },
   HoldingsrecordElectronicAccessItem: {
-    relationship(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships', cache: typeCache }).then(map => map.get(parent.relationshipId))
+    relationship({ relationshipId }, args, { dataSources: { types } }, info) {
+      return types.getById<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships' }, relationshipId)
     }
   },
   Item: {
-    holdingsRecord(parent, args, { dataSources }, info) {
-      return dataSources.holdings.getHoldingsRecord(parent.holdingsRecordId)
+    holdingsRecord({ holdingsRecordId }, args, { dataSources: { holdings } }, info) {
+      return holdings.getHoldingsRecord(holdingsRecordId)
     },
-    instance(parent, args, { dataSources }, info) {
-      return dataSources.instances.getByHoldingsRecordId(parent.holdingsRecordId)
+    instance({ holdingsRecordId }, args, { dataSources: { instances } }, info) {
+      return instances.getByHoldingsRecordId(holdingsRecordId)
     },
-    permanentLocation(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.permanentLocationId))
+    permanentLocation({ permanentLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<Location>("locations", {}, permanentLocationId)
     },
-    temporaryLocation(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.temporaryLocationId))
+    temporaryLocation({ temporaryLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<Location>("locations", {}, temporaryLocationId)
     },
-    effectiveLocation(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Location>("locations", { cache: typeCache }).then(map => map.get(parent.effectiveLocationId))
+    effectiveLocation({ effectiveLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<Location>("locations", {}, effectiveLocationId)
     },
-    itemDamagedStatus(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ItemDamagedStatus>("item-damaged-statuses", { cache: typeCache }).then(map => map.get(parent.itemDamagedStatusId))
+    itemDamagedStatus({ itemDamagedStatusId }, args, { dataSources: { types } }, info) {
+      return types.getById<ItemDamagedStatus>("item-damaged-statuses", {}, itemDamagedStatusId)
     },
-    inTransitDestinationServicePoint(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ServicePoint>("service-points", { cache: typeCache }).then(map => map.get(parent.inTransitDestinationServicePointId))
+    inTransitDestinationServicePoint({ inTransitDestinationServicePointId }, args, { dataSources: { types } }, info) {
+      return types.getById<ServicePoint>("service-points", {}, inTransitDestinationServicePointId)
     },
-    permanentLoanType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<LoanType>("loan-types", { cache: typeCache }).then(map => map.get(parent.permanentLoanTypeId))
+    permanentLoanType({ permanentLoanTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<LoanType>("loan-types", {}, permanentLoanTypeId)
     },
-    temporaryLoanType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<LoanType>("loan-types", { cache: typeCache }).then(map => map.get(parent.temporaryLoanTypeId))
+    temporaryLoanType({ temporaryLoanTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<LoanType>("loan-types", {}, temporaryLoanTypeId)
     },
-    itemLevelCallNumberType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<CallNumberType>("call-number-types", { key: 'callNumberTypes', cache: typeCache }).then(map => map.get(parent.itemLevelCallNumberTypeId))
+    itemLevelCallNumberType({ itemLevelCallNumberTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, itemLevelCallNumberTypeId)
     }
   },
   ItemEffectiveCallNumberComponents: {
-    type(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<CallNumberType>("call-number-types", { key: 'callNumberTypes', cache: typeCache }).then(map => map.get(parent.typeId))
+    type({ typeId }, args, { dataSources: { types } }, info) {
+      return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, typeId)
     }
   },
   InstanceClassificationsItem: {
-    classificationType(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ClassificationType>("classification-types", { cache: typeCache }).then(map => map.get(parent.classificationTypeId))
+    classificationType({ classificationTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<ClassificationType>("classification-types", {}, classificationTypeId)
     }
   },
   Location: {
-    institution(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache }).then(map => map.get(parent.institutionId))
+    institution({ institutionId }, args, { dataSources: { types } }, info) {
+      return types.getById<Institution>("location-units/institutions", { key: "locinsts" }, institutionId);
     },
-    campus(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache }).then(map => map.get(parent.campusId))
+    campus({ campusId }, args, { dataSources: { types } }, info) {
+      return types.getById<Campus>("location-units/campuses", { key: "loccamps" }, campusId)
     },
-    library(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Library>("location-units/libraries", { key: "loclibs", cache: typeCache }).then(map => map.get(parent.libraryId))
+    library({ libraryId }, args, { dataSources: { types } }, info) {
+      return types.getById<Library>("location-units/libraries", { key: "loclibs" }, libraryId)
     },
-    primaryServicePointObject(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<ServicePoint>("service-points", { key: "servicepoints", cache: typeCache }).then(map => map.get(parent.primaryServicePoint))
+    primaryServicePointObject({ primaryServicePoint }, args, { dataSources: { types } }, info) {
+      return types.getById<ServicePoint>("service-points", { key: "servicepoints" }, primaryServicePoint)
     },
-    servicePoints(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<ServicePoint>("service-points", { key: "servicepoints", cache: typeCache }).then(arr => arr.filter(sp => parent.servicePointIds.includes(sp.id)))
+    servicePoints({ servicePointIds = [] }, args, { dataSources: { types } }, info) {
+      return types.getByIds<ServicePoint>("service-points", { key: "servicepoints" }, servicePointIds)
     }
   },
   Campus: {
-    institution(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Institution>("location-units/institutions", { key: "locinsts", cache: typeCache }).then(map => map.get(parent.institutionId))
+    institution({ institutionId }, args, { dataSources: { types } }, info) {
+      return types.getById<Institution>("location-units/institutions", { key: "locinsts" }, institutionId)
     }
   },
   Library: {
-    campus(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getMapFor<Campus>("location-units/campuses", { key: "loccamps", cache: typeCache }).then(map => map.get(parent.campusId))
+    campus({ campusId }, args, { dataSources: { types } }, info) {
+      return types.getById<Campus>("location-units/campuses", { key: "loccamps" }, campusId)
     },
-    locations(parent, args, { dataSources, typeCache }, info) {
-      return dataSources.types.getValuesFor<Location>("locations", { cache: typeCache }).then(values => values.filter(v => v.libraryId == parent.id))
+    async locations({ id }, args, { dataSources: { types } }, info) {
+      const values = await types.getValuesFor<Location>("locations", {})
+      return values.filter(v => v.libraryId == id)
     },
   },
   PatronCharge: {
-    feeFine(parent, args, { dataSources }, info) {
-      if (!parent.feeFineId) return;
+    feeFine({ feeFineId }, args, { dataSources: { feefines } }, info) {
+      if (!feeFineId) return;
 
-      return dataSources.feefines.getFeeFine(parent.feeFineId)
+      return feefines.getFeeFine(feeFineId)
     }
   },
   Account: {
-    user(parent, args, { dataSources }, info) {
-      return dataSources.users.getUser(parent.userId)
+    user({ userId }, args, { dataSources: { users } }, info) {
+      return users.getUser(userId)
     },
-    loan(parent, args, { dataSources }, info) {
-      return dataSources.circulation.getLoan(parent.id)
+    loan({ loanId }, args, { dataSources: { circulation } }, info) {
+      return circulation.getLoan(loanId)
     },
-    item(parent, args, { dataSources }, info) {
-      if (!parent.itemId) return null;
-      return dataSources.items.getItem(parent.itemId)
+    item({ itemId }, args, { dataSources: { items } }, info) {
+      if (!itemId) return null;
+      return items.getItem(itemId)
     },
-    feeFine(parent, args, { dataSources }, info) {
-      return dataSources.feefines.getFeeFine(parent.feeFineId)
+    feeFine({ feeFineId }, args, { dataSources: { feefines } }, info) {
+      return feefines.getFeeFine(feeFineId)
     },
   },
   UUID: UUIDResolver

@@ -48,8 +48,7 @@ const context: FolioContext = {
     types: new TypeAPI(apiOptions),
     feefines: new FeeFinesAPI(apiOptions),
     circulation: new CirculationAPI(apiOptions),
-  },
-  typeCache: new Map()
+  }
 }
 
 // expose queryTestServer for use in tests, allowing each test to pass in its own query and variables
