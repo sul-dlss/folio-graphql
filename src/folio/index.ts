@@ -176,6 +176,9 @@ export const resolvers: Resolvers = {
         case "Closed - Unfilled": return HoldStatus.ClosedUnfilled
         case "Closed - Pickup expired": return HoldStatus.ClosedPickupExpired
       }
+    },
+    queueTotalLength(parent, args, { dataSources }, info) { 
+      return dataSources.circulation.getRequestQueueLength(parent.item)
     }
   },
   PatronLoan: {
