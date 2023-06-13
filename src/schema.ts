@@ -376,6 +376,7 @@ export type Hold = {
   pickupLocationId: Scalars['UUID']['output'];
   /** The position in the queue for this patron */
   queuePosition?: Maybe<Scalars['Int']['output']>;
+  queueTotalLength?: Maybe<Scalars['Int']['output']>;
   /** The date when the request was made */
   requestDate: Scalars['DateTime']['output'];
   /** The UUID of the request */
@@ -1585,6 +1586,55 @@ export type OverdueFinePolicy = {
   overdueRecallFine?: Maybe<Quantity>;
 };
 
+/** Blocks to override (e.g. during checkout or renewal) */
+export type OverrideBlocks = {
+  __typename?: 'OverrideBlocks';
+  /** Reason for override */
+  comment?: Maybe<Scalars['String']['output']>;
+  /** Item limit block */
+  itemLimitBlock?: Maybe<OverrideBlocksItemLimitBlock>;
+  /** 'Item not loanable' block */
+  itemNotLoanableBlock?: Maybe<OverrideBlocksItemNotLoanableBlock>;
+  /** Automated patron block */
+  patronBlock?: Maybe<OverrideBlocksPatronBlock>;
+  /** Renewal block */
+  renewalBlock?: Maybe<OverrideBlocksRenewalBlock>;
+  /** Override renewal block which requires due date field */
+  renewalDueDateRequiredBlock?: Maybe<OverrideBlocksRenewalDueDateRequiredBlock>;
+};
+
+/** Item limit block */
+export type OverrideBlocksItemLimitBlock = {
+  __typename?: 'OverrideBlocksItemLimitBlock';
+  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+};
+
+/** 'Item not loanable' block */
+export type OverrideBlocksItemNotLoanableBlock = {
+  __typename?: 'OverrideBlocksItemNotLoanableBlock';
+  /** Due date for a new loan */
+  dueDate: Scalars['DateTime']['output'];
+};
+
+/** Automated patron block */
+export type OverrideBlocksPatronBlock = {
+  __typename?: 'OverrideBlocksPatronBlock';
+  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+};
+
+/** Renewal block */
+export type OverrideBlocksRenewalBlock = {
+  __typename?: 'OverrideBlocksRenewalBlock';
+  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+};
+
+/** Override renewal block which requires due date field */
+export type OverrideBlocksRenewalDueDateRequiredBlock = {
+  __typename?: 'OverrideBlocksRenewalDueDateRequiredBlock';
+  /** Due date for a new loan */
+  dueDate: Scalars['DateTime']['output'];
+};
+
 /** Account schema for patron portal integration */
 export type Patron = {
   __typename?: 'Patron';
@@ -2023,6 +2073,138 @@ export type QueryPatronArgs = {
   id: Scalars['UUID']['input'];
 };
 
+/** Request for an item that might be at a different location or already checked out to another patron */
+export type Request = {
+  __typename?: 'Request';
+  /** Additional information about a cancellation */
+  cancellationAdditionalInformation?: Maybe<Scalars['String']['output']>;
+  /** The id of the request reason */
+  cancellationReasonId?: Maybe<Scalars['UUID']['output']>;
+  /** The id of the user that cancelled the request */
+  cancelledByUserId?: Maybe<Scalars['UUID']['output']>;
+  /** Date the request was cancelled */
+  cancelledDate?: Maybe<Scalars['DateTime']['output']>;
+  /** Address the item is to be delivered to (derived from requester information) */
+  deliveryAddress?: Maybe<RequestDeliveryAddress>;
+  /** Deliver to the address of this type, for the requesting patron */
+  deliveryAddressTypeId?: Maybe<Scalars['UUID']['output']>;
+  /** How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester) */
+  fulfillmentPreference: RequestFulfillmentPreference;
+  /** Date when an item returned to the hold shelf expires */
+  holdShelfExpirationDate?: Maybe<Scalars['DateTime']['output']>;
+  /** ID of the holdings record being requested */
+  holdingsRecordId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the request */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** Copy of some instance metadata (used for searching and sorting) */
+  instance?: Maybe<RequestInstance>;
+  /** ID of the instance being requested */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+  /** Copy of some item metadata (used for searching and sorting) */
+  item?: Maybe<RequestItem>;
+  /** ID of the item being requested */
+  itemId?: Maybe<Scalars['UUID']['output']>;
+  /** Metadata about creation and changes to requests, provided by the server (client should not provide) */
+  metadata?: Maybe<Metadata>;
+  /** Comments made by the patron */
+  patronComments?: Maybe<Scalars['String']['output']>;
+  /** The full object of the Service Point record from pickupServicePointId */
+  pickupServicePoint?: Maybe<RequestPickupServicePoint>;
+  /** The ID of the Service Point where this request can be picked up */
+  pickupServicePointId?: Maybe<Scalars['UUID']['output']>;
+  /** position of the request in a per-item request queue */
+  position?: Maybe<Scalars['Int']['output']>;
+  /** Copy of some proxy patron metadata (used for searching and sorting), will be taken from the user referred to by the proxyUserId */
+  proxy?: Maybe<RequestProxy>;
+  /** ID of the user representing a proxy for the patron */
+  proxyUserId?: Maybe<Scalars['UUID']['output']>;
+  /** Date the request was made */
+  requestDate: Scalars['DateTime']['output'];
+  /** Date when the request expires */
+  requestExpirationDate?: Maybe<Scalars['DateTime']['output']>;
+  /** Level of the request - Item or Title */
+  requestLevel?: Maybe<RequestRequestLevel>;
+  /** Additional parameters used for request processing and discarded afterwards. Not part of request record. */
+  requestProcessingParameters?: Maybe<RequestRequestProcessingParameters>;
+  /** Whether the item should be held upon return, recalled or paged for */
+  requestType: RequestRequestType;
+  /** Copy of some requesting patron metadata (used for searching and sorting), will be taken from the user referred to by the requesterId */
+  requester?: Maybe<RequestRequester>;
+  /** ID of the user who made the request */
+  requesterId: Scalars['UUID']['output'];
+  /** Request fields used for search */
+  searchIndex?: Maybe<RequestSearchIndex>;
+  /** Status of the request */
+  status?: Maybe<RequestStatus>;
+  /** Tags */
+  tags?: Maybe<Tags>;
+};
+
+/** Address the item is to be delivered to (derived from requester information) */
+export type RequestDeliveryAddress = {
+  __typename?: 'RequestDeliveryAddress';
+  /** Address line 1 */
+  addressLine1?: Maybe<Scalars['String']['output']>;
+  /** Address line 2 */
+  addressLine2?: Maybe<Scalars['String']['output']>;
+  /** Type of address (refers to address types) */
+  addressTypeId?: Maybe<Scalars['UUID']['output']>;
+  /** City name */
+  city?: Maybe<Scalars['String']['output']>;
+  /** Country code */
+  countryId?: Maybe<Scalars['String']['output']>;
+  /** Postal code */
+  postalCode?: Maybe<Scalars['String']['output']>;
+  /** Region */
+  region?: Maybe<Scalars['String']['output']>;
+};
+
+export enum RequestFulfillmentPreference {
+  Delivery = 'Delivery',
+  HoldShelf = 'Hold_Shelf'
+}
+
+/** Copy of some instance metadata (used for searching and sorting) */
+export type RequestInstance = {
+  __typename?: 'RequestInstance';
+  /** An extensible set of name-value pairs of identifiers associated with the resource */
+  identifiers?: Maybe<Array<RequestInstanceIdentifiersItem>>;
+  /** title of the item */
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type RequestInstanceIdentifiersItem = {
+  __typename?: 'RequestInstanceIdentifiersItem';
+  /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
+  identifierTypeId: Scalars['UUID']['output'];
+  /** Resource identifier value */
+  value: Scalars['String']['output'];
+};
+
+/** Copy of some item metadata (used for searching and sorting) */
+export type RequestItem = {
+  __typename?: 'RequestItem';
+  /** barcode of the item */
+  barcode?: Maybe<Scalars['String']['output']>;
+};
+
+/** The full object of the Service Point record from pickupServicePointId */
+export type RequestPickupServicePoint = {
+  __typename?: 'RequestPickupServicePoint';
+  /** Unique code for the service point */
+  code?: Maybe<Scalars['String']['output']>;
+  /** Description of the service point */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Human-readable name for the service point */
+  discoveryDisplayName?: Maybe<Scalars['String']['output']>;
+  /** Unique name for the service point */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Is this service point a pickup location? */
+  pickupLocation?: Maybe<Scalars['Boolean']['output']>;
+  /** Shelving lag time */
+  shelvingLagTime?: Maybe<Scalars['Int']['output']>;
+};
+
 /** request policy schema */
 export type RequestPolicy = {
   __typename?: 'RequestPolicy';
@@ -2037,6 +2219,112 @@ export type RequestPolicy = {
   /** Whether the item should be held upon return, recalled or paged for */
   requestTypes?: Maybe<Array<RequestType>>;
 };
+
+/** Copy of some proxy patron metadata (used for searching and sorting), will be taken from the user referred to by the proxyUserId */
+export type RequestProxy = {
+  __typename?: 'RequestProxy';
+  /** barcode of the proxy patron (read only, defined by the server) */
+  barcode?: Maybe<Scalars['String']['output']>;
+  /** first name of the proxy patron (read only, defined by the server) */
+  firstName?: Maybe<Scalars['String']['output']>;
+  /** last name of the proxy patron (read only, defined by the server) */
+  lastName?: Maybe<Scalars['String']['output']>;
+  /** middle name of the proxy patron (read only, defined by the server) */
+  middleName?: Maybe<Scalars['String']['output']>;
+  /** record for the user's patrongroup */
+  patronGroup?: Maybe<RequestProxyPatronGroup>;
+  /** UUID for the patrongroup that this user belongs to */
+  patronGroupId?: Maybe<Scalars['UUID']['output']>;
+};
+
+/** record for the user's patrongroup */
+export type RequestProxyPatronGroup = {
+  __typename?: 'RequestProxyPatronGroup';
+  /** A description of the patrongroup */
+  desc?: Maybe<Scalars['String']['output']>;
+  /** The unique name of the patrongroup */
+  group?: Maybe<Scalars['String']['output']>;
+  /** ID of the patrongroup */
+  id?: Maybe<Scalars['UUID']['output']>;
+};
+
+export enum RequestRequestLevel {
+  Item = 'Item'
+}
+
+/** Additional parameters used for request processing and discarded afterwards. Not part of request record. */
+export type RequestRequestProcessingParameters = {
+  __typename?: 'RequestRequestProcessingParameters';
+  /** Blocks to override if user has corresponding permissions */
+  overrideBlocks?: Maybe<OverrideBlocks>;
+};
+
+export enum RequestRequestType {
+  Hold = 'Hold',
+  Page = 'Page',
+  Recall = 'Recall'
+}
+
+/** Copy of some requesting patron metadata (used for searching and sorting), will be taken from the user referred to by the requesterId */
+export type RequestRequester = {
+  __typename?: 'RequestRequester';
+  /** barcode of the patron (read only, defined by the server) */
+  barcode?: Maybe<Scalars['String']['output']>;
+  /** first name of the patron (read only, defined by the server) */
+  firstName?: Maybe<Scalars['String']['output']>;
+  /** last name of the patron (read only, defined by the server) */
+  lastName?: Maybe<Scalars['String']['output']>;
+  /** middle name of the patron (read only, defined by the server) */
+  middleName?: Maybe<Scalars['String']['output']>;
+  /** record for the user's patron group */
+  patronGroup?: Maybe<RequestRequesterPatronGroup>;
+  /** UUID for the patron group that this user belongs to */
+  patronGroupId?: Maybe<Scalars['UUID']['output']>;
+};
+
+/** record for the user's patron group */
+export type RequestRequesterPatronGroup = {
+  __typename?: 'RequestRequesterPatronGroup';
+  /** A description of the patron group */
+  desc?: Maybe<Scalars['String']['output']>;
+  /** The unique name of the patron group */
+  group?: Maybe<Scalars['String']['output']>;
+  /** ID of the patron group */
+  id?: Maybe<Scalars['UUID']['output']>;
+};
+
+/** Request fields used for search */
+export type RequestSearchIndex = {
+  __typename?: 'RequestSearchIndex';
+  /** Effective call number components */
+  callNumberComponents?: Maybe<RequestSearchIndexCallNumberComponents>;
+  /** The name of the request pickup service point */
+  pickupServicePointName?: Maybe<Scalars['String']['output']>;
+  /** A system generated normalization of the call number that allows for call number sorting in reports and search results */
+  shelvingOrder?: Maybe<Scalars['String']['output']>;
+};
+
+/** Effective call number components */
+export type RequestSearchIndexCallNumberComponents = {
+  __typename?: 'RequestSearchIndexCallNumberComponents';
+  /** Effective Call Number is an identifier assigned to an item or its holding and associated with the item. */
+  callNumber?: Maybe<Scalars['String']['output']>;
+  /** Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item. */
+  prefix?: Maybe<Scalars['String']['output']>;
+  /** Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item. */
+  suffix?: Maybe<Scalars['String']['output']>;
+};
+
+export enum RequestStatus {
+  ClosedCancelled = 'Closed___Cancelled',
+  ClosedFilled = 'Closed___Filled',
+  ClosedPickupExpired = 'Closed___Pickup_expired',
+  ClosedUnfilled = 'Closed___Unfilled',
+  OpenAwaitingDelivery = 'Open___Awaiting_delivery',
+  OpenAwaitingPickup = 'Open___Awaiting_pickup',
+  OpenInTransit = 'Open___In_transit',
+  OpenNotYetFilled = 'Open___Not_yet_filled'
+}
 
 export enum RequestType {
   Hold = 'Hold',

@@ -1816,6 +1816,374 @@ type LoanFeesAndFines {
   amountRemainingToPay: Float
 }
 
+"""
+Request for an item that might be at a different location or already checked out to another patron
+"""
+type Request {
+  """UUID of the request"""
+  id: UUID
+
+  """Whether the item should be held upon return, recalled or paged for"""
+  requestType: RequestRequestType!
+
+  """Level of the request - Item or Title"""
+  requestLevel: RequestRequestLevel
+
+  """Date the request was made"""
+  requestDate: DateTime!
+
+  """Comments made by the patron"""
+  patronComments: String
+
+  """ID of the user who made the request"""
+  requesterId: UUID!
+
+  """ID of the user representing a proxy for the patron"""
+  proxyUserId: UUID
+
+  """ID of the instance being requested"""
+  instanceId: UUID
+
+  """ID of the holdings record being requested"""
+  holdingsRecordId: UUID
+
+  """ID of the item being requested"""
+  itemId: UUID
+
+  """Status of the request"""
+  status: RequestStatus
+
+  """The id of the request reason"""
+  cancellationReasonId: UUID
+
+  """The id of the user that cancelled the request"""
+  cancelledByUserId: UUID
+
+  """Additional information about a cancellation"""
+  cancellationAdditionalInformation: String
+
+  """Date the request was cancelled"""
+  cancelledDate: DateTime
+
+  """position of the request in a per-item request queue"""
+  position: Int
+
+  """Copy of some instance metadata (used for searching and sorting)"""
+  instance: RequestInstance
+
+  """Copy of some item metadata (used for searching and sorting)"""
+  item: RequestItem
+
+  """
+  Copy of some requesting patron metadata (used for searching and sorting), will be taken from the user referred to by the requesterId
+  """
+  requester: RequestRequester
+
+  """
+  Copy of some proxy patron metadata (used for searching and sorting), will be taken from the user referred to by the proxyUserId
+  """
+  proxy: RequestProxy
+
+  """
+  How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester)
+  """
+  fulfillmentPreference: RequestFulfillmentPreference!
+
+  """Deliver to the address of this type, for the requesting patron"""
+  deliveryAddressTypeId: UUID
+
+  """
+  Address the item is to be delivered to (derived from requester information)
+  """
+  deliveryAddress: RequestDeliveryAddress
+
+  """Date when the request expires"""
+  requestExpirationDate: DateTime
+
+  """Date when an item returned to the hold shelf expires"""
+  holdShelfExpirationDate: DateTime
+
+  """The ID of the Service Point where this request can be picked up"""
+  pickupServicePointId: UUID
+
+  """The full object of the Service Point record from pickupServicePointId"""
+  pickupServicePoint: RequestPickupServicePoint
+
+  """Tags"""
+  tags: Tags
+
+  """
+  Metadata about creation and changes to requests, provided by the server (client should not provide)
+  """
+  metadata: Metadata
+
+  """
+  Additional parameters used for request processing and discarded afterwards. Not part of request record.
+  """
+  requestProcessingParameters: RequestRequestProcessingParameters
+
+  """Request fields used for search"""
+  searchIndex: RequestSearchIndex
+}
+
+enum RequestRequestType {
+  Hold
+  Recall
+  Page
+}
+
+enum RequestRequestLevel {
+  Item
+}
+
+enum RequestStatus {
+  Open___Not_yet_filled
+  Open___Awaiting_pickup
+  Open___In_transit
+  Open___Awaiting_delivery
+  Closed___Filled
+  Closed___Cancelled
+  Closed___Unfilled
+  Closed___Pickup_expired
+}
+
+"""Copy of some instance metadata (used for searching and sorting)"""
+type RequestInstance {
+  """title of the item"""
+  title: String
+
+  """
+  An extensible set of name-value pairs of identifiers associated with the resource
+  """
+  identifiers: [RequestInstanceIdentifiersItem!]
+}
+
+type RequestInstanceIdentifiersItem {
+  """Resource identifier value"""
+  value: String!
+
+  """
+  UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers)
+  """
+  identifierTypeId: UUID!
+}
+
+"""Copy of some item metadata (used for searching and sorting)"""
+type RequestItem {
+  """barcode of the item"""
+  barcode: String
+}
+
+"""
+Copy of some requesting patron metadata (used for searching and sorting), will be taken from the user referred to by the requesterId
+"""
+type RequestRequester {
+  """first name of the patron (read only, defined by the server)"""
+  firstName: String
+
+  """last name of the patron (read only, defined by the server)"""
+  lastName: String
+
+  """middle name of the patron (read only, defined by the server)"""
+  middleName: String
+
+  """barcode of the patron (read only, defined by the server)"""
+  barcode: String
+
+  """UUID for the patron group that this user belongs to"""
+  patronGroupId: UUID
+
+  """record for the user's patron group"""
+  patronGroup: RequestRequesterPatronGroup
+}
+
+"""record for the user's patron group"""
+type RequestRequesterPatronGroup {
+  """ID of the patron group"""
+  id: UUID
+
+  """The unique name of the patron group"""
+  group: String
+
+  """A description of the patron group"""
+  desc: String
+}
+
+"""
+Copy of some proxy patron metadata (used for searching and sorting), will be taken from the user referred to by the proxyUserId
+"""
+type RequestProxy {
+  """first name of the proxy patron (read only, defined by the server)"""
+  firstName: String
+
+  """last name of the proxy patron (read only, defined by the server)"""
+  lastName: String
+
+  """middle name of the proxy patron (read only, defined by the server)"""
+  middleName: String
+
+  """barcode of the proxy patron (read only, defined by the server)"""
+  barcode: String
+
+  """UUID for the patrongroup that this user belongs to"""
+  patronGroupId: UUID
+
+  """record for the user's patrongroup"""
+  patronGroup: RequestProxyPatronGroup
+}
+
+"""record for the user's patrongroup"""
+type RequestProxyPatronGroup {
+  """ID of the patrongroup"""
+  id: UUID
+
+  """The unique name of the patrongroup"""
+  group: String
+
+  """A description of the patrongroup"""
+  desc: String
+}
+
+enum RequestFulfillmentPreference {
+  Hold_Shelf
+  Delivery
+}
+
+"""
+Address the item is to be delivered to (derived from requester information)
+"""
+type RequestDeliveryAddress {
+  """Address line 1"""
+  addressLine1: String
+
+  """Address line 2"""
+  addressLine2: String
+
+  """City name"""
+  city: String
+
+  """Region"""
+  region: String
+
+  """Postal code"""
+  postalCode: String
+
+  """Country code"""
+  countryId: String
+
+  """Type of address (refers to address types)"""
+  addressTypeId: UUID
+}
+
+"""The full object of the Service Point record from pickupServicePointId"""
+type RequestPickupServicePoint {
+  """Unique name for the service point"""
+  name: String
+
+  """Unique code for the service point"""
+  code: String
+
+  """Human-readable name for the service point"""
+  discoveryDisplayName: String
+
+  """Description of the service point"""
+  description: String
+
+  """Shelving lag time"""
+  shelvingLagTime: Int
+
+  """Is this service point a pickup location?"""
+  pickupLocation: Boolean
+}
+
+"""
+Additional parameters used for request processing and discarded afterwards. Not part of request record.
+"""
+type RequestRequestProcessingParameters {
+  """Blocks to override if user has corresponding permissions"""
+  overrideBlocks: OverrideBlocks
+}
+
+"""Blocks to override (e.g. during checkout or renewal)"""
+type OverrideBlocks {
+  """'Item not loanable' block"""
+  itemNotLoanableBlock: OverrideBlocksItemNotLoanableBlock
+
+  """Automated patron block"""
+  patronBlock: OverrideBlocksPatronBlock
+
+  """Item limit block"""
+  itemLimitBlock: OverrideBlocksItemLimitBlock
+
+  """Renewal block"""
+  renewalBlock: OverrideBlocksRenewalBlock
+
+  """Override renewal block which requires due date field"""
+  renewalDueDateRequiredBlock: OverrideBlocksRenewalDueDateRequiredBlock
+
+  """Reason for override"""
+  comment: String
+}
+
+"""'Item not loanable' block"""
+type OverrideBlocksItemNotLoanableBlock {
+  """Due date for a new loan"""
+  dueDate: DateTime!
+}
+
+"""Automated patron block"""
+type OverrideBlocksPatronBlock {
+  _typesWithoutFieldsAreNotAllowed_: String
+}
+
+"""Item limit block"""
+type OverrideBlocksItemLimitBlock {
+  _typesWithoutFieldsAreNotAllowed_: String
+}
+
+"""Renewal block"""
+type OverrideBlocksRenewalBlock {
+  _typesWithoutFieldsAreNotAllowed_: String
+}
+
+"""Override renewal block which requires due date field"""
+type OverrideBlocksRenewalDueDateRequiredBlock {
+  """Due date for a new loan"""
+  dueDate: DateTime!
+}
+
+"""Request fields used for search"""
+type RequestSearchIndex {
+  """Effective call number components"""
+  callNumberComponents: RequestSearchIndexCallNumberComponents
+
+  """
+  A system generated normalization of the call number that allows for call number sorting in reports and search results
+  """
+  shelvingOrder: String
+
+  """The name of the request pickup service point"""
+  pickupServicePointName: String
+}
+
+"""Effective call number components"""
+type RequestSearchIndexCallNumberComponents {
+  """
+  Effective Call Number is an identifier assigned to an item or its holding and associated with the item.
+  """
+  callNumber: String
+
+  """
+  Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item.
+  """
+  prefix: String
+
+  """
+  Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item.
+  """
+  suffix: String
+}
+
 """User fines/fees account"""
 type Account {
   """Amount of the fine/fee"""
@@ -2932,6 +3300,7 @@ extend type Loan {
 
 extend type Hold {
   pickupLocation: ServicePoint
+  queueTotalLength: Int
 }
 
 extend type Instance {
