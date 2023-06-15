@@ -218,6 +218,7 @@ export const resolvers: Resolvers = {
       return instances.getInstance(instanceId)
     },
     item({ itemId }, args, { dataSources: { items } }, info) {
+      if (!itemId) return null;
       return items.getItem(itemId)
     }
   },
