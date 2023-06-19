@@ -3301,6 +3301,7 @@ extend type Loan {
 extend type Hold {
   pickupLocation: ServicePoint
   queueTotalLength: Int
+  details: Request
 }
 
 extend type Instance {
