@@ -3387,3 +3387,12 @@ extend type LoanPolicyRenewalsPolicy {
 extend type Block {
   blockCondition: PatronBlockCondition
 }
+
+extend type ServicePoint {
+  details: ServicePointDetails
+}
+
+type ServicePointDetails {
+  """Should this service point be a default pickup option for requests?"""
+  default_pickup_location: Boolean
+}

@@ -2353,6 +2353,7 @@ export type ServicePoint = {
   code: Scalars['String']['output'];
   /** description of the service-point */
   description?: Maybe<Scalars['String']['output']>;
+  details?: Maybe<ServicePointDetails>;
   /** display name, a required field */
   discoveryDisplayName: Scalars['String']['output'];
   /** enum for closedLibraryDateManagement associated with hold shelf */
@@ -2370,6 +2371,12 @@ export type ServicePoint = {
   shelvingLagTime?: Maybe<Scalars['Int']['output']>;
   /** List of staff slips for this service point */
   staffSlips?: Maybe<Array<ServicepointStaffSlipsItem>>;
+};
+
+export type ServicePointDetails = {
+  __typename?: 'ServicePointDetails';
+  /** Should this service point be a default pickup option for requests? */
+  default_pickup_location?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export enum ServicepointHoldShelfClosedLibraryDateManagement {
@@ -2746,6 +2753,7 @@ export type ResolversTypes = ResolversObject<{
   RequestType: RequestType;
   Schedule: ResolverTypeWrapper<Schedule>;
   ServicePoint: ResolverTypeWrapper<ServicePoint>;
+  ServicePointDetails: ResolverTypeWrapper<ServicePointDetails>;
   ServicepointHoldShelfClosedLibraryDateManagement: ServicepointHoldShelfClosedLibraryDateManagement;
   ServicepointStaffSlipsItem: ResolverTypeWrapper<ServicepointStaffSlipsItem>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -2892,6 +2900,7 @@ export type ResolversParentTypes = ResolversObject<{
   RequestSearchIndexCallNumberComponents: RequestSearchIndexCallNumberComponents;
   Schedule: Schedule;
   ServicePoint: ServicePoint;
+  ServicePointDetails: ServicePointDetails;
   ServicepointStaffSlipsItem: ServicepointStaffSlipsItem;
   String: Scalars['String']['output'];
   Tags: Tags;
@@ -4237,6 +4246,7 @@ export type ScheduleResolvers<ContextType = FolioContext, ParentType extends Res
 export type ServicePointResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePoint'] = ResolversParentTypes['ServicePoint']> = ResolversObject<{
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['ServicePointDetails']>, ParentType, ContextType>;
   discoveryDisplayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   holdShelfClosedLibraryDateManagement?: Resolver<Maybe<ResolversTypes['ServicepointHoldShelfClosedLibraryDateManagement']>, ParentType, ContextType>;
   holdShelfExpiryPeriod?: Resolver<Maybe<ResolversTypes['TimePeriod']>, ParentType, ContextType>;
@@ -4246,6 +4256,11 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
   pickupLocation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   shelvingLagTime?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   staffSlips?: Resolver<Maybe<Array<ResolversTypes['ServicepointStaffSlipsItem']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ServicePointDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePointDetails'] = ResolversParentTypes['ServicePointDetails']> = ResolversObject<{
+  default_pickup_location?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -4463,6 +4478,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   RequestSearchIndexCallNumberComponents?: RequestSearchIndexCallNumberComponentsResolvers<ContextType>;
   Schedule?: ScheduleResolvers<ContextType>;
   ServicePoint?: ServicePointResolvers<ContextType>;
+  ServicePointDetails?: ServicePointDetailsResolvers<ContextType>;
   ServicepointStaffSlipsItem?: ServicepointStaffSlipsItemResolvers<ContextType>;
   Tags?: TagsResolvers<ContextType>;
   TimePeriod?: TimePeriodResolvers<ContextType>;

@@ -2350,6 +2350,7 @@ export type ServicePoint = {
   code: Scalars['String']['output'];
   /** description of the service-point */
   description?: Maybe<Scalars['String']['output']>;
+  details?: Maybe<ServicePointDetails>;
   /** display name, a required field */
   discoveryDisplayName: Scalars['String']['output'];
   /** enum for closedLibraryDateManagement associated with hold shelf */
@@ -2367,6 +2368,12 @@ export type ServicePoint = {
   shelvingLagTime?: Maybe<Scalars['Int']['output']>;
   /** List of staff slips for this service point */
   staffSlips?: Maybe<Array<ServicepointStaffSlipsItem>>;
+};
+
+export type ServicePointDetails = {
+  __typename?: 'ServicePointDetails';
+  /** Should this service point be a default pickup option for requests? */
+  default_pickup_location?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export enum ServicepointHoldShelfClosedLibraryDateManagement {
