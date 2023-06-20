@@ -18,7 +18,7 @@ import Honeybadger from '@honeybadger-io/js';
 import { resolvers } from './folio/index.js';
 import PatronsAPI from "./folio/patrons-api.js"
 import UsersAPI from "./folio/users-api.js"
-import LocationsAPI from "./folio/locations-api.js"
+import ServicePointsAPI from "./folio/service-points-api.js"
 import InstancesAPI from "./folio/instances-api.js"
 import ItemsAPI from "./folio/items-api.js"
 import HoldingsAPI from "./folio/holdings-api.js"
@@ -75,7 +75,7 @@ const context = async ({ req }: Partial<{ req: express.Request }>) => {
     dataSources: {
       patrons: new PatronsAPI({ cache, token }),
       users: new UsersAPI({ cache, token }),
-      locations: new LocationsAPI({ cache, token }),
+      servicepoints: new ServicePointsAPI({ cache, token }),
       instances: new InstancesAPI({ cache, token }),
       items: new ItemsAPI({ cache, token }),
       holdings: new HoldingsAPI({ cache, token }),
