@@ -1,6 +1,6 @@
 import PatronsAPI from "./folio/patrons-api.js"
 import UsersAPI from "./folio/users-api.js"
-import LocationsAPI from "./folio/locations-api.js"
+import ServicePointsAPI from "./folio/service-points-api.js"
 import InstancesAPI from "./folio/instances-api.js"
 import ItemsAPI from "./folio/items-api.js"
 import HoldingsAPI from "./folio/holdings-api.js"
@@ -13,7 +13,7 @@ export interface FolioContext {
   dataSources: {
     patrons: PatronsAPI;
     users: UsersAPI;
-    locations: LocationsAPI;
+    servicepoints: ServicePointsAPI;
     instances: InstancesAPI;
     items: ItemsAPI;
     holdings: HoldingsAPI;

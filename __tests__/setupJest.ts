@@ -9,7 +9,7 @@ import FeeFinesAPI from '../src/folio/feefines-api';
 import HoldingsAPI from '../src/folio/holdings-api';
 import InstancesAPI from '../src/folio/instances-api';
 import ItemsAPI from '../src/folio/items-api';
-import LocationsAPI from '../src/folio/locations-api';
+import ServicePointsAPI from '../src/folio/service-points-api';
 import PatronsAPI from '../src/folio/patrons-api';
 import TypeAPI from '../src/folio/type-api';
 import UsersAPI from '../src/folio/users-api';
@@ -41,7 +41,7 @@ const context: FolioContext = {
   dataSources: {
     patrons: new PatronsAPI(apiOptions),
     users: new UsersAPI(apiOptions),
-    locations: new LocationsAPI(apiOptions),
+    servicepoints: new ServicePointsAPI(apiOptions),
     instances: new InstancesAPI(apiOptions),
     items: new ItemsAPI(apiOptions),
     holdings: new HoldingsAPI(apiOptions),
