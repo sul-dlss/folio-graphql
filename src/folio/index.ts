@@ -162,8 +162,8 @@ export const resolvers: Resolvers = {
     }
   },
   Hold: {
-    pickupLocation({ pickupLocationId }, args, { dataSources: { servicepoints } }, info) {
-      return servicepoints.getServicePoint(pickupLocationId)
+    pickupLocation({ pickupLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<ServicePoint>("service-points", { key: "servicepoints" }, pickupLocationId)
     },
     status({ status }, args, context, info) {
       switch(status as unknown as string) {
