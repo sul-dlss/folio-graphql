@@ -365,6 +365,7 @@ export type Hold = {
   cancellationAdditionalInformation?: Maybe<Scalars['String']['output']>;
   /** The id of the request reason */
   cancellationReasonId?: Maybe<Scalars['UUID']['output']>;
+  details?: Maybe<Request>;
   /** The date when the request expires */
   expirationDate?: Maybe<Scalars['DateTime']['output']>;
   /** The item that is checked out */

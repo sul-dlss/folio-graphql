@@ -4,6 +4,9 @@ export default class CirculationAPI extends FolioAPI {
   async getLoan(id: string): Promise<Loan> {
     return await this.get<Loan>(`/circulation/loans/${encodeURIComponent(id)}`)
   }
+  async getRequest(id: string): Promise<Request> {
+    return await this.get<Request>(`/circulation/requests/${encodeURIComponent(id)}`)
+  }
   async getRequestQueueLength(item: PatronItem): Promise<number> {
     let queue;
     if (item.itemId) {

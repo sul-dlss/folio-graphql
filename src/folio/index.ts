@@ -177,8 +177,11 @@ export const resolvers: Resolvers = {
         case "Closed - Pickup expired": return HoldStatus.ClosedPickupExpired
       }
     },
-    queueTotalLength(parent, args, { dataSources }, info) { 
+    queueTotalLength(parent, args, { dataSources }, info) {
       return dataSources.circulation.getRequestQueueLength(parent.item)
+    },
+    details({ requestId }, args, { dataSources: { circulation } }, info) {
+      return circulation.getRequest(requestId)
     }
   },
   PatronLoan: {
