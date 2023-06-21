@@ -1438,6 +1438,14 @@ export type Location = {
 export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+  /** Site value passed to Aeon to preselect delivery location for material paged from this location */
+  aeonSite?: Maybe<Scalars['String']['output']>;
+  /** Lookup key for user groups who mediate material paged from this location */
+  mediatedPagingGroupKey?: Maybe<Scalars['String']['output']>;
+  /** Comma-separated IDs of valid pickup locations for material paged from the location */
+  pageServicePointIds?: Maybe<Scalars['String']['output']>;
+  /** Valid pickup locations for material paged from this location */
+  pageServicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
 };
 
 /** CRUD to lost item fee policies */

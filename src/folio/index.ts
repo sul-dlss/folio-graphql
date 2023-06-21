@@ -370,7 +370,14 @@ export const resolvers: Resolvers = {
     },
     servicePoints({ servicePointIds = [] }, args, { dataSources: { types } }, info) {
       return types.getByIds<ServicePoint>("service-points", { key: "servicepoints" }, servicePointIds)
-    }
+    },
+  },
+  LocationDetails: {
+    pageServicePoints({ pageServicePointIds }, args, { dataSources: { servicepoints } }, info) {
+      if (!pageServicePointIds) return Promise.resolve([])
+
+      return servicepoints.getServicePoints({ 'code': pageServicePointIds.split(",") })
+    },
   },
   Campus: {
     institution({ institutionId }, args, { dataSources: { types } }, info) {
