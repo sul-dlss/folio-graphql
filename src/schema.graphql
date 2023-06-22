@@ -3390,15 +3390,15 @@ extend type Block {
 }
 
 extend type LocationDetails {
-  """Comma-separated IDs of valid pickup locations for material paged from the location"""
-  pageServicePointIds: String
+  """Comma-separated codes for valid pickup locations for material paged from this location"""
+  pageServicePointCodes: String
 
   """Valid pickup locations for material paged from this location"""
   pageServicePoints: [ServicePoint]
 
   """Lookup key for user groups who mediate material paged from this location"""
-  mediatedPagingGroupKey: String
+  pageMediationGroupKey: String
 
   """Site value passed to Aeon to preselect delivery location for material paged from this location"""
-  aeonSite: String
+  pageAeonSite: String
 }

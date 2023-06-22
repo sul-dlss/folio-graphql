@@ -1442,11 +1442,11 @@ export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
-  aeonSite?: Maybe<Scalars['String']['output']>;
+  pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */
-  mediatedPagingGroupKey?: Maybe<Scalars['String']['output']>;
-  /** Comma-separated IDs of valid pickup locations for material paged from the location */
-  pageServicePointIds?: Maybe<Scalars['String']['output']>;
+  pageMediationGroupKey?: Maybe<Scalars['String']['output']>;
+  /** Comma-separated codes for valid pickup locations for material paged from this location */
+  pageServicePointCodes?: Maybe<Scalars['String']['output']>;
   /** Valid pickup locations for material paged from this location */
   pageServicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
 };
@@ -3778,9 +3778,9 @@ export type LocationResolvers<ContextType = FolioContext, ParentType extends Res
 
 export type LocationDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LocationDetails'] = ResolversParentTypes['LocationDetails']> = ResolversObject<{
   _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  aeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  mediatedPagingGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  pageServicePointIds?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pageAeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pageMediationGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pageServicePointCodes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePoints?: Resolver<Maybe<Array<Maybe<ResolversTypes['ServicePoint']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
