@@ -46,4 +46,3 @@ function parseDescriptionJSON(description: string) {
     return description ? {"notes": description} as ServicePointDetails : null
   }
 }
-

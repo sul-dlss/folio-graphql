@@ -3392,6 +3392,20 @@ extend type Block {
   blockCondition: PatronBlockCondition
 }
 
+extend type LocationDetails {
+  """Comma-separated IDs of valid pickup locations for material paged from the location"""
+  pageServicePointIds: String
+
+  """Valid pickup locations for material paged from this location"""
+  pageServicePoints: [ServicePoint]
+
+  """Lookup key for user groups who mediate material paged from this location"""
+  mediatedPagingGroupKey: String
+
+  """Site value passed to Aeon to preselect delivery location for material paged from this location"""
+  aeonSite: String
+}
+
 extend type ServicePoint {
   details: ServicePointDetails
 }

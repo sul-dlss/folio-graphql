@@ -172,8 +172,8 @@ export const resolvers: Resolvers = {
     }
   },
   Hold: {
-    pickupLocation({ pickupLocationId }, args, { dataSources: { servicepoints } }, info) {
-      return servicepoints.getServicePoint(pickupLocationId)
+    pickupLocation({ pickupLocationId }, args, { dataSources: { types } }, info) {
+      return types.getById<ServicePoint>("service-points", { key: "servicepoints" }, pickupLocationId)
     },
     status({ status }, args, context, info) {
       switch(status as unknown as string) {
@@ -380,7 +380,14 @@ export const resolvers: Resolvers = {
     },
     servicePoints({ servicePointIds = [] }, args, { dataSources: { types } }, info) {
       return types.getByIds<ServicePoint>("service-points", { key: "servicepoints" }, servicePointIds)
-    }
+    },
+  },
+  LocationDetails: {
+    pageServicePoints({ pageServicePointIds }, args, { dataSources: { servicepoints } }, info) {
+      if (!pageServicePointIds) return Promise.resolve([])
+
+      return servicepoints.getServicePoints({ 'code': pageServicePointIds.split(",") })
+    },
   },
   Campus: {
     institution({ institutionId }, args, { dataSources: { types } }, info) {
