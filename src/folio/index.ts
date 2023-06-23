@@ -98,7 +98,17 @@ export const resolvers: Resolvers = {
     },
     locations(parent, args, { dataSources: { types } }, info) {
       return types.getValuesFor<Location>("locations", {})
+    },
+    servicePoints(parent, args, { dataSources: { servicepoints } }, info) {
+      //eturn ServicePointsAPIz
+      return servicepoints.getServicePoints(args)
     }
+    /*
+    servicePoints(parent, arg, { dataSources: { types } }, info) {
+      //eturn ServicePointsAPIz
+      return types.getValuesFor<ServicePoint>("service-points", { key: "servicepoints" })
+    }
+    */
   },
   Patron: {
     user({ id }, args, { dataSources: { users } }, info) {

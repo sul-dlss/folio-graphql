@@ -37,6 +37,9 @@ type Query {
   campuses: [Campus]
   libraries: [Library]
   locations: [Location]
+
+  # for retrieving all service points or a subset based on query
+  servicePoints(id: [String], params: CqlParams): [ServicePoint]
 }
 
 ############################
@@ -3395,5 +3398,6 @@ extend type ServicePoint {
 
 type ServicePointDetails {
   """Should this service point be a default pickup option for requests?"""
-  default_pickup_location: Boolean
+  isDefaultPickup: Boolean
+  notes: String
 }

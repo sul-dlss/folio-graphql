@@ -7,7 +7,7 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
@@ -2031,6 +2031,7 @@ export type Query = {
   patronGroups?: Maybe<Array<Maybe<PatronGroup>>>;
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
+  servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
 };
 
 
@@ -2072,6 +2073,12 @@ export type QueryItemsArgs = {
 
 export type QueryPatronArgs = {
   id: Scalars['UUID']['input'];
+};
+
+
+export type QueryServicePointsArgs = {
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  params?: InputMaybe<CqlParams>;
 };
 
 /** Request for an item that might be at a different location or already checked out to another patron */
@@ -2374,7 +2381,8 @@ export type ServicePoint = {
 export type ServicePointDetails = {
   __typename?: 'ServicePointDetails';
   /** Should this service point be a default pickup option for requests? */
-  default_pickup_location?: Maybe<Scalars['Boolean']['output']>;
+  isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
 };
 
 export enum ServicepointHoldShelfClosedLibraryDateManagement {

@@ -10,7 +10,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
@@ -2034,6 +2034,7 @@ export type Query = {
   patronGroups?: Maybe<Array<Maybe<PatronGroup>>>;
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
+  servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
 };
 
 
@@ -2075,6 +2076,12 @@ export type QueryItemsArgs = {
 
 export type QueryPatronArgs = {
   id: Scalars['UUID']['input'];
+};
+
+
+export type QueryServicePointsArgs = {
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  params?: InputMaybe<CqlParams>;
 };
 
 /** Request for an item that might be at a different location or already checked out to another patron */
@@ -2377,7 +2384,8 @@ export type ServicePoint = {
 export type ServicePointDetails = {
   __typename?: 'ServicePointDetails';
   /** Should this service point be a default pickup option for requests? */
-  default_pickup_location?: Maybe<Scalars['Boolean']['output']>;
+  isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
 };
 
 export enum ServicepointHoldShelfClosedLibraryDateManagement {
@@ -4101,6 +4109,7 @@ export type QueryResolvers<ContextType = FolioContext, ParentType extends Resolv
   patronGroups?: Resolver<Maybe<Array<Maybe<ResolversTypes['PatronGroup']>>>, ParentType, ContextType>;
   patronNoticePolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['PatronNoticePolicy']>>>, ParentType, ContextType>;
   requestPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['RequestPolicy']>>>, ParentType, ContextType>;
+  servicePoints?: Resolver<Maybe<Array<Maybe<ResolversTypes['ServicePoint']>>>, ParentType, ContextType, Partial<QueryServicePointsArgs>>;
 }>;
 
 export type RequestResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Request'] = ResolversParentTypes['Request']> = ResolversObject<{
@@ -4262,7 +4271,8 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
 }>;
 
 export type ServicePointDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePointDetails'] = ResolversParentTypes['ServicePointDetails']> = ResolversObject<{
-  default_pickup_location?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isDefaultPickup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
