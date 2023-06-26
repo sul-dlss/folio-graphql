@@ -100,7 +100,6 @@ export const resolvers: Resolvers = {
       return types.getValuesFor<Location>("locations", {})
     },
     servicePoints(parent, args, { dataSources: { servicepoints } }, info) {
-      //eturn ServicePointsAPIz
       return servicepoints.getServicePoints(args)
     }
   },
