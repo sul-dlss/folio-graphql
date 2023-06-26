@@ -24,6 +24,7 @@ export type Scalars = {
 /** User fines/fees account */
 export type Account = {
   __typename?: 'Account';
+  actions?: Maybe<Array<Maybe<FeeFineAction>>>;
   /** Amount of the fine/fee */
   amount: Scalars['Float']['output'];
   /** Text, with input likely validated by the barcode scanner */
@@ -344,6 +345,39 @@ export type FeeFine = {
   metadata?: Maybe<Metadata>;
   /** ID of the owner */
   ownerId?: Maybe<Scalars['UUID']['output']>;
+};
+
+/** Transactions or activities associated with a user fee/fine account */
+export type FeeFineAction = {
+  __typename?: 'FeeFineAction';
+  /** ID of the accounts */
+  accountId: Scalars['UUID']['output'];
+  /** Amount of activity */
+  amountAction?: Maybe<Scalars['Float']['output']>;
+  /** Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/transferred/refunded */
+  balance?: Maybe<Scalars['Float']['output']>;
+  /** Additional information entered as part of the activity or on this screen as a 'Staff info only' activity */
+  comments?: Maybe<Scalars['String']['output']>;
+  /** ID of the service point where the action was created */
+  createdAt?: Maybe<Scalars['UUID']['output']>;
+  /** Date and time the transaction of the fine/fee was created */
+  dateAction?: Maybe<Scalars['DateTime']['output']>;
+  /** Fine/fee action id, UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** A flag to determine if a patron should be notified or not */
+  notify?: Maybe<Scalars['Boolean']['output']>;
+  /** Original invalid (non-UUID) value of 'createdAt' moved here when UUID-validation was enabled for 'createdAt' */
+  originalCreatedAt?: Maybe<Scalars['String']['output']>;
+  /** Overall status of the action-setting */
+  paymentMethod?: Maybe<Scalars['String']['output']>;
+  /** Person who processed activity (from login information) */
+  source?: Maybe<Scalars['String']['output']>;
+  /** Number or other transaction id related to payment */
+  transactionInformation?: Maybe<Scalars['String']['output']>;
+  /** Type of activity including the type of transaction */
+  typeAction?: Maybe<Scalars['String']['output']>;
+  /** ID of the user */
+  userId: Scalars['UUID']['output'];
 };
 
 /** A set of date ranges for materials checkout and their associated due dates. */
@@ -2620,6 +2654,7 @@ export type ResolversTypes = ResolversObject<{
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ElectronicAccessRelationship: ResolverTypeWrapper<ElectronicAccessRelationship>;
   FeeFine: ResolverTypeWrapper<FeeFine>;
+  FeeFineAction: ResolverTypeWrapper<FeeFineAction>;
   FixedDueDateSchedule: ResolverTypeWrapper<FixedDueDateSchedule>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Hold: ResolverTypeWrapper<Hold>;
@@ -2791,6 +2826,7 @@ export type ResolversParentTypes = ResolversObject<{
   DateTime: Scalars['DateTime']['output'];
   ElectronicAccessRelationship: ElectronicAccessRelationship;
   FeeFine: FeeFine;
+  FeeFineAction: FeeFineAction;
   FixedDueDateSchedule: FixedDueDateSchedule;
   Float: Scalars['Float']['output'];
   Hold: Hold;
@@ -2914,6 +2950,7 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type AccountResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = ResolversObject<{
+  actions?: Resolver<Maybe<Array<Maybe<ResolversTypes['FeeFineAction']>>>, ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -3108,6 +3145,24 @@ export type FeeFineResolvers<ContextType = FolioContext, ParentType extends Reso
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   ownerId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type FeeFineActionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FeeFineAction'] = ResolversParentTypes['FeeFineAction']> = ResolversObject<{
+  accountId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  amountAction?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  balance?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  comments?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  dateAction?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  notify?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  originalCreatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  paymentMethod?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  transactionInformation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  typeAction?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -4369,6 +4424,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   ElectronicAccessRelationship?: ElectronicAccessRelationshipResolvers<ContextType>;
   FeeFine?: FeeFineResolvers<ContextType>;
+  FeeFineAction?: FeeFineActionResolvers<ContextType>;
   FixedDueDateSchedule?: FixedDueDateScheduleResolvers<ContextType>;
   Hold?: HoldResolvers<ContextType>;
   HoldingsNoteType?: HoldingsNoteTypeResolvers<ContextType>;

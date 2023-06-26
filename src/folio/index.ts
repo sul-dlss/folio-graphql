@@ -404,6 +404,9 @@ export const resolvers: Resolvers = {
     user({ userId }, args, { dataSources: { users } }, info) {
       return users.getUser(userId)
     },
+    actions({ id }, args, { dataSources: { users } }, info) {
+      return users.getFeeFineActions(id)
+    },
     loan({ loanId }, args, { dataSources: { circulation } }, info) {
       return circulation.getLoan(loanId)
     },

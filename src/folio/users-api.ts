@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { User, Block, CqlParams, ManualBlock, Account, ProxyFor } from '../schema'
+import { User, Block, CqlParams, ManualBlock, Account, ProxyFor, FeeFineAction } from '../schema'
 
 interface AutomatedPatronsBlockResponse {
   automatedPatronBlocks: Block[]
@@ -34,11 +34,17 @@ export default class UsersAPI extends FolioAPI {
     return blocks.manualblocks
   }
 
+  async getFeeFineActions(accountId) {
+    const urlParams = this.buildCqlQuery({ accountId: accountId })
+    const actions = await this.get(`/feefineactions`, { params: urlParams })
+    return actions.feefineactions
+  }
+
+
   async getAccounts(userId: string): Promise<any> {
     const urlParams = this.buildCqlQuery({ userId: userId })
-    const accounts = await this.get<AccountsResponse>(`/accounts`, { params: urlParams })
-
-    return accounts.accounts
+    const response = await this.get<AccountsResponse>(`/accounts`, { params: urlParams })
+    return response.accounts
   }
 
   async getProxiesFor(id: string): Promise<ProxyFor[]> {
