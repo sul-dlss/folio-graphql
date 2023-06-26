@@ -24,22 +24,17 @@ export default class ServicePointsAPI extends FolioAPI {
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
     const urlParams = this.buildCqlQuery(params)
     const response = await this.get<ServicePointsResponse>(`/service-points`, { params: urlParams })
-    return  response.servicepoints.map(sp => {
-      return this.addDetails(sp)
-    })
+    return  response.servicepoints.map(this.addDetails)
   }
 }
 
 // Parse JSON in the description field into a typed ServicePointDetails object.
 // FOLIO stores this field as a string; we use it to store extra metadata about
 // the service point for requests configuration.
-function parseServicePointDetails(servicePoint: ServicePoint): ServicePointDetails {
-  return parseDescriptionJSON(servicePoint.description)
-}
-
 // If the description field is not empty and can be parsed as JSON, we wish to return the JSON object
 // In case a regular string is added to the description field, we also wish to return it in the "notes" key
-function parseDescriptionJSON(description: string) {
+function parseServicePointDetails(servicePoint: ServicePoint): ServicePointDetails {
+  const description = servicePoint.description
   try {
     return description ? JSON.parse(description) as ServicePointDetails : null
   } catch(e) {

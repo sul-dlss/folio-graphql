@@ -103,12 +103,6 @@ export const resolvers: Resolvers = {
       //eturn ServicePointsAPIz
       return servicepoints.getServicePoints(args)
     }
-    /*
-    servicePoints(parent, arg, { dataSources: { types } }, info) {
-      //eturn ServicePointsAPIz
-      return types.getValuesFor<ServicePoint>("service-points", { key: "servicepoints" })
-    }
-    */
   },
   Patron: {
     user({ id }, args, { dataSources: { users } }, info) {
