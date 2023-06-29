@@ -37,7 +37,9 @@ export default class UsersAPI extends FolioAPI {
   async getFeeFineActions(accountId) {
     const urlParams = this.buildCqlQuery({ accountId: accountId })
     const actions = await this.get(`/feefineactions`, { params: urlParams })
-    return actions.feefineactions
+
+    // remove the 'source' attribute from the response because it contains private staff data
+    return actions.feefineactions.map(({source, ...data}) => data)
   }
 
 
