@@ -396,13 +396,6 @@ export const resolvers: Resolvers = {
       return values.filter(v => v.libraryId == id)
     },
   },
-  PatronCharge: {
-    feeFine({ feeFineId }, args, { dataSources: { feefines } }, info) {
-      if (!feeFineId) return;
-
-      return feefines.getFeeFine(feeFineId)
-    }
-  },
   Account: {
     user({ userId }, args, { dataSources: { users } }, info) {
       return users.getUser(userId)
