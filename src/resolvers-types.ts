@@ -2058,6 +2058,7 @@ export enum QuantityIntervalId {
 export type Query = {
   __typename?: 'Query';
   campuses?: Maybe<Array<Maybe<Campus>>>;
+  feeFineTypes?: Maybe<Array<Maybe<FeeFine>>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
   holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
   instance?: Maybe<Instance>;
@@ -4141,6 +4142,7 @@ export type QuantityResolvers<ContextType = FolioContext, ParentType extends Res
 
 export type QueryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   campuses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Campus']>>>, ParentType, ContextType>;
+  feeFineTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['FeeFine']>>>, ParentType, ContextType>;
   holdingsRecord?: Resolver<Maybe<ResolversTypes['HoldingsRecord']>, ParentType, ContextType, RequireFields<QueryHoldingsRecordArgs, 'id'>>;
   holdingsRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['HoldingsRecord']>>>, ParentType, ContextType, Partial<QueryHoldingsRecordsArgs>>;
   instance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType, RequireFields<QueryInstanceArgs, 'id'>>;

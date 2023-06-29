@@ -41,6 +41,9 @@ export const resolvers: Resolvers = {
     patron(parent, { id }, { dataSources: { patrons } }, info) {
       return patrons.getPatron(id)
     },
+    feeFineTypes(parent, args, { dataSources: { feefines } }, info) {
+      return feefines.getFeeFineTypes(args)
+    },
     instance(parent, { id }, { dataSources: { instances } }, info) {
       return instances.getInstance(id)
     },

@@ -2055,6 +2055,7 @@ export enum QuantityIntervalId {
 export type Query = {
   __typename?: 'Query';
   campuses?: Maybe<Array<Maybe<Campus>>>;
+  feeFineTypes?: Maybe<Array<Maybe<FeeFine>>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
   holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
   instance?: Maybe<Instance>;

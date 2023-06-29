@@ -13,6 +13,8 @@ input CqlParams {
 type Query {
   patron(id: UUID!): Patron
 
+  feeFineTypes: [FeeFine]
+
   instance(id: UUID!): Instance
   instances(id: [String], hrid: [String], params: CqlParams): [Instance]
 
