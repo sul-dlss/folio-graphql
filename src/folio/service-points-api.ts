@@ -17,18 +17,18 @@ export default class ServicePointsAPI extends FolioAPI {
   }
 
   // Add libraries and locations where this service point is the primary service point
-  addLibraryLocationDetails(servicePoints: ServicePoint[], locationsHash: {}): ServicePoint[] {
+  addLibraryLocationDetails(servicePoints: ServicePoint[], locationsHash: object): ServicePoint[] {
     return servicePoints.map(servicePoint => {
-      let servicePointId = servicePoint.id
+      const servicePointId = servicePoint.id
       if(servicePointId in locationsHash) {
-        let libraries = locationsHash[servicePointId]["libraries"]
-        let locations = locationsHash[servicePointId]["locations"]
+        const libraries = locationsHash[servicePointId]["libraries"]
+        const locations = locationsHash[servicePointId]["locations"]
         servicePoint = this.addLibraryLocationDetailsForServicePoint(servicePoint, libraries, locations)
       }
       return servicePoint
     })
   }
-  
+
   // Get a list of all service points along with the details information required for paging
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
     const urlParams = this.buildCqlQuery(params)
@@ -44,10 +44,10 @@ export default class ServicePointsAPI extends FolioAPI {
 
     // Retrieve a hash using library ids to point to library objects
     const libraryHash = this.parseLibraries(libraries)
-    let locationsHash = this.parseLocations(locations)
+    const locationsHash = this.parseLocations(locations)
     Object.entries(locationsHash).forEach(
       ([servicePointId, info]) => {
-        let libraryIds:string[] = Array.from(info["libraryIds"].values())
+        const libraryIds:string[] = Array.from(info["libraryIds"].values())
         libraryIds.forEach(lId => {
           locationsHash[servicePointId]["libraries"].push(libraryHash[lId])
         })
@@ -74,10 +74,10 @@ export default class ServicePointsAPI extends FolioAPI {
 
   // Parse Locations to return hash by primary service point id with locations and libraries
   parseLocations(locations: Location[]) {
-    let locationsHash = {}
+    const locationsHash = {}
     locations.forEach( loc => {
       if(! (loc.primaryServicePoint in locationsHash) ) {
-        locationsHash[loc.primaryServicePoint] = {locations: [], libraryIds:new Set<String>, libraries:[]}
+        locationsHash[loc.primaryServicePoint] = {locations: [], libraryIds:new Set<string>, libraries:[]}
       }
       locationsHash[loc.primaryServicePoint].locations.push(loc)
       locationsHash[loc.primaryServicePoint].libraryIds.add(loc["libraryId"])
@@ -92,7 +92,7 @@ export default class ServicePointsAPI extends FolioAPI {
   }
 
   parseLibraries(libraries: Library[]) {
-    let libraryHash = {}
+    const libraryHash = {}
     libraries.forEach( lib => {
       libraryHash[lib.id] = lib
     })
