@@ -2393,6 +2393,8 @@ export type ServicePointDetails = {
   __typename?: 'ServicePointDetails';
   /** Should this service point be a default pickup option for requests? */
   isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
+  libraries?: Maybe<Array<Maybe<Library>>>;
+  locations?: Maybe<Array<Maybe<Location>>>;
   notes?: Maybe<Scalars['String']['output']>;
 };
 
@@ -4284,6 +4286,8 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
 
 export type ServicePointDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePointDetails'] = ResolversParentTypes['ServicePointDetails']> = ResolversObject<{
   isDefaultPickup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
+  locations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Location']>>>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

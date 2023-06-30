@@ -2390,6 +2390,8 @@ export type ServicePointDetails = {
   __typename?: 'ServicePointDetails';
   /** Should this service point be a default pickup option for requests? */
   isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
+  libraries?: Maybe<Array<Maybe<Library>>>;
+  locations?: Maybe<Array<Maybe<Location>>>;
   notes?: Maybe<Scalars['String']['output']>;
 };
 
