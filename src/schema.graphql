@@ -3408,12 +3408,12 @@ extend type LocationDetails {
 
 extend type ServicePoint {
   details: ServicePointDetails
+  libraries: [Library]
+  locations: [Location]
 }
 
 type ServicePointDetails {
   """Should this service point be a default pickup option for requests?"""
   isDefaultPickup: Boolean
   notes: String
-  libraries: [Library]
-  locations: [Location]
 }

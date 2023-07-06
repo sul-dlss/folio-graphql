@@ -418,5 +418,13 @@ export const resolvers: Resolvers = {
       return feefines.getFeeFine(feeFineId)
     },
   },
+  ServicePoint: {
+    libraries({ id }, args, { dataSources: { servicepoints } }, info) {
+      return  servicepoints.getLibrariesForServicePoint(id)
+    },
+    locations({ id }, args, { dataSources: { servicepoints } }, info) {
+      return servicepoints.getLocationsForPrimaryServicePoint(id)
+    }
+  },
   UUID: UUIDResolver
 }

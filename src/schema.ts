@@ -2375,6 +2375,8 @@ export type ServicePoint = {
   holdShelfExpiryPeriod?: Maybe<TimePeriod>;
   /** Id of service-point object */
   id?: Maybe<Scalars['String']['output']>;
+  libraries?: Maybe<Array<Maybe<Library>>>;
+  locations?: Maybe<Array<Maybe<Location>>>;
   metadata?: Maybe<Metadata>;
   /** service-point name, a required field */
   name: Scalars['String']['output'];
@@ -2390,8 +2392,6 @@ export type ServicePointDetails = {
   __typename?: 'ServicePointDetails';
   /** Should this service point be a default pickup option for requests? */
   isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
-  libraries?: Maybe<Array<Maybe<Library>>>;
-  locations?: Maybe<Array<Maybe<Location>>>;
   notes?: Maybe<Scalars['String']['output']>;
 };
 

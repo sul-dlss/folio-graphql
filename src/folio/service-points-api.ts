@@ -6,6 +6,8 @@ interface ServicePointsResponse {
 }
 
 export default class ServicePointsAPI extends FolioAPI {
+  // This is the maximum also used in type-apis
+  static maxQueryLimit = 2147483647
   // Removing the individual getServicePoint by id method, since not used anywhere
   // And will be updated with upcoming pull requests
   // Parse the description string and add the resulting JSON object in the details filed
@@ -16,87 +18,58 @@ export default class ServicePointsAPI extends FolioAPI {
     }
   }
 
-  // Add libraries and locations where this service point is the primary service point
-  addLibraryLocationDetails(servicePoints: ServicePoint[], locationsHash: object): ServicePoint[] {
-    return servicePoints.map(servicePoint => {
-      const servicePointId = servicePoint.id
-      if(servicePointId in locationsHash) {
-        const libraries = locationsHash[servicePointId]["libraries"]
-        const locations = locationsHash[servicePointId]["locations"]
-        servicePoint = this.addLibraryLocationDetailsForServicePoint(servicePoint, libraries, locations)
-      }
-      return servicePoint
-    })
-  }
-
   // Get a list of all service points along with the details information required for paging
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
+    // Unless the limit is being sent in as a parameter, pass in the max limit
+    // We also want to retain any other parameters being sent through the query
+    if(! ("params" in params && "limit" in params["params"])) {
+      if(! ("params" in params)) {
+        params["params"] = {"limit": ServicePointsAPI.maxQueryLimit}
+      } else {
+        params["params"]["limit"] = ServicePointsAPI.maxQueryLimit
+      }
+    }
     const urlParams = this.buildCqlQuery(params)
     const response = await this.get<ServicePointsResponse>(`/service-points`, { params: urlParams })
-    //Trying out location info retrieval
-    const locationsHash = await this.getLibrariesForServicePoints()
-    return this.addLibraryLocationDetails(response.servicepoints.map(this.addDetails), locationsHash)
+    return response.servicepoints.map(this.addDetails)
   }
 
-  async getLibrariesForServicePoints() {
-    const locations = await this.getAllLocations()
-    const libraries = await this.getAllLibraries()
-
-    // Retrieve a hash using library ids to point to library objects
-    const libraryHash = this.parseLibraries(libraries)
-    const locationsHash = this.parseLocations(locations)
-    Object.entries(locationsHash).forEach(
-      ([servicePointId, info]) => {
-        const libraryIds:string[] = Array.from(info["libraryIds"].values())
-        libraryIds.forEach(lId => {
-          locationsHash[servicePointId]["libraries"].push(libraryHash[lId])
-        })
-      }
-    )
-    return locationsHash
-  }
-
-  // Add libraries and locations for an individual service point
-  addLibraryLocationDetailsForServicePoint(servicePoint: ServicePoint, libraries:Library[], locations:Location[]): ServicePoint {
-    servicePoint["details"] = {
-      locations: locations,
-      libraries: libraries, 
-      ...servicePoint.details
-    }
-    return servicePoint
-  }
-
-  async getAllLocations(): Promise<Location[]> {
-    const urlParams = this.buildCqlQuery({ params: { limit:500 } })
+  // Get the location associated with the service point
+  async getLocationsForPrimaryServicePoint(servicePointId: string): Promise<Location[]> {
+    const locationQuery = this.buildLocationQuery(servicePointId)
+    const urlParams = this.buildCqlQuery({ params: { limit:ServicePointsAPI.maxQueryLimit, query: locationQuery} })
     const response =  await this.get<Location>(`/locations`, { params: urlParams })
     return response["locations"]
   }
 
-  // Parse Locations to return hash by primary service point id with locations and libraries
-  parseLocations(locations: Location[]) {
-    const locationsHash = {}
-    locations.forEach( loc => {
-      if(! (loc.primaryServicePoint in locationsHash) ) {
-        locationsHash[loc.primaryServicePoint] = {locations: [], libraryIds:new Set<string>, libraries:[]}
-      }
-      locationsHash[loc.primaryServicePoint].locations.push(loc)
-      locationsHash[loc.primaryServicePoint].libraryIds.add(loc["libraryId"])
-    })
-    return locationsHash
+  // Retrieve all locations which have this service point id associated
+  // This does not single out primary service points, but will return any locations
+  // with these associated service point ids in the servicePointIds field
+  buildLocationQuery(servicePointId:string): string {
+    return "servicePointIds==*\"" + servicePointId + "\"*"
   }
 
-  async getAllLibraries(): Promise<Library[]> {
-    const urlParams = this.buildCqlQuery({ params: { limit:500 } })
-    const response =  await this.get<Library>(`/location-units/libraries`, { params: urlParams })
+  // Get the library associated with the service point
+  async getLibrariesForServicePoint(servicePointId: string): Promise<Library[]> {
+    const locations = await this.getLocationsForPrimaryServicePoint(servicePointId)
+    // if there are no locations, please return null
+    if(locations.length < 1) return null
+    // First, retrieve all the libraries with the ids from this set
+    // Multiple locations may belong to the same library
+    // Adding to a set will remove duplicates
+    const libraryIds = new Set<string>(locations.map(location => {
+      return location.libraryId
+    }))
+    // if there are no library ids, the following query would return all libraries
+    if(libraryIds.size < 1) return null
+    const libraryIdQuery = this.buildMultiLibraryQuery(libraryIds)
+    const urlParams = this.buildCqlQuery({ params: { limit:ServicePointsAPI.maxQueryLimit, query:libraryIdQuery } })
+    const response =  await this.get<Location>(`/location-units/libraries`, { params: urlParams })
     return response["loclibs"]
   }
 
-  parseLibraries(libraries: Library[]) {
-    const libraryHash = {}
-    libraries.forEach( lib => {
-      libraryHash[lib.id] = lib
-    })
-    return libraryHash
+  buildMultiLibraryQuery(locationIds:Set<string>): string {
+    return "id=\"" + Array.from(locationIds.values()).join("\" OR id=\"") + "\""
   }
 }
 
