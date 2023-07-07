@@ -7,7 +7,7 @@ export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> =
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
@@ -1446,6 +1446,10 @@ export type LocationDetails = {
   pageServicePointCodes?: Maybe<Scalars['String']['output']>;
   /** Valid pickup locations for material paged from this location */
   pageServicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+  /** Service point where material from this location is scanned */
+  scanServicePoint?: Maybe<ServicePoint>;
+  /** Code for service point where material from this location is scanned */
+  scanServicePointCode?: Maybe<Scalars['String']['output']>;
 };
 
 /** CRUD to lost item fee policies */

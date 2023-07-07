@@ -378,8 +378,10 @@ export const resolvers: Resolvers = {
 
       return servicepoints.getServicePoints({ 'code': pageServicePointCodes.split(",") })
     },
+    scanServicePoint({ scanServicePointCode }, args, { dataSources: { servicepoints } }, info) {
+      if (!scanServicePointCode) return
 
-      return servicepoints.getServicePoints({ 'code': pageServicePointIds.split(",") })
+      return servicepoints.getByCode(scanServicePointCode)
     },
   },
   Campus: {
