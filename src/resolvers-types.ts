@@ -10,7 +10,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string | number; output: string; }
+  ID: { input: string; output: string; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
@@ -1442,13 +1442,17 @@ export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
-  aeonSite?: Maybe<Scalars['String']['output']>;
+  pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */
-  mediatedPagingGroupKey?: Maybe<Scalars['String']['output']>;
-  /** Comma-separated IDs of valid pickup locations for material paged from the location */
-  pageServicePointIds?: Maybe<Scalars['String']['output']>;
+  pageMediationGroupKey?: Maybe<Scalars['String']['output']>;
+  /** Comma-separated codes for valid pickup locations for material paged from this location */
+  pageServicePointCodes?: Maybe<Scalars['String']['output']>;
   /** Valid pickup locations for material paged from this location */
   pageServicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+  /** Service point where material from this location is scanned */
+  scanServicePoint?: Maybe<ServicePoint>;
+  /** Code for service point where material from this location is scanned */
+  scanServicePointCode?: Maybe<Scalars['String']['output']>;
 };
 
 /** CRUD to lost item fee policies */
@@ -3778,10 +3782,12 @@ export type LocationResolvers<ContextType = FolioContext, ParentType extends Res
 
 export type LocationDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LocationDetails'] = ResolversParentTypes['LocationDetails']> = ResolversObject<{
   _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  aeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  mediatedPagingGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  pageServicePointIds?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pageAeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pageMediationGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pageServicePointCodes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePoints?: Resolver<Maybe<Array<Maybe<ResolversTypes['ServicePoint']>>>, ParentType, ContextType>;
+  scanServicePoint?: Resolver<Maybe<ResolversTypes['ServicePoint']>, ParentType, ContextType>;
+  scanServicePointCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

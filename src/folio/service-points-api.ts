@@ -6,6 +6,11 @@ interface ServicePointsResponse {
 }
 
 export default class ServicePointsAPI extends FolioAPI {
+  async getByCode(code: string): Promise<ServicePoint> {
+    const servicePoints = await this.getServicePoints({ 'code': [code] })
+    return servicePoints[0]
+  }
+  
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
     const urlParams = this.buildCqlQuery(params)
 

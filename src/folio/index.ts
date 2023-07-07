@@ -373,10 +373,15 @@ export const resolvers: Resolvers = {
     },
   },
   LocationDetails: {
-    pageServicePoints({ pageServicePointIds }, args, { dataSources: { servicepoints } }, info) {
-      if (!pageServicePointIds) return Promise.resolve([])
+    pageServicePoints({ pageServicePointCodes }, args, { dataSources: { servicepoints } }, info) {
+      if (!pageServicePointCodes) return Promise.resolve([])
 
-      return servicepoints.getServicePoints({ 'code': pageServicePointIds.split(",") })
+      return servicepoints.getServicePoints({ 'code': pageServicePointCodes.split(",") })
+    },
+    scanServicePoint({ scanServicePointCode }, args, { dataSources: { servicepoints } }, info) {
+      if (!scanServicePointCode) return
+
+      return servicepoints.getByCode(scanServicePointCode)
     },
   },
   Campus: {
