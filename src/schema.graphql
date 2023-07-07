@@ -3408,8 +3408,6 @@ extend type LocationDetails {
 
 extend type ServicePoint {
   details: ServicePointDetails
-  libraries: [Library]
-  locations: [Location]
 }
 
 type ServicePointDetails {

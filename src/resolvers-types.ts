@@ -2378,8 +2378,6 @@ export type ServicePoint = {
   holdShelfExpiryPeriod?: Maybe<TimePeriod>;
   /** Id of service-point object */
   id?: Maybe<Scalars['String']['output']>;
-  libraries?: Maybe<Array<Maybe<Library>>>;
-  locations?: Maybe<Array<Maybe<Location>>>;
   metadata?: Maybe<Metadata>;
   /** service-point name, a required field */
   name: Scalars['String']['output'];
@@ -4276,8 +4274,6 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
   holdShelfClosedLibraryDateManagement?: Resolver<Maybe<ResolversTypes['ServicepointHoldShelfClosedLibraryDateManagement']>, ParentType, ContextType>;
   holdShelfExpiryPeriod?: Resolver<Maybe<ResolversTypes['TimePeriod']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
-  locations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Location']>>>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pickupLocation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;

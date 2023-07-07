@@ -33,44 +33,6 @@ export default class ServicePointsAPI extends FolioAPI {
     const response = await this.get<ServicePointsResponse>(`/service-points`, { params: urlParams })
     return response.servicepoints.map(this.addDetails)
   }
-
-  // Get the location associated with the service point
-  async getLocationsForPrimaryServicePoint(servicePointId: string): Promise<Location[]> {
-    const locationQuery = this.buildLocationQuery(servicePointId)
-    const urlParams = this.buildCqlQuery({ params: { limit:ServicePointsAPI.maxQueryLimit, query: locationQuery} })
-    const response =  await this.get<Location>(`/locations`, { params: urlParams })
-    return response["locations"]
-  }
-
-  // Retrieve all locations which have this service point id associated
-  // This does not single out primary service points, but will return any locations
-  // with these associated service point ids in the servicePointIds field
-  buildLocationQuery(servicePointId:string): string {
-    return "servicePointIds==*\"" + servicePointId + "\"*"
-  }
-
-  // Get the library associated with the service point
-  async getLibrariesForServicePoint(servicePointId: string): Promise<Library[]> {
-    const locations = await this.getLocationsForPrimaryServicePoint(servicePointId)
-    // if there are no locations, please return null
-    if(locations.length < 1) return null
-    // First, retrieve all the libraries with the ids from this set
-    // Multiple locations may belong to the same library
-    // Adding to a set will remove duplicates
-    const libraryIds = new Set<string>(locations.map(location => {
-      return location.libraryId
-    }))
-    // if there are no library ids, the following query would return all libraries
-    if(libraryIds.size < 1) return null
-    const libraryIdQuery = this.buildMultiLibraryQuery(libraryIds)
-    const urlParams = this.buildCqlQuery({ params: { limit:ServicePointsAPI.maxQueryLimit, query:libraryIdQuery } })
-    const response =  await this.get<Location>(`/location-units/libraries`, { params: urlParams })
-    return response["loclibs"]
-  }
-
-  buildMultiLibraryQuery(locationIds:Set<string>): string {
-    return "id=\"" + Array.from(locationIds.values()).join("\" OR id=\"") + "\""
-  }
 }
 
 // Parse JSON in the description field into a typed ServicePointDetails object.
