@@ -3347,6 +3347,7 @@ extend type Item {
   permanentLoanType: LoanType
   temporaryLoanType: LoanType
   itemLevelCallNumberType: CallNumberType
+  dueDate: DateTime
 }
 
 extend type ItemEffectiveCallNumberComponents {

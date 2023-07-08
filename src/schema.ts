@@ -952,6 +952,7 @@ export type Item = {
   descriptionOfPieces?: Maybe<Scalars['String']['output']>;
   /** Records the fact that the record should not be displayed in a discovery system */
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
+  dueDate?: Maybe<Scalars['DateTime']['output']>;
   /** Elements of a full call number generated from the item or holding */
   effectiveCallNumberComponents?: Maybe<ItemEffectiveCallNumberComponents>;
   effectiveLocation?: Maybe<Location>;

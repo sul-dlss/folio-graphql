@@ -955,6 +955,7 @@ export type Item = {
   descriptionOfPieces?: Maybe<Scalars['String']['output']>;
   /** Records the fact that the record should not be displayed in a discovery system */
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
+  dueDate?: Maybe<Scalars['DateTime']['output']>;
   /** Elements of a full call number generated from the item or holding */
   effectiveCallNumberComponents?: Maybe<ItemEffectiveCallNumberComponents>;
   effectiveLocation?: Maybe<Location>;
@@ -3474,6 +3475,7 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   copyNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   descriptionOfPieces?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   discoverySuppress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  dueDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   effectiveCallNumberComponents?: Resolver<Maybe<ResolversTypes['ItemEffectiveCallNumberComponents']>, ParentType, ContextType>;
   effectiveLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   effectiveLocationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
