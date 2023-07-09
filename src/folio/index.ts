@@ -343,6 +343,9 @@ export const resolvers: Resolvers = {
     },
     itemLevelCallNumberType({ itemLevelCallNumberTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, itemLevelCallNumberTypeId)
+    },
+    materialType({ materialTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<MaterialType>("material-types", { key: 'mtypes' }, materialTypeId)
     }
   },
   ItemEffectiveCallNumberComponents: {
