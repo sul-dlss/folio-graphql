@@ -352,6 +352,13 @@ export const resolvers: Resolvers = {
     },
     materialType({ materialTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<MaterialType>("material-types", { key: 'mtypes' }, materialTypeId)
+    },
+    async dueDate({ id }, args, { dataSources: { circulation } }, info) {
+      const loans = await circulation.getLoans({ itemId: id, "status.name": 'open' });
+
+      if (loans.length === 0) return null;
+
+      return loans[0].dueDate;
     }
   },
   ItemEffectiveCallNumberComponents: {
