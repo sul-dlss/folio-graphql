@@ -16,6 +16,7 @@ import {
   PatronBlockCondition,
   FixedDueDateSchedule,
   HoldStatus,
+  IdentifierType,
   InstanceNoteType,
   InstanceFormat,
   InstanceType,
@@ -257,6 +258,11 @@ export const resolvers: Resolvers = {
     },
     authority({ authorityId }, args, { dataSources: { types } }, info) {
       return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
+    },
+  },
+  InstanceIdentifiersItem: {
+    identifierTypeObject({ identifierTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<IdentifierType>("identifier-types", { key: 'identifierTypes' }, identifierTypeId)
     },
   },
   InstanceSeriesItem: {
