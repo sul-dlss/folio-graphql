@@ -13,6 +13,8 @@ input CqlParams {
 type Query {
   patron(id: UUID!): Patron
 
+  feeFineTypes: [FeeFine]
+
   instance(id: UUID!): Instance
   instances(id: [String], hrid: [String], params: CqlParams): [Instance]
 
@@ -2293,6 +2295,57 @@ type AccountdataItemStatus {
   name: String!
 }
 
+"""Transactions or activities associated with a user fee/fine account"""
+type FeeFineAction {
+  """Date and time the transaction of the fine/fee was created"""
+  dateAction: DateTime
+
+  """Type of activity including the type of transaction"""
+  typeAction: String
+
+  """
+  Additional information entered as part of the activity or on this screen as a 'Staff info only' activity
+  """
+  comments: String
+
+  """A flag to determine if a patron should be notified or not"""
+  notify: Boolean
+
+  """Amount of activity"""
+  amountAction: Float
+
+  """
+  Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/transferred/refunded
+  """
+  balance: Float
+
+  """Number or other transaction id related to payment"""
+  transactionInformation: String
+
+  """ID of the service point where the action was created"""
+  createdAt: UUID
+
+  """
+  Original invalid (non-UUID) value of 'createdAt' moved here when UUID-validation was enabled for 'createdAt'
+  """
+  originalCreatedAt: String
+
+  """Person who processed activity (from login information)"""
+  source: String
+
+  """Overall status of the action-setting"""
+  paymentMethod: String
+
+  """ID of the accounts"""
+  accountId: UUID!
+
+  """ID of the user"""
+  userId: UUID!
+
+  """Fine/fee action id, UUID"""
+  id: UUID
+}
+
 """
 Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service
 """
@@ -3281,11 +3334,11 @@ extend type Account {
   overdueFinePolicyId: UUID
   lostItemFeePolicyId: UUID
   processId: UUID
-
   user: User
   loan: Loan
   item: Item
   feeFine: FeeFine
+  actions: [FeeFineAction]
 }
 
 extend type PatronLoan {

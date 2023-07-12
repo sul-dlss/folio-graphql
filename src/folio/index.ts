@@ -42,6 +42,9 @@ export const resolvers: Resolvers = {
     patron(parent, { id }, { dataSources: { patrons } }, info) {
       return patrons.getPatron(id)
     },
+    feeFineTypes(parent, args, { dataSources: { feefines } }, info) {
+      return feefines.getFeeFineTypes(args)
+    },
     instance(parent, { id }, { dataSources: { instances } }, info) {
       return instances.getInstance(id)
     },
@@ -414,16 +417,12 @@ export const resolvers: Resolvers = {
       return values.filter(v => v.libraryId == id)
     },
   },
-  PatronCharge: {
-    feeFine({ feeFineId }, args, { dataSources: { feefines } }, info) {
-      if (!feeFineId) return;
-
-      return feefines.getFeeFine(feeFineId)
-    }
-  },
   Account: {
     user({ userId }, args, { dataSources: { users } }, info) {
       return users.getUser(userId)
+    },
+    actions({ id }, args, { dataSources: { users } }, info) {
+      return users.getFeeFineActions(id)
     },
     loan({ loanId }, args, { dataSources: { circulation } }, info) {
       return circulation.getLoan(loanId)
