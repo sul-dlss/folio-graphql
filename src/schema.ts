@@ -952,6 +952,7 @@ export type Item = {
   descriptionOfPieces?: Maybe<Scalars['String']['output']>;
   /** Records the fact that the record should not be displayed in a discovery system */
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
+  dueDate?: Maybe<Scalars['DateTime']['output']>;
   /** Elements of a full call number generated from the item or holding */
   effectiveCallNumberComponents?: Maybe<ItemEffectiveCallNumberComponents>;
   effectiveLocation?: Maybe<Location>;
@@ -1439,13 +1440,17 @@ export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
-  aeonSite?: Maybe<Scalars['String']['output']>;
+  pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */
-  mediatedPagingGroupKey?: Maybe<Scalars['String']['output']>;
-  /** Comma-separated IDs of valid pickup locations for material paged from the location */
-  pageServicePointIds?: Maybe<Scalars['String']['output']>;
+  pageMediationGroupKey?: Maybe<Scalars['String']['output']>;
+  /** Comma-separated codes for valid pickup locations for material paged from this location */
+  pageServicePointCodes?: Maybe<Scalars['String']['output']>;
   /** Valid pickup locations for material paged from this location */
   pageServicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+  /** Service point where material from this location is scanned */
+  scanServicePoint?: Maybe<ServicePoint>;
+  /** Code for service point where material from this location is scanned */
+  scanServicePointCode?: Maybe<Scalars['String']['output']>;
 };
 
 /** CRUD to lost item fee policies */

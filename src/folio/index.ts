@@ -16,6 +16,7 @@ import {
   PatronBlockCondition,
   FixedDueDateSchedule,
   HoldStatus,
+  IdentifierType,
   InstanceNoteType,
   InstanceFormat,
   InstanceType,
@@ -262,6 +263,11 @@ export const resolvers: Resolvers = {
       return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
     },
   },
+  InstanceIdentifiersItem: {
+    identifierTypeObject({ identifierTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<IdentifierType>("identifier-types", { key: 'identifierTypes' }, identifierTypeId)
+    },
+  },
   InstanceSeriesItem: {
     authority({ authorityId }, args, { dataSources: { types } }, info) {
       return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
@@ -346,6 +352,16 @@ export const resolvers: Resolvers = {
     },
     itemLevelCallNumberType({ itemLevelCallNumberTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, itemLevelCallNumberTypeId)
+    },
+    materialType({ materialTypeId }, args, { dataSources: { types } }, info) {
+      return types.getById<MaterialType>("material-types", { key: 'mtypes' }, materialTypeId)
+    },
+    async dueDate({ id }, args, { dataSources: { circulation } }, info) {
+      const loans = await circulation.getLoans({ itemId: id, "status.name": 'open' });
+
+      if (loans.length === 0) return null;
+
+      return loans[0].dueDate;
     }
   },
   ItemEffectiveCallNumberComponents: {
@@ -376,10 +392,15 @@ export const resolvers: Resolvers = {
     },
   },
   LocationDetails: {
-    pageServicePoints({ pageServicePointIds }, args, { dataSources: { servicepoints } }, info) {
-      if (!pageServicePointIds) return Promise.resolve([])
+    pageServicePoints({ pageServicePointCodes }, args, { dataSources: { servicepoints } }, info) {
+      if (!pageServicePointCodes) return Promise.resolve([])
 
-      return servicepoints.getServicePoints({ 'code': pageServicePointIds.split(",") })
+      return servicepoints.getServicePoints({ 'code': pageServicePointCodes.split(",") })
+    },
+    scanServicePoint({ scanServicePointCode }, args, { dataSources: { servicepoints } }, info) {
+      if (!scanServicePointCode) return
+
+      return servicepoints.getByCode(scanServicePointCode)
     },
   },
   Campus: {

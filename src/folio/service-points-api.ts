@@ -17,7 +17,11 @@ export default class ServicePointsAPI extends FolioAPI {
       ...servicePoint
     }
   }
-
+  async getByCode(code: string): Promise<ServicePoint> {
+    const servicePoints = await this.getServicePoints({ 'code': [code] })
+    return servicePoints[0]
+  }
+  
   // Get a list of all service points along with the details information required for paging
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
     // Unless the limit is being sent in as a parameter, pass in the max limit

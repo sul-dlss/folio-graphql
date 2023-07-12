@@ -1,8 +1,18 @@
 import FolioAPI from "./folio-api.js"
-import { Loan, PatronItem, Request } from '../schema'
+import { Loan, PatronItem, Request, CqlParams } from '../schema'
+interface LoansResponse {
+  loans: Loan[]
+}
+
 export default class CirculationAPI extends FolioAPI {
   async getLoan(id: string): Promise<Loan> {
     return await this.get<Loan>(`/circulation/loans/${encodeURIComponent(id)}`)
+  }
+  async getLoans(params: Partial<{ params: CqlParams, [key: string]: object | object[] | string | undefined }>): Promise<Loan[]> {
+    const urlParams = this.buildCqlQuery(params)
+
+    const response = await this.get<LoansResponse>(`/circulation/loans`, { params: urlParams })
+    return response.loans;
   }
   async getRequest(id: string): Promise<Request> {
     return await this.get<Request>(`/circulation/requests/${encodeURIComponent(id)}`)
