@@ -22,17 +22,9 @@ export default class ServicePointsAPI extends FolioAPI {
     return servicePoints[0]
   }
   
-  // Get a list of all service points along with the details information required for paging
+  // Based on the parameters, get a list of service points along with the details information required for paging
+  // To get the full list, the original query should pass in a large limit parameter
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
-    // Unless the limit is being sent in as a parameter, pass in the max limit
-    // We also want to retain any other parameters being sent through the query
-    if(! ("params" in params && "limit" in params["params"])) {
-      if(! ("params" in params)) {
-        params["params"] = {"limit": ServicePointsAPI.maxQueryLimit}
-      } else {
-        params["params"]["limit"] = ServicePointsAPI.maxQueryLimit
-      }
-    }
     const urlParams = this.buildCqlQuery(params)
     const response = await this.get<ServicePointsResponse>(`/service-points`, { params: urlParams })
     return response.servicepoints.map(this.addDetails)
