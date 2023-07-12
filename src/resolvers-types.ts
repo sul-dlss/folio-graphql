@@ -2094,7 +2094,6 @@ export type QueryPatronArgs = {
 
 export type QueryServicePointsArgs = {
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  params?: InputMaybe<CqlParams>;
 };
 
 /** Request for an item that might be at a different location or already checked out to another patron */

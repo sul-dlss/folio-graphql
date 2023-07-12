@@ -17,14 +17,20 @@ export default class ServicePointsAPI extends FolioAPI {
       ...servicePoint
     }
   }
+
+  // In our data model, code should uniquely identify service point
   async getByCode(code: string): Promise<ServicePoint> {
     const servicePoints = await this.getServicePoints({ 'code': [code] })
     return servicePoints[0]
   }
   
-  // Based on the parameters, get a list of service points along with the details information required for paging
-  // To get the full list, the original query should pass in a large limit parameter
+  // Get a list of all service points along with the details information required for paging
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
+    if(! ("params" in params) ) {
+      params["params"] = {}
+    }
+    // Set limit to max number to all the parameters back
+    params["params"]["limit"] = ServicePointsAPI.maxQueryLimit
     const urlParams = this.buildCqlQuery(params)
     const response = await this.get<ServicePointsResponse>(`/service-points`, { params: urlParams })
     return response.servicepoints.map(this.addDetails)

@@ -38,8 +38,8 @@ type Query {
   libraries: [Library]
   locations: [Location]
 
-  # for retrieving all service points or a subset based on query
-  servicePoints(id: [String], params: CqlParams): [ServicePoint]
+  # for retrieving all service points or a subset based on id
+  servicePoints(id: [String]): [ServicePoint]
 }
 
 ############################
