@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { ServicePoint, ServicePointDetails, CqlParams, Location, Library } from '../schema.js'
+import { ServicePoint, ServicePointDetails, CqlParams } from '../schema.js'
 
 interface ServicePointsResponse {
   servicepoints: ServicePoint[]
@@ -8,8 +8,7 @@ interface ServicePointsResponse {
 export default class ServicePointsAPI extends FolioAPI {
   // This is the maximum also used in type-apis
   static maxQueryLimit = 2147483647
-  // Removing the individual getServicePoint by id method, since not used anywhere
-  // And will be updated with upcoming pull requests
+  
   // Parse the description string and add the resulting JSON object in the details filed
   addDetails(servicePoint: ServicePoint) {
     return {
@@ -26,12 +25,11 @@ export default class ServicePointsAPI extends FolioAPI {
   
   // Get a list of all service points along with the details information required for paging
   async getServicePoints(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ServicePoint[]> {
-    if(! ("params" in params) ) {
-      params["params"] = {}
-    }
-    // Set limit to max number to all the parameters back
-    params["params"]["limit"] = ServicePointsAPI.maxQueryLimit
     const urlParams = this.buildCqlQuery(params)
+    // If no limit set, retrieve the max number possible
+    if(!urlParams.has("limit")) {
+      urlParams.set("limit", ServicePointsAPI.maxQueryLimit.toString())
+    } 
     const response = await this.get<ServicePointsResponse>(`/service-points`, { params: urlParams })
     return response.servicepoints.map(this.addDetails)
   }
