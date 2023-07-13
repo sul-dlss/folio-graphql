@@ -3474,4 +3474,6 @@ type ServicePointDetails {
   """Should this service point be a default pickup option for requests?"""
   isDefaultPickup: Boolean
   notes: String
+  """The code for the campus for which this service point will be set as default"""
+  isDefaultForCampus: String
 }

@@ -2430,6 +2430,8 @@ export type ServicePoint = {
 
 export type ServicePointDetails = {
   __typename?: 'ServicePointDetails';
+  /** The code for the campus for which this service point will be set as default */
+  isDefaultForCampus?: Maybe<Scalars['String']['output']>;
   /** Should this service point be a default pickup option for requests? */
   isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
@@ -4347,6 +4349,7 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
 }>;
 
 export type ServicePointDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePointDetails'] = ResolversParentTypes['ServicePointDetails']> = ResolversObject<{
+  isDefaultForCampus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isDefaultPickup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
