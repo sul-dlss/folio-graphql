@@ -102,6 +102,9 @@ export const resolvers: Resolvers = {
     },
     locations(parent, args, { dataSources: { types } }, info) {
       return types.getValuesFor<Location>("locations", {})
+    },
+    servicePoints(parent, args, { dataSources: { servicepoints } }, info) {
+      return servicepoints.getServicePoints(args)
     }
   },
   Patron: {

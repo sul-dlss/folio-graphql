@@ -2079,6 +2079,7 @@ export type Query = {
   patronGroups?: Maybe<Array<Maybe<PatronGroup>>>;
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
+  servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
 };
 
 
@@ -2120,6 +2121,11 @@ export type QueryItemsArgs = {
 
 export type QueryPatronArgs = {
   id: Scalars['UUID']['input'];
+};
+
+
+export type QueryServicePointsArgs = {
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 /** Request for an item that might be at a different location or already checked out to another patron */
@@ -2399,6 +2405,7 @@ export type ServicePoint = {
   code: Scalars['String']['output'];
   /** description of the service-point */
   description?: Maybe<Scalars['String']['output']>;
+  details?: Maybe<ServicePointDetails>;
   /** display name, a required field */
   discoveryDisplayName: Scalars['String']['output'];
   /** enum for closedLibraryDateManagement associated with hold shelf */
@@ -2416,6 +2423,13 @@ export type ServicePoint = {
   shelvingLagTime?: Maybe<Scalars['Int']['output']>;
   /** List of staff slips for this service point */
   staffSlips?: Maybe<Array<ServicepointStaffSlipsItem>>;
+};
+
+export type ServicePointDetails = {
+  __typename?: 'ServicePointDetails';
+  /** Should this service point be a default pickup option for requests? */
+  isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
 };
 
 export enum ServicepointHoldShelfClosedLibraryDateManagement {

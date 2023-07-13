@@ -39,6 +39,9 @@ type Query {
   campuses: [Campus]
   libraries: [Library]
   locations: [Location]
+
+  # for retrieving all service points or a subset based on id
+  servicePoints(id: [String]): [ServicePoint]
 }
 
 ############################
@@ -3461,4 +3464,14 @@ extend type LocationDetails {
 
   """Service point where material from this location is scanned"""
   scanServicePoint: ServicePoint
+}
+
+extend type ServicePoint {
+  details: ServicePointDetails
+}
+
+type ServicePointDetails {
+  """Should this service point be a default pickup option for requests?"""
+  isDefaultPickup: Boolean
+  notes: String
 }
