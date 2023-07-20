@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Awaiting payment schema",
+  "type": "object",
+  "properties": {
+    "encumbranceId": {
+      "description": "UUID of the encumbrance to updated",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "releaseEncumbrance": {
+      "description": "Whether or not remaining encumbered money should be released",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

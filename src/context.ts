@@ -8,6 +8,7 @@ import TypeAPI from "./folio/type-api.js"
 import FeeFinesAPI from "./folio/feefines-api.js"
 import CirculationAPI from "./folio/circulation-api.js"
 import MaterialTypesAPI from "./folio/material-type-api.js"
+import OrdersAPI from "./folio/orders-api.js"
 
 export interface FolioContext {
   token: string;
@@ -22,5 +23,6 @@ export interface FolioContext {
     feefines: FeeFinesAPI;
     circulation: CirculationAPI;
     materialtypes: MaterialTypesAPI;
+    orders: OrdersAPI;
   };
 }
