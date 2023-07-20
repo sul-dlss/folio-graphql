@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { CqlParams, HoldingsRecord } from '../schema'
+import { CqlParams, HoldingsRecord, BoundWithPart, BoundWithParts } from '../schema'
 
 interface HoldingsResponse {
   holdingsRecords: HoldingsRecord[]
@@ -19,5 +19,12 @@ export default class HoldingsAPI extends FolioAPI {
 
     const response = await this.get<HoldingsResponse>(`/holdings-storage/holdings`, { params: urlParams })
     return response.holdingsRecords
+  }
+
+  async getBoundWithPart(id: string): Promise<BoundWithPart> {
+    const urlParams = this.buildCqlQuery({ holdingsRecordId: id })
+    const response = await this.get<BoundWithParts>('/inventory-storage/bound-with-parts', { params: urlParams });
+
+    return response.boundWithParts[0];
   }
 }

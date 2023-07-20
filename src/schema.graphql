@@ -2734,6 +2734,34 @@ type AuthorityNotesItem {
   note: String!
 }
 
+"""
+Records the relationship between a part of a bound-with (a holdings-record) and the bound-with as a whole (the circulatable item)
+"""
+type BoundWithPart {
+  """unique ID of the recorded bound-with relation; a UUID"""
+  id: UUID
+
+  """
+  the ID of the holdings record representing a part of a bound-with; a UUID
+  """
+  holdingsRecordId: String!
+
+  """the ID of the item representing the bind; a UUID"""
+  itemId: String!
+  metadata: Metadata
+}
+
+"""
+A collection of parts (holdings-records) of one or more bound-with items
+"""
+type BoundWithParts {
+  """List of bound-with records"""
+  boundWithParts: [BoundWithPart!]!
+
+  """Estimated or exact total number of records"""
+  totalRecords: Int!
+}
+
 """A call number type"""
 type CallNumberType {
   """unique ID of the call number type; a UUID"""
@@ -3419,6 +3447,7 @@ extend type HoldingsRecord {
   holdingsType: HoldingsType
   callNumberType: CallNumberType
   source: HoldingsRecordsSource
+  boundWithItem: Item
 }
 
 extend type HoldingsrecordElectronicAccessItem {
