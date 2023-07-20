@@ -318,6 +318,12 @@ export const resolvers: Resolvers = {
     },
     source({ sourceId }, args, { dataSources: { types } }, info) {
       return types.getById<HoldingsRecordsSource>("holdings-sources", { key: 'holdingsRecordsSources' }, sourceId)
+    },
+    async boundWithItem({ id }, args, { dataSources: { holdings, items } }, info) {
+      const part = await holdings.getBoundWithPart(id);
+      if (!part) return null;
+
+      return items.getItem(part.itemId)
     }
   },
   HoldingsrecordElectronicAccessItem: {

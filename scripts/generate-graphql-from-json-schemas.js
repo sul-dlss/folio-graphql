@@ -323,7 +323,49 @@ const queryType = new GraphQLObjectType({
       // After all that work, we filter out models that we just don't need. These are the
       // "top level" models we care about, and the GraphQL implementation will figure out
       // their dependencies and drop the rest on the floor.
-      if (['Patron', 'User', 'PatronGroup', 'Instance', 'InstanceNoteType', 'InstanceStatus', 'InstanceType', 'ModeOfIssuance', 'AlternativeTitleType', 'Authority', 'ContributorType', 'HoldingsRecord', 'HoldingsType', 'HoldingsRecordsSource', 'Item', 'ItemDamagedStatus', 'LoanPolicy', 'Request', 'RequestPolicy', 'Library', 'Loan', 'LoanType', 'CallNumberType', 'ElectronicAccessRelationship', 'PatronGroup', 'Block', 'Account', 'ManualBlock', 'PatronBlockCondition', 'PatronBlockLimit', 'FeeFine', 'FeeFineAction', 'ProxyFor', 'FixedDueDateSchedule', 'OverdueFinePolicy', 'LostItemFeePolicy', 'PatronNoticePolicy'].includes(type.name)) {
+      const models = [
+        'Patron',
+        'User',
+        'PatronGroup',
+        'Instance',
+        'InstanceNoteType',
+        'InstanceStatus',
+        'InstanceType',
+        'ModeOfIssuance',
+        'AlternativeTitleType',
+        'Authority',
+        'ContributorType',
+        'HoldingsRecord',
+        'HoldingsType',
+        'HoldingsRecordsSource',
+        'BoundWithParts',
+        'BoundWithPart',
+        'Item',
+        'ItemDamagedStatus',
+        'LoanPolicy',
+        'Request',
+        'RequestPolicy',
+        'Library',
+        'Loan',
+        'LoanType',
+        'CallNumberType',
+        'ElectronicAccessRelationship',
+        'PatronGroup',
+        'Block',
+        'Account',
+        'ManualBlock',
+        'PatronBlockCondition',
+        'PatronBlockLimit',
+        'FeeFine',
+        'FeeFineAction',
+        'ProxyFor',
+        'FixedDueDateSchedule',
+        'OverdueFinePolicy',
+        'LostItemFeePolicy',
+        'PatronNoticePolicy'
+      ];
+
+      if (models.includes(type.name)) {
         const n = type.name.charAt(0).toLowerCase() + type.name.slice(1);
 
         result[n] = { type };

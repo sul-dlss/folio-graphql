@@ -240,6 +240,27 @@ export type Block = {
   patronBlockConditionId?: Maybe<Scalars['UUID']['output']>;
 };
 
+/** Records the relationship between a part of a bound-with (a holdings-record) and the bound-with as a whole (the circulatable item) */
+export type BoundWithPart = {
+  __typename?: 'BoundWithPart';
+  /** the ID of the holdings record representing a part of a bound-with; a UUID */
+  holdingsRecordId: Scalars['String']['output'];
+  /** unique ID of the recorded bound-with relation; a UUID */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** the ID of the item representing the bind; a UUID */
+  itemId: Scalars['String']['output'];
+  metadata?: Maybe<Metadata>;
+};
+
+/** A collection of parts (holdings-records) of one or more bound-with items */
+export type BoundWithParts = {
+  __typename?: 'BoundWithParts';
+  /** List of bound-with records */
+  boundWithParts: Array<BoundWithPart>;
+  /** Estimated or exact total number of records */
+  totalRecords: Scalars['Int']['output'];
+};
+
 /** A call number type */
 export type CallNumberType = {
   __typename?: 'CallNumberType';
@@ -459,6 +480,7 @@ export type HoldingsRecord = {
   administrativeNotes?: Maybe<Array<Scalars['String']['output']>>;
   /** Items of bareHoldings. This is a virtual field, accessible only when using mod-graphql. */
   bareHoldingsItems?: Maybe<Array<Item>>;
+  boundWithItem?: Maybe<Item>;
   /** Call Number is an identifier assigned to an item, usually printed on a label attached to the item. */
   callNumber?: Maybe<Scalars['String']['output']>;
   /** Prefix of the call number on the holding level. */
@@ -2666,6 +2688,8 @@ export type ResolversTypes = ResolversObject<{
   AuthoritySource: AuthoritySource;
   Block: ResolverTypeWrapper<Block>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  BoundWithPart: ResolverTypeWrapper<BoundWithPart>;
+  BoundWithParts: ResolverTypeWrapper<BoundWithParts>;
   CallNumberType: ResolverTypeWrapper<CallNumberType>;
   Campus: ResolverTypeWrapper<Campus>;
   Charge: ResolverTypeWrapper<Charge>;
@@ -2839,6 +2863,8 @@ export type ResolversParentTypes = ResolversObject<{
   AuthorityNotesItem: AuthorityNotesItem;
   Block: Block;
   Boolean: Scalars['Boolean']['output'];
+  BoundWithPart: BoundWithPart;
+  BoundWithParts: BoundWithParts;
   CallNumberType: CallNumberType;
   Campus: Campus;
   Charge: Charge;
@@ -3100,6 +3126,20 @@ export type BlockResolvers<ContextType = FolioContext, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type BoundWithPartResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BoundWithPart'] = ResolversParentTypes['BoundWithPart']> = ResolversObject<{
+  holdingsRecordId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  itemId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type BoundWithPartsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BoundWithParts'] = ResolversParentTypes['BoundWithParts']> = ResolversObject<{
+  boundWithParts?: Resolver<Array<ResolversTypes['BoundWithPart']>, ParentType, ContextType>;
+  totalRecords?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type CallNumberTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CallNumberType'] = ResolversParentTypes['CallNumberType']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
@@ -3232,6 +3272,7 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   acquisitionMethod?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   bareHoldingsItems?: Resolver<Maybe<Array<ResolversTypes['Item']>>, ParentType, ContextType>;
+  boundWithItem?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType>;
   callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumberPrefix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumberSuffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -4452,6 +4493,8 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   AuthorityIdentifiersItem?: AuthorityIdentifiersItemResolvers<ContextType>;
   AuthorityNotesItem?: AuthorityNotesItemResolvers<ContextType>;
   Block?: BlockResolvers<ContextType>;
+  BoundWithPart?: BoundWithPartResolvers<ContextType>;
+  BoundWithParts?: BoundWithPartsResolvers<ContextType>;
   CallNumberType?: CallNumberTypeResolvers<ContextType>;
   Campus?: CampusResolvers<ContextType>;
   Charge?: ChargeResolvers<ContextType>;
