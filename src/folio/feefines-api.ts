@@ -13,6 +13,7 @@ export default class FeeFinesAPI extends FolioAPI {
   // Types of fee/fines in the system can be retrieved via an API call (GET /feefines)
   async getFeeFineTypes(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<FeeFine[]> {
     const urlParams = this.buildCqlQuery(params)
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
     const response = await this.get<FeeFinesResponse>(`/feefines`, { params: urlParams })
     return response.feefines
   }
