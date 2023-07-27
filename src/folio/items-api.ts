@@ -19,6 +19,7 @@ export default class ItemsAPI extends FolioAPI {
 
   async getItems(params: Partial<{ params: CqlParams, [key: string]: unknown}>): Promise<Item[]> {
     const urlParams = this.buildCqlQuery(params)
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
 
     const response = await this.get<ItemsResponse>(`/item-storage/items`, { params: urlParams })
     return response.items

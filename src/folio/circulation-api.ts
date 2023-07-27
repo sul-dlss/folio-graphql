@@ -10,6 +10,7 @@ export default class CirculationAPI extends FolioAPI {
   }
   async getLoans(params: Partial<{ params: CqlParams, [key: string]: object | object[] | string | undefined }>): Promise<Loan[]> {
     const urlParams = this.buildCqlQuery(params)
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
 
     const response = await this.get<LoansResponse>(`/circulation/loans`, { params: urlParams })
     return response.loans;

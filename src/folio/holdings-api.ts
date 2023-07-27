@@ -16,6 +16,7 @@ export default class HoldingsAPI extends FolioAPI {
 
   async getHoldingsRecords(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<HoldingsRecord[]> {
     const urlParams = this.buildCqlQuery(params)
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
 
     const response = await this.get<HoldingsResponse>(`/holdings-storage/holdings`, { params: urlParams })
     return response.holdingsRecords

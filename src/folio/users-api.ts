@@ -29,6 +29,7 @@ export default class UsersAPI extends FolioAPI {
 
   async getManualBlocks(id: string): Promise<any> {
     const urlParams = this.buildCqlQuery({ userId: id })
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
     const blocks = await this.get<ManualBlocksResponse>(`/manualblocks`, { params: urlParams })
 
     return blocks.manualblocks
@@ -36,6 +37,7 @@ export default class UsersAPI extends FolioAPI {
 
   async getFeeFineActions(accountId) {
     const urlParams = this.buildCqlQuery({ accountId: accountId })
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
     const actions = await this.get(`/feefineactions`, { params: urlParams })
 
     // remove the 'source' attribute from the response because it contains private staff data
@@ -45,6 +47,7 @@ export default class UsersAPI extends FolioAPI {
 
   async getAccounts(userId: string): Promise<any> {
     const urlParams = this.buildCqlQuery({ userId: userId })
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
     const response = await this.get<AccountsResponse>(`/accounts`, { params: urlParams })
     return response.accounts
   }
@@ -59,6 +62,7 @@ export default class UsersAPI extends FolioAPI {
 
   async getProxyFor(params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<ProxyFor[]> {
     const urlParams = this.buildCqlQuery(params)
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
 
     const response = await this.get<ProxiesForResponse>(`/proxiesfor`, { params: urlParams })
     return response.proxiesFor
