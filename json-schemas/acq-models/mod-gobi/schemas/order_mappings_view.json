@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Order mapping view",
+  "type": "object",
+  "properties": {
+    "mappingType": {
+      "type": "string",
+      "readonly": true,
+      "description": "The type of the GOBI mapping",
+      "enum": [
+        "Default",
+        "Custom"
+      ],
+      "default": "Default"
+    },
+    "orderMappings": {
+      "type": "object",
+      "readonly": true,
+      "description": "Gobi mapping",
+      "$ref": "order_mappings.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "mappingType",
+    "mapping"
+  ]
+}

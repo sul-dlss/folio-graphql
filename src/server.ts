@@ -26,6 +26,7 @@ import TypeAPI from "./folio/type-api.js"
 import FeeFinesAPI from "./folio/feefines-api.js"
 import CirculationAPI from "./folio/circulation-api.js"
 import MaterialTypesAPI from './folio/material-type-api.js'
+import OrdersAPI from './folio/orders-api.js'
 import AuthnAPI from "./folio/authn-api.js"
 import OkapiAPI from "./folio/okapi-api.js"
 import { FolioContext } from './context.js'
@@ -84,6 +85,7 @@ const context = async ({ req }: Partial<{ req: express.Request }>) => {
       feefines: new FeeFinesAPI({ cache, token }),
       circulation: new CirculationAPI({ cache, token }),
       materialtypes: new MaterialTypesAPI({ cache, token }),
+      orders: new OrdersAPI({ cache, token }),
     }
   }
 }

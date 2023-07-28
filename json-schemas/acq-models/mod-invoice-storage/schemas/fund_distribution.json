@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Invoice/voucher line fund distribution",
+  "type": "object",
+  "properties": {
+    "code": {
+      "description": "The code of the fund associated with this fund distribution",
+      "type": "string"
+    },
+    "encumbrance": {
+      "description": "UUID of encumbrance record associated with this fund distribution",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "fundId": {
+      "description": "UUID of the fund associated with this fund distribution",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "invoiceLineId": {
+      "description": "UUID of the invoice line associated with this fund distribution",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "distributionType": {
+      "description": "Percentage or amount type of the value property",
+      "type": "string",
+      "enum": [
+        "amount",
+        "percentage"
+      ],
+      "default": "percentage"
+    },
+    "expenseClassId": {
+      "description": "UUID of the expense class associated with this fund distribution",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "value": {
+      "description": "The percentage of the cost to be applied to this fund",
+      "type": "number"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "fundId",
+    "distributionType",
+    "value"
+  ]
+}

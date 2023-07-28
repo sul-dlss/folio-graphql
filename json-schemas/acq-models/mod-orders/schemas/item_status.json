@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "The status of the Item",
+  "type": "string",
+  "enum": [
+    "In process",
+    "On order",
+    "Available",
+    "In transit",
+    "Order closed",
+    "Aged to lost",
+    "Awaiting pickup",
+    "Awaiting delivery",
+    "Checked out",
+    "Claimed returned",
+    "Declared lost",
+    "In process (non-requestable)",
+    "Intellectual item",
+    "Long missing",
+    "Lost and paid",
+    "Missing",
+    "Paged",
+    "Restricted",
+    "Unavailable",
+    "Unknown",
+    "Withdrawn"
+  ],
+  "default": "In process"
+}

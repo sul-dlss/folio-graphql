@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A fiscal year record",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "UUID of the fiscal year record",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "_version": {
+      "type": "integer",
+      "description": "Record version for optimistic locking"
+    },
+    "acqUnitIds": {
+      "description": "UUIDs of the acquisition units associated with this fiscal year",
+      "type": "array",
+      "items": {
+        "$ref": "../../common/schemas/uuid.json"
+      }
+    },
+    "name": {
+      "description": "The name of the fiscal year",
+      "type": "string"
+    },
+    "code": {
+      "description": "The code of the fiscal year",
+      "type": "string"
+    },
+    "currency": {
+      "description": "Currency code which is recorded when the FY ends, otherwise the system currency can be assumed",
+      "type": "string"
+    },
+    "description": {
+      "description": "The description of the fiscal year",
+      "type": "string"
+    },
+    "periodStart": {
+      "description": "The start date of the fiscal year",
+      "type": "string",
+      "format": "date-time"
+    },
+    "periodEnd": {
+      "description": "The end date of the fiscal year",
+      "type": "string",
+      "format": "date-time"
+    },
+    "series": {
+      "description": "The fiscal year series",
+      "type": "string"
+    },
+    "financialSummary": {
+      "description": "Includes Funding information and Financial activity",
+      "$ref": "fiscal_year_financial_summary.json"
+    },
+    "metadata": {
+      "type": "object",
+      "$ref": "../../../raml-util/schemas/metadata.schema",
+      "readonly": true
+    }
+
+  },
+  "additionalProperties": false,
+  "required": [
+    "code",
+    "name",
+    "periodStart",
+    "periodEnd"
+  ]
+}

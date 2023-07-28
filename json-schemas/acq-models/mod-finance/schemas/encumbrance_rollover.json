@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Encumbrance rollover info",
+  "javaName" : "EncumbranceRollover",
+  "type": "object",
+  "properties": {
+    "orderType": {
+      "description": "Order type",
+      "type": "string",
+      "enum": [
+        "Ongoing",
+        "Ongoing-Subscription",
+        "One-time"
+      ]
+    },
+    "basedOn": {
+      "description": "Based on Expended, Remaining or InitialAmount",
+      "type": "string",
+      "enum": [
+        "Expended",
+        "Remaining",
+        "InitialAmount"
+      ]
+    },
+    "increaseBy": {
+      "description": "How much should we increase the encumbrance amount based on basedOn",
+      "type": "number",
+      "default": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "orderType",
+    "basedOn"
+  ]
+}

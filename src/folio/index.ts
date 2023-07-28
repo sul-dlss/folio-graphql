@@ -248,6 +248,9 @@ export const resolvers: Resolvers = {
     },
     modeOfIssuance({ modeOfIssuanceId }, args, { dataSources: { types } }, info) {
       return types.getById<ModeOfIssuance>("modes-of-issuance", { key: 'modesOfIssuance' }, modeOfIssuanceId)
+    },
+    orderLines({ id }, args, { dataSources: { orders } }, info) {
+      return orders.getPoLines({ instanceId: id })
     }
   },
   InstanceAlternativeTitlesItem: {
@@ -324,6 +327,9 @@ export const resolvers: Resolvers = {
       if (!part) return null;
 
       return items.getItem(part.itemId)
+    },
+    holdingSummaries({ id }, args, { dataSources: { orders } }, info) {
+      return orders.getHoldingSummaries(id)
     }
   },
   HoldingsrecordElectronicAccessItem: {
@@ -443,6 +449,19 @@ export const resolvers: Resolvers = {
     feeFine({ feeFineId }, args, { dataSources: { feefines } }, info) {
       return feefines.getFeeFine(feeFineId)
     },
+  },
+  HoldingSummary: {
+    poLine({ poLineId }, args, { dataSources: { orders } }, info) {
+      return orders.getPoLine(poLineId)
+    },
+    pieces({ poLineId }, args, { dataSources: { orders } }, info) {
+      return orders.getPieces({ poLineId: poLineId })
+    }
+  },
+  PoLine: {
+    pieces({ id }, args, { dataSources: { orders } }, info) {
+      return orders.getPieces({ poLineId: id })
+    }
   },
   UUID: UUIDResolver
 }

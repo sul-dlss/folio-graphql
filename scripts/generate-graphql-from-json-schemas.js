@@ -23,7 +23,11 @@ const refAliases = {
   '/mod-feesfines/ramls/period.json': '/mod-circulation-storage/ramls/period.json',
   '/mod-feesfines/ramls/loan-policy.json': '/mod-circulation-storage/ramls/loan-policy.json',
   '/mod-patron-blocks/ramls/period.json': '/mod-circulation-storage/ramls/period.json',
-  '/mod-patron-blocks/ramls/user.json': '/mod-user/ramls/userdata.json',
+  '/mod-patron-blocks/ramls/user.json': '/mod-user/ramls/userdata.json'
+}
+
+const refRename = {
+  '/acq-models/mod-orders-storage/schemas/location.json': '/acq-models/mod-orders-storage/schemas/order_location.schema.json',
 }
 
 // Futz with the $ref values to make them point at each other appropriately
@@ -42,7 +46,7 @@ function normalizeRef(file, str) {
   const p = path.dirname(file.replace(folioRoot, '/')) + '/' + str.replace('.schema', '.schema.json');
 
   // it's possible we need to repoint the ref to a different file in another module
-  return refAliases[p] || p
+  return refAliases[p] || refRename[p] || p
 }
 
 // FOLIO's usage of ref is all over the place, and some of it doesn't play nice with
@@ -69,6 +73,10 @@ function fixupStuff(file, json) {
       json.properties[key].pattern == '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'
     ) {
       json.properties[key] = { description: json.properties[key].description, '$ref': '/uuid.schema.json' };
+    }
+
+    if (json.properties[key]['$ref'] && file.includes('acq-models') && json.properties[key]['type'] == 'string') {
+      delete json.properties[key]['$ref'];
     }
 
     if (json.properties[key]['folio:$ref']) {
@@ -117,7 +125,7 @@ context.types.set('/date-time', new GraphQLScalarType({ name: 'DateTime', descri
 
 context.types.set('/mod-circulation-storage/ramls/request-type.json', new GraphQLEnumType({ name: 'RequestType', values: { 'Hold': {}, 'Recall': {}, 'Page': {} } }))
 
-const files = await glob([folioRoot + 'mod-*/ramls/**/*.json', folioRoot + 'mod-*/ramls/**/*.schema']);
+const files = await glob([folioRoot + 'mod-*/ramls/**/*.json', folioRoot + 'mod-*/ramls/**/*.schema', folioRoot + 'acq-models/**/*.json']);
 
 files.sort().map(file => {
   // omitting because of a conflict with mod-circulation
@@ -129,9 +137,6 @@ files.sort().map(file => {
   // omitting because they aren't valid json schema
   if (file.includes('example') || file.includes('codex/') || file.includes('codex-next/') || file.includes('ramls/schema/anonymize-loans-response.json') || file.includes('ramls/events') || file.includes('ramls/migration') || file.includes('actions/')) return;
 
-  // omitting because they aren't object types
-  if (file.includes('uuid') || file.includes('parameters') || file.includes('tenant') || file.includes('error') || file.includes('CQL')) return;
-
   // omitting because we don't need them
   if (file.includes('dereferenced') || file.includes('ramls/inventory')) return;
   if (refAliases[file.replace(folioRoot, '/').replace('.schema', '.schema.json')]) return;
@@ -141,8 +146,13 @@ files.sort().map(file => {
   var json;
   json = JSON.parse(f);
 
+  // omitting because they aren't object types
+  if (json.type != 'object') return;
+
   if (file.includes('raml-util')) {
     json['$id'] = file.replace(/.*\/raml-util\//, '/raml-util/').replace('.schema', '.schema.json')
+  } else if (file.includes('json-schemas/acq-models/mod-orders-storage/schemas/location.json')) {
+    json['$id'] = '/acq-models/mod-orders-storage/schemas/order_location.schema.json';
   } else {
     json['$id'] = file.replace(folioRoot, '/').replace('.schema', '.schema.json')
   }
@@ -194,6 +204,30 @@ files.sort().map(file => {
   // Loans has an internal definition of a subset of loan policy, but we'd rather use the full definition
   if (file.includes('/mod-circulation/ramls/loan.json')) {
     json.properties.loanPolicy = { "$ref": "/mod-circulation-storage/ramls/loan-policy.json" }
+  }
+
+  // Loans has an internal definition of a subset of loan policy, but we'd rather use the full definition
+  if (file.includes('/acq-models/mod-orders-storage/schemas/po_line.json')) {
+    json.properties.orderFormat = { "type": "string" }
+    json.properties.receiptStatus = { "type": "string" }
+    json.properties.source = { "type": "string" }
+  }
+
+  if (file.includes('/acq-models/mod-orders-storage/schemas/product_identifier.json')) {
+    json.properties.productIdType = { "type": "string" }
+  }
+
+  if (file.includes('/acq-models/mod-orders-storage/schemas/fund_distribution.json')) {
+    json.properties.code = { "type": "string" }
+  }
+
+  if (file.includes('/acq-models/mod-orders-storage/schemas/vendor_detail.json')) {
+    json.properties.referenceNumbers = { "type": "array", "items": { "type": "string" } }
+  }
+
+  if (file.includes('/acq-models/mod-orders/schemas/holding_summary.json')) {
+    json.properties.polReceiptStatus = { "type": "string" }
+    json.properties.orderCloseReason = { "type": "string" }
   }
 
   fixupStuff(file, json)
@@ -362,7 +396,15 @@ const queryType = new GraphQLObjectType({
         'FixedDueDateSchedule',
         'OverdueFinePolicy',
         'LostItemFeePolicy',
-        'PatronNoticePolicy'
+        'PatronNoticePolicy',
+        'PieceCollection',
+        'Piece',
+        'Titles',
+        'Title',
+        'PoLineCollection',
+        'PoLine',
+        'HoldingSummary',
+        'HoldingSummaryCollection'
       ];
 
       if (models.includes(type.name)) {

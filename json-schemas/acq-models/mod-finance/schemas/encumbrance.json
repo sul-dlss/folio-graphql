@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "The encumbrance associated with the payment/credit taking place",
+  "type": "object",
+  "properties": {
+    "amountAwaitingPayment": {
+      "default": 0,
+      "description": "Deprecated! Going to be removed in next release. The amount of awaiting for payment",
+      "type": "number"
+    },
+    "amountExpended": {
+      "default": 0,
+      "description": "The amount currently expended by this encumbrance",
+      "type": "number"
+    },
+    "initialAmountEncumbered": {
+      "default": 0,
+      "description": "The initial amount of this encumbrance. Shouldn't change once create",
+      "type": "number"
+    },
+    "status": {
+      "default": "Unreleased",
+      "description": "The status of this encumbrance",
+      "type": "string",
+      "enum": [
+        "Released",
+        "Unreleased",
+        "Pending"
+      ]
+    },
+    "orderType": {
+     "description": "Taken from the purchase order",
+     "type": "string",
+      "enum": [
+        "One-Time",
+        "Ongoing"
+      ]
+    },
+    "orderStatus": {
+      "description": "Taken from the purchase order",
+      "type": "string",
+      "default": "Open",
+      "enum": [
+        "Pending",
+        "Open",
+        "Closed"
+      ]
+    },
+    "subscription": {
+     "description": "Taken from the purchase Order,for fiscal year rollover",
+     "type": "boolean"
+    },
+    "reEncumber": {
+     "description": "Taken from the purchase Order,for fiscal year rollover",
+     "type": "boolean"
+    },
+    "sourcePurchaseOrderId": {
+     "description": "UUID of the purchase order associated with this encumbrance",
+     "$ref": "../../common/schemas/uuid.json"
+    },
+    "sourcePoLineId": {
+     "description": "UUID of the poLine associated with this encumbrance",
+     "$ref": "../../common/schemas/uuid.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "initialAmountEncumbered",
+    "status",
+    "orderType",
+    "subscription",
+    "reEncumber",
+    "sourcePurchaseOrderId",
+    "sourcePoLineId"
+  ]
+}

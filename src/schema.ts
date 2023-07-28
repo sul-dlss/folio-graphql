@@ -293,6 +293,17 @@ export type Charge = {
   chargeType?: Maybe<Scalars['String']['output']>;
 };
 
+/** details about an order claim */
+export type Claim = {
+  __typename?: 'Claim';
+  /** whether or not this purchase order line has been claimed */
+  claimed?: Maybe<Scalars['Boolean']['output']>;
+  /** the number of days after the expected receipt date during which claims should not be processed */
+  grace?: Maybe<Scalars['Int']['output']>;
+  /** date a claim was sent */
+  sent?: Maybe<Scalars['DateTime']['output']>;
+};
+
 /** A classification type */
 export type ClassificationType = {
   __typename?: 'ClassificationType';
@@ -302,6 +313,15 @@ export type ClassificationType = {
   name: Scalars['String']['output'];
   /** label indicating where the classification type entry originates from, i.e. 'folio' or 'local' */
   source?: Maybe<Scalars['String']['output']>;
+};
+
+/** contributor to the material */
+export type Contributor = {
+  __typename?: 'Contributor';
+  /** the name of a contributor to the material */
+  contributor?: Maybe<Scalars['String']['output']>;
+  /** UUID of the contributor type */
+  contributorNameTypeId: Scalars['String']['output'];
 };
 
 /** A contributor name type */
@@ -328,11 +348,60 @@ export type ContributorType = {
   source: Scalars['String']['output'];
 };
 
+/** purchase order line cost record */
+export type Cost = {
+  __typename?: 'Cost';
+  /** Lump sum that is added to the total estimated price - not affected by discount */
+  additionalCost?: Maybe<Scalars['Float']['output']>;
+  /** An ISO currency code */
+  currency: Scalars['String']['output'];
+  /** Percentage (0 to 100) or amount (positive number) that is subtracted from the list price time quantities calculation before additional cost */
+  discount?: Maybe<Scalars['Float']['output']>;
+  /** Percentage or amount discount type */
+  discountType?: Maybe<CostDiscountType>;
+  /** Exchange rate */
+  exchangeRate?: Maybe<Scalars['Float']['output']>;
+  /** Adjustment amount if rollover was happen */
+  fyroAdjustmentAmount?: Maybe<Scalars['Float']['output']>;
+  /** The per-item list price for physical or resources of 'Other' order format */
+  listUnitPrice?: Maybe<Scalars['Float']['output']>;
+  /** The e-resource per-item list price */
+  listUnitPriceElectronic?: Maybe<Scalars['Float']['output']>;
+  /** The calculated total estimated price for this purchase order line: list price time quantities minus discount amount plus additional cost */
+  poLineEstimatedPrice?: Maybe<Scalars['Float']['output']>;
+  /** Quantity of electronic items in this purchase order line */
+  quantityElectronic?: Maybe<Scalars['Int']['output']>;
+  /** Quantity of physical items or resources of 'Other' order format in this purchase order line */
+  quantityPhysical?: Maybe<Scalars['Int']['output']>;
+};
+
+export enum CostDiscountType {
+  Amount = 'amount',
+  Percentage = 'percentage'
+}
+
 export type CqlParams = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   sortby?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** purchase order line details */
+export type Details = {
+  __typename?: 'Details';
+  /** Flag for acknowledge receiving note */
+  isAcknowledged?: Maybe<Scalars['Boolean']['output']>;
+  /** a list of product identifiers */
+  productIds?: Maybe<Array<ProductIdentifier>>;
+  /** notes regarding receiving instructions */
+  receivingNote?: Maybe<Scalars['String']['output']>;
+  /** the start date of the subscription */
+  subscriptionFrom?: Maybe<Scalars['DateTime']['output']>;
+  /** the subscription interval in days */
+  subscriptionInterval?: Maybe<Scalars['Int']['output']>;
+  /** the end date of the subscription */
+  subscriptionTo?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** A qualifier indicating the type of relationship that an electronic resource at a given URL has to an Instance */
@@ -343,6 +412,38 @@ export type ElectronicAccessRelationship = {
   /** label for the type of relationship between a URL and an Instance */
   name: Scalars['String']['output'];
 };
+
+/** purchase order line e-resource details */
+export type Eresource = {
+  __typename?: 'Eresource';
+  /** UUID of the access provider */
+  accessProvider?: Maybe<Scalars['UUID']['output']>;
+  /** whether or not this resource is activated */
+  activated?: Maybe<Scalars['Boolean']['output']>;
+  /** number of days until activation, from date of order placement */
+  activationDue?: Maybe<Scalars['Int']['output']>;
+  /** Shows what inventory objects need to be created for electronic resource */
+  createInventory?: Maybe<EresourceCreateInventory>;
+  /** expected date the resource will be activated */
+  expectedActivation?: Maybe<Scalars['DateTime']['output']>;
+  /** License record */
+  license?: Maybe<License>;
+  /** UUID of the material Type */
+  materialType?: Maybe<Scalars['UUID']['output']>;
+  /** Electronic resource can be access via this URL */
+  resourceUrl?: Maybe<Scalars['String']['output']>;
+  /** whether or not this is a trial */
+  trial?: Maybe<Scalars['Boolean']['output']>;
+  /** the concurrent user-limit */
+  userLimit?: Maybe<Scalars['Int']['output']>;
+};
+
+export enum EresourceCreateInventory {
+  Instance = 'Instance',
+  InstanceHolding = 'Instance__Holding',
+  InstanceHoldingItem = 'Instance__Holding__Item',
+  None = 'None'
+}
 
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
 export type FeeFine = {
@@ -409,6 +510,27 @@ export type FixedDueDateSchedule = {
   schedules?: Maybe<Array<Schedule>>;
 };
 
+/** purchase order fund distribution */
+export type FundDistribution = {
+  __typename?: 'FundDistribution';
+  code?: Maybe<Scalars['String']['output']>;
+  /** Percentage or amount type of the value property */
+  distributionType: FundDistributionDistributionType;
+  /** UUID of encumbrance record associated with this fund distribution */
+  encumbrance?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the expense class associated with this fund distribution */
+  expenseClassId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the fund associated with this fund distribution */
+  fundId: Scalars['UUID']['output'];
+  /** The value of the cost to be applied to this fund */
+  value: Scalars['Float']['output'];
+};
+
+export enum FundDistributionDistributionType {
+  Amount = 'amount',
+  Percentage = 'percentage'
+}
+
 /** Hold schema for patron portal integration */
 export type Hold = {
   __typename?: 'Hold';
@@ -450,6 +572,39 @@ export enum HoldStatus {
   OpenAwaitingPickup = 'Open___Awaiting_pickup',
   OpenInTransit = 'Open___In_transit',
   OpenNotYetFilled = 'Open___Not_yet_filled'
+}
+
+/** Holding summary */
+export type HoldingSummary = {
+  __typename?: 'HoldingSummary';
+  orderCloseReason?: Maybe<Scalars['String']['output']>;
+  /** Order sent date */
+  orderSentDate?: Maybe<Scalars['DateTime']['output']>;
+  /** Order status */
+  orderStatus?: Maybe<Scalars['String']['output']>;
+  /** Purchase order type */
+  orderType?: Maybe<HoldingSummaryOrderType>;
+  pieces?: Maybe<Array<Maybe<Piece>>>;
+  poLine?: Maybe<PoLine>;
+  /** Purchase order line id */
+  poLineId?: Maybe<Scalars['String']['output']>;
+  /** Purchase order line number */
+  poLineNumber?: Maybe<Scalars['String']['output']>;
+  polReceiptStatus?: Maybe<Scalars['String']['output']>;
+};
+
+/** Collection of holding summary elements */
+export type HoldingSummaryCollection = {
+  __typename?: 'HoldingSummaryCollection';
+  /** an array of holding summaries */
+  holdingSummaries: Array<HoldingSummary>;
+  /** total number of records in the array */
+  totalRecords: Scalars['Int']['output'];
+};
+
+export enum HoldingSummaryOrderType {
+  OneTime = 'One_Time',
+  Ongoing = 'Ongoing'
 }
 
 /** A holdings note type */
@@ -500,6 +655,7 @@ export type HoldingsRecord = {
   electronicAccess?: Maybe<Array<HoldingsrecordElectronicAccessItem>>;
   /** Previous ID(s) assigned to the holdings record */
   formerIds?: Maybe<Array<Scalars['String']['output']>>;
+  holdingSummaries?: Maybe<Array<Maybe<HoldingSummary>>>;
   /** Instance of holding record. This is a virtual field, accessible only when using mod-graphql. */
   holdingsInstance?: Maybe<Instance>;
   /** Items related to holdings record. This is a virtual field, accessible only when using mod-graphql. */
@@ -530,6 +686,7 @@ export type HoldingsRecord = {
   notes?: Maybe<Array<HoldingsrecordNotesItem>>;
   /** Text (Number) */
   numberOfItems?: Maybe<Scalars['String']['output']>;
+  orderLines?: Maybe<Array<Maybe<PoLine>>>;
   /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** The permanent shelving location in which an item resides. */
@@ -740,6 +897,7 @@ export type Instance = {
   natureOfContentTermIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** Bibliographic notes (e.g. general notes, specialized notes) */
   notes?: Maybe<Array<InstanceNotesItem>>;
+  orderLines?: Maybe<Array<Maybe<PoLine>>>;
   /** Physical description of the described resource, including its extent, dimensions, and such other physical details as a description of any accompanying materials and unit type and size */
   physicalDescriptions?: Maybe<Array<Scalars['String']['output']>>;
   /** Records the fact that the resource was previously held by the library for things like Hathi access, etc. */
@@ -1232,6 +1390,17 @@ export type Library = {
   name: Scalars['String']['output'];
 };
 
+/** purchase order line license record */
+export type License = {
+  __typename?: 'License';
+  /** license code */
+  code?: Maybe<Scalars['String']['output']>;
+  /** license description */
+  description?: Maybe<Scalars['String']['output']>;
+  /** license reference */
+  reference?: Maybe<Scalars['String']['output']>;
+};
+
 /** Links the item with the patron and applies certain conditions based on policies */
 export type Loan = {
   __typename?: 'Loan';
@@ -1627,6 +1796,21 @@ export type Money = {
   amount: Scalars['Float']['output'];
   /** An ISO 4217 standard currency code */
   isoCurrencyCode: Scalars['String']['output'];
+};
+
+/** purchase order line location record */
+export type OrderLocation = {
+  __typename?: 'OrderLocation';
+  /** Holding UUID associated with order line */
+  holdingId?: Maybe<Scalars['String']['output']>;
+  /** UUID of the (inventory) location record */
+  locationId?: Maybe<Scalars['UUID']['output']>;
+  /** combined/total quanitity of physical and electronic items */
+  quantity?: Maybe<Scalars['Int']['output']>;
+  /** quantity of electronic items */
+  quantityElectronic?: Maybe<Scalars['Int']['output']>;
+  /** quantity of physical items */
+  quantityPhysical?: Maybe<Scalars['Int']['output']>;
 };
 
 /** Overdue fine policy to be associated with a loan policy by the Circulation Rules Editor */
@@ -2034,6 +2218,192 @@ export enum PeriodIntervalId {
   Months = 'Months',
   Weeks = 'Weeks'
 }
+
+/** purchase order line physical material details */
+export type Physical = {
+  __typename?: 'Physical';
+  /** Shows what inventory objects need to be created for physical resource */
+  createInventory?: Maybe<PhysicalCreateInventory>;
+  /** vendor agreed date prior to the Receipt Due date item is expected to be received by */
+  expectedReceiptDate?: Maybe<Scalars['DateTime']['output']>;
+  /** UUID of the material supplier record */
+  materialSupplier?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the material Type */
+  materialType?: Maybe<Scalars['UUID']['output']>;
+  /** date item should be received by */
+  receiptDue?: Maybe<Scalars['DateTime']['output']>;
+  /** list of volumes included to the physical material */
+  volumes: Array<Scalars['String']['output']>;
+};
+
+export enum PhysicalCreateInventory {
+  Instance = 'Instance',
+  InstanceHolding = 'Instance__Holding',
+  InstanceHoldingItem = 'Instance__Holding__Item',
+  None = 'None'
+}
+
+/** Piece details */
+export type Piece = {
+  __typename?: 'Piece';
+  /** Volume/enumeration information */
+  caption?: Maybe<Scalars['String']['output']>;
+  /** Chronology is the descriptive information for the dating scheme of a serial. Synchronized with inventory item. */
+  chronology?: Maybe<Scalars['String']['output']>;
+  /** Free form commentary */
+  comment?: Maybe<Scalars['String']['output']>;
+  /** Copy number of the piece */
+  copyNumber?: Maybe<Scalars['String']['output']>;
+  /** Records the fact that the record should not be displayed in a discovery system */
+  discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
+  /** Whether or not receiving history should be displayed in holding record view */
+  displayOnHolding?: Maybe<Scalars['Boolean']['output']>;
+  /** Enumeration is the descriptive information for the numbering scheme of a serial. Synchronized with inventory item. */
+  enumeration?: Maybe<Scalars['String']['output']>;
+  /** The format of the piece */
+  format: Scalars['String']['output'];
+  /** UUID of the holding record */
+  holdingId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of this piece record */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the associated item record */
+  itemId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the (inventory) location record */
+  locationId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the purchase order line this record is associated with */
+  poLineId: Scalars['UUID']['output'];
+  /** Date that associated item is expected to arrive */
+  receiptDate?: Maybe<Scalars['DateTime']['output']>;
+  /** The date associated item is actually received */
+  receivedDate?: Maybe<Scalars['DateTime']['output']>;
+  /** the status of this piece */
+  receivingStatus: PieceReceivingStatus;
+  /** Whether or not this is supplementary material */
+  supplement?: Maybe<Scalars['Boolean']['output']>;
+  /** UUID of the title record */
+  titleId: Scalars['UUID']['output'];
+};
+
+/** collection of piece records */
+export type PieceCollection = {
+  __typename?: 'PieceCollection';
+  /** collection of piece records */
+  pieces?: Maybe<Array<Piece>>;
+  /** The number of objects contained in this collection */
+  totalRecords?: Maybe<Scalars['Int']['output']>;
+};
+
+export enum PieceReceivingStatus {
+  Expected = 'Expected',
+  Received = 'Received'
+}
+
+/** purchase order line */
+export type PoLine = {
+  __typename?: 'PoLine';
+  /** UUID of the acquisition method for this purchase order line */
+  acquisitionMethod?: Maybe<Scalars['String']['output']>;
+  /** UUID of the agreement this purchase order line is related to */
+  agreementId?: Maybe<Scalars['UUID']['output']>;
+  /** an array of alert record IDs */
+  alerts?: Maybe<Array<Scalars['UUID']['output']>>;
+  /** if true then line will be marked as available to export in the EDIFACT format or other format */
+  automaticExport?: Maybe<Scalars['Boolean']['output']>;
+  /** whether or not there are cancellation restrictions for this purchase order line */
+  cancellationRestriction?: Maybe<Scalars['Boolean']['output']>;
+  /** free-form notes related to cancellation restrictions */
+  cancellationRestrictionNote?: Maybe<Scalars['String']['output']>;
+  /** if true this will toggle the Check-in workflow for details associated with this PO line */
+  checkinItems?: Maybe<Scalars['Boolean']['output']>;
+  /** list of claims */
+  claims?: Maybe<Array<Claim>>;
+  /** whether or not this purchase order line is for a collection */
+  collection?: Maybe<Scalars['Boolean']['output']>;
+  /** list of contributors to the material */
+  contributors?: Maybe<Array<Contributor>>;
+  /** cost record */
+  cost?: Maybe<Cost>;
+  /** description of the material */
+  description?: Maybe<Scalars['String']['output']>;
+  /** details record */
+  details?: Maybe<Details>;
+  /** the donor contributing to this purchase order line */
+  donor?: Maybe<Scalars['String']['output']>;
+  /** edition of the material */
+  edition?: Maybe<Scalars['String']['output']>;
+  /** eresource record */
+  eresource?: Maybe<Eresource>;
+  /** Fund distribution records for this purchase order line */
+  fundDistribution?: Maybe<Array<FundDistribution>>;
+  /** UUID identifying this purchase order line */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the instance record this purchase order line is related to */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+  /** Indicates that this POL is for a package */
+  isPackage?: Maybe<Scalars['Boolean']['output']>;
+  /** The last date when line was exported in the EDIFACT file */
+  lastEDIExportDate?: Maybe<Scalars['DateTime']['output']>;
+  /** Location records for this purchase order line */
+  locations?: Maybe<Array<OrderLocation>>;
+  metadata?: Maybe<Metadata>;
+  orderFormat: Scalars['String']['output'];
+  /** UUID referencing the poLine that represents the package that this POLs title belongs to */
+  packagePoLineId?: Maybe<Scalars['UUID']['output']>;
+  /** The purchase order line payment status */
+  paymentStatus?: Maybe<Scalars['String']['output']>;
+  /** UUID of the physical (details) record */
+  physical?: Maybe<Physical>;
+  pieces?: Maybe<Array<Maybe<Piece>>>;
+  /** purchase order line description */
+  poLineDescription?: Maybe<Scalars['String']['output']>;
+  /** A human readable number assigned to this PO line */
+  poLineNumber?: Maybe<Scalars['String']['output']>;
+  /** date (year) of the material's publication */
+  publicationDate?: Maybe<Scalars['String']['output']>;
+  /** publisher of the material */
+  publisher?: Maybe<Scalars['String']['output']>;
+  /** UUID of the purchase order */
+  purchaseOrderId: Scalars['UUID']['output'];
+  /** date the purchase order line was received */
+  receiptDate?: Maybe<Scalars['DateTime']['output']>;
+  receiptStatus?: Maybe<Scalars['String']['output']>;
+  /** Renewal note for this purchase order line */
+  renewalNote?: Maybe<Scalars['String']['output']>;
+  /** a list of reporting codes associated with this purchase order line */
+  reportingCodes?: Maybe<Array<Scalars['UUID']['output']>>;
+  /** who requested this purchase order line */
+  requester?: Maybe<Scalars['String']['output']>;
+  /** whether or not this is a rush order */
+  rush?: Maybe<Scalars['Boolean']['output']>;
+  /** who selected this material */
+  selector?: Maybe<Scalars['String']['output']>;
+  source: Scalars['String']['output'];
+  /** arbitrary tags associated with this purchase order line */
+  tags?: Maybe<Tags>;
+  /** title of the material */
+  titleOrPackage: Scalars['String']['output'];
+  /** Vendor detail record */
+  vendorDetail?: Maybe<VendorDetail>;
+};
+
+/** collection of purchase order line records */
+export type PoLineCollection = {
+  __typename?: 'PoLineCollection';
+  /** collection of purchase order line records */
+  poLines: Array<PoLine>;
+  /** The number of objects contained in this collection */
+  totalRecords: Scalars['Int']['output'];
+};
+
+/** Product identifier */
+export type ProductIdentifier = {
+  __typename?: 'ProductIdentifier';
+  /** The actual product identifier */
+  productId?: Maybe<Scalars['String']['output']>;
+  productIdType?: Maybe<Scalars['String']['output']>;
+  /** Information about the binding, format, volume numbers, part of a set, publisher, distributor, etc. which might be enclosed in parenthesis */
+  qualifier?: Maybe<Scalars['String']['output']>;
+};
 
 /** A proxy for a user */
 export type ProxyFor = {
@@ -2497,6 +2867,46 @@ export enum TimePeriodIntervalId {
   Weeks = 'Weeks'
 }
 
+/** Title */
+export type Title = {
+  __typename?: 'Title';
+  /** List of contributors to the material */
+  contributors?: Maybe<Array<Contributor>>;
+  /** Edition of the material */
+  edition?: Maybe<Scalars['String']['output']>;
+  /** Vendor agreed date prior to the Receipt Due date item is expected to be received by */
+  expectedReceiptDate?: Maybe<Scalars['DateTime']['output']>;
+  /** UUID of this title */
+  id?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the instance associated with this Title */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+  /** Flag for acknowledge receiving note */
+  isAcknowledged?: Maybe<Scalars['Boolean']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** The name of the package */
+  packageName?: Maybe<Scalars['String']['output']>;
+  /** UUID of the purchase order line this Title is associated with */
+  poLineId: Scalars['UUID']['output'];
+  /** The number of the POL identified by poLineId */
+  poLineNumber?: Maybe<Scalars['String']['output']>;
+  /** List of product identifiers */
+  productIds?: Maybe<Array<ProductIdentifier>>;
+  /** Year of the material's publication */
+  publishedDate?: Maybe<Scalars['String']['output']>;
+  /** Publisher of the material */
+  publisher?: Maybe<Scalars['String']['output']>;
+  /** Receiving note of the POL identified by poLineId */
+  receivingNote?: Maybe<Scalars['String']['output']>;
+  /** The start date of the subscription */
+  subscriptionFrom?: Maybe<Scalars['DateTime']['output']>;
+  /** The subscription interval in days */
+  subscriptionInterval?: Maybe<Scalars['Int']['output']>;
+  /** The end date of the subscription */
+  subscriptionTo?: Maybe<Scalars['DateTime']['output']>;
+  /** The title name */
+  title: Scalars['String']['output'];
+};
+
 /** A user */
 export type User = {
   __typename?: 'User';
@@ -2600,4 +3010,16 @@ export type UserdataPersonalAddressesItem = {
   primaryAddress?: Maybe<Scalars['Boolean']['output']>;
   /** Region */
   region?: Maybe<Scalars['String']['output']>;
+};
+
+/** purchase order line vendor details */
+export type VendorDetail = {
+  __typename?: 'VendorDetail';
+  /** special instructions for the vendor */
+  instructions?: Maybe<Scalars['String']['output']>;
+  /** free-form notes from the vendor */
+  noteFromVendor?: Maybe<Scalars['String']['output']>;
+  referenceNumbers?: Maybe<Array<Scalars['String']['output']>>;
+  /** the accound number on the vendor's end associated with this purchase order line */
+  vendorAccount?: Maybe<Scalars['String']['output']>;
 };
