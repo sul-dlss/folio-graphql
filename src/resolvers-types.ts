@@ -689,7 +689,6 @@ export type HoldingsRecord = {
   notes?: Maybe<Array<HoldingsrecordNotesItem>>;
   /** Text (Number) */
   numberOfItems?: Maybe<Scalars['String']['output']>;
-  orderLines?: Maybe<Array<Maybe<PoLine>>>;
   /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** The permanent shelving location in which an item resides. */
@@ -3850,7 +3849,6 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   notes?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordNotesItem']>>, ParentType, ContextType>;
   numberOfItems?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  orderLines?: Resolver<Maybe<Array<Maybe<ResolversTypes['PoLine']>>>, ParentType, ContextType>;
   permanentLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   permanentLocationId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   receiptStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
