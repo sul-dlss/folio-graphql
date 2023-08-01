@@ -4061,6 +4061,9 @@ extend type LocationDetails {
 
   """"Location-specific item availability information"""
   availabilityClass: LocationAvailabilityClass
+
+  """Location-specific paging schedule code (e.g. SAL3 for offsite locations that aren't nested under the SAL3 library)"""
+  pagingSchedule: String
 }
 
 enum LocationAvailabilityClass {
@@ -4069,7 +4072,6 @@ enum LocationAvailabilityClass {
   In_process
   Offsite
 }
-
 
 extend type ServicePoint {
   details: ServicePointDetails
