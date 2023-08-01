@@ -1685,6 +1685,8 @@ export type LocationDetails = {
   pageServicePointCodes?: Maybe<Scalars['String']['output']>;
   /** Valid pickup locations for material paged from this location */
   pageServicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+  /** Location-specific paging schedule code (e.g. SAL3 for offsite locations that aren't nested under the SAL3 library) */
+  pagingSchedule?: Maybe<Scalars['String']['output']>;
   /** Service point where material from this location is scanned */
   scanServicePoint?: Maybe<ServicePoint>;
   /** Code for service point where material from this location is scanned */
@@ -4470,6 +4472,7 @@ export type LocationDetailsResolvers<ContextType = FolioContext, ParentType exte
   pageMediationGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePointCodes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePoints?: Resolver<Maybe<Array<Maybe<ResolversTypes['ServicePoint']>>>, ParentType, ContextType>;
+  pagingSchedule?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   scanServicePoint?: Resolver<Maybe<ResolversTypes['ServicePoint']>, ParentType, ContextType>;
   scanServicePointCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
