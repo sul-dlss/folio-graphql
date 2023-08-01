@@ -1662,10 +1662,19 @@ export type Location = {
   servicePoints?: Maybe<Array<ServicePoint>>;
 };
 
+export enum LocationAvailabilityClass {
+  Available = 'Available',
+  InProcess = 'In_process',
+  Offsite = 'Offsite',
+  Unavailable = 'Unavailable'
+}
+
 /** Details about this (shelf) location. */
 export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+  /** "Location-specific item availability information */
+  availabilityClass?: Maybe<LocationAvailabilityClass>;
   /** Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types) */
   holdingsTypeName?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
@@ -3204,6 +3213,7 @@ export type ResolversTypes = ResolversObject<{
   LoanStatus: ResolverTypeWrapper<LoanStatus>;
   LoanType: ResolverTypeWrapper<LoanType>;
   Location: ResolverTypeWrapper<Location>;
+  LocationAvailabilityClass: LocationAvailabilityClass;
   LocationDetails: ResolverTypeWrapper<LocationDetails>;
   LostItemFeePolicy: ResolverTypeWrapper<LostItemFeePolicy>;
   ManualBlock: ResolverTypeWrapper<ManualBlock>;
@@ -4454,6 +4464,7 @@ export type LocationResolvers<ContextType = FolioContext, ParentType extends Res
 
 export type LocationDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LocationDetails'] = ResolversParentTypes['LocationDetails']> = ResolversObject<{
   _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  availabilityClass?: Resolver<Maybe<ResolversTypes['LocationAvailabilityClass']>, ParentType, ContextType>;
   holdingsTypeName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageAeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageMediationGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

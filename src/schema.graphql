@@ -4058,7 +4058,18 @@ extend type LocationDetails {
 
   """Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types)"""
   holdingsTypeName: String
+
+  """"Location-specific item availability information"""
+  availabilityClass: LocationAvailabilityClass
 }
+
+enum LocationAvailabilityClass {
+  Available
+  Unavailable
+  In_process
+  Offsite
+}
+
 
 extend type ServicePoint {
   details: ServicePointDetails
