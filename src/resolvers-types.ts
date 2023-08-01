@@ -689,7 +689,6 @@ export type HoldingsRecord = {
   notes?: Maybe<Array<HoldingsrecordNotesItem>>;
   /** Text (Number) */
   numberOfItems?: Maybe<Scalars['String']['output']>;
-  orderLines?: Maybe<Array<Maybe<PoLine>>>;
   /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** The permanent shelving location in which an item resides. */
@@ -1663,10 +1662,21 @@ export type Location = {
   servicePoints?: Maybe<Array<ServicePoint>>;
 };
 
+export enum LocationAvailabilityClass {
+  Available = 'Available',
+  InProcess = 'In_process',
+  Offsite = 'Offsite',
+  Unavailable = 'Unavailable'
+}
+
 /** Details about this (shelf) location. */
 export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+  /** "Location-specific item availability information */
+  availabilityClass?: Maybe<LocationAvailabilityClass>;
+  /** Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types) */
+  holdingsTypeName?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
   pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */
@@ -3203,6 +3213,7 @@ export type ResolversTypes = ResolversObject<{
   LoanStatus: ResolverTypeWrapper<LoanStatus>;
   LoanType: ResolverTypeWrapper<LoanType>;
   Location: ResolverTypeWrapper<Location>;
+  LocationAvailabilityClass: LocationAvailabilityClass;
   LocationDetails: ResolverTypeWrapper<LocationDetails>;
   LostItemFeePolicy: ResolverTypeWrapper<LostItemFeePolicy>;
   ManualBlock: ResolverTypeWrapper<ManualBlock>;
@@ -3848,7 +3859,6 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   notes?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordNotesItem']>>, ParentType, ContextType>;
   numberOfItems?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  orderLines?: Resolver<Maybe<Array<Maybe<ResolversTypes['PoLine']>>>, ParentType, ContextType>;
   permanentLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   permanentLocationId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   receiptStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -4454,6 +4464,8 @@ export type LocationResolvers<ContextType = FolioContext, ParentType extends Res
 
 export type LocationDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LocationDetails'] = ResolversParentTypes['LocationDetails']> = ResolversObject<{
   _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  availabilityClass?: Resolver<Maybe<ResolversTypes['LocationAvailabilityClass']>, ParentType, ContextType>;
+  holdingsTypeName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageAeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageMediationGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePointCodes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

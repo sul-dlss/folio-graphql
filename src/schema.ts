@@ -686,7 +686,6 @@ export type HoldingsRecord = {
   notes?: Maybe<Array<HoldingsrecordNotesItem>>;
   /** Text (Number) */
   numberOfItems?: Maybe<Scalars['String']['output']>;
-  orderLines?: Maybe<Array<Maybe<PoLine>>>;
   /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** The permanent shelving location in which an item resides. */
@@ -1660,10 +1659,21 @@ export type Location = {
   servicePoints?: Maybe<Array<ServicePoint>>;
 };
 
+export enum LocationAvailabilityClass {
+  Available = 'Available',
+  InProcess = 'In_process',
+  Offsite = 'Offsite',
+  Unavailable = 'Unavailable'
+}
+
 /** Details about this (shelf) location. */
 export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+  /** "Location-specific item availability information */
+  availabilityClass?: Maybe<LocationAvailabilityClass>;
+  /** Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types) */
+  holdingsTypeName?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
   pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */
