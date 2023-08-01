@@ -1667,6 +1667,8 @@ export type Location = {
 export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+  /** Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types) */
+  holdingsTypeName?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
   pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */
@@ -4454,6 +4456,7 @@ export type LocationResolvers<ContextType = FolioContext, ParentType extends Res
 
 export type LocationDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LocationDetails'] = ResolversParentTypes['LocationDetails']> = ResolversObject<{
   _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  holdingsTypeName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageAeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageMediationGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePointCodes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

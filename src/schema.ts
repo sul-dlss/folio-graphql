@@ -1664,6 +1664,8 @@ export type Location = {
 export type LocationDetails = {
   __typename?: 'LocationDetails';
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+  /** Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types) */
+  holdingsTypeName?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */
   pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */

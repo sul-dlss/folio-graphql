@@ -4055,6 +4055,9 @@ extend type LocationDetails {
 
   """Service point where material from this location is scanned"""
   scanServicePoint: ServicePoint
+
+  """Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types)"""
+  holdingsTypeName: String
 }
 
 extend type ServicePoint {
