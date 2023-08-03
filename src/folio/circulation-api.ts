@@ -6,6 +6,7 @@ interface LoansResponse {
 
 export default class CirculationAPI extends FolioAPI {
   async getLoan(id: string): Promise<Loan> {
+    if (!id) { return null }
     return await this.get<Loan>(`/circulation/loans/${encodeURIComponent(id)}`)
   }
   async getLoans(params: Partial<{ params: CqlParams, [key: string]: object | object[] | string | undefined }>): Promise<Loan[]> {
