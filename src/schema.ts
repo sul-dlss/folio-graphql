@@ -1672,6 +1672,8 @@ export type LocationDetails = {
   _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
   /** "Location-specific item availability information */
   availabilityClass?: Maybe<LocationAvailabilityClass>;
+  /** URL for more information about a location (used by Lane in their discovery environment) */
+  discoveryDisplayUrl?: Maybe<Scalars['String']['output']>;
   /** Default type name for any holdings records in this location (used esp. for Lane, which lacks holdings types) */
   holdingsTypeName?: Maybe<Scalars['String']['output']>;
   /** Site value passed to Aeon to preselect delivery location for material paged from this location */

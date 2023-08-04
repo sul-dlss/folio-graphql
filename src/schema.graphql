@@ -4064,6 +4064,9 @@ extend type LocationDetails {
 
   """Location-specific paging schedule code (e.g. SAL3 for offsite locations that aren't nested under the SAL3 library)"""
   pagingSchedule: String
+
+  """URL for more information about a location (used by Lane in their discovery environment)"""
+  discoveryDisplayUrl: String
 }
 
 enum LocationAvailabilityClass {
