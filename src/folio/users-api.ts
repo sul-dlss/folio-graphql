@@ -1,5 +1,5 @@
 import FolioAPI from "./folio-api.js"
-import { User, Block, CqlParams, ManualBlock, Account, ProxyFor, FeeFineAction } from '../schema'
+import { User, Block, CqlParams, ManualBlock, Account, ProxyFor } from '../schema'
 
 interface AutomatedPatronsBlockResponse {
   automatedPatronBlocks: Block[]
@@ -41,7 +41,7 @@ export default class UsersAPI extends FolioAPI {
     const actions = await this.get(`/feefineactions`, { params: urlParams })
 
     // remove the 'source' attribute from the response because it contains private staff data
-    return actions.feefineactions.map(({source, ...data}) => data)
+    return actions.feefineactions.map(({source, ...data}) => data) // eslint-disable-line @typescript-eslint/no-unused-vars
   }
 
 
