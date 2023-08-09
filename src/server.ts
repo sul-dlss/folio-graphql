@@ -99,7 +99,7 @@ const server = new ApolloServer<FolioContext>({
 await server.start();
 
 app.get('/status', async (req, res) => {
-  await new OkapiAPI().getVersion().then(_response => res.status(200).send('OK')).catch(error => res.status(500).send(error))
+  await new OkapiAPI().getVersion().then(() => res.status(200).send('OK')).catch(error => res.status(500).send(error))
 });
 app.use(Honeybadger.requestHandler) // Use *before* all other app middleware.
 app.use(
