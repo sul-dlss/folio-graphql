@@ -20,6 +20,8 @@ docker compose up
 Once the server is running, you can use the web interface to explore and build queries. In order to enable schema introspection, you need to configure Apollo to send the `okapi_username` and `okapi_password` headers with each request. You can do this by updating the connection settings at the top of the query explorer:
 
 ![Gear icon for connection settings in query explorer](connection_settings.png)
+<img width="596" alt="Setting auth headers in configuration" src="https://github.com/sul-dlss/folio-graphql/assets/92044/c75e0c47-619f-4ec7-9c4f-184b9308f451">
+
 ## Architecture
 The GraphQL API is constructed based on FOLIO's published API schemas, in a process that involves several steps. In most cases, this pipeline will be automated for you and run when files are modified if you use the `start:dev` command. See `package.json` for commands that invoke the various steps in the pipeline separately.
 ### Schema
