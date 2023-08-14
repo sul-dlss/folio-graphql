@@ -4072,6 +4072,9 @@ extend type LocationDetails {
 
   """URL for more information about a location (used by Lane in their discovery environment)"""
   discoveryDisplayUrl: String
+
+  """User-visible string for building the Searchworks location_facet"""
+  searchworksLocationFacetDisplayName: String
 }
 
 enum LocationAvailabilityClass {

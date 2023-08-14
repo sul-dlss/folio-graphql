@@ -1691,6 +1691,8 @@ export type LocationDetails = {
   scanServicePoint?: Maybe<ServicePoint>;
   /** Code for service point where material from this location is scanned */
   scanServicePointCode?: Maybe<Scalars['String']['output']>;
+  /** User-visible string for building the Searchworks location_facet */
+  searchworksLocationFacetDisplayName?: Maybe<Scalars['String']['output']>;
 };
 
 /** CRUD to lost item fee policies */
