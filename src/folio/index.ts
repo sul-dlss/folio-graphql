@@ -97,11 +97,26 @@ export const resolvers: Resolvers = {
     campuses(parent, args, { dataSources: { types } }, info) {
       return types.getValuesFor<Campus>("location-units/campuses", { key: "loccamps" })
     },
+    async campus(parent, { code }, { dataSources: { types } }, info) {
+      const campuses = await types.getValuesFor<Campus>("location-units/campuses", { key: "loccamps" });
+
+      return campuses.find(campus => campus.code === code);
+    },
     libraries(parent, args, { dataSources: { types } }, info) {
       return types.getValuesFor<Library>("location-units/libraries", { key: "loclibs" })
     },
+    async library(parent, { code }, { dataSources: { types } }, info) {
+      const libraries = await types.getValuesFor<Library>("location-units/libraries", { key: "loclibs" });
+
+      return libraries.find(library => library.code === code);
+    },
     locations(parent, args, { dataSources: { types } }, info) {
       return types.getValuesFor<Location>("locations", {})
+    },
+    async location(parent, { code }, { dataSources: { types } }, info) {
+      const locations = await types.getValuesFor<Location>("locations", {});
+
+      return locations.find(location => location.code === code);
     },
     servicePoints(parent, args, { dataSources: { servicepoints } }, info) {
       return servicepoints.getServicePoints(args)
@@ -421,6 +436,11 @@ export const resolvers: Resolvers = {
   Campus: {
     institution({ institutionId }, args, { dataSources: { types } }, info) {
       return types.getById<Institution>("location-units/institutions", { key: "locinsts" }, institutionId)
+    },
+    async libraries({ id }, args, { dataSources: { types } }, info) {
+      const values = await types.getValuesFor<Library>("location-units/libraries", { key: "loclibs" })
+
+      return values.filter(v => v.campusId == id)
     }
   },
   Library: {

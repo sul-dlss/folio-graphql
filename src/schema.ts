@@ -279,6 +279,7 @@ export type Campus = {
   institution?: Maybe<Institution>;
   /** ID of the first-level location unit that the second-level unit belongs to */
   institutionId: Scalars['String']['output'];
+  libraries?: Maybe<Array<Maybe<Library>>>;
   metadata?: Maybe<Metadata>;
   /** name of the location */
   name: Scalars['String']['output'];
@@ -2465,6 +2466,7 @@ export enum QuantityIntervalId {
 
 export type Query = {
   __typename?: 'Query';
+  campus?: Maybe<Campus>;
   campuses?: Maybe<Array<Maybe<Campus>>>;
   feeFineTypes?: Maybe<Array<Maybe<FeeFine>>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
@@ -2475,8 +2477,10 @@ export type Query = {
   item?: Maybe<Item>;
   items?: Maybe<Array<Maybe<Item>>>;
   libraries?: Maybe<Array<Maybe<Library>>>;
+  library?: Maybe<Library>;
   loanPolicies?: Maybe<Array<Maybe<LoanPolicy>>>;
   loanTypes?: Maybe<Array<Maybe<LoanType>>>;
+  location?: Maybe<Location>;
   locations?: Maybe<Array<Maybe<Location>>>;
   lostItemFeesPolicies?: Maybe<Array<Maybe<LostItemFeePolicy>>>;
   materialTypes?: Maybe<Array<Maybe<MaterialType>>>;
@@ -2486,6 +2490,11 @@ export type Query = {
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
   servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+};
+
+
+export type QueryCampusArgs = {
+  code?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2522,6 +2531,16 @@ export type QueryItemsArgs = {
   hrid?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   params?: InputMaybe<CqlParams>;
+};
+
+
+export type QueryLibraryArgs = {
+  code?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryLocationArgs = {
+  code?: InputMaybe<Scalars['String']['input']>;
 };
 
 
