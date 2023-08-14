@@ -1694,6 +1694,8 @@ export type LocationDetails = {
   scanServicePoint?: Maybe<ServicePoint>;
   /** Code for service point where material from this location is scanned */
   scanServicePointCode?: Maybe<Scalars['String']['output']>;
+  /** Some locations imply the type of gov docs they contain */
+  searchworksGovDocsClassification?: Maybe<Scalars['String']['output']>;
   /** User-visible string for building the Searchworks location_facet */
   searchworksLocationFacetDisplayName?: Maybe<Scalars['String']['output']>;
 };
@@ -4500,6 +4502,7 @@ export type LocationDetailsResolvers<ContextType = FolioContext, ParentType exte
   pagingSchedule?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   scanServicePoint?: Resolver<Maybe<ResolversTypes['ServicePoint']>, ParentType, ContextType>;
   scanServicePointCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  searchworksGovDocsClassification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   searchworksLocationFacetDisplayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
