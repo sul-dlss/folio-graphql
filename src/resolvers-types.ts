@@ -282,6 +282,7 @@ export type Campus = {
   institution?: Maybe<Institution>;
   /** ID of the first-level location unit that the second-level unit belongs to */
   institutionId: Scalars['String']['output'];
+  libraries?: Maybe<Array<Maybe<Library>>>;
   metadata?: Maybe<Metadata>;
   /** name of the location */
   name: Scalars['String']['output'];
@@ -2468,6 +2469,7 @@ export enum QuantityIntervalId {
 
 export type Query = {
   __typename?: 'Query';
+  campus?: Maybe<Campus>;
   campuses?: Maybe<Array<Maybe<Campus>>>;
   feeFineTypes?: Maybe<Array<Maybe<FeeFine>>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
@@ -2478,8 +2480,10 @@ export type Query = {
   item?: Maybe<Item>;
   items?: Maybe<Array<Maybe<Item>>>;
   libraries?: Maybe<Array<Maybe<Library>>>;
+  library?: Maybe<Library>;
   loanPolicies?: Maybe<Array<Maybe<LoanPolicy>>>;
   loanTypes?: Maybe<Array<Maybe<LoanType>>>;
+  location?: Maybe<Location>;
   locations?: Maybe<Array<Maybe<Location>>>;
   lostItemFeesPolicies?: Maybe<Array<Maybe<LostItemFeePolicy>>>;
   materialTypes?: Maybe<Array<Maybe<MaterialType>>>;
@@ -2489,6 +2493,11 @@ export type Query = {
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
   servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+};
+
+
+export type QueryCampusArgs = {
+  code?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2525,6 +2534,16 @@ export type QueryItemsArgs = {
   hrid?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   params?: InputMaybe<CqlParams>;
+};
+
+
+export type QueryLibraryArgs = {
+  code?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryLocationArgs = {
+  code?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -3632,6 +3651,7 @@ export type CampusResolvers<ContextType = FolioContext, ParentType extends Resol
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   institution?: Resolver<Maybe<ResolversTypes['Institution']>, ParentType, ContextType>;
   institutionId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4889,6 +4909,7 @@ export type QuantityResolvers<ContextType = FolioContext, ParentType extends Res
 }>;
 
 export type QueryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  campus?: Resolver<Maybe<ResolversTypes['Campus']>, ParentType, ContextType, Partial<QueryCampusArgs>>;
   campuses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Campus']>>>, ParentType, ContextType>;
   feeFineTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['FeeFine']>>>, ParentType, ContextType>;
   holdingsRecord?: Resolver<Maybe<ResolversTypes['HoldingsRecord']>, ParentType, ContextType, RequireFields<QueryHoldingsRecordArgs, 'id'>>;
@@ -4899,8 +4920,10 @@ export type QueryResolvers<ContextType = FolioContext, ParentType extends Resolv
   item?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType, RequireFields<QueryItemArgs, 'id'>>;
   items?: Resolver<Maybe<Array<Maybe<ResolversTypes['Item']>>>, ParentType, ContextType, Partial<QueryItemsArgs>>;
   libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
+  library?: Resolver<Maybe<ResolversTypes['Library']>, ParentType, ContextType, Partial<QueryLibraryArgs>>;
   loanPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['LoanPolicy']>>>, ParentType, ContextType>;
   loanTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['LoanType']>>>, ParentType, ContextType>;
+  location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType, Partial<QueryLocationArgs>>;
   locations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Location']>>>, ParentType, ContextType>;
   lostItemFeesPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['LostItemFeePolicy']>>>, ParentType, ContextType>;
   materialTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['MaterialType']>>>, ParentType, ContextType>;

@@ -40,6 +40,10 @@ type Query {
   libraries: [Library]
   locations: [Location]
 
+  campus(code: String): Campus
+  library(code: String): Library
+  location(code: String): Location
+
   # for retrieving all service points or a subset based on id
   servicePoints(id: [String]): [ServicePoint]
 }
@@ -4018,6 +4022,7 @@ extend type HoldingsrecordElectronicAccessItem {
 
 extend type Campus {
   institution: Institution
+  libraries: [Library]
 }
 
 extend type Library {
