@@ -4075,6 +4075,9 @@ extend type LocationDetails {
 
   """User-visible string for building the Searchworks location_facet"""
   searchworksLocationFacetDisplayName: String
+
+  """Some locations imply the type of gov docs they contain"""
+  searchworksGovDocsClassification: String
 }
 
 enum LocationAvailabilityClass {
