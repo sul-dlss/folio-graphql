@@ -1695,6 +1695,8 @@ export type LocationDetails = {
   searchworksGovDocsClassification?: Maybe<Scalars['String']['output']>;
   /** User-visible string for building the Searchworks location_facet */
   searchworksLocationFacetDisplayName?: Maybe<Scalars['String']['output']>;
+  /** We want to treat some locations that are used as temporary locations as if they were the permanent location */
+  searchworksTreatTemporaryLocationAsPermanentLocation?: Maybe<Scalars['String']['output']>;
 };
 
 /** CRUD to lost item fee policies */

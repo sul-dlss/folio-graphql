@@ -1698,6 +1698,8 @@ export type LocationDetails = {
   searchworksGovDocsClassification?: Maybe<Scalars['String']['output']>;
   /** User-visible string for building the Searchworks location_facet */
   searchworksLocationFacetDisplayName?: Maybe<Scalars['String']['output']>;
+  /** We want to treat some locations that are used as temporary locations as if they were the permanent location */
+  searchworksTreatTemporaryLocationAsPermanentLocation?: Maybe<Scalars['String']['output']>;
 };
 
 /** CRUD to lost item fee policies */
@@ -4504,6 +4506,7 @@ export type LocationDetailsResolvers<ContextType = FolioContext, ParentType exte
   scanServicePointCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   searchworksGovDocsClassification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   searchworksLocationFacetDisplayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  searchworksTreatTemporaryLocationAsPermanentLocation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
