@@ -26,6 +26,12 @@ Once the server is running, you can use the web interface to explore and build q
 The GraphQL API is constructed based on FOLIO's published API schemas, in a process that involves several steps. In most cases, this pipeline will be automated for you and run when files are modified if you use the `start:dev` command. See `package.json` for commands that invoke the various steps in the pipeline separately.
 ### Schema
 The schemas are generated from the RAML files published by FOLIO using a script in the `scripts` directory. The script corrects for some eccentricities in FOLIO's published JSON schemas, and then uses the [json-schema-to-graphql-types](https://github.com/lifeomic/json-schema-to-graphql-types) library to output a GraphQL schema to stdout.
+#### Updating the FOLIO schemas
+To update the schemas FOLIO publishes from upstream, or to pull down types for a new module, you need to set the `FOLIO_ROOT` environment variable to point to a place where you can clone FOLIO repositories. You will need to clone each of the repositories listed in `json-schemas/`.
+
+Then, see the instructions in [`json-schemas/README.md`](json-schemas/README.md) for updating the schemas. This will copy just the needed JSON schemas into the `json-schemas/` directory so that they can be turned into a GraphQL schema (see below).
+
+The `last_synced_metadata` file in `json-schemas/` contains a list of the repositories and commits that were used to generate the schemas. Make sure that you check out the FOLIO repositories to the commit that matches the currently deployed version of the module in FOLIO so that the schemas are compatible with what's actually deployed.
 #### Adding new types
 To add a new type to the schema, you need to add it to the allowlist of enabled types in the definition for `queryType` near the bottom of the script:
 ```js
@@ -44,7 +50,7 @@ You can invoke the script with:
 npm run update-graphql-schema
 ```
 > **Warning**
-> The library is currently not compatible with GraphQL v16, so you need to edit `node_modules/json-schema-to-graphql-types/src/converter.js` and make some changes in order to run the script. See the notes on PR #71 for details.
+> The library is currently not compatible with GraphQL v16, so you need to edit `node_modules/@lifeomic/json-schema-to-graphql-types/src/converter.js` and make some changes in order to run the script. See the notes on PR #71 for details.
 
 This will output the schema to stdout. You can redirect it to a file if you want to save it:
 ```sh
