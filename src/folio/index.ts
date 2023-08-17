@@ -272,9 +272,6 @@ export const resolvers: Resolvers = {
     alternativeTitleType({ alternativeTitleTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<AlternativeTitleType>("alternative-title-types", { key: 'alternativeTitleTypes' }, alternativeTitleTypeId)
     },
-    authority({ authorityId }, args, { dataSources: { types } }, info) {
-      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
-    },
   },
   InstanceContributorsItem: {
     contributorType({ contributorTypeId }, args, { dataSources: { types } }, info) {
@@ -287,16 +284,6 @@ export const resolvers: Resolvers = {
   InstanceIdentifiersItem: {
     identifierTypeObject({ identifierTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<IdentifierType>("identifier-types", { key: 'identifierTypes' }, identifierTypeId)
-    },
-  },
-  InstanceSeriesItem: {
-    authority({ authorityId }, args, { dataSources: { types } }, info) {
-      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
-    },
-  },
-  InstanceSubjectsItem: {
-    authority({ authorityId }, args, { dataSources: { types } }, info) {
-      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
     },
   },
   InstanceElectronicAccessItem: {

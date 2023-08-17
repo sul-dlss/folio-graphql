@@ -474,20 +474,18 @@ export type FeeFineAction = {
   accountId: Scalars['UUID']['output'];
   /** Amount of activity */
   amountAction?: Maybe<Scalars['Float']['output']>;
-  /** Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/transferred/refunded */
+  /** Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/tranferred/refunded */
   balance?: Maybe<Scalars['Float']['output']>;
   /** Additional information entered as part of the activity or on this screen as a 'Staff info only' activity */
   comments?: Maybe<Scalars['String']['output']>;
-  /** ID of the service point where the action was created */
-  createdAt?: Maybe<Scalars['UUID']['output']>;
+  /** Location where activity took place (from login information) */
+  createdAt?: Maybe<Scalars['String']['output']>;
   /** Date and time the transaction of the fine/fee was created */
   dateAction?: Maybe<Scalars['DateTime']['output']>;
   /** Fine/fee action id, UUID */
   id?: Maybe<Scalars['UUID']['output']>;
   /** A flag to determine if a patron should be notified or not */
   notify?: Maybe<Scalars['Boolean']['output']>;
-  /** Original invalid (non-UUID) value of 'createdAt' moved here when UUID-validation was enabled for 'createdAt' */
-  originalCreatedAt?: Maybe<Scalars['String']['output']>;
   /** Overall status of the action-setting */
   paymentMethod?: Maybe<Scalars['String']['output']>;
   /** Person who processed activity (from login information) */
@@ -911,7 +909,7 @@ export type Instance = {
   /** The range of sequential designation/chronology of publication, or date range */
   publicationRange?: Maybe<Array<Scalars['String']['output']>>;
   /** List of series titles associated with the resource (e.g. Harry Potter) */
-  series?: Maybe<Array<InstanceSeriesItem>>;
+  series?: Maybe<Array<Scalars['String']['output']>>;
   /** The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings) */
   source: Scalars['String']['output'];
   /** Format of the instance source record, if a source record exists (e.g. FOLIO if it's a record created in Inventory,  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings) */
@@ -926,7 +924,7 @@ export type Instance = {
   /** Date [or timestamp] for when the instance status was updated */
   statusUpdatedDate?: Maybe<Scalars['String']['output']>;
   /** List of subject headings */
-  subjects?: Maybe<Array<InstanceSubjectsItem>>;
+  subjects?: Maybe<Array<Scalars['String']['output']>>;
   /** arbitrary tags associated with this instance */
   tags?: Maybe<Tags>;
   /** The primary title (or label) associated with the resource */
@@ -953,8 +951,6 @@ export type InstanceAlternativeTitlesItem = {
   /** UUID for an alternative title qualifier */
   alternativeTitleTypeId?: Maybe<Scalars['UUID']['output']>;
   authority?: Maybe<Authority>;
-  /** UUID of authority record that controls an alternative title */
-  authorityId?: Maybe<Scalars['UUID']['output']>;
 };
 
 export type InstanceClassificationsItem = {
@@ -1068,15 +1064,6 @@ export type InstancePublicationPeriod = {
   start?: Maybe<Scalars['Int']['output']>;
 };
 
-export type InstanceSeriesItem = {
-  __typename?: 'InstanceSeriesItem';
-  authority?: Maybe<Authority>;
-  /** UUID of authority record that controls an series title */
-  authorityId?: Maybe<Scalars['UUID']['output']>;
-  /** Series title value */
-  value: Scalars['String']['output'];
-};
-
 export enum InstanceSourceRecordFormat {
   MarcJson = 'MARC_JSON'
 }
@@ -1092,15 +1079,6 @@ export type InstanceStatus = {
   name: Scalars['String']['output'];
   /** origin of an instance status record */
   source: Scalars['String']['output'];
-};
-
-export type InstanceSubjectsItem = {
-  __typename?: 'InstanceSubjectsItem';
-  authority?: Maybe<Authority>;
-  /** UUID of authority record that controls a subject heading */
-  authorityId?: Maybe<Scalars['UUID']['output']>;
-  /** Subject heading value */
-  value: Scalars['String']['output'];
 };
 
 /** The resource type of an Instance */
@@ -1422,10 +1400,6 @@ export type Loan = {
   declaredLostDate?: Maybe<Scalars['DateTime']['output']>;
   /** Date and time when the item is due to be returned */
   dueDate?: Maybe<Scalars['DateTime']['output']>;
-  /** Is due date changed by hold request */
-  dueDateChangedByHold?: Maybe<Scalars['Boolean']['output']>;
-  /** Indicates whether or not this loan had its due date modified by a expired user */
-  dueDateChangedByNearExpireUser?: Maybe<Scalars['Boolean']['output']>;
   /** Is due date changed by recall request */
   dueDateChangedByRecall?: Maybe<Scalars['Boolean']['output']>;
   /** Fees and fines associated with loans */
@@ -2575,7 +2549,7 @@ export type Request = {
   /** Deliver to the address of this type, for the requesting patron */
   deliveryAddressTypeId?: Maybe<Scalars['UUID']['output']>;
   /** How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester) */
-  fulfillmentPreference: RequestFulfillmentPreference;
+  fulfilmentPreference: RequestFulfilmentPreference;
   /** Date when an item returned to the hold shelf expires */
   holdShelfExpirationDate?: Maybe<Scalars['DateTime']['output']>;
   /** ID of the holdings record being requested */
@@ -2618,8 +2592,6 @@ export type Request = {
   requester?: Maybe<RequestRequester>;
   /** ID of the user who made the request */
   requesterId: Scalars['UUID']['output'];
-  /** Request fields used for search */
-  searchIndex?: Maybe<RequestSearchIndex>;
   /** Status of the request */
   status?: Maybe<RequestStatus>;
   /** Tags */
@@ -2645,7 +2617,7 @@ export type RequestDeliveryAddress = {
   region?: Maybe<Scalars['String']['output']>;
 };
 
-export enum RequestFulfillmentPreference {
+export enum RequestFulfilmentPreference {
   Delivery = 'Delivery',
   HoldShelf = 'Hold_Shelf'
 }
@@ -2779,28 +2751,6 @@ export type RequestRequesterPatronGroup = {
   id?: Maybe<Scalars['UUID']['output']>;
 };
 
-/** Request fields used for search */
-export type RequestSearchIndex = {
-  __typename?: 'RequestSearchIndex';
-  /** Effective call number components */
-  callNumberComponents?: Maybe<RequestSearchIndexCallNumberComponents>;
-  /** The name of the request pickup service point */
-  pickupServicePointName?: Maybe<Scalars['String']['output']>;
-  /** A system generated normalization of the call number that allows for call number sorting in reports and search results */
-  shelvingOrder?: Maybe<Scalars['String']['output']>;
-};
-
-/** Effective call number components */
-export type RequestSearchIndexCallNumberComponents = {
-  __typename?: 'RequestSearchIndexCallNumberComponents';
-  /** Effective Call Number is an identifier assigned to an item or its holding and associated with the item. */
-  callNumber?: Maybe<Scalars['String']['output']>;
-  /** Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item. */
-  prefix?: Maybe<Scalars['String']['output']>;
-  /** Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item. */
-  suffix?: Maybe<Scalars['String']['output']>;
-};
-
 export enum RequestStatus {
   ClosedCancelled = 'Closed___Cancelled',
   ClosedFilled = 'Closed___Filled',
@@ -2839,8 +2789,6 @@ export type ServicePoint = {
   details?: Maybe<ServicePointDetails>;
   /** display name, a required field */
   discoveryDisplayName: Scalars['String']['output'];
-  /** enum for closedLibraryDateManagement associated with hold shelf */
-  holdShelfClosedLibraryDateManagement?: Maybe<ServicepointHoldShelfClosedLibraryDateManagement>;
   /** expiration period for items on the hold shelf at the service point */
   holdShelfExpiryPeriod?: Maybe<TimePeriod>;
   /** Id of service-point object */
@@ -2864,15 +2812,6 @@ export type ServicePointDetails = {
   isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
 };
-
-export enum ServicepointHoldShelfClosedLibraryDateManagement {
-  KeepTheCurrentDueDate = 'Keep_the_current_due_date',
-  KeepTheCurrentDueDateTime = 'Keep_the_current_due_date_time',
-  MoveToBeginningOfNextOpenServicePointHours = 'Move_to_beginning_of_next_open_service_point_hours',
-  MoveToEndOfCurrentServicePointHours = 'Move_to_end_of_current_service_point_hours',
-  MoveToTheEndOfTheNextOpenDay = 'Move_to_the_end_of_the_next_open_day',
-  MoveToTheEndOfThePreviousOpenDay = 'Move_to_the_end_of_the_previous_open_day'
-}
 
 export type ServicepointStaffSlipsItem = {
   __typename?: 'ServicepointStaffSlipsItem';

@@ -186,7 +186,7 @@
       },
       "additionalProperties": false
     },
-    "fulfillmentPreference": {
+    "fulfilmentPreference": {
       "description": "How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester)",
       "type": "string",
       "enum": ["Hold Shelf", "Delivery"]
@@ -226,11 +226,6 @@
       "type": "string",
       "format": "date-time",
       "readonly" : true
-    },
-    "searchIndex": {
-      "description": "Request fields used for search",
-      "type": "object",
-      "$ref": "request-search-index.json"
     }
   },
   "additionalProperties": false,
@@ -240,7 +235,6 @@
     "requestType",
     "requestLevel",
     "requestDate",
-    "fulfillmentPreference",
-    "status"
+    "fulfilmentPreference"
   ]
 }
