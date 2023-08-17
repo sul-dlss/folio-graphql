@@ -1275,14 +1275,6 @@ type Loan {
   """Is due date changed by recall request"""
   dueDateChangedByRecall: Boolean
 
-  """
-  Indicates whether or not this loan had its due date modified by a expired user
-  """
-  dueDateChangedByNearExpireUser: Boolean
-
-  """Is due date changed by hold request"""
-  dueDateChangedByHold: Boolean
-
   """ID of the Service Point where the last checkout occured"""
   checkoutServicePointId: UUID
 
@@ -1797,9 +1789,6 @@ type ServicePoint {
   """expiration period for items on the hold shelf at the service point"""
   holdShelfExpiryPeriod: TimePeriod
 
-  """enum for closedLibraryDateManagement associated with hold shelf"""
-  holdShelfClosedLibraryDateManagement: ServicepointHoldShelfClosedLibraryDateManagement
-
   """List of staff slips for this service point"""
   staffSlips: [ServicepointStaffSlipsItem!]
   metadata: Metadata
@@ -1822,15 +1811,6 @@ enum TimePeriodIntervalId {
   Days
   Weeks
   Months
-}
-
-enum ServicepointHoldShelfClosedLibraryDateManagement {
-  Keep_the_current_due_date
-  Move_to_the_end_of_the_previous_open_day
-  Move_to_the_end_of_the_next_open_day
-  Keep_the_current_due_date_time
-  Move_to_end_of_current_service_point_hours
-  Move_to_beginning_of_next_open_service_point_hours
 }
 
 type ServicepointStaffSlipsItem {
@@ -2178,7 +2158,7 @@ type Instance {
   editions: [String!]
 
   """List of series titles associated with the resource (e.g. Harry Potter)"""
-  series: [InstanceSeriesItem!]
+  series: [String!]
 
   """
   An extensible set of name-value pairs of identifiers associated with the resource
@@ -2189,7 +2169,7 @@ type Instance {
   contributors: [InstanceContributorsItem!]
 
   """List of subject headings"""
-  subjects: [InstanceSubjectsItem!]
+  subjects: [String!]
 
   """List of classifications"""
   classifications: [InstanceClassificationsItem!]
@@ -2298,17 +2278,6 @@ type InstanceAlternativeTitlesItem {
 
   """An alternative title for the resource"""
   alternativeTitle: String
-
-  """UUID of authority record that controls an alternative title"""
-  authorityId: UUID
-}
-
-type InstanceSeriesItem {
-  """Series title value"""
-  value: String!
-
-  """UUID of authority record that controls an series title"""
-  authorityId: UUID
 }
 
 type InstanceIdentifiersItem {
@@ -2375,14 +2344,6 @@ type ContributorNameType {
   """
   ordering: String
   metadata: Metadata
-}
-
-type InstanceSubjectsItem {
-  """Subject heading value"""
-  value: String!
-
-  """UUID of authority record that controls a subject heading"""
-  authorityId: UUID
 }
 
 type InstanceClassificationsItem {
@@ -2602,7 +2563,7 @@ type Request {
   """
   How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester)
   """
-  fulfillmentPreference: RequestFulfillmentPreference!
+  fulfilmentPreference: RequestFulfilmentPreference!
 
   """Deliver to the address of this type, for the requesting patron"""
   deliveryAddressTypeId: UUID
@@ -2636,9 +2597,6 @@ type Request {
   Additional parameters used for request processing and discarded afterwards. Not part of request record.
   """
   requestProcessingParameters: RequestRequestProcessingParameters
-
-  """Request fields used for search"""
-  searchIndex: RequestSearchIndex
 }
 
 enum RequestRequestType {
@@ -2759,7 +2717,7 @@ type RequestProxyPatronGroup {
   desc: String
 }
 
-enum RequestFulfillmentPreference {
+enum RequestFulfilmentPreference {
   Hold_Shelf
   Delivery
 }
@@ -2867,36 +2825,13 @@ type OverrideBlocksRenewalDueDateRequiredBlock {
   dueDate: DateTime!
 }
 
-"""Request fields used for search"""
-type RequestSearchIndex {
-  """Effective call number components"""
-  callNumberComponents: RequestSearchIndexCallNumberComponents
+"""A loan type"""
+type LoanType {
+  id: String
 
-  """
-  A system generated normalization of the call number that allows for call number sorting in reports and search results
-  """
-  shelvingOrder: String
-
-  """The name of the request pickup service point"""
-  pickupServicePointName: String
-}
-
-"""Effective call number components"""
-type RequestSearchIndexCallNumberComponents {
-  """
-  Effective Call Number is an identifier assigned to an item or its holding and associated with the item.
-  """
-  callNumber: String
-
-  """
-  Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item.
-  """
-  prefix: String
-
-  """
-  Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item.
-  """
-  suffix: String
+  """label for the loan type"""
+  name: String!
+  metadata: Metadata
 }
 
 """User fines/fees account"""
@@ -3028,20 +2963,15 @@ type FeeFineAction {
   amountAction: Float
 
   """
-  Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/transferred/refunded
+  Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/tranferred/refunded
   """
   balance: Float
 
   """Number or other transaction id related to payment"""
   transactionInformation: String
 
-  """ID of the service point where the action was created"""
-  createdAt: UUID
-
-  """
-  Original invalid (non-UUID) value of 'createdAt' moved here when UUID-validation was enabled for 'createdAt'
-  """
-  originalCreatedAt: String
+  """Location where activity took place (from login information)"""
+  createdAt: String
 
   """Person who processed activity (from login information)"""
   source: String
@@ -3606,15 +3536,6 @@ type ItemDamagedStatus {
   metadata: Metadata
 }
 
-"""A loan type"""
-type LoanType {
-  id: String
-
-  """label for the loan type"""
-  name: String!
-  metadata: Metadata
-}
-
 """A mode of issuance to be assigned to an Instance"""
 type ModeOfIssuance {
   id: String
@@ -3968,14 +3889,6 @@ extend type InstanceAlternativeTitlesItem {
 
 extend type InstanceContributorsItem {
   contributorType: ContributorType
-  authority: Authority
-}
-
-extend type InstanceSeriesItem {
-  authority: Authority
-}
-
-extend type InstanceSubjectsItem {
   authority: Authority
 }
 

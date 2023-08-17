@@ -14,5 +14,6 @@
       "description": "Base URL of the source file origin",
       "examples": "id.loc.gov/authorities/names/"
     }
-  }
+  },
+  "additionalProperties": false
 }
