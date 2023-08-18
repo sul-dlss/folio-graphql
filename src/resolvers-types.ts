@@ -1414,6 +1414,7 @@ export type Loan = {
   declaredLostDate?: Maybe<Scalars['DateTime']['output']>;
   /** Date and time when the item is due to be returned */
   dueDate?: Maybe<Scalars['DateTime']['output']>;
+  dueDateChangedByHold?: Maybe<Scalars['Boolean']['output']>;
   /** Is due date changed by recall request */
   dueDateChangedByRecall?: Maybe<Scalars['Boolean']['output']>;
   /** Fees and fines associated with loans */
@@ -4319,6 +4320,7 @@ export type LoanResolvers<ContextType = FolioContext, ParentType extends Resolve
   checkoutServicePointId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   declaredLostDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   dueDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  dueDateChangedByHold?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   dueDateChangedByRecall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   feesAndFines?: Resolver<Maybe<ResolversTypes['LoanFeesAndFines']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;

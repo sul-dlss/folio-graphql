@@ -1411,6 +1411,7 @@ export type Loan = {
   declaredLostDate?: Maybe<Scalars['DateTime']['output']>;
   /** Date and time when the item is due to be returned */
   dueDate?: Maybe<Scalars['DateTime']['output']>;
+  dueDateChangedByHold?: Maybe<Scalars['Boolean']['output']>;
   /** Is due date changed by recall request */
   dueDateChangedByRecall?: Maybe<Scalars['Boolean']['output']>;
   /** Fees and fines associated with loans */

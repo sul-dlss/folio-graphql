@@ -3924,6 +3924,10 @@ extend type Loan {
   itemEffectiveLocationAtCheckOut: Location
   user: User
   proxyUser: User
+  # TODO: dueDateChangedByHold is not yet implemented in mod-circulation v23.3.5
+  # we polyfill it so that we can still query for it in mylibrary without erroring
+  # see: https://github.com/folio-org/mod-circulation/blob/23b19a862969dece47d3eb6ebc4cde7e43094f91/ramls/loan.json#L307-L311
+  dueDateChangedByHold: Boolean
 }
 
 extend type Hold {
