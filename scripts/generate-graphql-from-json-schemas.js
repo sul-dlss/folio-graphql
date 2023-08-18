@@ -230,6 +230,12 @@ files.sort().map(file => {
     json.properties.orderCloseReason = { "type": "string" }
   }
 
+  // error.schema internally references parameters.schema, which throws UnknownTypeReference
+  // we just get rid of it, since we don't care about the typing of the error response
+  if (file.includes('/mod-inventory-storage/ramls/raml-util/schemas/error.')) {
+    delete json.properties.parameters
+  }
+
   fixupStuff(file, json)
 
   convert(context, json)
@@ -404,7 +410,8 @@ const queryType = new GraphQLObjectType({
         'PoLineCollection',
         'PoLine',
         'HoldingSummary',
-        'HoldingSummaryCollection'
+        'HoldingSummaryCollection',
+        'RtacHoldingsBatch'
       ];
 
       if (models.includes(type.name)) {

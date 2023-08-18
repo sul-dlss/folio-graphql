@@ -24,6 +24,8 @@ type Query {
   item(id: UUID!): Item
   items(id: [String], hrid: [String], params: CqlParams): [Item]
 
+  availability(id: String): [RtacHolding]
+
   # circ rule policies
   loanPolicies: [LoanPolicy]
   requestPolicies: [RequestPolicy]
@@ -3616,6 +3618,63 @@ type PatronBlockLimit {
   """Limit value"""
   value: Float!
   metadata: Metadata
+}
+
+"""Batch holdings response"""
+type RtacHoldingsBatch {
+  """Real Time Availability Check (RTAC) holding details"""
+  holdings: [RtacHoldings!]
+
+  """Errors"""
+  errors: [Error!]
+}
+
+"""Collection of holdings"""
+type RtacHoldings {
+  """The FOLIO instance identifier"""
+  instanceId: UUID
+
+  """Collection of holdings"""
+  holdings: [RtacHolding!]!
+}
+
+"""Real Time Availability Check (RTAC) holding details"""
+type RtacHolding {
+  """The FOLIO id of the holding (item)"""
+  id: String!
+
+  """The location of the holding"""
+  location: String!
+
+  """The call number of the holding"""
+  callNumber: String!
+
+  """The availability status of the holding"""
+  status: String!
+
+  """The date when the holding will be available"""
+  dueDate: DateTime
+
+  """Volume details for the holding (item)"""
+  volume: String
+
+  """Name of the temporary loan type for a given item"""
+  temporaryLoanType: String
+
+  """Name of the default loan type for a given item"""
+  permanentLoanType: String
+}
+
+"""An error"""
+type Error {
+  """Error message text"""
+  message: String!
+
+  """Error message type"""
+  type: String
+
+  """Error message code"""
+  code: String
 }
 
 """A proxy for a user"""

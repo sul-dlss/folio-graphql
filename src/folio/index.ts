@@ -63,6 +63,9 @@ export const resolvers: Resolvers = {
     items(parent, args, { dataSources: { items } }, info) {
       return items.getItems(args)
     },
+    availability(parent, { id }, { dataSources: { rtac } }, info) {
+      return rtac.getAvailability(id)
+    },
 
     // circ rule policies
     loanPolicies(parent, args, { dataSources: { types } }, info) {

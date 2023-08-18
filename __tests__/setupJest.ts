@@ -15,6 +15,7 @@ import TypeAPI from '../src/folio/type-api';
 import UsersAPI from '../src/folio/users-api';
 import MaterialTypesAPI from '../src/folio/material-type-api';
 import OrdersAPI from '../src/folio/orders-api';
+import RtacApi from '../src/folio/rtac-api';
 
 // set up fetchMock
 beforeEach(() => {
@@ -52,6 +53,7 @@ const context: FolioContext = {
     circulation: new CirculationAPI(apiOptions),
     materialtypes: new MaterialTypesAPI(apiOptions),
     orders: new OrdersAPI(apiOptions),
+    rtac: new RtacApi(apiOptions),
   }
 }
 
