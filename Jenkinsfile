@@ -53,22 +53,22 @@ pipeline {
       }
 
       when {
-        branch 'main'
+        tag "v*"
       }
 
       steps {
         checkout scm
 
         sshagent (['sul-devops-team', 'sul-continuous-deployment']){
-          sh '''#!/bin/bash -l
+          sh """#!/bin/bash -l
             # wait for the image to become available?
             sleep 300
 
             ssh graphql@sul-folio-graphql-prod.stanford.edu \
-            'docker pull suldlss/folio-graphql:latest && \
-            docker rm $(docker stop $(docker ps -a -q --filter="name=folio-graphql")) && \
-            docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:latest'
-          '''
+            'docker pull suldlss/folio-graphql:${env.TAG_NAME} && \
+            docker rm \$(docker stop \$(docker ps -a -q --filter="name=folio-graphql")) && \
+            docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:${env.TAG_NAME}'
+          """
         }
       }
 
