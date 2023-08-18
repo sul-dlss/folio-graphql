@@ -24,9 +24,9 @@ pipeline {
             sleep 300
 
             ssh graphql@sul-folio-graphql-test.stanford.edu \
-            'docker pull suldlss/folio-graphql:latest && \
+            'docker pull suldlss/folio-graphql:main && \
             docker rm $(docker stop $(docker ps -a -q --filter="name=folio-graphql")) && \
-            docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:latest'
+            docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:main'
           '''
         }
       }
