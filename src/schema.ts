@@ -446,6 +446,17 @@ export enum EresourceCreateInventory {
   None = 'None'
 }
 
+/** An error */
+export type Error = {
+  __typename?: 'Error';
+  /** Error message code */
+  code?: Maybe<Scalars['String']['output']>;
+  /** Error message text */
+  message: Scalars['String']['output'];
+  /** Error message type */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
 export type FeeFine = {
   __typename?: 'FeeFine';
@@ -2446,6 +2457,7 @@ export enum QuantityIntervalId {
 
 export type Query = {
   __typename?: 'Query';
+  availability?: Maybe<Array<Maybe<RtacHolding>>>;
   campus?: Maybe<Campus>;
   campuses?: Maybe<Array<Maybe<Campus>>>;
   feeFineTypes?: Maybe<Array<Maybe<FeeFine>>>;
@@ -2470,6 +2482,11 @@ export type Query = {
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
   servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+};
+
+
+export type QueryAvailabilityArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2767,6 +2784,45 @@ export enum RequestType {
   Page = 'Page',
   Recall = 'Recall'
 }
+
+/** Real Time Availability Check (RTAC) holding details */
+export type RtacHolding = {
+  __typename?: 'RtacHolding';
+  /** The call number of the holding */
+  callNumber: Scalars['String']['output'];
+  /** The date when the holding will be available */
+  dueDate?: Maybe<Scalars['DateTime']['output']>;
+  /** The FOLIO id of the holding (item) */
+  id: Scalars['String']['output'];
+  /** The location of the holding */
+  location: Scalars['String']['output'];
+  /** Name of the default loan type for a given item */
+  permanentLoanType?: Maybe<Scalars['String']['output']>;
+  /** The availability status of the holding */
+  status: Scalars['String']['output'];
+  /** Name of the temporary loan type for a given item */
+  temporaryLoanType?: Maybe<Scalars['String']['output']>;
+  /** Volume details for the holding (item) */
+  volume?: Maybe<Scalars['String']['output']>;
+};
+
+/** Collection of holdings */
+export type RtacHoldings = {
+  __typename?: 'RtacHoldings';
+  /** Collection of holdings */
+  holdings: Array<RtacHolding>;
+  /** The FOLIO instance identifier */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+};
+
+/** Batch holdings response */
+export type RtacHoldingsBatch = {
+  __typename?: 'RtacHoldingsBatch';
+  /** Errors */
+  errors?: Maybe<Array<Error>>;
+  /** Real Time Availability Check (RTAC) holding details */
+  holdings?: Maybe<Array<RtacHoldings>>;
+};
 
 /** A date range and associated due date, connected with the parent FixedDueDateSchedule. */
 export type Schedule = {

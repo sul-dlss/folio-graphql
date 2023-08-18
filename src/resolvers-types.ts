@@ -449,6 +449,17 @@ export enum EresourceCreateInventory {
   None = 'None'
 }
 
+/** An error */
+export type Error = {
+  __typename?: 'Error';
+  /** Error message code */
+  code?: Maybe<Scalars['String']['output']>;
+  /** Error message text */
+  message: Scalars['String']['output'];
+  /** Error message type */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
 export type FeeFine = {
   __typename?: 'FeeFine';
@@ -2449,6 +2460,7 @@ export enum QuantityIntervalId {
 
 export type Query = {
   __typename?: 'Query';
+  availability?: Maybe<Array<Maybe<RtacHolding>>>;
   campus?: Maybe<Campus>;
   campuses?: Maybe<Array<Maybe<Campus>>>;
   feeFineTypes?: Maybe<Array<Maybe<FeeFine>>>;
@@ -2473,6 +2485,11 @@ export type Query = {
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
   servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+};
+
+
+export type QueryAvailabilityArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2770,6 +2787,45 @@ export enum RequestType {
   Page = 'Page',
   Recall = 'Recall'
 }
+
+/** Real Time Availability Check (RTAC) holding details */
+export type RtacHolding = {
+  __typename?: 'RtacHolding';
+  /** The call number of the holding */
+  callNumber: Scalars['String']['output'];
+  /** The date when the holding will be available */
+  dueDate?: Maybe<Scalars['DateTime']['output']>;
+  /** The FOLIO id of the holding (item) */
+  id: Scalars['String']['output'];
+  /** The location of the holding */
+  location: Scalars['String']['output'];
+  /** Name of the default loan type for a given item */
+  permanentLoanType?: Maybe<Scalars['String']['output']>;
+  /** The availability status of the holding */
+  status: Scalars['String']['output'];
+  /** Name of the temporary loan type for a given item */
+  temporaryLoanType?: Maybe<Scalars['String']['output']>;
+  /** Volume details for the holding (item) */
+  volume?: Maybe<Scalars['String']['output']>;
+};
+
+/** Collection of holdings */
+export type RtacHoldings = {
+  __typename?: 'RtacHoldings';
+  /** Collection of holdings */
+  holdings: Array<RtacHolding>;
+  /** The FOLIO instance identifier */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+};
+
+/** Batch holdings response */
+export type RtacHoldingsBatch = {
+  __typename?: 'RtacHoldingsBatch';
+  /** Errors */
+  errors?: Maybe<Array<Error>>;
+  /** Real Time Availability Check (RTAC) holding details */
+  holdings?: Maybe<Array<RtacHoldings>>;
+};
 
 /** A date range and associated due date, connected with the parent FixedDueDateSchedule. */
 export type Schedule = {
@@ -3106,6 +3162,7 @@ export type ResolversTypes = ResolversObject<{
   ElectronicAccessRelationship: ResolverTypeWrapper<ElectronicAccessRelationship>;
   Eresource: ResolverTypeWrapper<Eresource>;
   EresourceCreateInventory: EresourceCreateInventory;
+  Error: ResolverTypeWrapper<Error>;
   FeeFine: ResolverTypeWrapper<FeeFine>;
   FeeFineAction: ResolverTypeWrapper<FeeFineAction>;
   FixedDueDateSchedule: ResolverTypeWrapper<FixedDueDateSchedule>;
@@ -3253,6 +3310,9 @@ export type ResolversTypes = ResolversObject<{
   RequestRequesterPatronGroup: ResolverTypeWrapper<RequestRequesterPatronGroup>;
   RequestStatus: RequestStatus;
   RequestType: RequestType;
+  RtacHolding: ResolverTypeWrapper<RtacHolding>;
+  RtacHoldings: ResolverTypeWrapper<RtacHoldings>;
+  RtacHoldingsBatch: ResolverTypeWrapper<RtacHoldingsBatch>;
   Schedule: ResolverTypeWrapper<Schedule>;
   ServicePoint: ResolverTypeWrapper<ServicePoint>;
   ServicePointDetails: ResolverTypeWrapper<ServicePointDetails>;
@@ -3299,6 +3359,7 @@ export type ResolversParentTypes = ResolversObject<{
   Details: Details;
   ElectronicAccessRelationship: ElectronicAccessRelationship;
   Eresource: Eresource;
+  Error: Error;
   FeeFine: FeeFine;
   FeeFineAction: FeeFineAction;
   FixedDueDateSchedule: FixedDueDateSchedule;
@@ -3416,6 +3477,9 @@ export type ResolversParentTypes = ResolversObject<{
   RequestRequestProcessingParameters: RequestRequestProcessingParameters;
   RequestRequester: RequestRequester;
   RequestRequesterPatronGroup: RequestRequesterPatronGroup;
+  RtacHolding: RtacHolding;
+  RtacHoldings: RtacHoldings;
+  RtacHoldingsBatch: RtacHoldingsBatch;
   Schedule: Schedule;
   ServicePoint: ServicePoint;
   ServicePointDetails: ServicePointDetails;
@@ -3684,6 +3748,13 @@ export type EresourceResolvers<ContextType = FolioContext, ParentType extends Re
   resourceUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   trial?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   userLimit?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ErrorResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Error'] = ResolversParentTypes['Error']> = ResolversObject<{
+  code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -4830,6 +4901,7 @@ export type QuantityResolvers<ContextType = FolioContext, ParentType extends Res
 }>;
 
 export type QueryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  availability?: Resolver<Maybe<Array<Maybe<ResolversTypes['RtacHolding']>>>, ParentType, ContextType, Partial<QueryAvailabilityArgs>>;
   campus?: Resolver<Maybe<ResolversTypes['Campus']>, ParentType, ContextType, Partial<QueryCampusArgs>>;
   campuses?: Resolver<Maybe<Array<Maybe<ResolversTypes['Campus']>>>, ParentType, ContextType>;
   feeFineTypes?: Resolver<Maybe<Array<Maybe<ResolversTypes['FeeFine']>>>, ParentType, ContextType>;
@@ -4973,6 +5045,30 @@ export type RequestRequesterPatronGroupResolvers<ContextType = FolioContext, Par
   desc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   group?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type RtacHoldingResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHolding'] = ResolversParentTypes['RtacHolding']> = ResolversObject<{
+  callNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  dueDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  location?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  permanentLoanType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  temporaryLoanType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  volume?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type RtacHoldingsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldings'] = ResolversParentTypes['RtacHoldings']> = ResolversObject<{
+  holdings?: Resolver<Array<ResolversTypes['RtacHolding']>, ParentType, ContextType>;
+  instanceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type RtacHoldingsBatchResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldingsBatch'] = ResolversParentTypes['RtacHoldingsBatch']> = ResolversObject<{
+  errors?: Resolver<Maybe<Array<ResolversTypes['Error']>>, ParentType, ContextType>;
+  holdings?: Resolver<Maybe<Array<ResolversTypes['RtacHoldings']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -5147,6 +5243,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   Details?: DetailsResolvers<ContextType>;
   ElectronicAccessRelationship?: ElectronicAccessRelationshipResolvers<ContextType>;
   Eresource?: EresourceResolvers<ContextType>;
+  Error?: ErrorResolvers<ContextType>;
   FeeFine?: FeeFineResolvers<ContextType>;
   FeeFineAction?: FeeFineActionResolvers<ContextType>;
   FixedDueDateSchedule?: FixedDueDateScheduleResolvers<ContextType>;
@@ -5262,6 +5359,9 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   RequestRequestProcessingParameters?: RequestRequestProcessingParametersResolvers<ContextType>;
   RequestRequester?: RequestRequesterResolvers<ContextType>;
   RequestRequesterPatronGroup?: RequestRequesterPatronGroupResolvers<ContextType>;
+  RtacHolding?: RtacHoldingResolvers<ContextType>;
+  RtacHoldings?: RtacHoldingsResolvers<ContextType>;
+  RtacHoldingsBatch?: RtacHoldingsBatchResolvers<ContextType>;
   Schedule?: ScheduleResolvers<ContextType>;
   ServicePoint?: ServicePointResolvers<ContextType>;
   ServicePointDetails?: ServicePointDetailsResolvers<ContextType>;
