@@ -22,7 +22,7 @@ type Query {
   holdingsRecords(id: [String], hrid: [String], params: CqlParams): [HoldingsRecord]
 
   item(id: UUID!): Item
-  items(id: [String], hrid: [String], params: CqlParams): [Item]
+  items(id: [String], barcode: [String], hrid: [String], params: CqlParams): [Item]
 
   availability(id: String): [RtacHolding]
 
