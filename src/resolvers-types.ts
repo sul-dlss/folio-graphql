@@ -2529,6 +2529,7 @@ export type QueryItemArgs = {
 
 
 export type QueryItemsArgs = {
+  barcode?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   hrid?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   params?: InputMaybe<CqlParams>;
