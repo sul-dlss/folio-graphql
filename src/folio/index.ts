@@ -32,6 +32,7 @@ import {
   AlternativeTitleType,
   ContributorType,
   MaterialType,
+  ItemCirculationNotesItemNoteType,
 } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
@@ -382,6 +383,14 @@ export const resolvers: Resolvers = {
       if (loans.length === 0) return null;
 
       return loans[0].dueDate;
+    }
+  },
+  ItemCirculationNotesItem: {
+    noteType({ noteType }, args, { dataSources: { types } }, info) {
+      switch (noteType as unknown as string) {
+        case "Check in": return ItemCirculationNotesItemNoteType.CheckIn
+        case "Check out": return ItemCirculationNotesItemNoteType.CheckOut
+      }
     }
   },
   ItemEffectiveCallNumberComponents: {
