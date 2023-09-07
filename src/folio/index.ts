@@ -366,10 +366,10 @@ export const resolvers: Resolvers = {
       return types.getById<ServicePoint>("service-points", {}, inTransitDestinationServicePointId)
     },
     permanentLoanType({ permanentLoanTypeId }, args, { dataSources: { types } }, info) {
-      return types.getById<LoanType>("loan-types", {}, permanentLoanTypeId)
+      return types.getById<LoanType>("loan-types", { key: 'loantypes' }, permanentLoanTypeId)
     },
     temporaryLoanType({ temporaryLoanTypeId }, args, { dataSources: { types } }, info) {
-      return types.getById<LoanType>("loan-types", {}, temporaryLoanTypeId)
+      return types.getById<LoanType>("loan-types", { key: 'loantypes' }, temporaryLoanTypeId)
     },
     itemLevelCallNumberType({ itemLevelCallNumberTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, itemLevelCallNumberTypeId)
