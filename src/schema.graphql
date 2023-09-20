@@ -4060,6 +4060,9 @@ extend type LocationDetails {
 
   """ E.g. 'https://stanford.stackmap.com/json/', if a stackmap is available for that location"""
   stackmapBaseUrl: String
+
+  """Some locations (like SAL3-PAGE-AR) are also indexed under the paged-to library (i.e. ART)"""
+  searchworksAdditionalLibraryCodeFacetValues: String
 }
 
 enum LocationAvailabilityClass {
