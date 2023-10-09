@@ -4082,6 +4082,12 @@ type ServicePointDetails {
   notes: String
   """The code for the campus for which this service point will be set as default"""
   isDefaultForCampus: String
+
+  """IPLC location code equivalent for the service point, generally starts with STA-"""
+  iplcLocationCode: String
+
+  """Pseudopatron barcode to use for placing holds"""
+  holdPseudopatronCode: String
 }
 
 extend type HoldingSummary {

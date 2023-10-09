@@ -2871,6 +2871,10 @@ export type ServicePoint = {
 
 export type ServicePointDetails = {
   __typename?: 'ServicePointDetails';
+  /** Pseudopatron barcode to use for placing holds */
+  holdPseudopatronCode?: Maybe<Scalars['String']['output']>;
+  /** IPLC location code equivalent for the service point, generally starts with STA- */
+  iplcLocationCode?: Maybe<Scalars['String']['output']>;
   /** The code for the campus for which this service point will be set as default */
   isDefaultForCampus?: Maybe<Scalars['String']['output']>;
   /** Should this service point be a default pickup option for requests? */
@@ -5104,6 +5108,8 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
 }>;
 
 export type ServicePointDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePointDetails'] = ResolversParentTypes['ServicePointDetails']> = ResolversObject<{
+  holdPseudopatronCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  iplcLocationCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isDefaultForCampus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isDefaultPickup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
