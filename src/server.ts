@@ -25,7 +25,7 @@ import HoldingsAPI from "./folio/holdings-api.js"
 import TypeAPI from "./folio/type-api.js"
 import FeeFinesAPI from "./folio/feefines-api.js"
 import CirculationAPI from "./folio/circulation-api.js"
-import MaterialTypesAPI from './folio/material-type-api.js'
+import MaterialTypesAPI from './folio/material-types-api.js'
 import OrdersAPI from './folio/orders-api.js'
 import AuthnAPI from "./folio/authn-api.js"
 import OkapiAPI from "./folio/okapi-api.js"

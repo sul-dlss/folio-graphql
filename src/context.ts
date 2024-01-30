@@ -7,7 +7,7 @@ import HoldingsAPI from "./folio/holdings-api.js"
 import TypeAPI from "./folio/type-api.js"
 import FeeFinesAPI from "./folio/feefines-api.js"
 import CirculationAPI from "./folio/circulation-api.js"
-import MaterialTypesAPI from "./folio/material-type-api.js"
+import MaterialTypesAPI from "./folio/material-types-api.js"
 import OrdersAPI from "./folio/orders-api.js"
 import RtacApi from "./folio/rtac-api.js"
 
