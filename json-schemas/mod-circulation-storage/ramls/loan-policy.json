@@ -1,21 +1,26 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Rules governing loans",
   "type": "object",
   "properties": {
     "id": {
       "type": "string"
     },
     "name": {
+      "description": "The name of the policy.",
       "type": "string"
     },
     "description": {
+      "description": "Description of the loan policy",
       "type": "string"
     },
     "loanable": {
+      "description": "Flag that indicates whether this policy allows loans",
       "type": "boolean"
     },
     "loansPolicy": {
       "type": "object",
+      "description": "Settings for loans",
       "additionalProperties": false,
       "properties": {
         "profileId": {
@@ -59,6 +64,7 @@
     },
     "renewalsPolicy": {
       "type": "object",
+      "description": "Settings for renewals",
       "properties": {
         "unlimited": {
           "type": "boolean",
@@ -89,10 +95,12 @@
     },
     "requestManagement": {
       "type": "object",
+      "description": "Settings for various request types",
       "additionalProperties": false,
       "properties": {
         "recalls": {
           "type": "object",
+          "description": "Settings for recall requests",
           "additionalProperties": false,
           "properties": {
             "alternateGracePeriod": {
@@ -124,6 +132,7 @@
         },
         "holds": {
           "type": "object",
+          "description": "Settings for hold requests",
           "additionalProperties": false,
           "properties": {
             "alternateCheckoutLoanPeriod": {
@@ -144,6 +153,7 @@
         },
         "pages": {
           "type": "object",
+          "description": "Settings for page requests",
           "additionalProperties": false,
           "properties": {
             "alternateCheckoutLoanPeriod": {

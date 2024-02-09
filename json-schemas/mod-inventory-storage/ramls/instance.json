@@ -22,7 +22,7 @@
     },
     "source": {
       "type": "string",
-      "description": "The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings)"
+      "description": "The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory; MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings; CONSORTIUM-MARC or CONSORTIUM-FOLIO for sharing Instances)."
     },
     "title": {
       "type": "string",
@@ -46,6 +46,11 @@
           "alternativeTitle": {
             "type": "string",
             "description": "An alternative title for the resource"
+          },
+          "authorityId": {
+            "type": "string",
+            "description": "UUID of authority record that controls an alternative title",
+            "$ref": "uuid.json"
           }
         }
       },
@@ -63,7 +68,22 @@
       "type": "array",
       "description": "List of series titles associated with the resource (e.g. Harry Potter)",
       "items": {
-        "type": "string"
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Series title value"
+          },
+          "authorityId": {
+            "type": "string",
+            "description": "UUID of authority record that controls an series title",
+            "$ref": "uuid.json"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "value"
+        ]
       },
       "uniqueItems": true
     },
@@ -160,7 +180,22 @@
       "type": "array",
       "description": "List of subject headings",
       "items": {
-        "type": "string"
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Subject heading value"
+          },
+          "authorityId": {
+            "type": "string",
+            "description": "UUID of authority record that controls a subject heading",
+            "$ref": "uuid.json"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "value"
+        ]
       },
       "uniqueItems": true
     },
@@ -184,7 +219,6 @@
             "type": "object",
             "description": "Dereferenced classification schema",
             "javaType": "org.folio.rest.jaxrs.model.classificationTypeVirtual",
-            "readonly": true,
             "folio:$ref": "classificationtype.json",
             "readonly": true,
             "folio:isVirtual": true,
@@ -338,6 +372,8 @@
       "description": "Bibliographic notes (e.g. general notes, specialized notes)",
       "items": {
         "type": "object",
+        "javaType": "org.folio.rest.jaxrs.model.InstanceNote",
+        "additionalProperties": false,
         "properties": {
           "instanceNoteTypeId": {
             "description": "ID of the type of note",
@@ -425,7 +461,7 @@
       "description": "List of holdings records",
       "items": {
         "type": "object",
-        "$ref": "holdingsrecord.json"
+        "$ref": "holdings-storage/holdingsRecord.json"
       },
       "readonly": true,
       "folio:isVirtual": true,
