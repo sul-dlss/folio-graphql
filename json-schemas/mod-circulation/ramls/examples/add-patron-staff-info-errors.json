@@ -1,9 +1,0 @@
-{
-  "errors" : [ {
-    "message" : "An action of type 'patronInfoAdded' or 'staffInfoAdded', with associated 'actionComment', required in order to add info",
-    "parameters" : [ {
-      "key" : "action",
-      "value" : "patronInfoAdded"
-    } ]
-  } ]
-}
