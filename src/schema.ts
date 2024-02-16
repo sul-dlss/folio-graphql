@@ -334,6 +334,8 @@ export type ContributorNameType = {
   name: Scalars['String']['output'];
   /** used for ordering of contributor name types in displays, i.e. in select lists */
   ordering?: Maybe<Scalars['String']['output']>;
+  /** origin of the contributor name type record, e.g. 'local', 'consortium' etc. */
+  source?: Maybe<Scalars['String']['output']>;
 };
 
 /** A contributor type */
@@ -412,6 +414,8 @@ export type ElectronicAccessRelationship = {
   metadata?: Maybe<Metadata>;
   /** label for the type of relationship between a URL and an Instance */
   name: Scalars['String']['output'];
+  /** Origin of the electronic access relationship record, e.g. 'local', 'consortium' etc. */
+  source?: Maybe<Scalars['String']['output']>;
 };
 
 /** purchase order line e-resource details */
@@ -485,18 +489,20 @@ export type FeeFineAction = {
   accountId: Scalars['UUID']['output'];
   /** Amount of activity */
   amountAction?: Maybe<Scalars['Float']['output']>;
-  /** Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/tranferred/refunded */
+  /** Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/transferred/refunded */
   balance?: Maybe<Scalars['Float']['output']>;
   /** Additional information entered as part of the activity or on this screen as a 'Staff info only' activity */
   comments?: Maybe<Scalars['String']['output']>;
-  /** Location where activity took place (from login information) */
-  createdAt?: Maybe<Scalars['String']['output']>;
+  /** ID of the service point where the action was created */
+  createdAt?: Maybe<Scalars['UUID']['output']>;
   /** Date and time the transaction of the fine/fee was created */
   dateAction?: Maybe<Scalars['DateTime']['output']>;
   /** Fine/fee action id, UUID */
   id?: Maybe<Scalars['UUID']['output']>;
   /** A flag to determine if a patron should be notified or not */
   notify?: Maybe<Scalars['Boolean']['output']>;
+  /** Original invalid (non-UUID) value of 'createdAt' moved here when UUID-validation was enabled for 'createdAt' */
+  originalCreatedAt?: Maybe<Scalars['String']['output']>;
   /** Overall status of the action-setting */
   paymentMethod?: Maybe<Scalars['String']['output']>;
   /** Person who processed activity (from login information) */
@@ -512,11 +518,14 @@ export type FeeFineAction = {
 /** A set of date ranges for materials checkout and their associated due dates. */
 export type FixedDueDateSchedule = {
   __typename?: 'FixedDueDateSchedule';
+  /** Schedule description */
   description?: Maybe<Scalars['String']['output']>;
   /** Unique ID (generated UUID) */
   id?: Maybe<Scalars['UUID']['output']>;
   metadata?: Maybe<Metadata>;
+  /** Schedule name */
   name: Scalars['String']['output'];
+  /** List date ranges with a due date for each */
   schedules?: Maybe<Array<Schedule>>;
 };
 
@@ -726,6 +735,16 @@ export type HoldingsRecordItemsArgs = {
   params?: InputMaybe<CqlParams>;
 };
 
+/** A collection of holdings records */
+export type HoldingsRecords = {
+  __typename?: 'HoldingsRecords';
+  /** List of holdings records */
+  holdingsRecords: Array<HoldingsRecord>;
+  resultInfo?: Maybe<ResultInfo>;
+  /** Estimated or exact total number of records */
+  totalRecords: Scalars['Int']['output'];
+};
+
 /** A holdings records source */
 export type HoldingsRecordsSource = {
   __typename?: 'HoldingsRecordsSource';
@@ -876,8 +895,7 @@ export type Instance = {
   /** List of electronic access items */
   electronicAccess?: Maybe<Array<InstanceElectronicAccessItem>>;
   holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
-  /** List of holdings records */
-  holdingsRecords2?: Maybe<Array<HoldingsRecord>>;
+  holdingsRecords2?: Maybe<HoldingsRecords>;
   /** The human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID */
   hrid?: Maybe<Scalars['String']['output']>;
   /** The unique ID of the instance record; a UUID */
@@ -920,8 +938,8 @@ export type Instance = {
   /** The range of sequential designation/chronology of publication, or date range */
   publicationRange?: Maybe<Array<Scalars['String']['output']>>;
   /** List of series titles associated with the resource (e.g. Harry Potter) */
-  series?: Maybe<Array<Scalars['String']['output']>>;
-  /** The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings) */
+  series?: Maybe<Array<InstanceSeriesItem>>;
+  /** The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory; MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings; CONSORTIUM-MARC or CONSORTIUM-FOLIO for sharing Instances). */
   source: Scalars['String']['output'];
   /** Format of the instance source record, if a source record exists (e.g. FOLIO if it's a record created in Inventory,  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings) */
   sourceRecordFormat?: Maybe<InstanceSourceRecordFormat>;
@@ -935,7 +953,7 @@ export type Instance = {
   /** Date [or timestamp] for when the instance status was updated */
   statusUpdatedDate?: Maybe<Scalars['String']['output']>;
   /** List of subject headings */
-  subjects?: Maybe<Array<Scalars['String']['output']>>;
+  subjects?: Maybe<Array<InstanceSubjectsItem>>;
   /** arbitrary tags associated with this instance */
   tags?: Maybe<Tags>;
   /** The primary title (or label) associated with the resource */
@@ -962,6 +980,8 @@ export type InstanceAlternativeTitlesItem = {
   /** UUID for an alternative title qualifier */
   alternativeTitleTypeId?: Maybe<Scalars['UUID']['output']>;
   authority?: Maybe<Authority>;
+  /** UUID of authority record that controls an alternative title */
+  authorityId?: Maybe<Scalars['UUID']['output']>;
 };
 
 export type InstanceClassificationsItem = {
@@ -1075,6 +1095,14 @@ export type InstancePublicationPeriod = {
   start?: Maybe<Scalars['Int']['output']>;
 };
 
+export type InstanceSeriesItem = {
+  __typename?: 'InstanceSeriesItem';
+  /** UUID of authority record that controls an series title */
+  authorityId?: Maybe<Scalars['UUID']['output']>;
+  /** Series title value */
+  value: Scalars['String']['output'];
+};
+
 export enum InstanceSourceRecordFormat {
   MarcJson = 'MARC_JSON'
 }
@@ -1090,6 +1118,14 @@ export type InstanceStatus = {
   name: Scalars['String']['output'];
   /** origin of an instance status record */
   source: Scalars['String']['output'];
+};
+
+export type InstanceSubjectsItem = {
+  __typename?: 'InstanceSubjectsItem';
+  /** UUID of authority record that controls a subject heading */
+  authorityId?: Maybe<Scalars['UUID']['output']>;
+  /** Subject heading value */
+  value: Scalars['String']['output'];
 };
 
 /** The resource type of an Instance */
@@ -1155,6 +1191,8 @@ export type Item = {
   descriptionOfPieces?: Maybe<Scalars['String']['output']>;
   /** Records the fact that the record should not be displayed in a discovery system */
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
+  /** Display summary about the item */
+  displaySummary?: Maybe<Scalars['String']['output']>;
   dueDate?: Maybe<Scalars['DateTime']['output']>;
   /** Elements of a full call number generated from the item or holding */
   effectiveCallNumberComponents?: Maybe<ItemEffectiveCallNumberComponents>;
@@ -1170,7 +1208,7 @@ export type Item = {
   /** Previous identifiers assigned to the item */
   formerIds?: Maybe<Array<Scalars['String']['output']>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
-  /** Item associated holdings record object. */
+  /** Fake property for mod-graphql to determine record relationships. */
   holdingsRecord2?: Maybe<HoldingsRecord>;
   /** ID of the holdings record the item is a member of. */
   holdingsRecordId: Scalars['String']['output'];
@@ -1411,7 +1449,10 @@ export type Loan = {
   declaredLostDate?: Maybe<Scalars['DateTime']['output']>;
   /** Date and time when the item is due to be returned */
   dueDate?: Maybe<Scalars['DateTime']['output']>;
+  /** Is due date changed by hold request */
   dueDateChangedByHold?: Maybe<Scalars['Boolean']['output']>;
+  /** Indicates whether or not this loan had its due date modified by a expired user */
+  dueDateChangedByNearExpireUser?: Maybe<Scalars['Boolean']['output']>;
   /** Is due date changed by recall request */
   dueDateChangedByRecall?: Maybe<Scalars['Boolean']['output']>;
   /** Fees and fines associated with loans */
@@ -1500,20 +1541,28 @@ export type LoanPatronGroupAtCheckout = {
   name?: Maybe<Scalars['String']['output']>;
 };
 
+/** Rules governing loans */
 export type LoanPolicy = {
   __typename?: 'LoanPolicy';
+  /** Description of the loan policy */
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  /** Flag that indicates whether this policy allows loans */
   loanable: Scalars['Boolean']['output'];
+  /** Settings for loans */
   loansPolicy?: Maybe<LoanPolicyLoansPolicy>;
   metadata?: Maybe<Metadata>;
+  /** The name of the policy. */
   name: Scalars['String']['output'];
   /** Is item renewable */
   renewable: Scalars['Boolean']['output'];
+  /** Settings for renewals */
   renewalsPolicy?: Maybe<LoanPolicyRenewalsPolicy>;
+  /** Settings for various request types */
   requestManagement?: Maybe<LoanPolicyRequestManagement>;
 };
 
+/** Settings for loans */
 export type LoanPolicyLoansPolicy = {
   __typename?: 'LoanPolicyLoansPolicy';
   /** Closed library due date management */
@@ -1533,6 +1582,7 @@ export type LoanPolicyLoansPolicy = {
   profileId?: Maybe<Scalars['String']['output']>;
 };
 
+/** Settings for renewals */
 export type LoanPolicyRenewalsPolicy = {
   __typename?: 'LoanPolicyRenewalsPolicy';
   alternateFixedDueDateSchedule?: Maybe<FixedDueDateSchedule>;
@@ -1550,13 +1600,18 @@ export type LoanPolicyRenewalsPolicy = {
   unlimited?: Maybe<Scalars['Boolean']['output']>;
 };
 
+/** Settings for various request types */
 export type LoanPolicyRequestManagement = {
   __typename?: 'LoanPolicyRequestManagement';
+  /** Settings for hold requests */
   holds?: Maybe<LoanPolicyRequestManagementHolds>;
+  /** Settings for page requests */
   pages?: Maybe<LoanPolicyRequestManagementPages>;
+  /** Settings for recall requests */
   recalls?: Maybe<LoanPolicyRequestManagementRecalls>;
 };
 
+/** Settings for hold requests */
 export type LoanPolicyRequestManagementHolds = {
   __typename?: 'LoanPolicyRequestManagementHolds';
   /** Alternate loan period at checkout for items with active, pending hold request */
@@ -1567,6 +1622,7 @@ export type LoanPolicyRequestManagementHolds = {
   renewItemsWithRequest?: Maybe<Scalars['Boolean']['output']>;
 };
 
+/** Settings for page requests */
 export type LoanPolicyRequestManagementPages = {
   __typename?: 'LoanPolicyRequestManagementPages';
   /** Alternate loan period at checkout for items with active, pending page request */
@@ -1577,6 +1633,7 @@ export type LoanPolicyRequestManagementPages = {
   renewItemsWithRequest?: Maybe<Scalars['Boolean']['output']>;
 };
 
+/** Settings for recall requests */
 export type LoanPolicyRequestManagementRecalls = {
   __typename?: 'LoanPolicyRequestManagementRecalls';
   /** Whether recalls are allowed to extend overdue loans */
@@ -1605,6 +1662,8 @@ export type LoanType = {
   metadata?: Maybe<Metadata>;
   /** label for the loan type */
   name: Scalars['String']['output'];
+  /** Origin of the loan type record, e.g. 'System', 'User', 'Consortium' etc. */
+  source?: Maybe<Scalars['String']['output']>;
 };
 
 /** A (shelf) location, the forth-level location unit below institution, campus, and library. */
@@ -1849,6 +1908,8 @@ export type OverdueFinePolicy = {
   overdueFine?: Maybe<Quantity>;
   /** Fine overdue recall fine */
   overdueRecallFine?: Maybe<Quantity>;
+  /** Rules and schedule for reminders with associated fees */
+  reminderFeesPolicy?: Maybe<ReminderFeesPolicy>;
 };
 
 /** Blocks to override (e.g. during checkout or renewal) */
@@ -1999,6 +2060,8 @@ export type PatronGroup = {
   id?: Maybe<Scalars['String']['output']>;
   limits?: Maybe<Array<Maybe<PatronBlockLimit>>>;
   metadata?: Maybe<Metadata>;
+  /** Origin of the group record, i.e. 'System' or 'User' */
+  source?: Maybe<Scalars['String']['output']>;
 };
 
 /** Item schema for patron portal integration */
@@ -2065,6 +2128,7 @@ export type PatronNoticePolicyFeeFineNoticesItem = {
   name?: Maybe<Scalars['String']['output']>;
   /** Is this real time event */
   realTime: Scalars['Boolean']['output'];
+  /** Notice sending options */
   sendOptions?: Maybe<PatronNoticePolicyFeeFineNoticesItemSendOptions>;
   /** Template id, UUID */
   templateId: Scalars['String']['output'];
@@ -2083,9 +2147,12 @@ export enum PatronNoticePolicyFeeFineNoticesItemFrequency {
   Recurring = 'Recurring'
 }
 
+/** Notice sending options */
 export type PatronNoticePolicyFeeFineNoticesItemSendOptions = {
   __typename?: 'PatronNoticePolicyFeeFineNoticesItemSendOptions';
+  /** Delay before the first attempt to send a notice */
   sendBy?: Maybe<Interval>;
+  /** Interval between attempts to send a recurring notice */
   sendEvery?: Maybe<Interval>;
   /** Defines how notice should be sent: after or upon */
   sendHow?: Maybe<PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow>;
@@ -2116,6 +2183,7 @@ export type PatronNoticePolicyLoanNoticesItem = {
   name?: Maybe<Scalars['String']['output']>;
   /** Is this real time event */
   realTime: Scalars['Boolean']['output'];
+  /** Notice sending options */
   sendOptions?: Maybe<PatronNoticePolicyLoanNoticesItemSendOptions>;
   /** Template id, UUID */
   templateId: Scalars['String']['output'];
@@ -2134,9 +2202,12 @@ export enum PatronNoticePolicyLoanNoticesItemFrequency {
   Recurring = 'Recurring'
 }
 
+/** Notice sending options */
 export type PatronNoticePolicyLoanNoticesItemSendOptions = {
   __typename?: 'PatronNoticePolicyLoanNoticesItemSendOptions';
+  /** Delay before the first attempt to send a notice */
   sendBy?: Maybe<Interval>;
+  /** Interval between attempts to send a recurring notice */
   sendEvery?: Maybe<Interval>;
   /** Defines how notice should be sent, before, after or upon */
   sendHow?: Maybe<PatronNoticePolicyLoanNoticesItemSendOptionsSendHow>;
@@ -2170,6 +2241,7 @@ export type PatronNoticePolicyRequestNoticesItem = {
   name?: Maybe<Scalars['String']['output']>;
   /** Is this real time event */
   realTime: Scalars['Boolean']['output'];
+  /** Notice sending options */
   sendOptions?: Maybe<PatronNoticePolicyRequestNoticesItemSendOptions>;
   /** Template id, UUID */
   templateId: Scalars['String']['output'];
@@ -2188,9 +2260,12 @@ export enum PatronNoticePolicyRequestNoticesItemFrequency {
   Recurring = 'Recurring'
 }
 
+/** Notice sending options */
 export type PatronNoticePolicyRequestNoticesItemSendOptions = {
   __typename?: 'PatronNoticePolicyRequestNoticesItemSendOptions';
+  /** Delay before the first attempt to send a notice */
   sendBy?: Maybe<Interval>;
+  /** Interval between attempts to send a recurring notice */
   sendEvery?: Maybe<Interval>;
   /** Defines how notice should be sent, before, after or upon */
   sendHow?: Maybe<PatronNoticePolicyRequestNoticesItemSendOptionsSendHow>;
@@ -2214,6 +2289,7 @@ export enum PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen {
   RequestExpiration = 'Request_expiration'
 }
 
+/** Time interval defined by its duration */
 export type Period = {
   __typename?: 'Period';
   /** Duration of the period, number of times the interval repeats */
@@ -2556,6 +2632,52 @@ export type QueryServicePointsArgs = {
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
+/** Reminder fee policy as part of overdue fine policy */
+export type ReminderFeesPolicy = {
+  __typename?: 'ReminderFeesPolicy';
+  /** Allow renewal of items with reminder fee(s) */
+  allowRenewalOfItemsWithReminderFees?: Maybe<Scalars['Boolean']['output']>;
+  /** Clear patron block when paid */
+  clearPatronBlockWhenPaid?: Maybe<Scalars['Boolean']['output']>;
+  /** A flag to determine if a reminder fee should take closed days into account */
+  countClosed?: Maybe<Scalars['Boolean']['output']>;
+  /** Ignore grace period for holds */
+  ignoreGracePeriodHolds?: Maybe<Scalars['Boolean']['output']>;
+  /** Ignore grace period for recall */
+  ignoreGracePeriodRecall?: Maybe<Scalars['Boolean']['output']>;
+  /** Ordered list of reminder notices */
+  reminderSchedule?: Maybe<Array<ReminderFeesPolicyReminderScheduleItem>>;
+};
+
+/** Scheduled reminder notice with associated fee */
+export type ReminderFeesPolicyReminderScheduleItem = {
+  __typename?: 'ReminderFeesPolicyReminderScheduleItem';
+  /** Id of block reminder template */
+  blockTemplateId?: Maybe<Scalars['UUID']['output']>;
+  /** Number of units of time before notice should be sent */
+  interval: Scalars['Int']['output'];
+  /** Method of sending notice */
+  noticeFormat?: Maybe<ReminderFeesPolicyReminderScheduleItemNoticeFormat>;
+  /** Id of reminder notice template */
+  noticeTemplateId: Scalars['UUID']['output'];
+  /** Fee amount accrued by reminder notice */
+  reminderFee: Scalars['Float']['output'];
+  /** Time unit of interval */
+  timeUnitId: ReminderFeesPolicyReminderScheduleItemTimeUnitId;
+};
+
+export enum ReminderFeesPolicyReminderScheduleItemNoticeFormat {
+  Email = 'Email',
+  None = 'None',
+  Print = 'Print'
+}
+
+export enum ReminderFeesPolicyReminderScheduleItemTimeUnitId {
+  Day = 'day',
+  Minute = 'minute',
+  Week = 'week'
+}
+
 /** Request for an item that might be at a different location or already checked out to another patron */
 export type Request = {
   __typename?: 'Request';
@@ -2572,7 +2694,7 @@ export type Request = {
   /** Deliver to the address of this type, for the requesting patron */
   deliveryAddressTypeId?: Maybe<Scalars['UUID']['output']>;
   /** How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester) */
-  fulfilmentPreference: RequestFulfilmentPreference;
+  fulfillmentPreference: RequestFulfillmentPreference;
   /** Date when an item returned to the hold shelf expires */
   holdShelfExpirationDate?: Maybe<Scalars['DateTime']['output']>;
   /** ID of the holdings record being requested */
@@ -2615,6 +2737,8 @@ export type Request = {
   requester?: Maybe<RequestRequester>;
   /** ID of the user who made the request */
   requesterId: Scalars['UUID']['output'];
+  /** Request fields used for search */
+  searchIndex?: Maybe<RequestSearchIndex>;
   /** Status of the request */
   status?: Maybe<RequestStatus>;
   /** Tags */
@@ -2640,7 +2764,7 @@ export type RequestDeliveryAddress = {
   region?: Maybe<Scalars['String']['output']>;
 };
 
-export enum RequestFulfilmentPreference {
+export enum RequestFulfillmentPreference {
   Delivery = 'Delivery',
   HoldShelf = 'Hold_Shelf'
 }
@@ -2689,6 +2813,8 @@ export type RequestPickupServicePoint = {
 /** request policy schema */
 export type RequestPolicy = {
   __typename?: 'RequestPolicy';
+  /** Allowed pickup service point IDs by request type */
+  allowedServicePoints?: Maybe<RequestPolicyAllowedServicePoints>;
   /** Description of request policy */
   description?: Maybe<Scalars['String']['output']>;
   /** Unique request policy ID */
@@ -2699,6 +2825,14 @@ export type RequestPolicy = {
   name: Scalars['String']['output'];
   /** Whether the item should be held upon return, recalled or paged for */
   requestTypes?: Maybe<Array<RequestType>>;
+};
+
+/** Allowed pickup service point IDs by request type */
+export type RequestPolicyAllowedServicePoints = {
+  __typename?: 'RequestPolicyAllowedServicePoints';
+  Hold?: Maybe<Array<Scalars['String']['output']>>;
+  Page?: Maybe<Array<Scalars['String']['output']>>;
+  Recall?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 /** Copy of some proxy patron metadata (used for searching and sorting), will be taken from the user referred to by the proxyUserId */
@@ -2774,6 +2908,28 @@ export type RequestRequesterPatronGroup = {
   id?: Maybe<Scalars['UUID']['output']>;
 };
 
+/** Request fields used for search */
+export type RequestSearchIndex = {
+  __typename?: 'RequestSearchIndex';
+  /** Effective call number components */
+  callNumberComponents?: Maybe<RequestSearchIndexCallNumberComponents>;
+  /** The name of the request pickup service point */
+  pickupServicePointName?: Maybe<Scalars['String']['output']>;
+  /** A system generated normalization of the call number that allows for call number sorting in reports and search results */
+  shelvingOrder?: Maybe<Scalars['String']['output']>;
+};
+
+/** Effective call number components */
+export type RequestSearchIndexCallNumberComponents = {
+  __typename?: 'RequestSearchIndexCallNumberComponents';
+  /** Effective Call Number is an identifier assigned to an item or its holding and associated with the item. */
+  callNumber?: Maybe<Scalars['String']['output']>;
+  /** Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item. */
+  prefix?: Maybe<Scalars['String']['output']>;
+  /** Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item. */
+  suffix?: Maybe<Scalars['String']['output']>;
+};
+
 export enum RequestStatus {
   ClosedCancelled = 'Closed___Cancelled',
   ClosedFilled = 'Closed___Filled',
@@ -2790,6 +2946,64 @@ export enum RequestType {
   Page = 'Page',
   Recall = 'Recall'
 }
+
+/** Faceting of result sets */
+export type ResultInfo = {
+  __typename?: 'ResultInfo';
+  /** Array of diagnostic information */
+  diagnostics?: Maybe<Array<ResultInfoDiagnosticsItem>>;
+  /** Array of facets */
+  facets?: Maybe<Array<ResultInfoFacetsItem>>;
+  /** Response time */
+  responseTime?: Maybe<Scalars['Float']['output']>;
+  /** Estimated or exact total number of records */
+  totalRecords?: Maybe<Scalars['Int']['output']>;
+  /** True if totalRecords is an estimation, false if it is the exact number */
+  totalRecordsEstimated?: Maybe<Scalars['Boolean']['output']>;
+  /** The rounded value of totalRecords if totalRecords is an estimation */
+  totalRecordsRounded?: Maybe<Scalars['Int']['output']>;
+};
+
+/** Diagnostic information */
+export type ResultInfoDiagnosticsItem = {
+  __typename?: 'ResultInfoDiagnosticsItem';
+  /** Diagnostic Code */
+  code?: Maybe<Scalars['String']['output']>;
+  /** Diagnostic Message */
+  message?: Maybe<Scalars['String']['output']>;
+  /** Module reporting diagnostic information */
+  module?: Maybe<Scalars['String']['output']>;
+  /** CQL Query associated with results */
+  query?: Maybe<Scalars['String']['output']>;
+  /** Record Count for diagnostics */
+  recordCount?: Maybe<Scalars['Int']['output']>;
+  /** Source reporting the diagnostic information */
+  source?: Maybe<Scalars['String']['output']>;
+};
+
+/** A facet */
+export type ResultInfoFacetsItem = {
+  __typename?: 'ResultInfoFacetsItem';
+  /** Array of facet values */
+  facetValues?: Maybe<Array<ResultInfoFacetsItemFacetValuesItem>>;
+  /** Type of facet */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** A facet value */
+export type ResultInfoFacetsItemFacetValuesItem = {
+  __typename?: 'ResultInfoFacetsItemFacetValuesItem';
+  /** Count of facet values */
+  count?: Maybe<Scalars['Int']['output']>;
+  /** Value Object */
+  value?: Maybe<ResultInfoFacetsItemFacetValuesItemValue>;
+};
+
+/** Value Object */
+export type ResultInfoFacetsItemFacetValuesItemValue = {
+  __typename?: 'ResultInfoFacetsItemFacetValuesItemValue';
+  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+};
 
 /** Real Time Availability Check (RTAC) holding details */
 export type RtacHolding = {
@@ -2851,6 +3065,8 @@ export type ServicePoint = {
   details?: Maybe<ServicePointDetails>;
   /** display name, a required field */
   discoveryDisplayName: Scalars['String']['output'];
+  /** enum for closedLibraryDateManagement associated with hold shelf */
+  holdShelfClosedLibraryDateManagement?: Maybe<ServicepointHoldShelfClosedLibraryDateManagement>;
   /** expiration period for items on the hold shelf at the service point */
   holdShelfExpiryPeriod?: Maybe<TimePeriod>;
   /** Id of service-point object */
@@ -2878,6 +3094,15 @@ export type ServicePointDetails = {
   isDefaultPickup?: Maybe<Scalars['Boolean']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
 };
+
+export enum ServicepointHoldShelfClosedLibraryDateManagement {
+  KeepTheCurrentDueDate = 'Keep_the_current_due_date',
+  KeepTheCurrentDueDateTime = 'Keep_the_current_due_date_time',
+  MoveToBeginningOfNextOpenServicePointHours = 'Move_to_beginning_of_next_open_service_point_hours',
+  MoveToEndOfCurrentServicePointHours = 'Move_to_end_of_current_service_point_hours',
+  MoveToTheEndOfTheNextOpenDay = 'Move_to_the_end_of_the_next_open_day',
+  MoveToTheEndOfThePreviousOpenDay = 'Move_to_the_end_of_the_previous_open_day'
+}
 
 export type ServicepointStaffSlipsItem = {
   __typename?: 'ServicepointStaffSlipsItem';
@@ -2989,7 +3214,7 @@ export type User = {
   /** Deprecated */
   proxyFor?: Maybe<Array<Scalars['String']['output']>>;
   tags?: Maybe<Tags>;
-  /** The class of user like staff or patron; this is different from patronGroup */
+  /** The class of user like staff or patron; this is different from patronGroup; it can store shadow, system user and dcb types also */
   type?: Maybe<Scalars['String']['output']>;
   /** Deprecated */
   updatedDate?: Maybe<Scalars['DateTime']['output']>;
@@ -3032,6 +3257,8 @@ export type UserdataPersonal = {
   preferredContactTypeId?: Maybe<Scalars['String']['output']>;
   /** The user's preferred name */
   preferredFirstName?: Maybe<Scalars['String']['output']>;
+  /** Link to the profile picture */
+  profilePictureLink?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserdataPersonalAddressesItem = {
