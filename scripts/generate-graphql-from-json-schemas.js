@@ -14,6 +14,11 @@ const context = newContext();
 // the most authoritative version.
 const refAliases = {
   '/mod-feesfines/ramls/servicepoint.json': '/mod-inventory-storage/ramls/servicepoint.json',
+  // Point all holdingsRecord(s) to the root inventory storage versions (/mod-inventory-storage/ramls/holdingsRecord.json)
+  '/mod-feesfines/ramls/inventory/holdingsrecords.json': '/mod-inventory-storage/ramls/holdingsRecords.json',
+  '/mod-feesfines/ramls/inventory/holdingsrecord.json': '/mod-inventory-storage/ramls/holdingsRecord.json',
+  '/mod-inventory-storage/ramls/holdings-storage/holdingsRecord.json': '/mod-inventory-storage/ramls/holdingsRecord.json',
+  '/mod-inventory-storage/ramls/holdings-storage/holdingsRecords.json': '/mod-inventory-storage/ramls/holdingsRecords.json',
   '/mod-circulation/ramls/service-point.json': '/mod-inventory-storage/ramls/servicepoint.json',
   '/mod-circulation/ramls/actual-cost-record.json': '/mod-feesfines/ramls/actual-cost-record.json',
   '/mod-feesfines/ramls/usergroup.json': '/mod-users/ramls/usergroup.json',
@@ -162,13 +167,19 @@ files.sort().map(file => {
   if (file.includes('resultInfo')) {
     json.properties.facets.items.properties.facetValues.items.properties.value.type = 'object'
   }
-
+  
   if (file.includes('/marc.json')) {
     json.properties.fields.items = { 'type': 'string' }
   }
 
   if (file.includes('/mod-circulation/ramls/request.json')) {
     json.properties.pickupServicePoint.type = 'object';
+  }
+
+  if (file.includes('/mod-circulation-storage/ramls/request-policy.json')) {
+    json.properties.allowedServicePoints.properties.Page = { "type": "array", "items": { "type": "string" } }
+    json.properties.allowedServicePoints.properties.Hold = { "type": "array", "items": { "type": "string" } }
+    json.properties.allowedServicePoints.properties.Recall = { "type": "array", "items": { "type": "string" } }
   }
 
   // move patronGroup to patronGroupId for consistency
@@ -228,6 +239,11 @@ files.sort().map(file => {
   if (file.includes('/acq-models/mod-orders/schemas/holding_summary.json')) {
     json.properties.polReceiptStatus = { "type": "string" }
     json.properties.orderCloseReason = { "type": "string" }
+  }
+
+  // Point to the canonical holdingsrecords model we are using: See overrides in the `refAliases` object above
+  if (file.includes('/mod-inventory-storage/ramls/instance.json')) {
+    json.properties.holdingsRecords2 = { "$ref": "/mod-inventory-storage/ramls/holdingsrecords.json" }
   }
 
   // error.schema internally references parameters.schema, which throws UnknownTypeReference
@@ -337,7 +353,7 @@ const nameMap = {
 }
 
 // GraphQL can't handle multiple types with the same name; if they
-// we the same, we'd alias them way back in the beginning.  But
+// were the same, we'd alias them way back in the beginning.  But
 // these are different, so we give them some namespaces
 const pathMap = {
   '/mod-patron/ramls/item.json': 'PatronItem',

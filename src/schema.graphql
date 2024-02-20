@@ -801,8 +801,14 @@ A set of date ranges for materials checkout and their associated due dates.
 type FixedDueDateSchedule {
   """Unique ID (generated UUID)"""
   id: UUID
+
+  """Schedule name"""
   name: String!
+
+  """Schedule description"""
   description: String
+
+  """List date ranges with a due date for each"""
   schedules: [Schedule!]
   metadata: Metadata
 }
@@ -827,20 +833,34 @@ type Schedule {
   due: DateTime!
 }
 
+"""Rules governing loans"""
 type LoanPolicy {
   id: String
+
+  """The name of the policy."""
   name: String!
+
+  """Description of the loan policy"""
   description: String
+
+  """Flag that indicates whether this policy allows loans"""
   loanable: Boolean!
+
+  """Settings for loans"""
   loansPolicy: LoanPolicyLoansPolicy
 
   """Is item renewable"""
   renewable: Boolean!
+
+  """Settings for renewals"""
   renewalsPolicy: LoanPolicyRenewalsPolicy
+
+  """Settings for various request types"""
   requestManagement: LoanPolicyRequestManagement
   metadata: Metadata
 }
 
+"""Settings for loans"""
 type LoanPolicyLoansPolicy {
   """Loan profile"""
   profileId: String
@@ -864,6 +884,7 @@ type LoanPolicyLoansPolicy {
   itemLimit: Int
 }
 
+"""Time interval defined by its duration"""
 type Period {
   """Duration of the period, number of times the interval repeats"""
   duration: Int!
@@ -880,6 +901,7 @@ enum PeriodIntervalId {
   Months
 }
 
+"""Settings for renewals"""
 type LoanPolicyRenewalsPolicy {
   """Unlimited renewals"""
   unlimited: Boolean
@@ -900,12 +922,19 @@ type LoanPolicyRenewalsPolicy {
   alternateFixedDueDateScheduleId: String
 }
 
+"""Settings for various request types"""
 type LoanPolicyRequestManagement {
+  """Settings for recall requests"""
   recalls: LoanPolicyRequestManagementRecalls
+
+  """Settings for hold requests"""
   holds: LoanPolicyRequestManagementHolds
+
+  """Settings for page requests"""
   pages: LoanPolicyRequestManagementPages
 }
 
+"""Settings for recall requests"""
 type LoanPolicyRequestManagementRecalls {
   """Alternate grace period for recalled items"""
   alternateGracePeriod: Period
@@ -923,6 +952,7 @@ type LoanPolicyRequestManagementRecalls {
   alternateRecallReturnInterval: Period
 }
 
+"""Settings for hold requests"""
 type LoanPolicyRequestManagementHolds {
   """
   Alternate loan period at checkout for items with active, pending hold request
@@ -938,6 +968,7 @@ type LoanPolicyRequestManagementHolds {
   alternateRenewalLoanPeriod: Period
 }
 
+"""Settings for page requests"""
 type LoanPolicyRequestManagementPages {
   """
   Alternate loan period at checkout for items with active, pending page request
@@ -1000,6 +1031,8 @@ type PatronNoticePolicyLoanNoticesItem {
 
   """Is this real time event"""
   realTime: Boolean!
+
+  """Notice sending options"""
   sendOptions: PatronNoticePolicyLoanNoticesItemSendOptions
 }
 
@@ -1014,13 +1047,18 @@ enum PatronNoticePolicyLoanNoticesItemFrequency {
   Recurring
 }
 
+"""Notice sending options"""
 type PatronNoticePolicyLoanNoticesItemSendOptions {
   """Defines how notice should be sent, before, after or upon"""
   sendHow: PatronNoticePolicyLoanNoticesItemSendOptionsSendHow
 
   """Triggering event"""
   sendWhen: PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen!
+
+  """Delay before the first attempt to send a notice"""
   sendBy: Interval
+
+  """Interval between attempts to send a recurring notice"""
   sendEvery: Interval
 }
 
@@ -1076,6 +1114,8 @@ type PatronNoticePolicyFeeFineNoticesItem {
 
   """Is this real time event"""
   realTime: Boolean!
+
+  """Notice sending options"""
   sendOptions: PatronNoticePolicyFeeFineNoticesItemSendOptions
 }
 
@@ -1090,13 +1130,18 @@ enum PatronNoticePolicyFeeFineNoticesItemFrequency {
   Recurring
 }
 
+"""Notice sending options"""
 type PatronNoticePolicyFeeFineNoticesItemSendOptions {
   """Defines how notice should be sent: after or upon"""
   sendHow: PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow
 
   """Triggering event"""
   sendWhen: PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen!
+
+  """Delay before the first attempt to send a notice"""
   sendBy: Interval
+
+  """Interval between attempts to send a recurring notice"""
   sendEvery: Interval
 }
 
@@ -1131,6 +1176,8 @@ type PatronNoticePolicyRequestNoticesItem {
 
   """Is this real time event"""
   realTime: Boolean!
+
+  """Notice sending options"""
   sendOptions: PatronNoticePolicyRequestNoticesItemSendOptions
 }
 
@@ -1145,13 +1192,18 @@ enum PatronNoticePolicyRequestNoticesItemFrequency {
   Recurring
 }
 
+"""Notice sending options"""
 type PatronNoticePolicyRequestNoticesItemSendOptions {
   """Defines how notice should be sent, before, after or upon"""
   sendHow: PatronNoticePolicyRequestNoticesItemSendOptionsSendHow
 
   """User initiated and time driven events for request related notices"""
   sendWhen: PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen!
+
+  """Delay before the first attempt to send a notice"""
   sendBy: Interval
+
+  """Interval between attempts to send a recurring notice"""
   sendEvery: Interval
 }
 
@@ -1185,6 +1237,9 @@ type RequestPolicy {
   """Whether the item should be held upon return, recalled or paged for"""
   requestTypes: [RequestType!]
 
+  """Allowed pickup service point IDs by request type"""
+  allowedServicePoints: RequestPolicyAllowedServicePoints
+
   """
   Metadata about creation and changes to request policy, provided by the server (client should not provide)
   """
@@ -1195,6 +1250,13 @@ enum RequestType {
   Hold
   Recall
   Page
+}
+
+"""Allowed pickup service point IDs by request type"""
+type RequestPolicyAllowedServicePoints {
+  Page: [String!]
+  Hold: [String!]
+  Recall: [String!]
 }
 
 """
@@ -1276,6 +1338,14 @@ type Loan {
 
   """Is due date changed by recall request"""
   dueDateChangedByRecall: Boolean
+
+  """
+  Indicates whether or not this loan had its due date modified by a expired user
+  """
+  dueDateChangedByNearExpireUser: Boolean
+
+  """Is due date changed by hold request"""
+  dueDateChangedByHold: Boolean
 
   """ID of the Service Point where the last checkout occured"""
   checkoutServicePointId: UUID
@@ -1366,6 +1436,9 @@ type Item {
   Records the fact that the record should not be displayed in a discovery system
   """
   discoverySuppress: Boolean
+
+  """Display summary about the item"""
+  displaySummary: String
 
   """Also called inventar number"""
   accessionNumber: String
@@ -1513,7 +1586,7 @@ type Item {
   tags: Tags
   metadata: Metadata
 
-  """Item associated holdings record object."""
+  """Fake property for mod-graphql to determine record relationships."""
   holdingsRecord2: HoldingsRecord
 
   """Information about when an item was last scanned in the Inventory app."""
@@ -1791,6 +1864,9 @@ type ServicePoint {
   """expiration period for items on the hold shelf at the service point"""
   holdShelfExpiryPeriod: TimePeriod
 
+  """enum for closedLibraryDateManagement associated with hold shelf"""
+  holdShelfClosedLibraryDateManagement: ServicepointHoldShelfClosedLibraryDateManagement
+
   """List of staff slips for this service point"""
   staffSlips: [ServicepointStaffSlipsItem!]
   metadata: Metadata
@@ -1813,6 +1889,15 @@ enum TimePeriodIntervalId {
   Days
   Weeks
   Months
+}
+
+enum ServicepointHoldShelfClosedLibraryDateManagement {
+  Keep_the_current_due_date
+  Move_to_the_end_of_the_previous_open_day
+  Move_to_the_end_of_the_next_open_day
+  Keep_the_current_due_date_time
+  Move_to_end_of_current_service_point_hours
+  Move_to_beginning_of_next_open_service_point_hours
 }
 
 type ServicepointStaffSlipsItem {
@@ -2137,7 +2222,7 @@ type Instance {
   matchKey: String
 
   """
-  The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings)
+  The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory; MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings; CONSORTIUM-MARC or CONSORTIUM-FOLIO for sharing Instances).
   """
   source: String!
 
@@ -2160,7 +2245,7 @@ type Instance {
   editions: [String!]
 
   """List of series titles associated with the resource (e.g. Harry Potter)"""
-  series: [String!]
+  series: [InstanceSeriesItem!]
 
   """
   An extensible set of name-value pairs of identifiers associated with the resource
@@ -2171,7 +2256,7 @@ type Instance {
   contributors: [InstanceContributorsItem!]
 
   """List of subject headings"""
-  subjects: [String!]
+  subjects: [InstanceSubjectsItem!]
 
   """List of classifications"""
   classifications: [InstanceClassificationsItem!]
@@ -2264,9 +2349,7 @@ type Instance {
   """arbitrary tags associated with this instance"""
   tags: Tags
   metadata: Metadata
-
-  """List of holdings records"""
-  holdingsRecords2: [HoldingsRecord!]
+  holdingsRecords2: HoldingsRecords
 
   """
   Array of UUID for the Instance nature of content (e.g. bibliography, biography, exhibition catalogue, festschrift, newspaper, proceedings, research report, thesis or website)
@@ -2280,6 +2363,17 @@ type InstanceAlternativeTitlesItem {
 
   """An alternative title for the resource"""
   alternativeTitle: String
+
+  """UUID of authority record that controls an alternative title"""
+  authorityId: UUID
+}
+
+type InstanceSeriesItem {
+  """Series title value"""
+  value: String!
+
+  """UUID of authority record that controls an series title"""
+  authorityId: UUID
 }
 
 type InstanceIdentifiersItem {
@@ -2345,7 +2439,20 @@ type ContributorNameType {
   used for ordering of contributor name types in displays, i.e. in select lists
   """
   ordering: String
+
+  """
+  origin of the contributor name type record, e.g. 'local', 'consortium' etc.
+  """
+  source: String
   metadata: Metadata
+}
+
+type InstanceSubjectsItem {
+  """Subject heading value"""
+  value: String!
+
+  """UUID of authority record that controls a subject heading"""
+  authorityId: UUID
 }
 
 type InstanceClassificationsItem {
@@ -2453,6 +2560,81 @@ type InstanceNotesItem {
 
 enum InstanceSourceRecordFormat {
   MARC_JSON
+}
+
+"""A collection of holdings records"""
+type HoldingsRecords {
+  """List of holdings records"""
+  holdingsRecords: [HoldingsRecord!]!
+
+  """Estimated or exact total number of records"""
+  totalRecords: Int!
+  resultInfo: ResultInfo
+}
+
+"""Faceting of result sets"""
+type ResultInfo {
+  """Estimated or exact total number of records"""
+  totalRecords: Int
+
+  """True if totalRecords is an estimation, false if it is the exact number"""
+  totalRecordsEstimated: Boolean
+
+  """The rounded value of totalRecords if totalRecords is an estimation"""
+  totalRecordsRounded: Int
+
+  """Response time"""
+  responseTime: Float
+
+  """Array of facets"""
+  facets: [ResultInfoFacetsItem!]
+
+  """Array of diagnostic information"""
+  diagnostics: [ResultInfoDiagnosticsItem!]
+}
+
+"""A facet"""
+type ResultInfoFacetsItem {
+  """Array of facet values"""
+  facetValues: [ResultInfoFacetsItemFacetValuesItem!]
+
+  """Type of facet"""
+  type: String
+}
+
+"""A facet value"""
+type ResultInfoFacetsItemFacetValuesItem {
+  """Count of facet values"""
+  count: Int
+
+  """Value Object"""
+  value: ResultInfoFacetsItemFacetValuesItemValue
+}
+
+"""Value Object"""
+type ResultInfoFacetsItemFacetValuesItemValue {
+  _typesWithoutFieldsAreNotAllowed_: String
+}
+
+"""Diagnostic information"""
+type ResultInfoDiagnosticsItem {
+  """Source reporting the diagnostic information"""
+  source: String
+
+  """Diagnostic Code"""
+  code: String
+
+  """Diagnostic Message"""
+  message: String
+
+  """Module reporting diagnostic information"""
+  module: String
+
+  """Record Count for diagnostics"""
+  recordCount: Int
+
+  """CQL Query associated with results"""
+  query: String
 }
 
 """Information about when an item was last scanned in the Inventory app."""
@@ -2565,7 +2747,7 @@ type Request {
   """
   How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester)
   """
-  fulfilmentPreference: RequestFulfilmentPreference!
+  fulfillmentPreference: RequestFulfillmentPreference!
 
   """Deliver to the address of this type, for the requesting patron"""
   deliveryAddressTypeId: UUID
@@ -2599,6 +2781,9 @@ type Request {
   Additional parameters used for request processing and discarded afterwards. Not part of request record.
   """
   requestProcessingParameters: RequestRequestProcessingParameters
+
+  """Request fields used for search"""
+  searchIndex: RequestSearchIndex
 }
 
 enum RequestRequestType {
@@ -2719,7 +2904,7 @@ type RequestProxyPatronGroup {
   desc: String
 }
 
-enum RequestFulfilmentPreference {
+enum RequestFulfillmentPreference {
   Hold_Shelf
   Delivery
 }
@@ -2827,12 +3012,49 @@ type OverrideBlocksRenewalDueDateRequiredBlock {
   dueDate: DateTime!
 }
 
+"""Request fields used for search"""
+type RequestSearchIndex {
+  """Effective call number components"""
+  callNumberComponents: RequestSearchIndexCallNumberComponents
+
+  """
+  A system generated normalization of the call number that allows for call number sorting in reports and search results
+  """
+  shelvingOrder: String
+
+  """The name of the request pickup service point"""
+  pickupServicePointName: String
+}
+
+"""Effective call number components"""
+type RequestSearchIndexCallNumberComponents {
+  """
+  Effective Call Number is an identifier assigned to an item or its holding and associated with the item.
+  """
+  callNumber: String
+
+  """
+  Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item.
+  """
+  prefix: String
+
+  """
+  Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item.
+  """
+  suffix: String
+}
+
 """A loan type"""
 type LoanType {
   id: String
 
   """label for the loan type"""
   name: String!
+
+  """
+  Origin of the loan type record, e.g. 'System', 'User', 'Consortium' etc.
+  """
+  source: String
   metadata: Metadata
 }
 
@@ -2965,15 +3187,20 @@ type FeeFineAction {
   amountAction: Float
 
   """
-  Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/tranferred/refunded
+  Calculated amount of remaining balance based on original fee/fine and what has been paid/waived/transferred/refunded
   """
   balance: Float
 
   """Number or other transaction id related to payment"""
   transactionInformation: String
 
-  """Location where activity took place (from login information)"""
-  createdAt: String
+  """ID of the service point where the action was created"""
+  createdAt: UUID
+
+  """
+  Original invalid (non-UUID) value of 'createdAt' moved here when UUID-validation was enabled for 'createdAt'
+  """
+  originalCreatedAt: String
 
   """Person who processed activity (from login information)"""
   source: String
@@ -3189,6 +3416,9 @@ type OverdueFinePolicy {
   """Maximum overdue recall fine"""
   maxOverdueRecallFine: Float
 
+  """Rules and schedule for reminders with associated fees"""
+  reminderFeesPolicy: ReminderFeesPolicy
+
   """Metadata about creation to overdue fine policy, provided by the server"""
   metadata: Metadata
 
@@ -3212,6 +3442,62 @@ enum QuantityIntervalId {
   week
   month
   year
+}
+
+"""Reminder fee policy as part of overdue fine policy"""
+type ReminderFeesPolicy {
+  """
+  A flag to determine if a reminder fee should take closed days into account
+  """
+  countClosed: Boolean
+
+  """Ignore grace period for recall"""
+  ignoreGracePeriodRecall: Boolean
+
+  """Ignore grace period for holds"""
+  ignoreGracePeriodHolds: Boolean
+
+  """Allow renewal of items with reminder fee(s)"""
+  allowRenewalOfItemsWithReminderFees: Boolean
+
+  """Clear patron block when paid"""
+  clearPatronBlockWhenPaid: Boolean
+
+  """Ordered list of reminder notices"""
+  reminderSchedule: [ReminderFeesPolicyReminderScheduleItem!]
+}
+
+"""Scheduled reminder notice with associated fee"""
+type ReminderFeesPolicyReminderScheduleItem {
+  """Number of units of time before notice should be sent"""
+  interval: Int!
+
+  """Time unit of interval"""
+  timeUnitId: ReminderFeesPolicyReminderScheduleItemTimeUnitId!
+
+  """Fee amount accrued by reminder notice"""
+  reminderFee: Float!
+
+  """Method of sending notice"""
+  noticeFormat: ReminderFeesPolicyReminderScheduleItemNoticeFormat
+
+  """Id of reminder notice template"""
+  noticeTemplateId: UUID!
+
+  """Id of block reminder template"""
+  blockTemplateId: UUID
+}
+
+enum ReminderFeesPolicyReminderScheduleItemTimeUnitId {
+  day
+  week
+  minute
+}
+
+enum ReminderFeesPolicyReminderScheduleItemNoticeFormat {
+  Email
+  Print
+  None
 }
 
 """A call number type"""
@@ -3442,6 +3728,11 @@ type ElectronicAccessRelationship {
 
   """label for the type of relationship between a URL and an Instance"""
   name: String!
+
+  """
+  Origin of the electronic access relationship record, e.g. 'local', 'consortium' etc.
+  """
+  source: String
   metadata: Metadata
 }
 
@@ -3728,7 +4019,7 @@ type User {
   active: Boolean
 
   """
-  The class of user like staff or patron; this is different from patronGroup
+  The class of user like staff or patron; this is different from patronGroup; it can store shadow, system user and dcb types also
   """
   type: String
 
@@ -3807,6 +4098,9 @@ type UserdataPersonal {
   Id of user's preferred contact type like Email, Mail or Text Message, see /addresstypes API
   """
   preferredContactTypeId: String
+
+  """Link to the profile picture"""
+  profilePictureLink: String
 }
 
 type UserdataPersonalAddressesItem {
@@ -3858,6 +4152,9 @@ type PatronGroup {
   The default period in days after which a newly created user that belongs to this group will expire
   """
   expirationOffsetInDays: Int
+
+  """Origin of the group record, i.e. 'System' or 'User'"""
+  source: String
   metadata: Metadata
 }
 
