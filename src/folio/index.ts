@@ -281,8 +281,9 @@ export const resolvers: Resolvers = {
     contributorType({ contributorTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<ContributorType>("contributor-types", { key: 'contributorTypes' }, contributorTypeId)
     },
-    authority({ authorityId }, args, { dataSources: { types } }, info) {
-      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
+    authority({ authorityId }, args, { dataSources: { types, instances } }, info) {
+      return instances.getAuthorityById(authorityId)
+      //return types.getById<Authority>("authority-storage/authorities", { key: 'authorities' }, authorityId)
     },
   },
   InstanceIdentifiersItem: {
