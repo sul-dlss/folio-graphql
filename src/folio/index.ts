@@ -283,7 +283,6 @@ export const resolvers: Resolvers = {
     },
     authority({ authorityId }, args, { dataSources: { types, instances } }, info) {
       return instances.getAuthorityById(authorityId)
-      //return types.getById<Authority>("authority-storage/authorities", { key: 'authorities' }, authorityId)
     },
   },
   InstanceIdentifiersItem: {
