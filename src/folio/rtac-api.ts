@@ -22,7 +22,7 @@ export default class RtacApi extends FolioAPI {
         fullPeriodicals,
       },
     })
-
+    // structure is nested: { holdings: [ items: { holdings: [ ] } ] }
     return response.holdings
   }
 }
