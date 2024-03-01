@@ -13,9 +13,12 @@ import ServicePointsAPI from '../src/folio/service-points-api';
 import PatronsAPI from '../src/folio/patrons-api';
 import TypeAPI from '../src/folio/type-api';
 import UsersAPI from '../src/folio/users-api';
-import MaterialTypesAPI from '../src/folio/material-type-api';
+import MaterialTypesAPI from '../src/folio/material-types-api';
 import OrdersAPI from '../src/folio/orders-api';
 import RtacApi from '../src/folio/rtac-api';
+import FolioAPI from '../src/folio/folio-api';
+import AuthnAPI from '../src/folio/authn-api';
+import OkapiAPI from '../src/folio/okapi-api';
 
 // set up fetchMock
 beforeEach(() => {
@@ -24,10 +27,48 @@ beforeEach(() => {
   fetchMock.doMock();
 })
 
-// expose mockResponse for use in tests, allowing each test to pass in its own expected response data
-export const mockResponse = (match: RegExp, data: object) => {
-  fetchMock.mockIf(match, async _req => ({ body: JSON.stringify(data), status: 200, headers: { "Content-Type": 'application/json' }}));
+// Helper function to get request URL
+export const mockFolioRequestUrl = () => {
+  return decodeURIComponent((fetchMock.mock.calls[0][0] as string))
+};
+
+export const mockFolioResponse = (data: object) => {
+  fetchMock.mockResponseOnce((req: Request) => {
+    return Promise.resolve({ 
+      body: JSON.stringify(data),
+      status: 200, 
+      headers: { "Content-Type": 'application/json' }});
+  });
+};
+
+// Create a custom matcher essentially to check if a string contains a substring
+// This will be used to check if the request URL contains the expected path
+expect.extend({
+  toContainPath(received, expected) {
+      const pass = received.includes(expected);
+      if (pass) {
+          return {
+              message: () => `Expected ${received} not to contain ${expected}`,
+              pass: true,
+          };
+      } else {
+          return {
+              message: () => `Expected ${received} to contain ${expected}`,
+              pass: false,
+          };
+      }
+  },
+});
+// Register the custom matcher type
+declare global {
+  namespace jest {
+      interface Matchers<R> {
+          toContainPath(expected: string): R;
+      }
+  }
 }
+
+
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
 const typeDefs = readFileSync(path.resolve(__dirname, "../src/schema.graphql")).toString("utf-8")
 const testServer = new ApolloServer<FolioContext>({
@@ -39,25 +80,29 @@ const apiOptions = {
   token: token,
   fetch: fetchMock
 };
+export const dataSources = {
+  authn: new AuthnAPI(apiOptions),
+  patrons: new PatronsAPI(apiOptions),
+  users: new UsersAPI(apiOptions),
+  servicepoints: new ServicePointsAPI(apiOptions),
+  instances: new InstancesAPI(apiOptions),
+  items: new ItemsAPI(apiOptions),
+  holdings: new HoldingsAPI(apiOptions),
+  types: new TypeAPI(apiOptions),
+  feefines: new FeeFinesAPI(apiOptions),
+  circulation: new CirculationAPI(apiOptions),
+  materialtypes: new MaterialTypesAPI(apiOptions),
+  orders: new OrdersAPI(apiOptions),
+  rtac: new RtacApi(apiOptions),
+  folio: new FolioAPI(apiOptions),
+  okapi: new OkapiAPI(apiOptions)
+}
 const context: FolioContext = {
   token,
-  dataSources: {
-    patrons: new PatronsAPI(apiOptions),
-    users: new UsersAPI(apiOptions),
-    servicepoints: new ServicePointsAPI(apiOptions),
-    instances: new InstancesAPI(apiOptions),
-    items: new ItemsAPI(apiOptions),
-    holdings: new HoldingsAPI(apiOptions),
-    types: new TypeAPI(apiOptions),
-    feefines: new FeeFinesAPI(apiOptions),
-    circulation: new CirculationAPI(apiOptions),
-    materialtypes: new MaterialTypesAPI(apiOptions),
-    orders: new OrdersAPI(apiOptions),
-    rtac: new RtacApi(apiOptions),
-  }
+  dataSources
 }
 
-// expose queryTestServer for use in tests, allowing each test to pass in its own query and variables
+// expose queryTestServer for use in tests
 export const queryTestServer = async (args: { query: string, variables: any }) => {
   const response = await testServer.executeOperation(
     args,
