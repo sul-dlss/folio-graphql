@@ -3515,153 +3515,6 @@ type AlternativeTitleType {
   metadata: Metadata
 }
 
-"""An authority record"""
-type Authority {
-  """Authority UUID"""
-  id: UUID
-
-  """Record version for optimistic locking"""
-  _version: Int
-
-  """
-  The metadata source of the underlying record to the authority record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in data-import)
-  """
-  source: AuthoritySource
-
-  """Heading personal name"""
-  personalName: String
-
-  """See from tracing personal name"""
-  sftPersonalName: [String!]
-
-  """See also from tracing personal name"""
-  saftPersonalName: [String!]
-
-  """Heading personal name title"""
-  personalNameTitle: String
-
-  """See from tracing personal name title"""
-  sftPersonalNameTitle: [String!]
-
-  """See also from tracing personal name title"""
-  saftPersonalNameTitle: [String!]
-
-  """Heading corporate name"""
-  corporateName: String
-
-  """See from tracing corporate name"""
-  sftCorporateName: [String!]
-
-  """See also from tracing corporate name"""
-  saftCorporateName: [String!]
-
-  """Heading corporate name title"""
-  corporateNameTitle: String
-
-  """See from tracing corporate name title"""
-  sftCorporateNameTitle: [String!]
-
-  """See also from tracing corporate name title"""
-  saftCorporateNameTitle: [String!]
-
-  """Heading meeting name"""
-  meetingName: String
-
-  """See from tracing meeting name"""
-  sftMeetingName: [String!]
-
-  """See also from tracing meeting name"""
-  saftMeetingName: [String!]
-
-  """Heading meeting name title"""
-  meetingNameTitle: String
-
-  """See from tracing meeting name title"""
-  sftMeetingNameTitle: [String!]
-
-  """See also from tracing meeting name title"""
-  saftMeetingNameTitle: [String!]
-
-  """Heading uniform title"""
-  uniformTitle: String
-
-  """See from tracing uniform title"""
-  sftUniformTitle: [String!]
-
-  """See also from tracing uniform title"""
-  saftUniformTitle: [String!]
-
-  """Heading topical term"""
-  topicalTerm: String
-
-  """See from tracing topical term"""
-  sftTopicalTerm: [String!]
-
-  """See also from tracing topical term"""
-  saftTopicalTerm: [String!]
-
-  """Children's subject headings"""
-  subjectHeadings: String
-
-  """Heading geographic name"""
-  geographicName: String
-
-  """See from tracing geographic name"""
-  sftGeographicName: [String!]
-
-  """See also from tracing geographic name"""
-  saftGeographicName: [String!]
-
-  """Heading genre/form term"""
-  genreTerm: String
-
-  """See from tracing genre/form term"""
-  sftGenreTerm: [String!]
-
-  """See also from tracing genre/form term"""
-  saftGenreTerm: [String!]
-
-  """
-  An extensible set of name-value pairs of identifiers associated with the resource
-  """
-  identifiers: [AuthorityIdentifiersItem!]
-
-  """Notes (e.g. nonpublic general note)"""
-  notes: [AuthorityNotesItem!]
-
-  """Authority source file id; UUID"""
-  sourceFileId: UUID
-
-  """Authority Natural ID"""
-  naturalId: String
-
-  """Creater, updater, creation date, last updated date"""
-  metadata: Metadata
-}
-
-enum AuthoritySource {
-  MARC
-  FOLIO
-}
-
-type AuthorityIdentifiersItem {
-  """Resource identifier value"""
-  value: String!
-
-  """
-  Resource identifier type (e.g. Control number, LCCN, Other standard identifier, System control number)
-  """
-  identifierTypeId: UUID!
-}
-
-type AuthorityNotesItem {
-  """ID of the type of note"""
-  noteTypeId: UUID!
-
-  """Text content of the note"""
-  note: String!
-}
-
 """
 Records the relationship between a part of a bound-with (a holdings-record) and the bound-with as a whole (the circulatable item)
 """
@@ -4244,12 +4097,10 @@ extend type Instance {
 
 extend type InstanceAlternativeTitlesItem {
   alternativeTitleType: AlternativeTitleType
-  authority: Authority
 }
 
 extend type InstanceContributorsItem {
   contributorType: ContributorType
-  authority: Authority
 }
 
 extend type InstanceElectronicAccessItem {
