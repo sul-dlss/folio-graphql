@@ -66,4 +66,24 @@ describe('HoldingsAPI', () => {
             expect(result.id).toEqual('partId1');
         });
     });
+
+    describe('getBoundWithHoldingsPerItem', () => {
+        it('queries the expected URL', async () => {
+            mockFolioResponse({
+                "boundWithParts": [
+                  {
+                    "id": "partId1",
+                    "holdingsRecordId": "holdingsId123"
+                  }],
+              });
+
+              mockFolioResponse({
+                "id": "holdingsId123",
+              });
+
+            const result = await HoldingsAPI.getBoundWithHoldingsPerItem('item_id_1');
+            expect(mockFolioRequestUrl()).toContainPath('/inventory-storage/bound-with-parts?query=itemId=="item_id_1"');
+            expect(result[0].id).toEqual('holdingsId123')
+        });
+    });
 });

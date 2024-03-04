@@ -4121,6 +4121,7 @@ extend type Item {
   temporaryLoanType: LoanType
   itemLevelCallNumberType: CallNumberType
   dueDate: DateTime
+  boundWithHoldingsPerItem: [HoldingsRecord]
 }
 
 extend type ItemEffectiveCallNumberComponents {

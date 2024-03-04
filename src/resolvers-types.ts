@@ -1078,6 +1078,7 @@ export type Item = {
   administrativeNotes?: Maybe<Array<Scalars['String']['output']>>;
   /** Unique inventory control number for physical resources, used largely for circulation purposes */
   barcode?: Maybe<Scalars['String']['output']>;
+  boundWithHoldingsPerItem?: Maybe<Array<Maybe<HoldingsRecord>>>;
   /** Chronology is the descriptive information for the dating scheme of a serial. */
   chronology?: Maybe<Scalars['String']['output']>;
   /** Notes to be displayed in circulation processes */
@@ -4277,6 +4278,7 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   accessionNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  boundWithHoldingsPerItem?: Resolver<Maybe<Array<Maybe<ResolversTypes['HoldingsRecord']>>>, ParentType, ContextType>;
   chronology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   circulationNotes?: Resolver<Maybe<Array<ResolversTypes['ItemCirculationNotesItem']>>, ParentType, ContextType>;
   copyNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

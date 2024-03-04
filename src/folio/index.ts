@@ -379,7 +379,13 @@ export const resolvers: Resolvers = {
       if (loans.length === 0) return null;
 
       return loans[0].dueDate;
-    }
+    },
+    async boundWithHoldingsPerItem({ id }, args, { dataSources: { holdings, items } }, info) {
+      const results = await holdings.getBoundWithHoldingsPerItem(id);
+      if (!results) return null;
+
+      return results;
+    },
   },
   ItemCirculationNotesItem: {
     noteType({ noteType }, args, { dataSources: { types } }, info) {
