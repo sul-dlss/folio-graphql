@@ -1,9 +1,11 @@
 import { dataSources, queryTestServer } from '../setupJest';
 import assert from 'assert';
 
-it('resolves serivePoints', async () => {
+it('resolves servicePoints', async () => {
 
-    // Source: https://github.com/sul-dlss/mylibrary/blob/4be4b3705c734a7743b019a8450626a6324fe45f/app/services/folio_graphql_client.rb#L55
+    // sul-requests and mylibrary both use this query
+    // https://github.com/sul-dlss/mylibrary/blob/4be4b3705c734a7743b019a8450626a6324fe45f/app/services/folio_graphql_client.rb#L55
+    // https://github.com/sul-dlss/sul-requests/blob/35ad5eb23429c838289520eae7a1e91614cf33ae/app/services/folio_graphql_client.rb#L209 
     const query = `query ServicePoints {
         servicePoints {
           discoveryDisplayName
@@ -13,12 +15,14 @@ it('resolves serivePoints', async () => {
           details {
             isDefaultForCampus
             isDefaultPickup
+            notes
           }
         }
       }`;
-
-    // mock the internals of  service-points-api
-    dataSources.servicepoints.getServicePoints = jest.fn().mockResolvedValue([{
+      
+    // mock the internals of service-points-api
+    dataSources.servicepoints.getServicePoints = jest.fn().mockResolvedValue([
+      {
         "discoveryDisplayName": "Green Library",
         "id": "a5dbb3dc-84f8-4eb3-8bfe-c61f74a9e92d",
         "code": "GREEN-LOAN",
@@ -37,7 +41,8 @@ it('resolves serivePoints', async () => {
           "isDefaultForCampus": "GSB",
           "isDefaultPickup": true
         }
-      }]);
+      }
+    ]);
 
     const response = await queryTestServer({
         query: query,
