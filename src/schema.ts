@@ -117,110 +117,6 @@ export type AlternativeTitleType = {
   source: Scalars['String']['output'];
 };
 
-/** An authority record */
-export type Authority = {
-  __typename?: 'Authority';
-  /** Record version for optimistic locking */
-  _version?: Maybe<Scalars['Int']['output']>;
-  /** Heading corporate name */
-  corporateName?: Maybe<Scalars['String']['output']>;
-  /** Heading corporate name title */
-  corporateNameTitle?: Maybe<Scalars['String']['output']>;
-  /** Heading genre/form term */
-  genreTerm?: Maybe<Scalars['String']['output']>;
-  /** Heading geographic name */
-  geographicName?: Maybe<Scalars['String']['output']>;
-  /** Authority UUID */
-  id?: Maybe<Scalars['UUID']['output']>;
-  /** An extensible set of name-value pairs of identifiers associated with the resource */
-  identifiers?: Maybe<Array<AuthorityIdentifiersItem>>;
-  /** Heading meeting name */
-  meetingName?: Maybe<Scalars['String']['output']>;
-  /** Heading meeting name title */
-  meetingNameTitle?: Maybe<Scalars['String']['output']>;
-  /** Creater, updater, creation date, last updated date */
-  metadata?: Maybe<Metadata>;
-  /** Authority Natural ID */
-  naturalId?: Maybe<Scalars['String']['output']>;
-  /** Notes (e.g. nonpublic general note) */
-  notes?: Maybe<Array<AuthorityNotesItem>>;
-  /** Heading personal name */
-  personalName?: Maybe<Scalars['String']['output']>;
-  /** Heading personal name title */
-  personalNameTitle?: Maybe<Scalars['String']['output']>;
-  /** See also from tracing corporate name */
-  saftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing corporate name title */
-  saftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing genre/form term */
-  saftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing geographic name */
-  saftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing meeting name */
-  saftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing meeting name title */
-  saftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing personal name */
-  saftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing personal name title */
-  saftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing topical term */
-  saftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing uniform title */
-  saftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing corporate name */
-  sftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing corporate name title */
-  sftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing genre/form term */
-  sftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing geographic name */
-  sftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing meeting name */
-  sftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing meeting name title */
-  sftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing personal name */
-  sftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing personal name title */
-  sftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing topical term */
-  sftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing uniform title */
-  sftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** The metadata source of the underlying record to the authority record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in data-import) */
-  source?: Maybe<AuthoritySource>;
-  /** Authority source file id; UUID */
-  sourceFileId?: Maybe<Scalars['UUID']['output']>;
-  /** Children's subject headings */
-  subjectHeadings?: Maybe<Scalars['String']['output']>;
-  /** Heading topical term */
-  topicalTerm?: Maybe<Scalars['String']['output']>;
-  /** Heading uniform title */
-  uniformTitle?: Maybe<Scalars['String']['output']>;
-};
-
-export type AuthorityIdentifiersItem = {
-  __typename?: 'AuthorityIdentifiersItem';
-  /** Resource identifier type (e.g. Control number, LCCN, Other standard identifier, System control number) */
-  identifierTypeId: Scalars['UUID']['output'];
-  /** Resource identifier value */
-  value: Scalars['String']['output'];
-};
-
-export type AuthorityNotesItem = {
-  __typename?: 'AuthorityNotesItem';
-  /** Text content of the note */
-  note: Scalars['String']['output'];
-  /** ID of the type of note */
-  noteTypeId: Scalars['UUID']['output'];
-};
-
-export enum AuthoritySource {
-  Folio = 'FOLIO',
-  Marc = 'MARC'
-}
-
 /** Single automated patron block */
 export type Block = {
   __typename?: 'Block';
@@ -979,7 +875,6 @@ export type InstanceAlternativeTitlesItem = {
   alternativeTitleType?: Maybe<AlternativeTitleType>;
   /** UUID for an alternative title qualifier */
   alternativeTitleTypeId?: Maybe<Scalars['UUID']['output']>;
-  authority?: Maybe<Authority>;
   /** UUID of authority record that controls an alternative title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
 };
@@ -996,7 +891,6 @@ export type InstanceClassificationsItem = {
 
 export type InstanceContributorsItem = {
   __typename?: 'InstanceContributorsItem';
-  authority?: Maybe<Authority>;
   /** UUID of authority record that controls the contributor */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Dereferenced contributor-name type */

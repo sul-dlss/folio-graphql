@@ -27,7 +27,6 @@ import {
   IlLpolicy,
   ElectronicAccessRelationship,
   ModeOfIssuance,
-  Authority,
   HoldingsType,
   AlternativeTitleType,
   ContributorType,
@@ -280,10 +279,7 @@ export const resolvers: Resolvers = {
   InstanceContributorsItem: {
     contributorType({ contributorTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<ContributorType>("contributor-types", { key: 'contributorTypes' }, contributorTypeId)
-    },
-    authority({ authorityId }, args, { dataSources: { types } }, info) {
-      return types.getById<Authority>("authorities", { key: 'authorities' }, authorityId)
-    },
+    }
   },
   InstanceIdentifiersItem: {
     identifierTypeObject({ identifierTypeId }, args, { dataSources: { types } }, info) {

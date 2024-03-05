@@ -120,110 +120,6 @@ export type AlternativeTitleType = {
   source: Scalars['String']['output'];
 };
 
-/** An authority record */
-export type Authority = {
-  __typename?: 'Authority';
-  /** Record version for optimistic locking */
-  _version?: Maybe<Scalars['Int']['output']>;
-  /** Heading corporate name */
-  corporateName?: Maybe<Scalars['String']['output']>;
-  /** Heading corporate name title */
-  corporateNameTitle?: Maybe<Scalars['String']['output']>;
-  /** Heading genre/form term */
-  genreTerm?: Maybe<Scalars['String']['output']>;
-  /** Heading geographic name */
-  geographicName?: Maybe<Scalars['String']['output']>;
-  /** Authority UUID */
-  id?: Maybe<Scalars['UUID']['output']>;
-  /** An extensible set of name-value pairs of identifiers associated with the resource */
-  identifiers?: Maybe<Array<AuthorityIdentifiersItem>>;
-  /** Heading meeting name */
-  meetingName?: Maybe<Scalars['String']['output']>;
-  /** Heading meeting name title */
-  meetingNameTitle?: Maybe<Scalars['String']['output']>;
-  /** Creater, updater, creation date, last updated date */
-  metadata?: Maybe<Metadata>;
-  /** Authority Natural ID */
-  naturalId?: Maybe<Scalars['String']['output']>;
-  /** Notes (e.g. nonpublic general note) */
-  notes?: Maybe<Array<AuthorityNotesItem>>;
-  /** Heading personal name */
-  personalName?: Maybe<Scalars['String']['output']>;
-  /** Heading personal name title */
-  personalNameTitle?: Maybe<Scalars['String']['output']>;
-  /** See also from tracing corporate name */
-  saftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing corporate name title */
-  saftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing genre/form term */
-  saftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing geographic name */
-  saftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing meeting name */
-  saftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing meeting name title */
-  saftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing personal name */
-  saftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing personal name title */
-  saftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing topical term */
-  saftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See also from tracing uniform title */
-  saftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing corporate name */
-  sftCorporateName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing corporate name title */
-  sftCorporateNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing genre/form term */
-  sftGenreTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing geographic name */
-  sftGeographicName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing meeting name */
-  sftMeetingName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing meeting name title */
-  sftMeetingNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing personal name */
-  sftPersonalName?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing personal name title */
-  sftPersonalNameTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing topical term */
-  sftTopicalTerm?: Maybe<Array<Scalars['String']['output']>>;
-  /** See from tracing uniform title */
-  sftUniformTitle?: Maybe<Array<Scalars['String']['output']>>;
-  /** The metadata source of the underlying record to the authority record. (e.g. FOLIO if it's a record created in Inventory;  MARC if it's a MARC record created in data-import) */
-  source?: Maybe<AuthoritySource>;
-  /** Authority source file id; UUID */
-  sourceFileId?: Maybe<Scalars['UUID']['output']>;
-  /** Children's subject headings */
-  subjectHeadings?: Maybe<Scalars['String']['output']>;
-  /** Heading topical term */
-  topicalTerm?: Maybe<Scalars['String']['output']>;
-  /** Heading uniform title */
-  uniformTitle?: Maybe<Scalars['String']['output']>;
-};
-
-export type AuthorityIdentifiersItem = {
-  __typename?: 'AuthorityIdentifiersItem';
-  /** Resource identifier type (e.g. Control number, LCCN, Other standard identifier, System control number) */
-  identifierTypeId: Scalars['UUID']['output'];
-  /** Resource identifier value */
-  value: Scalars['String']['output'];
-};
-
-export type AuthorityNotesItem = {
-  __typename?: 'AuthorityNotesItem';
-  /** Text content of the note */
-  note: Scalars['String']['output'];
-  /** ID of the type of note */
-  noteTypeId: Scalars['UUID']['output'];
-};
-
-export enum AuthoritySource {
-  Folio = 'FOLIO',
-  Marc = 'MARC'
-}
-
 /** Single automated patron block */
 export type Block = {
   __typename?: 'Block';
@@ -982,7 +878,6 @@ export type InstanceAlternativeTitlesItem = {
   alternativeTitleType?: Maybe<AlternativeTitleType>;
   /** UUID for an alternative title qualifier */
   alternativeTitleTypeId?: Maybe<Scalars['UUID']['output']>;
-  authority?: Maybe<Authority>;
   /** UUID of authority record that controls an alternative title */
   authorityId?: Maybe<Scalars['UUID']['output']>;
 };
@@ -999,7 +894,6 @@ export type InstanceClassificationsItem = {
 
 export type InstanceContributorsItem = {
   __typename?: 'InstanceContributorsItem';
-  authority?: Maybe<Authority>;
   /** UUID of authority record that controls the contributor */
   authorityId?: Maybe<Scalars['UUID']['output']>;
   /** Dereferenced contributor-name type */
@@ -3375,10 +3269,6 @@ export type ResolversTypes = ResolversObject<{
   AccountdataPaymentStatus: ResolverTypeWrapper<AccountdataPaymentStatus>;
   AccountdataStatus: ResolverTypeWrapper<AccountdataStatus>;
   AlternativeTitleType: ResolverTypeWrapper<AlternativeTitleType>;
-  Authority: ResolverTypeWrapper<Authority>;
-  AuthorityIdentifiersItem: ResolverTypeWrapper<AuthorityIdentifiersItem>;
-  AuthorityNotesItem: ResolverTypeWrapper<AuthorityNotesItem>;
-  AuthoritySource: AuthoritySource;
   Block: ResolverTypeWrapper<Block>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   BoundWithPart: ResolverTypeWrapper<BoundWithPart>;
@@ -3591,9 +3481,6 @@ export type ResolversParentTypes = ResolversObject<{
   AccountdataPaymentStatus: AccountdataPaymentStatus;
   AccountdataStatus: AccountdataStatus;
   AlternativeTitleType: AlternativeTitleType;
-  Authority: Authority;
-  AuthorityIdentifiersItem: AuthorityIdentifiersItem;
-  AuthorityNotesItem: AuthorityNotesItem;
   Block: Block;
   Boolean: Scalars['Boolean']['output'];
   BoundWithPart: BoundWithPart;
@@ -3822,61 +3709,6 @@ export type AlternativeTitleTypeResolvers<ContextType = FolioContext, ParentType
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AuthorityResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Authority'] = ResolversParentTypes['Authority']> = ResolversObject<{
-  _version?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  corporateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  corporateNameTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  genreTerm?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  geographicName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  identifiers?: Resolver<Maybe<Array<ResolversTypes['AuthorityIdentifiersItem']>>, ParentType, ContextType>;
-  meetingName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  meetingNameTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
-  naturalId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  notes?: Resolver<Maybe<Array<ResolversTypes['AuthorityNotesItem']>>, ParentType, ContextType>;
-  personalName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  personalNameTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  saftCorporateName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftCorporateNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftGenreTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftGeographicName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftMeetingName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftMeetingNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftPersonalName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftPersonalNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftTopicalTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  saftUniformTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftCorporateName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftCorporateNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftGenreTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftGeographicName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftMeetingName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftMeetingNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftPersonalName?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftPersonalNameTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftTopicalTerm?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  sftUniformTitle?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  source?: Resolver<Maybe<ResolversTypes['AuthoritySource']>, ParentType, ContextType>;
-  sourceFileId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  subjectHeadings?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  topicalTerm?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  uniformTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AuthorityIdentifiersItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AuthorityIdentifiersItem'] = ResolversParentTypes['AuthorityIdentifiersItem']> = ResolversObject<{
-  identifierTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AuthorityNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AuthorityNotesItem'] = ResolversParentTypes['AuthorityNotesItem']> = ResolversObject<{
-  note?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  noteTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -4317,7 +4149,6 @@ export type InstanceAlternativeTitlesItemResolvers<ContextType = FolioContext, P
   alternativeTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   alternativeTitleType?: Resolver<Maybe<ResolversTypes['AlternativeTitleType']>, ParentType, ContextType>;
   alternativeTitleTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  authority?: Resolver<Maybe<ResolversTypes['Authority']>, ParentType, ContextType>;
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -4330,7 +4161,6 @@ export type InstanceClassificationsItemResolvers<ContextType = FolioContext, Par
 }>;
 
 export type InstanceContributorsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceContributorsItem'] = ResolversParentTypes['InstanceContributorsItem']> = ResolversObject<{
-  authority?: Resolver<Maybe<ResolversTypes['Authority']>, ParentType, ContextType>;
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   contributorNameType?: Resolver<Maybe<ResolversTypes['ContributorNameType']>, ParentType, ContextType>;
   contributorNameTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
@@ -5605,9 +5435,6 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   AccountdataPaymentStatus?: AccountdataPaymentStatusResolvers<ContextType>;
   AccountdataStatus?: AccountdataStatusResolvers<ContextType>;
   AlternativeTitleType?: AlternativeTitleTypeResolvers<ContextType>;
-  Authority?: AuthorityResolvers<ContextType>;
-  AuthorityIdentifiersItem?: AuthorityIdentifiersItemResolvers<ContextType>;
-  AuthorityNotesItem?: AuthorityNotesItemResolvers<ContextType>;
   Block?: BlockResolvers<ContextType>;
   BoundWithPart?: BoundWithPartResolvers<ContextType>;
   BoundWithParts?: BoundWithPartsResolvers<ContextType>;
