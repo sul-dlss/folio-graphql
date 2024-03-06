@@ -24,8 +24,20 @@ export default class HoldingsAPI extends FolioAPI {
 
   async getBoundWithPart(id: string): Promise<BoundWithPart> {
     const urlParams = this.buildCqlQuery({ holdingsRecordId: id })
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
+
     const response = await this.get<BoundWithParts>('/inventory-storage/bound-with-parts', { params: urlParams });
 
     return response.boundWithParts[0];
+  }
+
+  async getBoundWithHoldingsPerItem(id: string): Promise<HoldingsRecord[]> {
+    const urlParams = this.buildCqlQuery({ itemId: id });
+    if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
+
+    const response = await this.get<BoundWithParts>('/inventory-storage/bound-with-parts', { params: urlParams });
+
+    const holdingsPromises = response.boundWithParts.map((part) => this.getHoldingsRecord(part.holdingsRecordId));
+    return Promise.all(holdingsPromises);
   }
 }

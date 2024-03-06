@@ -1075,6 +1075,7 @@ export type Item = {
   administrativeNotes?: Maybe<Array<Scalars['String']['output']>>;
   /** Unique inventory control number for physical resources, used largely for circulation purposes */
   barcode?: Maybe<Scalars['String']['output']>;
+  boundWithHoldingsPerItem?: Maybe<Array<Maybe<HoldingsRecord>>>;
   /** Chronology is the descriptive information for the dating scheme of a serial. */
   chronology?: Maybe<Scalars['String']['output']>;
   /** Notes to be displayed in circulation processes */
