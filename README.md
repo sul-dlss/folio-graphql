@@ -116,3 +116,14 @@ ssh graphql@sul-folio-graphql-test.stanford.edu \
 docker rm $(docker stop $(docker ps -a -q --filter="name=folio-graphql")) && \
 docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:latest'
 ```
+
+In case you want to deploy a specific tagged version of folio-graphql you can specify the version, for example:
+
+```sh
+ssh graphql@sul-folio-graphql-test.stanford.edu \
+'docker pull suldlss/folio-graphql:v2024-03-04 && \
+docker rm $(docker stop $(docker ps -a -q --filter="name=folio-graphql")) && \
+docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:v2024-03-04'
+```
+
+Alternately, you can replay a previous deploy using the Jenkins UI.
