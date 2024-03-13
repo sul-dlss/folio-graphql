@@ -108,7 +108,7 @@ Code is tested with `jest` in CI. To run the tests locally:
 npm test
 ```
 ## Deploying
-The app is deployed as a Docker container. Github actions automatically builds the image and publishes it to docker hub. Once that is complete you can push the image to the server:
+The app is deployed as a Docker container. Github actions automatically builds the image and publishes it to docker hub. Docker Hub then sends a webhook to Jenkins, which then deploys the new container.  If you want to manually push the image to the server, you can do this:
 
 ```sh
 ssh graphql@sul-folio-graphql-test.stanford.edu \
