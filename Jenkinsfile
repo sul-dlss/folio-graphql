@@ -12,9 +12,9 @@ pipeline {
             genericVariables: [
                 [$class: 'GenericVariable', key: 'image', value: '$.repository.repo_name', defaultValue: ''],
                 [$class: 'GenericVariable', key: 'pusher', value: '$.push_data.pusher', defaultValue: ''],
-                [$class: 'GenericVariable', key: 'tag', value: '$.push_data.tag', defaultValue: ''],
+                [$class: 'GenericVariable', key: 'imageTag', value: '$.push_data.tag', defaultValue: ''],
             ],
-            causeString: 'Docker Hub push event for ${image}:${tag} by ${pusher}',
+            causeString: 'Docker Hub push event for ${image}:${imageTag} by ${pusher}',
             printContributedVariables: true,
             // The presence of the token in the webhook push is what triggers this specific build.
             // Dockerhub will send a POST request with this token via our brick-city gateway
@@ -24,14 +24,21 @@ pipeline {
     }
 
     stages {
+        stage('Echo Before Stages') {
+            steps {
+                echo "git branch: ${env.GIT_BRANCH}"
+                echo "tag name: ${env.TAG_NAME}"
+            }
+        }
         stage('Deploy to test server') {
             environment {
               DEPLOY_ENVIRONMENT = 'folio-test'
             }
             when {
-              // Only run on builds trigggered by GenericWebhookTrigger 
-              // Also check the docker image tag name, based on a push to the main branch in Github
-               expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && tag == 'main' }
+              // 1. Only run on builds trigggered by GenericWebhookTrigger 
+              // 2. Check the docker image tag name, based on a push to the main branch in Github
+              // 3. Only run on branch pushes, not tag pushes, in order to avoid duplicate builds
+               expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag == 'main' && !env.TAG_NAME}
              }
             steps {
               echo 'Deploying to test server'
@@ -49,8 +56,8 @@ pipeline {
               always {
                   build job: '/Continuous Deployment/Slack Deployment Notification', parameters: [
                   string(name: 'PROJECT', value: env.PROJECT),
-                  string(name: 'TAG_NAME', value: tag),
                   string(name: 'DEPLOY_ENVIRONMENT', value: env.DEPLOY_ENVIRONMENT),
+                  string(name: 'TAG_NAME', value: imageTag),
                   string(name: 'GIT_URL', value: env.GIT_URL),
                   booleanParam(name: 'SUCCESS', value: currentBuild.resultIsBetterOrEqualTo('SUCCESS')),
                   string(name: 'RUN_DISPLAY_URL', value: env.RUN_DISPLAY_URL)
@@ -63,9 +70,11 @@ pipeline {
               DEPLOY_ENVIRONMENT = 'folio-prod'
             }
             when {
-              // Only run on builds trigggered by GenericWebhookTrigger
-              // Also check the docker image tag name, based on a tagged release in Github
-              expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && tag.startsWith('v') }
+              // 1. Only run on builds trigggered by GenericWebhookTrigger
+              // 2. Check the docker image tag name, based on a tagged release in Github
+              // 3. Only run on tag pushes, not branch pushes, in order to avoid duplicate builds (for example, tagging a release on the main branch)
+              // 4. Only run when the git tag was on the main branch
+              expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag.startsWith('v') && env.GIT_BRANCH == 'main' && env.TAG_NAME}
             }
             steps {
               echo 'Deploying to production server'
@@ -73,9 +82,9 @@ pipeline {
               sshagent (['sul-devops-team', 'sul-continuous-deployment']){
                 sh """#!/bin/bash -l
                   ssh graphql@sul-folio-graphql-prod.stanford.edu \
-                  'docker pull suldlss/folio-graphql:${tag} && \
+                  'docker pull suldlss/folio-graphql:${imageTag} && \
                   docker rm -f \$(docker ps -a -q --filter="name=folio-graphql") && \
-                  docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:${tag}'
+                  docker run -d --env-file ./.env -p 4000:4000 --name folio-graphql suldlss/folio-graphql:${imageTag}'
                 """
               }
             } 
@@ -83,7 +92,7 @@ pipeline {
               always {
                   build job: '/Continuous Deployment/Slack Deployment Notification', parameters: [
                   string(name: 'PROJECT', value: env.PROJECT),
-                  string(name: 'TAG_NAME', value: tag),
+                  string(name: 'TAG_NAME', value: imageTag),
                   string(name: 'DEPLOY_ENVIRONMENT', value: env.DEPLOY_ENVIRONMENT),
                   string(name: 'GIT_URL', value: env.GIT_URL),
                   booleanParam(name: 'SUCCESS', value: currentBuild.resultIsBetterOrEqualTo('SUCCESS')),
