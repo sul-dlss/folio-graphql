@@ -37,8 +37,8 @@ pipeline {
             when {
               // 1. Only run on builds trigggered by GenericWebhookTrigger 
               // 2. Check the docker image tag name, based on a push to the main branch in Github
-              // 3. Only run on branch pushes, not tag pushes, in order to avoid duplicate builds
-               expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag == 'main' && !env.TAG_NAME}
+              // 3. Only when the Docker image and Github branch are both "main", in order to avoid duplicate builds
+               expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag == 'main' && env.GIT_BRANCH == 'main' && !env.TAG_NAME}
              }
             steps {
               echo 'Deploying to test server'
