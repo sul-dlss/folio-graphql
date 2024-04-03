@@ -72,9 +72,9 @@ pipeline {
             when {
               // 1. Only run on builds trigggered by GenericWebhookTrigger
               // 2. Check the docker image tag name, based on a tagged release in Github
-              // 3. Only run on tag pushes, not branch pushes, in order to avoid duplicate builds (for example, tagging a release on the main branch)
-              // 4. Only run when the git tag was on the main branch
-              expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag.startsWith('v') && env.GIT_BRANCH == 'main' && env.TAG_NAME}
+              // 3. Only run when the Github branch is "main", 
+              // 4. Only run when the Docker image starts with "v"               
+              expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag.startsWith('v') && env.GIT_BRANCH == 'main' && !env.TAG_NAME}
             }
             steps {
               echo 'Deploying to production server'
