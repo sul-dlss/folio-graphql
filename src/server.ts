@@ -57,7 +57,7 @@ async function getTokenFromRequest(req: express.Request): Promise<{ token: strin
       token: response.okapiToken,
       refreshToken: response.refreshToken
     });
-  } catch (error) {
+  } catch {
     throw new GraphQLError('User is not authenticated',
       {
         extensions: {

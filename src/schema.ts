@@ -1132,6 +1132,7 @@ export type Item = {
   itemLevelCallNumberType?: Maybe<CallNumberType>;
   /** Identifies the source of the call number, e.g., LCC, Dewey, NLM, etc. */
   itemLevelCallNumberTypeId?: Maybe<Scalars['String']['output']>;
+  itemNumber?: Maybe<Scalars['Int']['output']>;
   /** Information about when an item was last scanned in the Inventory app. */
   lastCheckIn?: Maybe<ItemLastCheckIn>;
   /** Item's material type */
