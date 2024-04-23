@@ -1156,6 +1156,7 @@ export type Item = {
   permanentLocationId?: Maybe<Scalars['String']['output']>;
   /** ID referencing a remote purchase order object related to this item */
   purchaseOrderLineIdentifier?: Maybe<Scalars['String']['output']>;
+  queueTotalLength?: Maybe<Scalars['Int']['output']>;
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['String']['output']>>;
   /** The status of the item */

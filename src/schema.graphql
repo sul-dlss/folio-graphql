@@ -4122,6 +4122,7 @@ extend type Item {
   itemLevelCallNumberType: CallNumberType
   dueDate: DateTime
   boundWithHoldingsPerItem: [HoldingsRecord]
+  queueTotalLength: Int
 }
 
 extend type ItemEffectiveCallNumberComponents {
