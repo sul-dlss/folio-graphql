@@ -373,6 +373,10 @@ export const resolvers: Resolvers = {
     materialType({ materialTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<MaterialType>("material-types", { key: 'mtypes' }, materialTypeId)
     },
+    async queueTotalLength({ id }, args, { dataSources: { items } }, info) {
+      const queue =  await items.getRequestQueueLength(id);
+      return queue
+    },
     async dueDate({ id }, args, { dataSources: { circulation } }, info) {
       const loans = await circulation.getLoans({ itemId: id, "status.name": 'open' });
 

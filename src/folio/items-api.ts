@@ -24,4 +24,10 @@ export default class ItemsAPI extends FolioAPI {
     const response = await this.get<ItemsResponse>(`/item-storage/items`, { params: urlParams })
     return response.items
   }
+
+  async getRequestQueueLength(id: string): Promise<number> {
+    let queue;
+    queue = await this.get<number>(`/circulation/requests/queue/item/${encodeURIComponent(id)}`)
+    return queue?.totalRecords;
+  }
 }

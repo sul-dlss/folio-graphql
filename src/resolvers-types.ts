@@ -1159,6 +1159,7 @@ export type Item = {
   permanentLocationId?: Maybe<Scalars['String']['output']>;
   /** ID referencing a remote purchase order object related to this item */
   purchaseOrderLineIdentifier?: Maybe<Scalars['String']['output']>;
+  queueTotalLength?: Maybe<Scalars['Int']['output']>;
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['String']['output']>>;
   /** The status of the item */
@@ -4324,6 +4325,7 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   permanentLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   permanentLocationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   purchaseOrderLineIdentifier?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  queueTotalLength?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   statisticalCodeIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ItemStatus'], ParentType, ContextType>;
   tags?: Resolver<Maybe<ResolversTypes['Tags']>, ParentType, ContextType>;
