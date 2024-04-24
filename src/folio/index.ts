@@ -258,6 +258,9 @@ export const resolvers: Resolvers = {
     items({ id }, args, { dataSources: { items } }, info) {
       return items.getByInstanceId(id, args)
     },
+    async queueTotalLength({ id }, args, { dataSources: { circulation } }, info) {
+      return await circulation.getInstanceQueueLength(id);
+    },
     async instanceFormats({ instanceFormatIds }, args, { dataSources: { types } }, info) {
       const map = await types.getMapFor<InstanceFormat>("instance-formats", { key: 'instanceFormats' })
       return instanceFormatIds.map(id => map.get(id))
@@ -374,9 +377,8 @@ export const resolvers: Resolvers = {
     materialType({ materialTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<MaterialType>("material-types", { key: 'mtypes' }, materialTypeId)
     },
-    async queueTotalLength({ id }, args, { dataSources: { items } }, info) {
-      const queue =  await items.getRequestQueueLength(id);
-      return queue
+    async queueTotalLength({ id }, args, { dataSources: { circulation } }, info) {
+      return await circulation.getItemQueueLength(id);
     },
     async dueDate({ id }, args, { dataSources: { circulation } }, info) {
       const loans = await circulation.getLoans({ itemId: id, "status.name": 'open' });

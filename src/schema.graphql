@@ -4093,6 +4093,7 @@ extend type Instance {
   instanceType: InstanceType
   modeOfIssuance: ModeOfIssuance
   orderLines: [PoLine]
+  queueTotalLength: Int
 }
 
 extend type InstanceAlternativeTitlesItem {

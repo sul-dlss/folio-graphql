@@ -836,6 +836,7 @@ export type Instance = {
   publicationPeriod?: Maybe<InstancePublicationPeriod>;
   /** The range of sequential designation/chronology of publication, or date range */
   publicationRange?: Maybe<Array<Scalars['String']['output']>>;
+  queueTotalLength?: Maybe<Scalars['Int']['output']>;
   /** List of series titles associated with the resource (e.g. Harry Potter) */
   series?: Maybe<Array<InstanceSeriesItem>>;
   /** The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory; MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings; CONSORTIUM-MARC or CONSORTIUM-FOLIO for sharing Instances). */
@@ -4133,6 +4134,7 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   publicationFrequency?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   publicationPeriod?: Resolver<Maybe<ResolversTypes['InstancePublicationPeriod']>, ParentType, ContextType>;
   publicationRange?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  queueTotalLength?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   series?: Resolver<Maybe<Array<ResolversTypes['InstanceSeriesItem']>>, ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sourceRecordFormat?: Resolver<Maybe<ResolversTypes['InstanceSourceRecordFormat']>, ParentType, ContextType>;
