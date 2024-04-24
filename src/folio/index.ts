@@ -32,6 +32,7 @@ import {
   ContributorType,
   MaterialType,
   ItemCirculationNotesItemNoteType,
+  ItemNoteType,
 } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
@@ -389,6 +390,15 @@ export const resolvers: Resolvers = {
       if (!results) return null;
 
       return results;
+    },
+    notes: async ({ notes }, args, { dataSources: { types } }) => {
+      // For each note, fetch the corresponding itemNoteType
+      const populatedNotes = notes.map(async (note) => {
+        const itemNoteType = await types.getById("item-note-types", { key: 'itemNoteTypes' }, note.itemNoteTypeId) as ItemNoteType;
+        return { ...note, itemNoteType };
+      });
+
+      return populatedNotes;
     },
   },
   ItemCirculationNotesItem: {
