@@ -24,14 +24,23 @@ export default class CirculationAPI extends FolioAPI {
   async getRequest(id: string): Promise<Request> {
     return await this.get<Request>(`/circulation/requests/${encodeURIComponent(id)}`)
   }
+
+  async getItemQueueLength(id: string): Promise<number> {
+    const queue = await this.get<RequestQueueResponse>(`/circulation/requests/queue/item/${encodeURIComponent(id)}`);
+    return queue?.totalRecords;
+  }
+
+  async getInstanceQueueLength(id: string): Promise<number> {
+    const queue = await this.get<RequestQueueResponse>(`/circulation/requests/queue/instance/${encodeURIComponent(id)}`);
+    return queue?.totalRecords;
+  }
+
   async getRequestQueueLength(item: PatronItem): Promise<number> {
-    let queue;
     if (item.itemId) {
-      queue = await this.get<RequestQueueResponse>(`/circulation/requests/queue/item/${encodeURIComponent(item.itemId)}`)
+      return this.getItemQueueLength(item.itemId);
     // title-level requests have an instanceId but no itemId
     } else if (item.instanceId) {
-      queue = await this.get<RequestQueueResponse>(`/circulation/requests/queue/instance/${encodeURIComponent(item.instanceId)}`)
+      return this.getInstanceQueueLength(item.instanceId);
     }
-    return queue?.totalRecords;
   }
 }
