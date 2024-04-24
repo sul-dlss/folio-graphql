@@ -1,5 +1,6 @@
 import FolioAPI from "./folio-api.js"
 import { CqlParams, Item } from '../schema'
+import { RequestQueueResponse } from './circulation-api'
 
 interface ItemsResponse {
   items: Item[]
@@ -26,8 +27,7 @@ export default class ItemsAPI extends FolioAPI {
   }
 
   async getRequestQueueLength(id: string): Promise<number> {
-    let queue;
-    queue = await this.get<number>(`/circulation/requests/queue/item/${encodeURIComponent(id)}`)
+    const queue = await this.get<RequestQueueResponse>(`/circulation/requests/queue/item/${encodeURIComponent(id)}`)
     return queue?.totalRecords;
   }
 }
