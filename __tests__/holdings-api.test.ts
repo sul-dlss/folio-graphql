@@ -46,7 +46,7 @@ describe('HoldingsAPI', () => {
 
         it('handles query params properly when provided', async () => {
             await HoldingsAPI.getHoldingsRecords({ instanceId: ['instanceId789'] });
-            expect(mockFolioRequestUrl()).toContainPath('/holdings?query=(instanceId==instanceId789+)');
+            expect(mockFolioRequestUrl()).toContainPath('/holdings?query=(instanceId=="instanceId789"+)');
         });
     });
 

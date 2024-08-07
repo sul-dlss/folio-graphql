@@ -30,7 +30,7 @@ describe('InstancesAPI', () => {
         });
         it('handles query params properly when provided', async () => {
             await InstancesAPI.getInstances({ 'holdingsRecords.id': ['holdingsRecord1'] });
-            expect(mockFolioRequestUrl()).toContainPath('/instances?query=(holdingsRecords.id==holdingsRecord1+)');
+            expect(mockFolioRequestUrl()).toContainPath('/instances?query=(holdingsRecords.id=="holdingsRecord1"+)');
         });
     });
     describe('getInstance', () => {

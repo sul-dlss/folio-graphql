@@ -42,7 +42,7 @@ describe('ServicePointsAPI', () => {
         ]
       });
       const result = await ServicePointsAPI.getByCode('cd1');
-      expect(mockFolioRequestUrl()).toContainPath('/service-points?query=(code==cd1+)&limit=2147483647');
+      expect(mockFolioRequestUrl()).toContainPath('/service-points?query=(code=="cd1"+)&limit=2147483647');
       // the method returns the array within servicepoints key
       expect(result.code).toEqual('cd1');
     });

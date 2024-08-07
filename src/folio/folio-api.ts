@@ -34,9 +34,9 @@ export default class FolioAPI extends RESTDataSource {
       }
 
       if (Array.isArray(value)) {
-        cqlQuery += `(${value.map((v: string) => `${key}==${v}`).join(" OR ")} )`
+        cqlQuery += `(${value.map((v: string) => `${key}=="${this.escape(v)}"`).join(" OR ")} )`
       } else {
-        cqlQuery += `${key}=="${value}"`
+        cqlQuery += `${key}=="${this.escape(value as string)}"`
       }
     }
 
@@ -55,5 +55,11 @@ export default class FolioAPI extends RESTDataSource {
     if (params?.offset) urlParams.set('offset', params.offset.toString())
 
     return urlParams
+  }
+
+  escape(value: string): string {
+    if (value === undefined) return value;
+
+    return value.replace('\\', '\\\\').replace('"', '\\"').replace('*', '\\*').replace('?', '\\?').replace('^', '\\^');
   }
 }
