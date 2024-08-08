@@ -11,7 +11,7 @@ describe('FolioAPI', () => {
         it('handles array-value objects passed directly as arguments ', async () => {
             const result = FolioAPI.buildCqlQuery({'holdingsRecordId': ['holdingsId789', 'holdingsId456'] });
             expect(result).toBeInstanceOf(URLSearchParams);
-            expect(result.get('query')).toEqual('(holdingsRecordId==holdingsId789 OR holdingsRecordId==holdingsId456 )');
+            expect(result.get('query')).toEqual('(holdingsRecordId=="holdingsId789" OR holdingsRecordId=="holdingsId456" )');
         });
         it('handles multiple single-value objects passed directly as arguments ', async () => {
             const result = FolioAPI.buildCqlQuery({'holdingsRecordId': 'holdingsId789', 'instanceId': 'instanceId123' });
@@ -38,5 +38,10 @@ describe('FolioAPI', () => {
             expect(result).toBeInstanceOf(URLSearchParams);
             expect(result.get('query')).toEqual(' sortby holdingsRecordId');
         });
+        it('escapes special characters in query values', async () => {
+            const result = FolioAPI.buildCqlQuery({'holdingsRecordId': 'hold"ingsId*789?' });
+            expect(result).toBeInstanceOf(URLSearchParams);
+            expect(result.get('query')).toEqual('holdingsRecordId=="hold\\"ingsId\\*789\\?"');
+        })
     });
 });

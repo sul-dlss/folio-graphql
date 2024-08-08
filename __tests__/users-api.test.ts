@@ -65,9 +65,8 @@ describe('UsersAPI', () => {
         });
         it('getProxyFor queries the expected URL and returns expected data', async () => {
             const result = await UsersAPI.getProxyFor({ 'proxyUserId': ['userId1'] });
-            expect(mockFolioRequestUrl()).toContainPath('/proxiesfor?query=(proxyUserId==userId1+)&limit=2147483647');
+            expect(mockFolioRequestUrl()).toContainPath('/proxiesfor?query=(proxyUserId=="userId1"+)&limit=2147483647');
             expect(result[0].id).toEqual('proxyrelationship1');
         });
     });
 });
-

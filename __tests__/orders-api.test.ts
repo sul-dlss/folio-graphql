@@ -29,7 +29,7 @@ describe('OrdersAPI', () => {
                 ]
             });
             const result = await OrdersAPI.getPoLines({ 'instanceId': ['instanceId456'] })
-            expect(mockFolioRequestUrl()).toContainPath('/orders/order-lines?query=(instanceId==instanceId456+)&limit=2147483647');
+            expect(mockFolioRequestUrl()).toContainPath('/orders/order-lines?query=(instanceId=="instanceId456"+)&limit=2147483647');
             expect(result.length).toEqual(2);
             expect(result[0].id).toEqual('poLine1');
         });
@@ -51,7 +51,7 @@ describe('OrdersAPI', () => {
                    }]
                 });
             const result = await OrdersAPI.getPieces({ 'poLineId': ['poLine1'] })
-            expect(mockFolioRequestUrl()).toContainPath('/orders/pieces?query=(poLineId==poLine1+)&limit=2147483647');
+            expect(mockFolioRequestUrl()).toContainPath('/orders/pieces?query=(poLineId=="poLine1"+)&limit=2147483647');
             expect(result[0].id).toEqual('piece1');
         });
     });
