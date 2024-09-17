@@ -4182,6 +4182,9 @@ extend type LocationDetails {
   """Site value passed to Aeon to preselect delivery location for material paged from this location"""
   pageAeonSite: String
 
+  """Some locations (like SAL-PAGE) should attempt an ILLiad request before trying FOLIO"""
+  pagePreferSendIlliad: String
+
   """Code for service point where material from this location is scanned"""
   scanServicePointCode: String
 
