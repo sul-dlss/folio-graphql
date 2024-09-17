@@ -1626,6 +1626,8 @@ export type LocationDetails = {
   pageAeonSite?: Maybe<Scalars['String']['output']>;
   /** Lookup key for user groups who mediate material paged from this location */
   pageMediationGroupKey?: Maybe<Scalars['String']['output']>;
+  /** Some locations (like SAL-PAGE) should attempt an ILLiad request before trying FOLIO */
+  pagePreferSendIlliad?: Maybe<Scalars['String']['output']>;
   /** Comma-separated codes for valid pickup locations for material paged from this location */
   pageServicePointCodes?: Maybe<Scalars['String']['output']>;
   /** Valid pickup locations for material paged from this location */
@@ -4611,6 +4613,7 @@ export type LocationDetailsResolvers<ContextType = FolioContext, ParentType exte
   holdingsTypeName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageAeonSite?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageMediationGroupKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  pagePreferSendIlliad?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePointCodes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pageServicePoints?: Resolver<Maybe<Array<Maybe<ResolversTypes['ServicePoint']>>>, ParentType, ContextType>;
   pagingSchedule?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
