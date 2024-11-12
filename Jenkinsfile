@@ -48,7 +48,7 @@ pipeline {
                   ssh graphql@sul-folio-graphql-test.stanford.edu \
                   'docker pull suldlss/folio-graphql:main && \
                   docker rm -f \$(docker ps -a -q --filter="name=folio-graphql") && \
-                  docker run -d --env-file ./.env -p 4000:4000 --dns=10.111.7.182 --dns=8.8.8.8 --name folio-graphql suldlss/folio-graphql:main'
+                  docker run -d --env-file ./.env -p 4000:4000 --dns=10.111.7.160 --dns=8.8.8.8 --name folio-graphql suldlss/folio-graphql:main'
                 """
               }
             }
