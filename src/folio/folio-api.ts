@@ -14,6 +14,7 @@ export default class FolioAPI extends RESTDataSource {
     request.headers["User-Agent"] = "FolioApiClient"
     request.headers["Accept"] = "application/json, text/plain"
     request.headers["Content-Type"] = "application/json"
+    console.log("[FOLIO]", request.method, this.baseURL, path, request.params.toString());
   }
 
   private token: string
