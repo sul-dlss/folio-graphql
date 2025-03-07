@@ -59,17 +59,18 @@ type Piece {
   """UUID of this piece record"""
   id: UUID
 
-  """Volume/enumeration information"""
-  caption: String
+  """Display summary information"""
+  displaySummary: String
 
   """Free form commentary"""
   comment: String
-
-  """The format of the piece"""
   format: String!
 
   """UUID of the associated item record"""
   itemId: UUID
+
+  """UUID of the associated bind item record"""
+  bindItemId: UUID
 
   """UUID of the (inventory) location record"""
   locationId: UUID
@@ -83,10 +84,18 @@ type Piece {
   """UUID of the holding record"""
   holdingId: UUID
 
+  """Receiving tenant for ECS-enabled clusters"""
+  receivingTenantId: String
+
   """
   Whether or not receiving history should be displayed in holding record view
   """
   displayOnHolding: Boolean
+
+  """
+  Whether or not the piece data should display to patrons at point of receipt
+  """
+  displayToPublic: Boolean
 
   """
   Enumeration is the descriptive information for the numbering scheme of a serial. Synchronized with inventory item.
@@ -99,6 +108,21 @@ type Piece {
   chronology: String
 
   """
+  Barcode is the descriptive information for the barcode of a serial. Synchronized with inventory item.
+  """
+  barcode: String
+
+  """
+  AccessionNumber is the descriptive information for the accession number of a serial. Synchronized with inventory item.
+  """
+  accessionNumber: String
+
+  """
+  CallNumber is the descriptive information for the call number of a serial. Synchronized with inventory item.
+  """
+  callNumber: String
+
+  """
   Records the fact that the record should not be displayed in a discovery system
   """
   discoverySuppress: Boolean
@@ -106,17 +130,33 @@ type Piece {
   """Copy number of the piece"""
   copyNumber: String
 
-  """the status of this piece"""
+  """The status of this piece"""
   receivingStatus: PieceReceivingStatus!
 
   """Whether or not this is supplementary material"""
   supplement: Boolean
+
+  """Whether or not piece has already been bound"""
+  isBound: Boolean
 
   """Date that associated item is expected to arrive"""
   receiptDate: DateTime
 
   """The date associated item is actually received"""
   receivedDate: DateTime
+
+  """Date when the status of this piece was last updated"""
+  statusUpdatedDate: DateTime
+
+  """Time interval (in days) for processing claims related to this piece"""
+  claimingInterval: Int
+
+  """Internal note for Send Claim action"""
+  internalNote: String
+
+  """External note for Send Claim action to share with Vendor"""
+  externalNote: String
+  metadata: Metadata
 }
 
 """A UUID"""
@@ -125,10 +165,37 @@ scalar UUID
 enum PieceReceivingStatus {
   Received
   Expected
+  Late
+  Claim_delayed
+  Claim_sent
+  Unreceivable
 }
 
 """A date and time"""
 scalar DateTime
+
+"""
+Metadata about creation and changes to records, provided by the server (client should not provide)
+"""
+type Metadata {
+  """Date and time when the record was created"""
+  createdDate: DateTime!
+
+  """ID of the user who created the record (when available)"""
+  createdByUserId: UUID
+
+  """Username of the user who created the record (when available)"""
+  createdByUsername: String
+
+  """Date and time when the record was last updated"""
+  updatedDate: DateTime
+
+  """ID of the user who last updated the record (when available)"""
+  updatedByUserId: UUID
+
+  """Username of the user who last updated the record (when available)"""
+  updatedByUsername: String
+}
 
 """collection of piece records"""
 type PieceCollection {
@@ -524,29 +591,6 @@ type VendorDetail {
   """
   vendorAccount: String
   referenceNumbers: [String!]
-}
-
-"""
-Metadata about creation and changes to records, provided by the server (client should not provide)
-"""
-type Metadata {
-  """Date and time when the record was created"""
-  createdDate: DateTime!
-
-  """ID of the user who created the record (when available)"""
-  createdByUserId: UUID
-
-  """Username of the user who created the record (when available)"""
-  createdByUsername: String
-
-  """Date and time when the record was last updated"""
-  updatedDate: DateTime
-
-  """ID of the user who last updated the record (when available)"""
-  updatedByUserId: UUID
-
-  """Username of the user who last updated the record (when available)"""
-  updatedByUsername: String
 }
 
 """collection of purchase order line records"""
@@ -1368,6 +1412,9 @@ type Loan {
   """Date and time the item was declared lost during this loan"""
   declaredLostDate: DateTime
 
+  """Indicates whether or not this loan is associated for DCB use case"""
+  isDcb: Boolean
+
   """
   Metadata about creation and changes to loan, provided by the server (client should not provide)
   """
@@ -1391,6 +1438,16 @@ type LoanBorrower {
   barcode used to identify the borrower (read only, defined by the server)
   """
   barcode: String
+
+  """
+  preferred first name of the borrower (read only, defined by the server)
+  """
+  preferredFirstName: String
+
+  """
+  current patron group of the borrower (read only, defined by the server)
+  """
+  patronGroup: String
 }
 
 """
@@ -1869,6 +1926,9 @@ type ServicePoint {
 
   """List of staff slips for this service point"""
   staffSlips: [ServicepointStaffSlipsItem!]
+
+  """Indicates a service point used for the ECS functionality"""
+  ecsRequestRouting: Boolean
   metadata: Metadata
 }
 
@@ -2280,6 +2340,9 @@ type Instance {
   """List of electronic access items"""
   electronicAccess: [InstanceElectronicAccessItem!]
 
+  """Instance Dates"""
+  dates: InstanceDates
+
   """
   UUID of the unique term for the resource type whether it's from the RDA content term list of locally defined
   """
@@ -2453,6 +2516,12 @@ type InstanceSubjectsItem {
 
   """UUID of authority record that controls a subject heading"""
   authorityId: UUID
+
+  """UUID of subject source"""
+  sourceId: UUID
+
+  """UUID of subject type"""
+  typeId: UUID
 }
 
 type InstanceClassificationsItem {
@@ -2528,6 +2597,18 @@ type InstanceElectronicAccessItem {
   UUID for the type of relationship between the electronic resource at the location identified and the item described in the record as a whole
   """
   relationshipId: UUID
+}
+
+"""Instance Dates"""
+type InstanceDates {
+  """Date type ID"""
+  dateTypeId: UUID
+
+  """Date 1"""
+  date1: String
+
+  """Date 2"""
+  date2: String
 }
 
 """The format of an Instance"""
@@ -2728,12 +2809,6 @@ type Request {
   """position of the request in a per-item request queue"""
   position: Int
 
-  """Copy of some instance metadata (used for searching and sorting)"""
-  instance: RequestInstance
-
-  """Copy of some item metadata (used for searching and sorting)"""
-  item: RequestItem
-
   """
   Copy of some requesting patron metadata (used for searching and sorting), will be taken from the user referred to by the requesterId
   """
@@ -2747,7 +2822,7 @@ type Request {
   """
   How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester)
   """
-  fulfillmentPreference: RequestFulfillmentPreference!
+  fulfillmentPreference: RequestFulfillmentPreference
 
   """Deliver to the address of this type, for the requesting patron"""
   deliveryAddressTypeId: UUID
@@ -2768,22 +2843,6 @@ type Request {
 
   """The full object of the Service Point record from pickupServicePointId"""
   pickupServicePoint: RequestPickupServicePoint
-
-  """Tags"""
-  tags: Tags
-
-  """
-  Metadata about creation and changes to requests, provided by the server (client should not provide)
-  """
-  metadata: Metadata
-
-  """
-  Additional parameters used for request processing and discarded afterwards. Not part of request record.
-  """
-  requestProcessingParameters: RequestRequestProcessingParameters
-
-  """Request fields used for search"""
-  searchIndex: RequestSearchIndex
 }
 
 enum RequestRequestType {
@@ -2805,33 +2864,6 @@ enum RequestStatus {
   Closed___Cancelled
   Closed___Unfilled
   Closed___Pickup_expired
-}
-
-"""Copy of some instance metadata (used for searching and sorting)"""
-type RequestInstance {
-  """title of the item"""
-  title: String
-
-  """
-  An extensible set of name-value pairs of identifiers associated with the resource
-  """
-  identifiers: [RequestInstanceIdentifiersItem!]
-}
-
-type RequestInstanceIdentifiersItem {
-  """Resource identifier value"""
-  value: String!
-
-  """
-  UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers)
-  """
-  identifierTypeId: UUID!
-}
-
-"""Copy of some item metadata (used for searching and sorting)"""
-type RequestItem {
-  """barcode of the item"""
-  barcode: String
 }
 
 """
@@ -2954,94 +2986,6 @@ type RequestPickupServicePoint {
 
   """Is this service point a pickup location?"""
   pickupLocation: Boolean
-}
-
-"""
-Additional parameters used for request processing and discarded afterwards. Not part of request record.
-"""
-type RequestRequestProcessingParameters {
-  """Blocks to override if user has corresponding permissions"""
-  overrideBlocks: OverrideBlocks
-}
-
-"""Blocks to override (e.g. during checkout or renewal)"""
-type OverrideBlocks {
-  """'Item not loanable' block"""
-  itemNotLoanableBlock: OverrideBlocksItemNotLoanableBlock
-
-  """Automated patron block"""
-  patronBlock: OverrideBlocksPatronBlock
-
-  """Item limit block"""
-  itemLimitBlock: OverrideBlocksItemLimitBlock
-
-  """Renewal block"""
-  renewalBlock: OverrideBlocksRenewalBlock
-
-  """Override renewal block which requires due date field"""
-  renewalDueDateRequiredBlock: OverrideBlocksRenewalDueDateRequiredBlock
-
-  """Reason for override"""
-  comment: String
-}
-
-"""'Item not loanable' block"""
-type OverrideBlocksItemNotLoanableBlock {
-  """Due date for a new loan"""
-  dueDate: DateTime!
-}
-
-"""Automated patron block"""
-type OverrideBlocksPatronBlock {
-  _typesWithoutFieldsAreNotAllowed_: String
-}
-
-"""Item limit block"""
-type OverrideBlocksItemLimitBlock {
-  _typesWithoutFieldsAreNotAllowed_: String
-}
-
-"""Renewal block"""
-type OverrideBlocksRenewalBlock {
-  _typesWithoutFieldsAreNotAllowed_: String
-}
-
-"""Override renewal block which requires due date field"""
-type OverrideBlocksRenewalDueDateRequiredBlock {
-  """Due date for a new loan"""
-  dueDate: DateTime!
-}
-
-"""Request fields used for search"""
-type RequestSearchIndex {
-  """Effective call number components"""
-  callNumberComponents: RequestSearchIndexCallNumberComponents
-
-  """
-  A system generated normalization of the call number that allows for call number sorting in reports and search results
-  """
-  shelvingOrder: String
-
-  """The name of the request pickup service point"""
-  pickupServicePointName: String
-}
-
-"""Effective call number components"""
-type RequestSearchIndexCallNumberComponents {
-  """
-  Effective Call Number is an identifier assigned to an item or its holding and associated with the item.
-  """
-  callNumber: String
-
-  """
-  Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item.
-  """
-  prefix: String
-
-  """
-  Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item.
-  """
-  suffix: String
 }
 
 """A loan type"""
@@ -3764,94 +3708,6 @@ type PatronBlockLimit {
   metadata: Metadata
 }
 
-"""Batch holdings response"""
-type RtacHoldingsBatch {
-  """Real Time Availability Check (RTAC) holding details"""
-  holdings: [RtacHoldings!]
-
-  """Errors"""
-  errors: [Error!]
-}
-
-"""Collection of holdings"""
-type RtacHoldings {
-  """The FOLIO instance identifier"""
-  instanceId: UUID
-
-  """Collection of holdings"""
-  holdings: [RtacHolding!]!
-}
-
-"""Real Time Availability Check (RTAC) holding details"""
-type RtacHolding {
-  """The FOLIO id of the holding (item)"""
-  id: String!
-
-  """The location of the holding"""
-  location: String!
-
-  """The call number of the holding"""
-  callNumber: String!
-
-  """The availability status of the holding"""
-  status: String!
-
-  """The date when the holding will be available"""
-  dueDate: DateTime
-
-  """Volume details for the holding (item)"""
-  volume: String
-
-  """Name of the temporary loan type for a given item"""
-  temporaryLoanType: String
-
-  """Name of the default loan type for a given item"""
-  permanentLoanType: String
-}
-
-"""An error"""
-type Error {
-  """Error message text"""
-  message: String!
-
-  """Error message type"""
-  type: String
-
-  """Error message code"""
-  code: String
-}
-
-"""A proxy for a user"""
-type ProxyFor {
-  """The id of the user for whom this proxy pertains"""
-  userId: String
-
-  """The id of the user acting as the proxy"""
-  proxyUserId: String
-
-  """A UUID identifying this proxy relationship"""
-  id: String
-
-  """Can the user request a sponsor (yes/no)"""
-  requestForSponsor: String
-
-  """Deprecated"""
-  createdDate: DateTime
-
-  """Where notifications are sent"""
-  notificationsTo: String
-
-  """Where fees and fines accrue"""
-  accrueTo: String
-
-  """Active or Inactive"""
-  status: String
-
-  """The date this proxy relationship expires"""
-  expirationDate: DateTime
-  metadata: Metadata
-}
-
 """A user"""
 type User {
   """A unique name belonging to a user. Typically used for login"""
@@ -3906,6 +3762,9 @@ type User {
 
   """Object that contains custom field"""
   customFields: UserdataCustomFields
+
+  """Preferred email communication types"""
+  preferredEmailCommunication: [UserdataPreferredEmailCommunicationItem!]
 
   """
   A UUID corresponding to the group the user belongs to, see /groups API, example groups are undergraduate and faculty; loan rules, patron blocks, fees/fines and expiration days can use the patron group
@@ -3988,6 +3847,177 @@ type UserdataPersonalAddressesItem {
 """Object that contains custom field"""
 type UserdataCustomFields {
   _typesWithoutFieldsAreNotAllowed_: String
+}
+
+enum UserdataPreferredEmailCommunicationItem {
+  Support
+  Programs
+  Services
+}
+
+"""Batch holdings response"""
+type RtacHoldingsBatch {
+  """Real Time Availability Check (RTAC) holding details"""
+  holdings: [RtacHoldings!]
+
+  """Errors"""
+  errors: [Error!]
+}
+
+"""Collection of holdings"""
+type RtacHoldings {
+  """The FOLIO instance identifier"""
+  instanceId: UUID
+
+  """Collection of holdings"""
+  holdings: [RtacHolding!]!
+}
+
+"""Real Time Availability Check (RTAC) holding details"""
+type RtacHolding {
+  """The FOLIO id of the holding (item)"""
+  id: String!
+
+  """
+  Unique inventory control number for physical resources, used largely for circulation purposes
+  """
+  barcode: String
+
+  """The location of the holding"""
+  location: String!
+
+  """The location code of the holding"""
+  locationCode: String
+
+  """The location id of the holding"""
+  locationId: String
+
+  """The call number of the holding"""
+  callNumber: String!
+
+  """The availability status of the holding"""
+  status: String!
+
+  """The date when the holding will be available"""
+  dueDate: DateTime
+
+  """Volume details for the holding (item)"""
+  volume: String
+
+  """Name of the temporary loan type for a given item"""
+  temporaryLoanType: String
+
+  """Name of the default loan type for a given item"""
+  permanentLoanType: String
+  materialType: RtacMaterialType
+  library: RtacLibrary
+
+  """Indicate if record should not be displayed in a discovery system"""
+  suppressFromDiscovery: Boolean
+
+  """The total number of requested items for the patron"""
+  totalHoldRequests: Int
+
+  """Notes about action, copy, binding etc."""
+  holdingsStatements: [RtacHoldingHoldingsStatementsItem!]
+
+  """Holdings record indexes statements"""
+  holdingsStatementsForIndexes: [RtacHoldingHoldingsStatementsForIndexesItem!]
+
+  """Holdings record supplements statements"""
+  holdingsStatementsForSupplements: [RtacHoldingHoldingsStatementsForSupplementsItem!]
+
+  """Piece ID (usually barcode) for systems that do not use holdings record"""
+  holdingsCopyNumber: String
+
+  """
+  Copy number is the piece identifier. The copy number reflects if the library has a copy of a single-volume monograph; a copy of a multi-volume, (e.g. Copy 1, or C.7.)
+  """
+  itemCopyNumber: String
+}
+
+"""A material type"""
+type RtacMaterialType {
+  id: String
+
+  """label for the material type"""
+  name: String!
+}
+
+"""third-level location unit"""
+type RtacLibrary {
+  """name of the location"""
+  name: String!
+
+  """distinct code for the location"""
+  code: String!
+}
+
+type RtacHoldingHoldingsStatementsItem {
+  """Name of the holdings note type"""
+  statement: String
+
+  """Text content of the note"""
+  note: String
+}
+
+type RtacHoldingHoldingsStatementsForIndexesItem {
+  """Textual description of the holdings of indexes"""
+  statement: String
+
+  """Note attached to a holdings statement"""
+  note: String
+}
+
+type RtacHoldingHoldingsStatementsForSupplementsItem {
+  """Textual description of the holdings of supplementary material"""
+  statement: String
+
+  """Note attached to a holdings statement"""
+  note: String
+}
+
+"""An error"""
+type Error {
+  """Error message text"""
+  message: String!
+
+  """Error message type"""
+  type: String
+
+  """Error message code"""
+  code: String
+}
+
+"""A proxy for a user"""
+type ProxyFor {
+  """The id of the user for whom this proxy pertains"""
+  userId: String
+
+  """The id of the user acting as the proxy"""
+  proxyUserId: String
+
+  """A UUID identifying this proxy relationship"""
+  id: String
+
+  """Can the user request a sponsor (yes/no)"""
+  requestForSponsor: String
+
+  """Deprecated"""
+  createdDate: DateTime
+
+  """Where notifications are sent"""
+  notificationsTo: String
+
+  """Where fees and fines accrue"""
+  accrueTo: String
+
+  """Active or Inactive"""
+  status: String
+
+  """The date this proxy relationship expires"""
+  expirationDate: DateTime
+  metadata: Metadata
 }
 
 """A user group"""
