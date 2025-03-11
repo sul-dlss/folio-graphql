@@ -38,6 +38,16 @@
           "description": "barcode used to identify the borrower (read only, defined by the server)",
           "type": "string",
           "readonly": true
+        },
+        "preferredFirstName": {
+          "description": "preferred first name of the borrower (read only, defined by the server)",
+          "type": "string",
+          "readonly": true
+        },
+        "patronGroup": {
+          "description": "current patron group of the borrower (read only, defined by the server)",
+          "type": "string",
+          "readonly": true
         }
        },
       "additionalProperties": false
@@ -158,6 +168,11 @@
             "additionalProperties": false
           }
         },
+        "primaryContributor": {
+          "description": "primary contributor of the item",
+          "type": "string",
+          "readonly": true
+        },
         "holdingsRecordId": {
           "description": "The ID of the holdings for the item",
           "type": "string",
@@ -238,6 +253,10 @@
           "description": "Item`s volume",
           "type": "string",
           "readonly": true
+        },
+        "displaySummary": {
+          "description": "Display summary about the item",
+          "type": "string"
         },
         "callNumberComponents": {
           "description": "Elements of a full call number",
@@ -365,6 +384,10 @@
       "description": "Date and time the item was declared lost during this loan",
       "type": "string",
       "format": "date-time"
+    },
+    "isDcb": {
+      "description": "Indicates whether or not this loan is associated for DCB use case",
+      "type": "boolean"
     },
     "metadata": {
       "description": "Metadata about creation and changes to loan, provided by the server (client should not provide)",
