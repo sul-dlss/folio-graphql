@@ -44,7 +44,7 @@ function parseServicePointDetails(servicePoint: ServicePoint): ServicePointDetai
   const description = servicePoint.description
   try {
     return description ? JSON.parse(description) as ServicePointDetails : null
-  } catch(e) {
+  } catch {
     return description ? {"notes": description} as ServicePointDetails : null
   }
 }
