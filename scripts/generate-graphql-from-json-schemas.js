@@ -252,6 +252,19 @@ files.sort().map(file => {
     delete json.properties.parameters
   }
 
+  if (file.includes('/mod-rtac/ramls/pieces/piece.json')) {
+    json.properties.format = { "type": "string" }
+  }
+
+  if (file.includes('/mod-rtac/ramls/requests/request.json')) {
+    json.properties.pickupServicePoint.type = 'object';
+  }
+
+  if (file.includes('/mod-rtac/ramls/rtac-holding.json')) {
+    json.properties.library = { "$ref": "/mod-rtac/ramls/library/loclib.json" };
+    json.properties.materialType = { "$ref": "/mod-rtac/ramls/material-type/materialtype.json" };
+  }
+
   fixupStuff(file, json)
 
   convert(context, json)
@@ -354,7 +367,9 @@ const pathMap = {
   '/mod-patron/ramls/item.json': 'PatronItem',
   '/mod-patron/ramls/charge.json': 'PatronCharge',
   '/mod-patron/ramls/loan.json': 'PatronLoan',
-  '/mod-feesfines/ramls/loan.json': 'FeesfinesLoan'
+  '/mod-feesfines/ramls/loan.json': 'FeesfinesLoan',
+  '/mod-rtac/ramls/library/loclib.json': 'RtacLibrary',
+  '/mod-rtac/ramls/material-type/materialtype.json': 'RtacMaterialType',
 }
 
 for (const [path, type] of context.types.entries()) {
