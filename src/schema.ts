@@ -1811,55 +1811,6 @@ export type OverdueFinePolicy = {
   reminderFeesPolicy?: Maybe<ReminderFeesPolicy>;
 };
 
-/** Blocks to override (e.g. during checkout or renewal) */
-export type OverrideBlocks = {
-  __typename?: 'OverrideBlocks';
-  /** Reason for override */
-  comment?: Maybe<Scalars['String']['output']>;
-  /** Item limit block */
-  itemLimitBlock?: Maybe<OverrideBlocksItemLimitBlock>;
-  /** 'Item not loanable' block */
-  itemNotLoanableBlock?: Maybe<OverrideBlocksItemNotLoanableBlock>;
-  /** Automated patron block */
-  patronBlock?: Maybe<OverrideBlocksPatronBlock>;
-  /** Renewal block */
-  renewalBlock?: Maybe<OverrideBlocksRenewalBlock>;
-  /** Override renewal block which requires due date field */
-  renewalDueDateRequiredBlock?: Maybe<OverrideBlocksRenewalDueDateRequiredBlock>;
-};
-
-/** Item limit block */
-export type OverrideBlocksItemLimitBlock = {
-  __typename?: 'OverrideBlocksItemLimitBlock';
-  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
-};
-
-/** 'Item not loanable' block */
-export type OverrideBlocksItemNotLoanableBlock = {
-  __typename?: 'OverrideBlocksItemNotLoanableBlock';
-  /** Due date for a new loan */
-  dueDate: Scalars['DateTime']['output'];
-};
-
-/** Automated patron block */
-export type OverrideBlocksPatronBlock = {
-  __typename?: 'OverrideBlocksPatronBlock';
-  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
-};
-
-/** Renewal block */
-export type OverrideBlocksRenewalBlock = {
-  __typename?: 'OverrideBlocksRenewalBlock';
-  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
-};
-
-/** Override renewal block which requires due date field */
-export type OverrideBlocksRenewalDueDateRequiredBlock = {
-  __typename?: 'OverrideBlocksRenewalDueDateRequiredBlock';
-  /** Due date for a new loan */
-  dueDate: Scalars['DateTime']['output'];
-};
-
 /** Account schema for patron portal integration */
 export type Patron = {
   __typename?: 'Patron';
@@ -2593,23 +2544,17 @@ export type Request = {
   /** Deliver to the address of this type, for the requesting patron */
   deliveryAddressTypeId?: Maybe<Scalars['UUID']['output']>;
   /** How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester) */
-  fulfillmentPreference: RequestFulfillmentPreference;
+  fulfillmentPreference?: Maybe<RequestFulfillmentPreference>;
   /** Date when an item returned to the hold shelf expires */
   holdShelfExpirationDate?: Maybe<Scalars['DateTime']['output']>;
   /** ID of the holdings record being requested */
   holdingsRecordId?: Maybe<Scalars['UUID']['output']>;
   /** UUID of the request */
   id?: Maybe<Scalars['UUID']['output']>;
-  /** Copy of some instance metadata (used for searching and sorting) */
-  instance?: Maybe<RequestInstance>;
   /** ID of the instance being requested */
   instanceId?: Maybe<Scalars['UUID']['output']>;
-  /** Copy of some item metadata (used for searching and sorting) */
-  item?: Maybe<RequestItem>;
   /** ID of the item being requested */
   itemId?: Maybe<Scalars['UUID']['output']>;
-  /** Metadata about creation and changes to requests, provided by the server (client should not provide) */
-  metadata?: Maybe<Metadata>;
   /** Comments made by the patron */
   patronComments?: Maybe<Scalars['String']['output']>;
   /** The full object of the Service Point record from pickupServicePointId */
@@ -2628,20 +2573,14 @@ export type Request = {
   requestExpirationDate?: Maybe<Scalars['DateTime']['output']>;
   /** Level of the request - Item or Title */
   requestLevel?: Maybe<RequestRequestLevel>;
-  /** Additional parameters used for request processing and discarded afterwards. Not part of request record. */
-  requestProcessingParameters?: Maybe<RequestRequestProcessingParameters>;
   /** Whether the item should be held upon return, recalled or paged for */
   requestType: RequestRequestType;
   /** Copy of some requesting patron metadata (used for searching and sorting), will be taken from the user referred to by the requesterId */
   requester?: Maybe<RequestRequester>;
   /** ID of the user who made the request */
   requesterId: Scalars['UUID']['output'];
-  /** Request fields used for search */
-  searchIndex?: Maybe<RequestSearchIndex>;
   /** Status of the request */
   status?: Maybe<RequestStatus>;
-  /** Tags */
-  tags?: Maybe<Tags>;
 };
 
 /** Address the item is to be delivered to (derived from requester information) */
@@ -2667,30 +2606,6 @@ export enum RequestFulfillmentPreference {
   Delivery = 'Delivery',
   HoldShelf = 'Hold_Shelf'
 }
-
-/** Copy of some instance metadata (used for searching and sorting) */
-export type RequestInstance = {
-  __typename?: 'RequestInstance';
-  /** An extensible set of name-value pairs of identifiers associated with the resource */
-  identifiers?: Maybe<Array<RequestInstanceIdentifiersItem>>;
-  /** title of the item */
-  title?: Maybe<Scalars['String']['output']>;
-};
-
-export type RequestInstanceIdentifiersItem = {
-  __typename?: 'RequestInstanceIdentifiersItem';
-  /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
-  identifierTypeId: Scalars['UUID']['output'];
-  /** Resource identifier value */
-  value: Scalars['String']['output'];
-};
-
-/** Copy of some item metadata (used for searching and sorting) */
-export type RequestItem = {
-  __typename?: 'RequestItem';
-  /** barcode of the item */
-  barcode?: Maybe<Scalars['String']['output']>;
-};
 
 /** The full object of the Service Point record from pickupServicePointId */
 export type RequestPickupServicePoint = {
@@ -2766,13 +2681,6 @@ export enum RequestRequestLevel {
   Item = 'Item'
 }
 
-/** Additional parameters used for request processing and discarded afterwards. Not part of request record. */
-export type RequestRequestProcessingParameters = {
-  __typename?: 'RequestRequestProcessingParameters';
-  /** Blocks to override if user has corresponding permissions */
-  overrideBlocks?: Maybe<OverrideBlocks>;
-};
-
 export enum RequestRequestType {
   Hold = 'Hold',
   Page = 'Page',
@@ -2805,28 +2713,6 @@ export type RequestRequesterPatronGroup = {
   group?: Maybe<Scalars['String']['output']>;
   /** ID of the patron group */
   id?: Maybe<Scalars['UUID']['output']>;
-};
-
-/** Request fields used for search */
-export type RequestSearchIndex = {
-  __typename?: 'RequestSearchIndex';
-  /** Effective call number components */
-  callNumberComponents?: Maybe<RequestSearchIndexCallNumberComponents>;
-  /** The name of the request pickup service point */
-  pickupServicePointName?: Maybe<Scalars['String']['output']>;
-  /** A system generated normalization of the call number that allows for call number sorting in reports and search results */
-  shelvingOrder?: Maybe<Scalars['String']['output']>;
-};
-
-/** Effective call number components */
-export type RequestSearchIndexCallNumberComponents = {
-  __typename?: 'RequestSearchIndexCallNumberComponents';
-  /** Effective Call Number is an identifier assigned to an item or its holding and associated with the item. */
-  callNumber?: Maybe<Scalars['String']['output']>;
-  /** Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item. */
-  prefix?: Maybe<Scalars['String']['output']>;
-  /** Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item. */
-  suffix?: Maybe<Scalars['String']['output']>;
 };
 
 export enum RequestStatus {
@@ -2907,22 +2793,68 @@ export type ResultInfoFacetsItemFacetValuesItemValue = {
 /** Real Time Availability Check (RTAC) holding details */
 export type RtacHolding = {
   __typename?: 'RtacHolding';
+  /** Unique inventory control number for physical resources, used largely for circulation purposes */
+  barcode?: Maybe<Scalars['String']['output']>;
   /** The call number of the holding */
   callNumber: Scalars['String']['output'];
   /** The date when the holding will be available */
   dueDate?: Maybe<Scalars['DateTime']['output']>;
+  /** Piece ID (usually barcode) for systems that do not use holdings record */
+  holdingsCopyNumber?: Maybe<Scalars['String']['output']>;
+  /** Notes about action, copy, binding etc. */
+  holdingsStatements?: Maybe<Array<RtacHoldingHoldingsStatementsItem>>;
+  /** Holdings record indexes statements */
+  holdingsStatementsForIndexes?: Maybe<Array<RtacHoldingHoldingsStatementsForIndexesItem>>;
+  /** Holdings record supplements statements */
+  holdingsStatementsForSupplements?: Maybe<Array<RtacHoldingHoldingsStatementsForSupplementsItem>>;
   /** The FOLIO id of the holding (item) */
   id: Scalars['String']['output'];
+  /** Copy number is the piece identifier. The copy number reflects if the library has a copy of a single-volume monograph; a copy of a multi-volume, (e.g. Copy 1, or C.7.) */
+  itemCopyNumber?: Maybe<Scalars['String']['output']>;
+  library?: Maybe<RtacLibrary>;
   /** The location of the holding */
   location: Scalars['String']['output'];
+  /** The location code of the holding */
+  locationCode?: Maybe<Scalars['String']['output']>;
+  /** The location id of the holding */
+  locationId?: Maybe<Scalars['String']['output']>;
+  materialType?: Maybe<RtacMaterialType>;
   /** Name of the default loan type for a given item */
   permanentLoanType?: Maybe<Scalars['String']['output']>;
   /** The availability status of the holding */
   status: Scalars['String']['output'];
+  /** Indicate if record should not be displayed in a discovery system */
+  suppressFromDiscovery?: Maybe<Scalars['Boolean']['output']>;
   /** Name of the temporary loan type for a given item */
   temporaryLoanType?: Maybe<Scalars['String']['output']>;
+  /** The total number of requested items for the patron */
+  totalHoldRequests?: Maybe<Scalars['Int']['output']>;
   /** Volume details for the holding (item) */
   volume?: Maybe<Scalars['String']['output']>;
+};
+
+export type RtacHoldingHoldingsStatementsForIndexesItem = {
+  __typename?: 'RtacHoldingHoldingsStatementsForIndexesItem';
+  /** Note attached to a holdings statement */
+  note?: Maybe<Scalars['String']['output']>;
+  /** Textual description of the holdings of indexes */
+  statement?: Maybe<Scalars['String']['output']>;
+};
+
+export type RtacHoldingHoldingsStatementsForSupplementsItem = {
+  __typename?: 'RtacHoldingHoldingsStatementsForSupplementsItem';
+  /** Note attached to a holdings statement */
+  note?: Maybe<Scalars['String']['output']>;
+  /** Textual description of the holdings of supplementary material */
+  statement?: Maybe<Scalars['String']['output']>;
+};
+
+export type RtacHoldingHoldingsStatementsItem = {
+  __typename?: 'RtacHoldingHoldingsStatementsItem';
+  /** Text content of the note */
+  note?: Maybe<Scalars['String']['output']>;
+  /** Name of the holdings note type */
+  statement?: Maybe<Scalars['String']['output']>;
 };
 
 /** Collection of holdings */
@@ -2941,6 +2873,23 @@ export type RtacHoldingsBatch = {
   errors?: Maybe<Array<Error>>;
   /** Real Time Availability Check (RTAC) holding details */
   holdings?: Maybe<Array<RtacHoldings>>;
+};
+
+/** third-level location unit */
+export type RtacLibrary = {
+  __typename?: 'RtacLibrary';
+  /** distinct code for the location */
+  code: Scalars['String']['output'];
+  /** name of the location */
+  name: Scalars['String']['output'];
+};
+
+/** A material type */
+export type RtacMaterialType = {
+  __typename?: 'RtacMaterialType';
+  id?: Maybe<Scalars['String']['output']>;
+  /** label for the material type */
+  name: Scalars['String']['output'];
 };
 
 /** A date range and associated due date, connected with the parent FixedDueDateSchedule. */

@@ -2728,12 +2728,6 @@ type Request {
   """position of the request in a per-item request queue"""
   position: Int
 
-  """Copy of some instance metadata (used for searching and sorting)"""
-  instance: RequestInstance
-
-  """Copy of some item metadata (used for searching and sorting)"""
-  item: RequestItem
-
   """
   Copy of some requesting patron metadata (used for searching and sorting), will be taken from the user referred to by the requesterId
   """
@@ -2747,7 +2741,7 @@ type Request {
   """
   How should the request be fulfilled (whether the item should be kept on the hold shelf for collection or delivered to the requester)
   """
-  fulfillmentPreference: RequestFulfillmentPreference!
+  fulfillmentPreference: RequestFulfillmentPreference
 
   """Deliver to the address of this type, for the requesting patron"""
   deliveryAddressTypeId: UUID
@@ -2768,22 +2762,6 @@ type Request {
 
   """The full object of the Service Point record from pickupServicePointId"""
   pickupServicePoint: RequestPickupServicePoint
-
-  """Tags"""
-  tags: Tags
-
-  """
-  Metadata about creation and changes to requests, provided by the server (client should not provide)
-  """
-  metadata: Metadata
-
-  """
-  Additional parameters used for request processing and discarded afterwards. Not part of request record.
-  """
-  requestProcessingParameters: RequestRequestProcessingParameters
-
-  """Request fields used for search"""
-  searchIndex: RequestSearchIndex
 }
 
 enum RequestRequestType {
@@ -2805,33 +2783,6 @@ enum RequestStatus {
   Closed___Cancelled
   Closed___Unfilled
   Closed___Pickup_expired
-}
-
-"""Copy of some instance metadata (used for searching and sorting)"""
-type RequestInstance {
-  """title of the item"""
-  title: String
-
-  """
-  An extensible set of name-value pairs of identifiers associated with the resource
-  """
-  identifiers: [RequestInstanceIdentifiersItem!]
-}
-
-type RequestInstanceIdentifiersItem {
-  """Resource identifier value"""
-  value: String!
-
-  """
-  UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers)
-  """
-  identifierTypeId: UUID!
-}
-
-"""Copy of some item metadata (used for searching and sorting)"""
-type RequestItem {
-  """barcode of the item"""
-  barcode: String
 }
 
 """
@@ -2954,94 +2905,6 @@ type RequestPickupServicePoint {
 
   """Is this service point a pickup location?"""
   pickupLocation: Boolean
-}
-
-"""
-Additional parameters used for request processing and discarded afterwards. Not part of request record.
-"""
-type RequestRequestProcessingParameters {
-  """Blocks to override if user has corresponding permissions"""
-  overrideBlocks: OverrideBlocks
-}
-
-"""Blocks to override (e.g. during checkout or renewal)"""
-type OverrideBlocks {
-  """'Item not loanable' block"""
-  itemNotLoanableBlock: OverrideBlocksItemNotLoanableBlock
-
-  """Automated patron block"""
-  patronBlock: OverrideBlocksPatronBlock
-
-  """Item limit block"""
-  itemLimitBlock: OverrideBlocksItemLimitBlock
-
-  """Renewal block"""
-  renewalBlock: OverrideBlocksRenewalBlock
-
-  """Override renewal block which requires due date field"""
-  renewalDueDateRequiredBlock: OverrideBlocksRenewalDueDateRequiredBlock
-
-  """Reason for override"""
-  comment: String
-}
-
-"""'Item not loanable' block"""
-type OverrideBlocksItemNotLoanableBlock {
-  """Due date for a new loan"""
-  dueDate: DateTime!
-}
-
-"""Automated patron block"""
-type OverrideBlocksPatronBlock {
-  _typesWithoutFieldsAreNotAllowed_: String
-}
-
-"""Item limit block"""
-type OverrideBlocksItemLimitBlock {
-  _typesWithoutFieldsAreNotAllowed_: String
-}
-
-"""Renewal block"""
-type OverrideBlocksRenewalBlock {
-  _typesWithoutFieldsAreNotAllowed_: String
-}
-
-"""Override renewal block which requires due date field"""
-type OverrideBlocksRenewalDueDateRequiredBlock {
-  """Due date for a new loan"""
-  dueDate: DateTime!
-}
-
-"""Request fields used for search"""
-type RequestSearchIndex {
-  """Effective call number components"""
-  callNumberComponents: RequestSearchIndexCallNumberComponents
-
-  """
-  A system generated normalization of the call number that allows for call number sorting in reports and search results
-  """
-  shelvingOrder: String
-
-  """The name of the request pickup service point"""
-  pickupServicePointName: String
-}
-
-"""Effective call number components"""
-type RequestSearchIndexCallNumberComponents {
-  """
-  Effective Call Number is an identifier assigned to an item or its holding and associated with the item.
-  """
-  callNumber: String
-
-  """
-  Effective Call Number Prefix is the prefix of the identifier assigned to an item or its holding and associated with the item.
-  """
-  prefix: String
-
-  """
-  Effective Call Number Suffix is the suffix of the identifier assigned to an item or its holding and associated with the item.
-  """
-  suffix: String
 }
 
 """A loan type"""
@@ -3787,8 +3650,19 @@ type RtacHolding {
   """The FOLIO id of the holding (item)"""
   id: String!
 
+  """
+  Unique inventory control number for physical resources, used largely for circulation purposes
+  """
+  barcode: String
+
   """The location of the holding"""
   location: String!
+
+  """The location code of the holding"""
+  locationCode: String
+
+  """The location id of the holding"""
+  locationId: String
 
   """The call number of the holding"""
   callNumber: String!
@@ -3807,6 +3681,72 @@ type RtacHolding {
 
   """Name of the default loan type for a given item"""
   permanentLoanType: String
+  materialType: RtacMaterialType
+  library: RtacLibrary
+
+  """Indicate if record should not be displayed in a discovery system"""
+  suppressFromDiscovery: Boolean
+
+  """The total number of requested items for the patron"""
+  totalHoldRequests: Int
+
+  """Notes about action, copy, binding etc."""
+  holdingsStatements: [RtacHoldingHoldingsStatementsItem!]
+
+  """Holdings record indexes statements"""
+  holdingsStatementsForIndexes: [RtacHoldingHoldingsStatementsForIndexesItem!]
+
+  """Holdings record supplements statements"""
+  holdingsStatementsForSupplements: [RtacHoldingHoldingsStatementsForSupplementsItem!]
+
+  """Piece ID (usually barcode) for systems that do not use holdings record"""
+  holdingsCopyNumber: String
+
+  """
+  Copy number is the piece identifier. The copy number reflects if the library has a copy of a single-volume monograph; a copy of a multi-volume, (e.g. Copy 1, or C.7.)
+  """
+  itemCopyNumber: String
+}
+
+"""A material type"""
+type RtacMaterialType {
+  id: String
+
+  """label for the material type"""
+  name: String!
+}
+
+"""third-level location unit"""
+type RtacLibrary {
+  """name of the location"""
+  name: String!
+
+  """distinct code for the location"""
+  code: String!
+}
+
+type RtacHoldingHoldingsStatementsItem {
+  """Name of the holdings note type"""
+  statement: String
+
+  """Text content of the note"""
+  note: String
+}
+
+type RtacHoldingHoldingsStatementsForIndexesItem {
+  """Textual description of the holdings of indexes"""
+  statement: String
+
+  """Note attached to a holdings statement"""
+  note: String
+}
+
+type RtacHoldingHoldingsStatementsForSupplementsItem {
+  """Textual description of the holdings of supplementary material"""
+  statement: String
+
+  """Note attached to a holdings statement"""
+  note: String
 }
 
 """An error"""
