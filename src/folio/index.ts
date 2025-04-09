@@ -36,7 +36,9 @@ import {
 } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
+declare global {
+  var itemNumber: number;
+}/* eslint-disable @typescript-eslint/no-unused-vars */
 // Resolvers define how to fetch the types defined in your schema.
 export const resolvers: Resolvers = {
   Query: {
@@ -361,6 +363,9 @@ export const resolvers: Resolvers = {
     },
     itemDamagedStatus({ itemDamagedStatusId }, args, { dataSources: { types } }, info) {
       return types.getById<ItemDamagedStatus>("item-damaged-statuses", {}, itemDamagedStatusId)
+    },
+    itemNumber(parent, args, { dataSources: { items } }, info) {
+      return globalThis.itemNumber;
     },
     inTransitDestinationServicePoint({ inTransitDestinationServicePointId }, args, { dataSources: { types } }, info) {
       return types.getById<ServicePoint>("service-points", {}, inTransitDestinationServicePointId)
