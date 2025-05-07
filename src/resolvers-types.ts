@@ -1608,6 +1608,7 @@ export type Location = {
 export enum LocationAvailabilityClass {
   Available = 'Available',
   InProcess = 'In_process',
+  InProcessNonRequestable = 'In_process_non_requestable',
   Offsite = 'Offsite',
   Unavailable = 'Unavailable'
 }
