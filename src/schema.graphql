@@ -4163,6 +4163,7 @@ enum LocationAvailabilityClass {
   Available
   Unavailable
   In_process
+  In_process_non_requestable
   Offsite
 }
 
