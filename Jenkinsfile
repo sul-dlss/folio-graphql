@@ -34,7 +34,7 @@ pipeline {
               DEPLOY_ENVIRONMENT = 'folio-test'
             }
             when {
-               expression { params.image == 'sul-dlss/folio-graphql' && params.imageTag == 'main' }
+               expression { params.image == 'folio-graphql' && params.imageTag == 'main' }
              }
             steps {
               echo 'Deploying to test server'
@@ -66,7 +66,7 @@ pipeline {
               DEPLOY_ENVIRONMENT = 'folio-prod'
             }
             when {
-               expression { params.image == 'sul-dlss/folio-graphql' && params.imageTag == 'latest' }
+               expression { params.image == 'folio-graphql' && params.imageTag == 'latest' }
             }
             steps {
               echo 'Deploying to production server'
