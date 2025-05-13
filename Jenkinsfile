@@ -6,21 +6,9 @@ pipeline {
       GIT_URL = 'https://github.com/sul-dlss/folio-graphql.git'
     }
 
-    triggers {
-        // the generic-webhook-trigger plugin is installed on the Jenkins server
-        GenericTrigger(
-            genericVariables: [
-                [$class: 'GenericVariable', key: 'image', value: '$.repository.repo_name', defaultValue: ''],
-                [$class: 'GenericVariable', key: 'pusher', value: '$.push_data.pusher', defaultValue: ''],
-                [$class: 'GenericVariable', key: 'imageTag', value: '$.push_data.tag', defaultValue: ''],
-            ],
-            causeString: 'Docker Hub push event for ${image}:${imageTag} by ${pusher}',
-            printContributedVariables: true,
-            // The presence of the token in the webhook push is what triggers this specific build.
-            // Dockerhub will send a POST request with this token via our brick-city gateway
-            // See https://hub.docker.com/repository/docker/suldlss/folio-graphql/webhooks (logged in)
-            token: 'foliogql'
-        )
+    parameters {
+      string(name: 'image', defaultValue: 'sul-dlss/folio-graphql', description: 'Docker image to deploy')
+      string(name: 'imageTag', defaultValue: '', description: 'Docker image tag to deploy')
     }
 
     stages {
@@ -30,15 +18,23 @@ pipeline {
                 echo "tag name: ${env.TAG_NAME}"
             }
         }
+
+        stage('Quirks about this deploy pipeline') {
+          when {
+            expression { params.imageTag == '' }
+          }
+
+          steps {
+            echo "The actual deploy is triggered by the registry_package webhook and the 'Continuous Deployment/folio-graphql registry webhook' project (which triggers this with the expected parameters)"
+          }
+        }
+
         stage('Deploy to test server') {
             environment {
               DEPLOY_ENVIRONMENT = 'folio-test'
             }
             when {
-              // 1. Only run on builds trigggered by GenericWebhookTrigger 
-              // 2. Check the docker image tag name, based on a push to the main branch in Github
-              // 3. Only when the Docker image and Github branch are both "main", in order to avoid duplicate builds
-               expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag == 'main' && env.GIT_BRANCH == 'main' && !env.TAG_NAME}
+               expression { params.image == 'sul-dlss/folio-graphql' && params.imageTag == 'main' }
              }
             steps {
               echo 'Deploying to test server'
@@ -46,9 +42,9 @@ pipeline {
               sshagent (['sul-devops-team', 'sul-continuous-deployment']){
                 sh """#!/bin/bash -l
                   ssh graphql@sul-folio-graphql-test.stanford.edu \
-                  'docker pull suldlss/folio-graphql:main && \
+                  'docker pull ghcr.io/sul-dlss/folio-graphql:main && \
                   docker rm -f \$(docker ps -a -q --filter="name=folio-graphql") && \
-                  docker run -d --env-file ./.env -p 4000:4000 --dns=10.111.7.160 --dns=8.8.8.8 --name folio-graphql suldlss/folio-graphql:main'
+                  docker run -d --env-file ./.env -p 4000:4000 --dns=10.111.7.160 --dns=8.8.8.8 --name folio-graphql ghcr.io/sul-dlss/folio-graphql:main'
                 """
               }
             }
@@ -70,11 +66,7 @@ pipeline {
               DEPLOY_ENVIRONMENT = 'folio-prod'
             }
             when {
-              // 1. Only run on builds trigggered by GenericWebhookTrigger
-              // 2. Check the docker image tag name, based on a tagged release in Github
-              // 3. Only run when the Github branch is "main", 
-              // 4. Only run when the Docker image starts with "v"               
-              expression { currentBuild.getBuildCauses('org.jenkinsci.plugins.gwt.GenericCause') && imageTag.startsWith('v') && env.GIT_BRANCH == 'main' && !env.TAG_NAME}
+               expression { params.image == 'sul-dlss/folio-graphql' && params.imageTag == 'latest' }
             }
             steps {
               echo 'Deploying to production server'
@@ -82,9 +74,9 @@ pipeline {
               sshagent (['sul-devops-team', 'sul-continuous-deployment']){
                 sh """#!/bin/bash -l
                   ssh graphql@sul-folio-graphql-prod.stanford.edu \
-                  'docker pull suldlss/folio-graphql:${imageTag} && \
+                  'docker pull ghcr.io/sul-dlss/folio-graphql:latest && \
                   docker rm -f \$(docker ps -a -q --filter="name=folio-graphql") && \
-                  docker run -d --env-file ./.env -p 4000:4000 --dns=10.111.7.182 --dns=8.8.8.8 --name folio-graphql suldlss/folio-graphql:${imageTag}'
+                  docker run -d --env-file ./.env -p 4000:4000 --dns=10.111.7.182 --dns=8.8.8.8 --name folio-graphql ghcr.io/sul-dlss/folio-graphql:latest'
                 """
               }
             } 
