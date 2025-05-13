@@ -6,6 +6,11 @@ pipeline {
       GIT_URL = 'https://github.com/sul-dlss/folio-graphql.git'
     }
 
+    parameters {
+      string(name: 'image', defaultValue: 'sul-dlss/folio-graphql', description: 'Docker image to deploy')
+      string(name: 'imageTag', defaultValue: '', description: 'Docker image tag to deploy')
+    }
+
     stages {
         stage('Echo Before Stages') {
             steps {
@@ -18,7 +23,7 @@ pipeline {
               DEPLOY_ENVIRONMENT = 'folio-test'
             }
             when {
-               expression { image == 'sul-dlss/folio-graphql' && imageTag == 'main' }
+               expression { params.image == 'sul-dlss/folio-graphql' && params.imageTag == 'main' }
              }
             steps {
               echo 'Deploying to test server'
@@ -50,7 +55,7 @@ pipeline {
               DEPLOY_ENVIRONMENT = 'folio-prod'
             }
             when {
-               expression { image == 'sul-dlss/folio-graphql' && imageTag == 'latest' }
+               expression { params.image == 'sul-dlss/folio-graphql' && params.imageTag == 'latest' }
             }
             steps {
               echo 'Deploying to production server'
