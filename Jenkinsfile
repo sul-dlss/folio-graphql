@@ -18,6 +18,17 @@ pipeline {
                 echo "tag name: ${env.TAG_NAME}"
             }
         }
+
+        stage('Quirks about this deploy pipeline') {
+          when {
+            expression { params.imageTag == '' }
+          }
+
+          steps {
+            echo "The actual deploy is triggered by the registry_package webhook and the 'Continuous Deployment/folio-graphql registry webhook' project (which triggers this with the expected parameters)"
+          }
+        }
+
         stage('Deploy to test server') {
             environment {
               DEPLOY_ENVIRONMENT = 'folio-test'
