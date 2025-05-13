@@ -79,11 +79,3 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
-
-      - name: Webhook
-        uses: joelwmale/webhook-action@cc1a66f987e1591785273fd6f9d2f7a9d8d7c9cd
-        with:
-          url: ${{ secrets.WEBHOOK_URL }}
-          headers: '{"token": "${{ secrets.WEBHOOK_TOKEN }}"}'
-          body: '{"event": "deployment", "repository": "sul-dlss/folio-graphql"}'
-          github_event_payload: true
