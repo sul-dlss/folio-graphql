@@ -8,6 +8,9 @@ jobs:
   trigger_deploy:
     name: Trigger continuous deployment
     runs-on: ubuntu-latest
+    permissions:
+      attestations: read
+      packages: read
     steps:
       - name: Webhook
         uses: joelwmale/webhook-action@cc1a66f987e1591785273fd6f9d2f7a9d8d7c9cd
