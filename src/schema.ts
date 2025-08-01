@@ -1644,6 +1644,8 @@ export type LocationDetails = {
   searchworksLocationFacetDisplayName?: Maybe<Scalars['String']['output']>;
   /** We want to treat some locations that are used as temporary locations as if they were the permanent location */
   searchworksTreatTemporaryLocationAsPermanentLocation?: Maybe<Scalars['String']['output']>;
+  /** Some locations aren't shelved by call number; this text should help the user find the thing */
+  shelvedByText?: Maybe<Scalars['String']['output']>;
   /**  E.g. 'https://stanford.stackmap.com/json/', if a stackmap is available for that location */
   stackmapBaseUrl?: Maybe<Scalars['String']['output']>;
 };

@@ -4157,6 +4157,9 @@ extend type LocationDetails {
 
   """Some locations (like SAL3-PAGE-AR) are also indexed under the paged-to library (i.e. ART)"""
   searchworksAdditionalLibraryCodeFacetValues: String
+
+  """Some locations aren't shelved by call number; this text should help the user find the thing"""
+  shelvedByText: String
 }
 
 enum LocationAvailabilityClass {
