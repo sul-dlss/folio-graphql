@@ -1135,6 +1135,7 @@ export type Item = {
   itemLevelCallNumberType?: Maybe<CallNumberType>;
   /** Identifies the source of the call number, e.g., LCC, Dewey, NLM, etc. */
   itemLevelCallNumberTypeId?: Maybe<Scalars['String']['output']>;
+  itemNumber?: Maybe<Scalars['Int']['output']>;
   /** Information about when an item was last scanned in the Inventory app. */
   lastCheckIn?: Maybe<ItemLastCheckIn>;
   /** Item's material type */
@@ -4253,6 +4254,7 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   itemLevelCallNumberSuffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   itemLevelCallNumberType?: Resolver<Maybe<ResolversTypes['CallNumberType']>, ParentType, ContextType>;
   itemLevelCallNumberTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  itemNumber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   lastCheckIn?: Resolver<Maybe<ResolversTypes['ItemLastCheckIn']>, ParentType, ContextType>;
   materialType?: Resolver<Maybe<ResolversTypes['MaterialType']>, ParentType, ContextType>;
   materialTypeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
