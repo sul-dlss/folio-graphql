@@ -5,6 +5,7 @@ import { RequestQueueResponse } from './circulation-api'
 interface ItemsResponse {
   items: Item[]
 }
+
 export default class ItemsAPI extends FolioAPI {
   async getItem(id: string): Promise<Item> {
     return await this.get<Item>(`/item-storage/items/${encodeURIComponent(id)}`)
@@ -21,8 +22,10 @@ export default class ItemsAPI extends FolioAPI {
   async getItems(params: Partial<{ params: CqlParams, [key: string]: unknown}>): Promise<Item[]> {
     const urlParams = this.buildCqlQuery(params)
     if (!urlParams.has('limit')) urlParams.set('limit', '2147483647');
+    urlParams.set('totalRecords', 'exact');
 
-    const response = await this.get<ItemsResponse>(`/item-storage/items`, { params: urlParams })
+    const response = await this.get<ItemsResponse>(`/item-storage/items`, { params: urlParams });
+    globalThis.itemNumber = response['totalRecords']; // no error
     return response.items
   }
 
