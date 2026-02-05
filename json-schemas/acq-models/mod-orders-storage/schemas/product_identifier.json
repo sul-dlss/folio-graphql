@@ -9,7 +9,14 @@
     },
     "productIdType": {
       "description": "The type of product identifier",
-      "$ref": "../../common/schemas/product_id_type.json"
+      "$ref": "../../common/schemas/product_id_type.json",
+      "x-fqm-value-getter": "(SELECT array_agg(identifier_type.value->>'productIdType' ORDER BY identifier_type.value->>'productIdType') FROM jsonb_array_elements(:src__acquisition__orders_storage__titles.jsonb->'productIds') AS identifier_type)",
+      "x-fqm-filter-value-getter": "(SELECT array_agg(identifier_type.value->>'productIdType' ORDER BY identifier_type.value->>'productIdType') FROM jsonb_array_elements(:src__acquisition__orders_storage__titles.jsonb->'productIds') AS identifier_type)",
+      "x-fqm-data-type": "stringType",
+      "x-fqm-source": {
+        "columnName": "name",
+        "entityTypeId": "a0c8f96f-b630-41d5-bce3-e5b0512c4e48"
+      }
     },
     "qualifier": {
       "description": "Information about the binding, format, volume numbers, part of a set, publisher, distributor, etc. which might be enclosed in parenthesis",

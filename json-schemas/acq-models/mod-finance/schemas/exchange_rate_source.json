@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Exchange rate source schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier of the exchange rate source",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "enabled": {
+      "description": "Flag indicating whether the specified exchange rate source should be used",
+      "type": "boolean"
+    },
+    "providerType": {
+      "description": "Provider type",
+      "type": "string",
+      "enum": [
+        "treasury.gov",
+        "convera.com",
+        "currencyapi.com"
+      ]
+    },
+    "providerUri": {
+      "description": "The URI of the exchange rate provider",
+      "type": "string"
+    },
+    "apiKey": {
+      "description": "The API key or login for the provider",
+      "type": "string"
+    },
+    "apiSecret": {
+      "description": "The API secret or password for the provider",
+      "type": "string"
+    },
+    "refreshInterval": {
+      "description": "Refresh interval specified in seconds",
+      "type": "integer",
+      "default": 86400
+    },
+    "metadata": {
+      "description": "Metadata about creation and changes to record, provided by the server (client should not provide)",
+      "type": "object",
+      "$ref": "../../../raml-util/schemas/metadata.schema",
+      "readonly": true
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "enabled",
+    "providerUri",
+    "providerType"
+  ]
+}
