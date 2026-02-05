@@ -115,6 +115,8 @@ export type AlternativeTitleType = {
   name: Scalars['String']['output'];
   /** label indicating where the alternative title type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the alternative title type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Single automated patron block */
@@ -164,6 +166,8 @@ export type CallNumberType = {
   name: Scalars['String']['output'];
   /** label indicating where the call number type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the call number type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** second-level location unit */
@@ -175,6 +179,8 @@ export type Campus = {
   institution?: Maybe<Institution>;
   /** ID of the first-level location unit that the second-level unit belongs to */
   institutionId: Scalars['String']['output'];
+  /** Whether this is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
   libraries?: Maybe<Array<Maybe<Library>>>;
   metadata?: Maybe<Metadata>;
   /** name of the location */
@@ -210,6 +216,17 @@ export type ClassificationType = {
   name: Scalars['String']['output'];
   /** label indicating where the classification type entry originates from, i.e. 'folio' or 'local' */
   source?: Maybe<Scalars['String']['output']>;
+  /** label indicating where the classification type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** purchase order closing reason record */
+export type CloseReason = {
+  __typename?: 'CloseReason';
+  /** free-form notes related to closing reason */
+  note?: Maybe<Scalars['String']['output']>;
+  /** close reason description */
+  reason?: Maybe<Scalars['String']['output']>;
 };
 
 /** contributor to the material */
@@ -232,6 +249,8 @@ export type ContributorNameType = {
   ordering?: Maybe<Scalars['String']['output']>;
   /** origin of the contributor name type record, e.g. 'local', 'consortium' etc. */
   source?: Maybe<Scalars['String']['output']>;
+  /** origin of the contributor name type record, e.g. 'local', 'consortium' etc. */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** A contributor type */
@@ -245,6 +264,8 @@ export type ContributorType = {
   name: Scalars['String']['output'];
   /** origin of the contributor type record */
   source: Scalars['String']['output'];
+  /** origin of the contributor type record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** purchase order line cost record */
@@ -286,11 +307,19 @@ export type CqlParams = {
   sortby?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Object that contains custom field */
+export type CustomFields = {
+  __typename?: 'CustomFields';
+  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+};
+
 /** purchase order line details */
 export type Details = {
   __typename?: 'Details';
   /** Flag for acknowledge receiving note */
   isAcknowledged?: Maybe<Scalars['Boolean']['output']>;
+  /** Indicates that this POL is designated as required binding */
+  isBinderyActive?: Maybe<Scalars['Boolean']['output']>;
   /** a list of product identifiers */
   productIds?: Maybe<Array<ProductIdentifier>>;
   /** notes regarding receiving instructions */
@@ -303,6 +332,21 @@ export type Details = {
   subscriptionTo?: Maybe<Scalars['DateTime']['output']>;
 };
 
+/** Electronic access item */
+export type ElectronicAccessItem = {
+  __typename?: 'ElectronicAccessItem';
+  /** the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
+  linkText?: Maybe<Scalars['String']['output']>;
+  /** materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record) */
+  materialsSpecification?: Maybe<Scalars['String']['output']>;
+  /** URL public note to be displayed in the discovery */
+  publicNote?: Maybe<Scalars['String']['output']>;
+  /** relationship between the electronic resource at the location identified and the item described in the record as a whole */
+  relationshipId?: Maybe<Scalars['String']['output']>;
+  /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
+  uri: Scalars['String']['output'];
+};
+
 /** A qualifier indicating the type of relationship that an electronic resource at a given URL has to an Instance */
 export type ElectronicAccessRelationship = {
   __typename?: 'ElectronicAccessRelationship';
@@ -312,6 +356,8 @@ export type ElectronicAccessRelationship = {
   name: Scalars['String']['output'];
   /** Origin of the electronic access relationship record, e.g. 'local', 'consortium' etc. */
   source?: Maybe<Scalars['String']['output']>;
+  /** Origin of the electronic access relationship record, e.g. 'local', 'consortium' etc. */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** purchase order line e-resource details */
@@ -336,7 +382,7 @@ export type Eresource = {
   /** whether or not this is a trial */
   trial?: Maybe<Scalars['Boolean']['output']>;
   /** the concurrent user-limit */
-  userLimit?: Maybe<Scalars['Int']['output']>;
+  userLimit?: Maybe<Scalars['String']['output']>;
 };
 
 export enum EresourceCreateInventory {
@@ -353,8 +399,16 @@ export type Error = {
   code?: Maybe<Scalars['String']['output']>;
   /** Error message text */
   message: Scalars['String']['output'];
+  /** Error message parameters */
+  parameters?: Maybe<Array<ErrorParametersItem>>;
   /** Error message type */
   type?: Maybe<Scalars['String']['output']>;
+};
+
+export type ErrorParametersItem = {
+  __typename?: 'ErrorParametersItem';
+  key?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
 };
 
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
@@ -405,6 +459,8 @@ export type FeeFineAction = {
   source?: Maybe<Scalars['String']['output']>;
   /** Number or other transaction id related to payment */
   transactionInformation?: Maybe<Scalars['String']['output']>;
+  /** Person who processed activity (from login information) */
+  type?: Maybe<Scalars['String']['output']>;
   /** Type of activity including the type of transaction */
   typeAction?: Maybe<Scalars['String']['output']>;
   /** ID of the user */
@@ -483,6 +539,7 @@ export enum HoldStatus {
   ClosedFilled = 'Closed___Filled',
   ClosedPickupExpired = 'Closed___Pickup_expired',
   ClosedUnfilled = 'Closed___Unfilled',
+  NewAwaitingConfirmation = 'New___Awaiting_confirmation',
   OpenAwaitingDelivery = 'Open___Awaiting_delivery',
   OpenAwaitingPickup = 'Open___Awaiting_pickup',
   OpenInTransit = 'Open___In_transit',
@@ -492,20 +549,22 @@ export enum HoldStatus {
 /** Holding summary */
 export type HoldingSummary = {
   __typename?: 'HoldingSummary';
-  orderCloseReason?: Maybe<Scalars['String']['output']>;
+  /** Close reason for purchase order */
+  orderCloseReason?: Maybe<CloseReason>;
   /** Order sent date */
   orderSentDate?: Maybe<Scalars['DateTime']['output']>;
   /** Order status */
-  orderStatus?: Maybe<Scalars['String']['output']>;
+  orderStatus?: Maybe<WorkflowStatus>;
   /** Purchase order type */
   orderType?: Maybe<HoldingSummaryOrderType>;
   pieces?: Maybe<Array<Maybe<Piece>>>;
   poLine?: Maybe<PoLine>;
   /** Purchase order line id */
-  poLineId?: Maybe<Scalars['String']['output']>;
+  poLineId?: Maybe<Scalars['UUID']['output']>;
   /** Purchase order line number */
   poLineNumber?: Maybe<Scalars['String']['output']>;
-  polReceiptStatus?: Maybe<Scalars['String']['output']>;
+  /** Purchase order line receipt status */
+  polReceiptStatus?: Maybe<ReceiptStatus>;
 };
 
 /** Collection of holding summary elements */
@@ -522,16 +581,35 @@ export enum HoldingSummaryOrderType {
   Ongoing = 'Ongoing'
 }
 
-/** A holdings note type */
-export type HoldingsNoteType = {
-  __typename?: 'HoldingsNoteType';
-  /** unique ID of the holdings note type; a UUID */
-  id?: Maybe<Scalars['String']['output']>;
-  metadata?: Maybe<Metadata>;
-  /** name of the holdings note type */
-  name: Scalars['String']['output'];
-  /** label indicating where the holdings note type entry originates from, i.e. 'folio' or 'local' */
-  source: Scalars['String']['output'];
+/** A holdings record note */
+export type HoldingsNote = {
+  __typename?: 'HoldingsNote';
+  /** ID of the type of note */
+  holdingsNoteTypeId?: Maybe<Scalars['UUID']['output']>;
+  /** Text content of the note */
+  note?: Maybe<Scalars['String']['output']>;
+  /** If true, determines that the note should not be visible for others than staff */
+  staffOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+/** Receiving history of holdings record */
+export type HoldingsReceivingHistory = {
+  __typename?: 'HoldingsReceivingHistory';
+  /** Display hint. 1: Display fields separately. 2: Display fields concatenated */
+  displayType?: Maybe<Scalars['String']['output']>;
+  /** Entries of receiving history */
+  entries?: Maybe<Array<HoldingsReceivingHistoryEntry>>;
+};
+
+/** Receiving history entry of holdings record */
+export type HoldingsReceivingHistoryEntry = {
+  __typename?: 'HoldingsReceivingHistoryEntry';
+  /** Repeated element from Receiving history - Enumeration AND Receiving history - Chronology */
+  chronology?: Maybe<Scalars['String']['output']>;
+  /** This is the volume/issue number (e.g. v.71:no.6-2) */
+  enumeration?: Maybe<Scalars['String']['output']>;
+  /** Defines if the receivingHistory should be visible to the public. */
+  publicDisplay?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** A holdings record */
@@ -545,8 +623,6 @@ export type HoldingsRecord = {
   acquisitionMethod?: Maybe<Scalars['String']['output']>;
   /** Administrative notes */
   administrativeNotes?: Maybe<Array<Scalars['String']['output']>>;
-  /** Items of bareHoldings. This is a virtual field, accessible only when using mod-graphql. */
-  bareHoldingsItems?: Maybe<Array<Item>>;
   boundWithItem?: Maybe<Item>;
   /** Call Number is an identifier assigned to an item, usually printed on a label attached to the item. */
   callNumber?: Maybe<Scalars['String']['output']>;
@@ -567,20 +643,16 @@ export type HoldingsRecord = {
   /** Effective location is calculated by the system based on the values in the permanent and temporary locationId fields. */
   effectiveLocationId?: Maybe<Scalars['UUID']['output']>;
   /** List of electronic access items */
-  electronicAccess?: Maybe<Array<HoldingsrecordElectronicAccessItem>>;
+  electronicAccess?: Maybe<Array<ElectronicAccessItem>>;
   /** Previous ID(s) assigned to the holdings record */
   formerIds?: Maybe<Array<Scalars['String']['output']>>;
   holdingSummaries?: Maybe<Array<Maybe<HoldingSummary>>>;
-  /** Instance of holding record. This is a virtual field, accessible only when using mod-graphql. */
-  holdingsInstance?: Maybe<Instance>;
-  /** Items related to holdings record. This is a virtual field, accessible only when using mod-graphql. */
-  holdingsItems?: Maybe<Array<Item>>;
-  /** Notes about action, copy, binding etc. */
-  holdingsStatements?: Maybe<Array<HoldingsrecordHoldingsStatementsItem>>;
+  /** Holdings record statements */
+  holdingsStatements?: Maybe<Array<HoldingsStatement>>;
   /** Holdings record indexes statements */
-  holdingsStatementsForIndexes?: Maybe<Array<HoldingsrecordHoldingsStatementsForIndexesItem>>;
+  holdingsStatementsForIndexes?: Maybe<Array<HoldingsStatement>>;
   /** Holdings record supplements statements */
-  holdingsStatementsForSupplements?: Maybe<Array<HoldingsrecordHoldingsStatementsForSupplementsItem>>;
+  holdingsStatementsForSupplements?: Maybe<Array<HoldingsStatement>>;
   holdingsType?: Maybe<HoldingsType>;
   /** unique ID for the type of this holdings record, a UUID */
   holdingsTypeId?: Maybe<Scalars['UUID']['output']>;
@@ -588,8 +660,7 @@ export type HoldingsRecord = {
   hrid?: Maybe<Scalars['String']['output']>;
   /** the unique ID of the holdings record; UUID */
   id?: Maybe<Scalars['UUID']['output']>;
-  /** expanded ILL Policy object corresponding to illPolicyId */
-  illPolicy?: Maybe<IlLpolicy>;
+  illPolicy?: Maybe<IllPolicy>;
   /** unique ID for an ILL policy, a UUID */
   illPolicyId?: Maybe<Scalars['UUID']['output']>;
   instance?: Maybe<Instance>;
@@ -598,24 +669,23 @@ export type HoldingsRecord = {
   items?: Maybe<Array<Maybe<Item>>>;
   metadata?: Maybe<Metadata>;
   /** Notes about action, copy, binding etc. */
-  notes?: Maybe<Array<HoldingsrecordNotesItem>>;
+  notes?: Maybe<Array<HoldingsNote>>;
   /** Text (Number) */
   numberOfItems?: Maybe<Scalars['String']['output']>;
-  /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** The permanent shelving location in which an item resides. */
   permanentLocationId: Scalars['UUID']['output'];
   /** Receipt status (e.g. pending, awaiting receipt, partially received, fully received, receipt not required, and cancelled) */
   receiptStatus?: Maybe<Scalars['String']['output']>;
   /** Receiving history of holdings record */
-  receivingHistory?: Maybe<HoldingsrecordReceivingHistory>;
+  receivingHistory?: Maybe<HoldingsReceivingHistory>;
   /** Records information regarding how long we have agreed to keep something. */
   retentionPolicy?: Maybe<Scalars['String']['output']>;
   /** Indicates the shelving form of title. */
   shelvingTitle?: Maybe<Scalars['String']['output']>;
   source?: Maybe<HoldingsRecordsSource>;
   /** (A reference to) the source of a holdings record */
-  sourceId?: Maybe<Scalars['UUID']['output']>;
+  sourceId: Scalars['UUID']['output'];
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** arbitrary tags associated with this holding */
@@ -650,7 +720,32 @@ export type HoldingsRecordsSource = {
   /** Name of the holdings records source */
   name: Scalars['String']['output'];
   /** The holdings records source */
-  source?: Maybe<HoldingsrecordssourceSource>;
+  source?: Maybe<HoldingsRecordsSourceSource>;
+  /** The holdings records source */
+  type?: Maybe<HoldingsRecordsSourceType>;
+};
+
+export enum HoldingsRecordsSourceSource {
+  Consortium = 'consortium',
+  Folio = 'folio',
+  Local = 'local'
+}
+
+export enum HoldingsRecordsSourceType {
+  Consortium = 'consortium',
+  Folio = 'folio',
+  Local = 'local'
+}
+
+/** Holdings record statement */
+export type HoldingsStatement = {
+  __typename?: 'HoldingsStatement';
+  /** Note attached to a holdings statement */
+  note?: Maybe<Scalars['String']['output']>;
+  /** Private note attached to a holdings statement */
+  staffNote?: Maybe<Scalars['String']['output']>;
+  /** Specifies the exact content to which the library has access, typically for continuing publications. */
+  statement?: Maybe<Scalars['String']['output']>;
 };
 
 /** A holdings type */
@@ -663,99 +758,8 @@ export type HoldingsType = {
   name: Scalars['String']['output'];
   /** label indicating where the holdings type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
-};
-
-export type HoldingsrecordElectronicAccessItem = {
-  __typename?: 'HoldingsrecordElectronicAccessItem';
-  /** the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
-  linkText?: Maybe<Scalars['String']['output']>;
-  /** materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record) */
-  materialsSpecification?: Maybe<Scalars['String']['output']>;
-  /** URL public note to be displayed in the discovery */
-  publicNote?: Maybe<Scalars['String']['output']>;
-  relationship?: Maybe<ElectronicAccessRelationship>;
-  /** relationship between the electronic resource at the location identified and the item described in the record as a whole */
-  relationshipId?: Maybe<Scalars['String']['output']>;
-  /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
-  uri: Scalars['String']['output'];
-};
-
-export type HoldingsrecordHoldingsStatementsForIndexesItem = {
-  __typename?: 'HoldingsrecordHoldingsStatementsForIndexesItem';
-  /** Note attached to a holdings statement */
-  note?: Maybe<Scalars['String']['output']>;
-  /** Private note attached to a holdings statment */
-  staffNote?: Maybe<Scalars['String']['output']>;
-  /** Textual description of the holdings of indexes */
-  statement?: Maybe<Scalars['String']['output']>;
-};
-
-export type HoldingsrecordHoldingsStatementsForSupplementsItem = {
-  __typename?: 'HoldingsrecordHoldingsStatementsForSupplementsItem';
-  /** note attached to a holdings statement */
-  note?: Maybe<Scalars['String']['output']>;
-  /** Private note attached to a holdings statment */
-  staffNote?: Maybe<Scalars['String']['output']>;
-  /** textual description of the holdings of supplementary material */
-  statement?: Maybe<Scalars['String']['output']>;
-};
-
-export type HoldingsrecordHoldingsStatementsItem = {
-  __typename?: 'HoldingsrecordHoldingsStatementsItem';
-  /** Note attached to a holdings statement */
-  note?: Maybe<Scalars['String']['output']>;
-  /** Private note attached to a holdings statment */
-  staffNote?: Maybe<Scalars['String']['output']>;
-  /** Specifices the exact content to which the library has access, typically for continuing publications. */
-  statement?: Maybe<Scalars['String']['output']>;
-};
-
-export type HoldingsrecordNotesItem = {
-  __typename?: 'HoldingsrecordNotesItem';
-  /** expanded note-type object corresponding to holdingsNoteTypeId */
-  holdingsNoteType?: Maybe<HoldingsNoteType>;
-  /** ID of the type of note */
-  holdingsNoteTypeId?: Maybe<Scalars['UUID']['output']>;
-  /** Text content of the note */
-  note?: Maybe<Scalars['String']['output']>;
-  /** If true, determines that the note should not be visible for others than staff */
-  staffOnly?: Maybe<Scalars['Boolean']['output']>;
-};
-
-/** Receiving history of holdings record */
-export type HoldingsrecordReceivingHistory = {
-  __typename?: 'HoldingsrecordReceivingHistory';
-  /** Display hint. 1: Display fields separately. 2: Display fields concatenated */
-  displayType?: Maybe<Scalars['String']['output']>;
-  /** Entries of receiving history */
-  entries?: Maybe<Array<HoldingsrecordReceivingHistoryEntriesItem>>;
-};
-
-export type HoldingsrecordReceivingHistoryEntriesItem = {
-  __typename?: 'HoldingsrecordReceivingHistoryEntriesItem';
-  /** Repeated element from Receiving history - Enumeration AND Receiving history - Chronology */
-  chronology?: Maybe<Scalars['String']['output']>;
-  /** This is the volume/issue number (e.g. v.71:no.6-2) */
-  enumeration?: Maybe<Scalars['String']['output']>;
-  /** Defines if the receivingHistory should be visible to the public. */
-  publicDisplay?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export enum HoldingsrecordssourceSource {
-  Folio = 'folio',
-  Local = 'local'
-}
-
-/** An ILL policy */
-export type IlLpolicy = {
-  __typename?: 'ILLpolicy';
-  /** unique ID of the ILL policy; UUID */
-  id?: Maybe<Scalars['String']['output']>;
-  metadata?: Maybe<Metadata>;
-  /** name of the policy */
-  name: Scalars['String']['output'];
-  /** label indicating where the ILL policy entry originates from, i.e. 'folio' or 'local' */
-  source: Scalars['String']['output'];
+  /** label indicating where the holdings type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** An identifier type */
@@ -767,6 +771,22 @@ export type IdentifierType = {
   name: Scalars['String']['output'];
   /** label indicating where the identifier type entry originates from, i.e. 'folio' or 'local' */
   source?: Maybe<Scalars['String']['output']>;
+  /** label indicating where the identifier type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** An ILL policy */
+export type IllPolicy = {
+  __typename?: 'IllPolicy';
+  /** unique ID of the ILL policy; UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the policy */
+  name: Scalars['String']['output'];
+  /** label indicating where the ILL policy entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+  /** label indicating where the ILL policy entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** An instance record */
@@ -784,6 +804,10 @@ export type Instance = {
   classifications?: Maybe<Array<InstanceClassificationsItem>>;
   /** List of contributors */
   contributors?: Maybe<Array<InstanceContributorsItem>>;
+  /** Instance Dates */
+  dates?: Maybe<InstanceDates>;
+  /** Indicates whether the record was marked for deletion */
+  deleted?: Maybe<Scalars['Boolean']['output']>;
   /** Records the fact that the record should not be displayed in a discovery system */
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
   /** The edition statement, imprint and other publication source information */
@@ -791,7 +815,8 @@ export type Instance = {
   /** List of electronic access items */
   electronicAccess?: Maybe<Array<InstanceElectronicAccessItem>>;
   holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
-  holdingsRecords2?: Maybe<HoldingsRecords>;
+  /** List of holdings records */
+  holdingsRecords2?: Maybe<Array<HoldingsRecord>>;
   /** The human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID */
   hrid?: Maybe<Scalars['String']['output']>;
   /** The unique ID of the instance record; a UUID */
@@ -829,8 +854,6 @@ export type Instance = {
   publication?: Maybe<Array<InstancePublicationItem>>;
   /** List of intervals at which a serial appears (e.g. daily, weekly, monthly, quarterly, etc.) */
   publicationFrequency?: Maybe<Array<Scalars['String']['output']>>;
-  /** Publication period */
-  publicationPeriod?: Maybe<InstancePublicationPeriod>;
   /** The range of sequential designation/chronology of publication, or date range */
   publicationRange?: Maybe<Array<Scalars['String']['output']>>;
   queueTotalLength?: Maybe<Scalars['Int']['output']>;
@@ -840,6 +863,8 @@ export type Instance = {
   source: Scalars['String']['output'];
   /** Format of the instance source record, if a source record exists (e.g. FOLIO if it's a record created in Inventory,  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings) */
   sourceRecordFormat?: Maybe<InstanceSourceRecordFormat>;
+  /** A remote URI uniquely identifying the source of the instance */
+  sourceUri?: Maybe<Scalars['String']['output']>;
   /** Records the fact that the record should not be displayed for others than catalogers */
   staffSuppress?: Maybe<Scalars['Boolean']['output']>;
   /** List of statistical code IDs */
@@ -855,6 +880,8 @@ export type Instance = {
   tags?: Maybe<Tags>;
   /** The primary title (or label) associated with the resource */
   title: Scalars['String']['output'];
+  /** The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory; MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings; CONSORTIUM-MARC or CONSORTIUM-FOLIO for sharing Instances). */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -909,6 +936,17 @@ export type InstanceContributorsItem = {
   primary?: Maybe<Scalars['Boolean']['output']>;
 };
 
+/** Instance Dates */
+export type InstanceDates = {
+  __typename?: 'InstanceDates';
+  /** Date 1 */
+  date1?: Maybe<Scalars['String']['output']>;
+  /** Date 2 */
+  date2?: Maybe<Scalars['String']['output']>;
+  /** Date type ID */
+  dateTypeId?: Maybe<Scalars['UUID']['output']>;
+};
+
 export type InstanceElectronicAccessItem = {
   __typename?: 'InstanceElectronicAccessItem';
   /** The value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
@@ -935,12 +973,15 @@ export type InstanceFormat = {
   name: Scalars['String']['output'];
   /** origin of the Instance format record */
   source: Scalars['String']['output'];
+  /** origin of the Instance format record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 export type InstanceIdentifiersItem = {
   __typename?: 'InstanceIdentifiersItem';
   /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
   identifierTypeId: Scalars['UUID']['output'];
+  /** Information about identifier type, looked up from identifierTypeId */
   identifierTypeObject?: Maybe<IdentifierType>;
   /** Resource identifier value */
   value: Scalars['String']['output'];
@@ -956,6 +997,8 @@ export type InstanceNoteType = {
   name: Scalars['String']['output'];
   /** label indicating where the Instance note type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the Instance note type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 export type InstanceNotesItem = {
@@ -981,15 +1024,6 @@ export type InstancePublicationItem = {
   role?: Maybe<Scalars['String']['output']>;
 };
 
-/** Publication period */
-export type InstancePublicationPeriod = {
-  __typename?: 'InstancePublicationPeriod';
-  /** Publication end year */
-  end?: Maybe<Scalars['Int']['output']>;
-  /** Publication start year */
-  start?: Maybe<Scalars['Int']['output']>;
-};
-
 export type InstanceSeriesItem = {
   __typename?: 'InstanceSeriesItem';
   /** UUID of authority record that controls an series title */
@@ -1013,12 +1047,18 @@ export type InstanceStatus = {
   name: Scalars['String']['output'];
   /** origin of an instance status record */
   source: Scalars['String']['output'];
+  /** origin of an instance status record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 export type InstanceSubjectsItem = {
   __typename?: 'InstanceSubjectsItem';
   /** UUID of authority record that controls a subject heading */
   authorityId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of subject source */
+  sourceId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of subject type */
+  typeId?: Maybe<Scalars['UUID']['output']>;
   /** Subject heading value */
   value: Scalars['String']['output'];
 };
@@ -1034,6 +1074,8 @@ export type InstanceType = {
   name: Scalars['String']['output'];
   /** origin of a resource type record */
   source: Scalars['String']['output'];
+  /** origin of a resource type record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** highest-level location unit */
@@ -1042,6 +1084,8 @@ export type Institution = {
   /** distinct code for location */
   code: Scalars['String']['output'];
   id?: Maybe<Scalars['String']['output']>;
+  /** Whether this is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
   metadata?: Maybe<Metadata>;
   /** name of location */
   name: Scalars['String']['output'];
@@ -1105,7 +1149,7 @@ export type Item = {
   formerIds?: Maybe<Array<Scalars['String']['output']>>;
   holdingsRecord?: Maybe<HoldingsRecord>;
   /** Fake property for mod-graphql to determine record relationships. */
-  holdingsRecord2?: Maybe<HoldingsRecord>;
+  holdingsRecord2?: Maybe<HoldingsRecords>;
   /** ID of the holdings record the item is a member of. */
   holdingsRecordId: Scalars['String']['output'];
   /** The human readable ID, also called eye readable ID. A system-assigned sequential alternate ID */
@@ -1152,6 +1196,7 @@ export type Item = {
   permanentLoanType?: Maybe<LoanType>;
   /** The permanent loan type, is the default loan type for a given item. Loan types are tenant-defined. */
   permanentLoanTypeId: Scalars['String']['output'];
+  /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** Permanent item location is the default location, shelving location, or holding which is a physical place where items are stored, or an Online location. */
   permanentLocationId?: Maybe<Scalars['String']['output']>;
@@ -1191,6 +1236,8 @@ export type ItemCirculationNotesItem = {
   source?: Maybe<ItemCirculationNotesItemSource>;
   /** Flag to restrict display of this note */
   staffOnly?: Maybe<Scalars['Boolean']['output']>;
+  /** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+  type?: Maybe<ItemCirculationNotesItemType>;
 };
 
 export enum ItemCirculationNotesItemNoteType {
@@ -1216,6 +1263,24 @@ export type ItemCirculationNotesItemSourcePersonal = {
   lastName?: Maybe<Scalars['String']['output']>;
 };
 
+/** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+export type ItemCirculationNotesItemType = {
+  __typename?: 'ItemCirculationNotesItemType';
+  /** The id of the user who added/updated the note. The user information is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+  id?: Maybe<Scalars['String']['output']>;
+  /** Personal information about the user */
+  personal?: Maybe<ItemCirculationNotesItemTypePersonal>;
+};
+
+/** Personal information about the user */
+export type ItemCirculationNotesItemTypePersonal = {
+  __typename?: 'ItemCirculationNotesItemTypePersonal';
+  /** The user's first name */
+  firstName?: Maybe<Scalars['String']['output']>;
+  /** The user's last name */
+  lastName?: Maybe<Scalars['String']['output']>;
+};
+
 /** An item damage status */
 export type ItemDamagedStatus = {
   __typename?: 'ItemDamagedStatus';
@@ -1226,6 +1291,8 @@ export type ItemDamagedStatus = {
   name: Scalars['String']['output'];
   /** label indicating where the item damage status entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the item damage status entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Elements of a full call number generated from the item or holding */
@@ -1277,6 +1344,8 @@ export type ItemNoteType = {
   name: Scalars['String']['output'];
   /** label indicating where the item note type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the item note type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 export type ItemNotesItem = {
@@ -1308,6 +1377,8 @@ export type Library = {
   /** distinct code for the location */
   code: Scalars['String']['output'];
   id?: Maybe<Scalars['String']['output']>;
+  /** Whether this is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
   locations?: Maybe<Array<Maybe<Location>>>;
   metadata?: Maybe<Metadata>;
   /** name of the location */
@@ -1356,6 +1427,8 @@ export type Loan = {
   feesAndFines?: Maybe<LoanFeesAndFines>;
   /** Unique ID (generated UUID) of the loan */
   id?: Maybe<Scalars['UUID']['output']>;
+  /** Indicates whether or not this loan is associated for DCB use case */
+  isDcb?: Maybe<Scalars['Boolean']['output']>;
   item?: Maybe<Item>;
   itemEffectiveLocationAtCheckOut?: Maybe<Location>;
   /** The effective location, at the time of checkout, of the item loaned to the patron. */
@@ -1406,6 +1479,10 @@ export type LoanBorrower = {
   lastName?: Maybe<Scalars['String']['output']>;
   /** middle name of the borrower (read only, defined by the server) */
   middleName?: Maybe<Scalars['String']['output']>;
+  /** current patron group of the borrower (read only, defined by the server) */
+  patronGroup?: Maybe<Scalars['String']['output']>;
+  /** preferred first name of the borrower (read only, defined by the server) */
+  preferredFirstName?: Maybe<Scalars['String']['output']>;
 };
 
 /** Fees and fines associated with loans */
@@ -1561,6 +1638,8 @@ export type LoanType = {
   name: Scalars['String']['output'];
   /** Origin of the loan type record, e.g. 'System', 'User', 'Consortium' etc. */
   source?: Maybe<Scalars['String']['output']>;
+  /** Origin of the loan type record, e.g. 'System', 'User', 'Consortium' etc. */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** A (shelf) location, the forth-level location unit below institution, campus, and library. */
@@ -1586,6 +1665,11 @@ export type Location = {
   institutionId: Scalars['String']['output'];
   /** Whether this (shelf) location is active. Inactive (shelf) locations can no longer been used. */
   isActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Items checked in/out from this location can be checked in/out to other locations with the same flag. */
+  isFloatingCollection?: Maybe<Scalars['Boolean']['output']>;
+  /** Whether this location is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
+  /** The library, the third-level location unit, this (shelf) location belongs to. */
   library?: Maybe<Library>;
   /** The UUID of the library, the third-level location unit, this (shelf) location belongs to. */
   libraryId: Scalars['String']['output'];
@@ -1593,7 +1677,7 @@ export type Location = {
   /** Name of the (shelf) location */
   name: Scalars['String']['output'];
   /** The UUID of the primary service point of this (shelf) location. */
-  primaryServicePoint: Scalars['UUID']['output'];
+  primaryServicePoint: Scalars['String']['output'];
   /** Dereferenced object for primary service point. This should really just be called 'primaryServicePoint', but the field containing the ID of this object has that name -- it should really be called 'primaryServicePointId' -- so we need something different for this one. */
   primaryServicePointObject?: Maybe<ServicePoint>;
   /** All service points that this (shelf) location has. */
@@ -1731,6 +1815,8 @@ export type MaterialType = {
   name: Scalars['String']['output'];
   /** origin of the material type record */
   source?: Maybe<Scalars['String']['output']>;
+  /** origin of the material type record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Metadata about creation and changes to records, provided by the server (client should not provide) */
@@ -1759,6 +1845,8 @@ export type ModeOfIssuance = {
   name: Scalars['String']['output'];
   /** label indicating where the mode of issuance entry originates from, i.e. 'rdamodeissue' or 'local' */
   source?: Maybe<Scalars['String']['output']>;
+  /** label indicating where the mode of issuance entry originates from, i.e. 'rdamodeissue' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Money schema for patron portal integration */
@@ -1770,19 +1858,28 @@ export type Money = {
   isoCurrencyCode: Scalars['String']['output'];
 };
 
+export enum OrderFormat {
+  ElectronicResource = 'ElectronicResource',
+  Other = 'Other',
+  PeMix = 'PEMix',
+  PhysicalResource = 'PhysicalResource'
+}
+
 /** purchase order line location record */
 export type OrderLocation = {
   __typename?: 'OrderLocation';
   /** Holding UUID associated with order line */
-  holdingId?: Maybe<Scalars['String']['output']>;
+  holdingId?: Maybe<Scalars['UUID']['output']>;
   /** UUID of the (inventory) location record */
   locationId?: Maybe<Scalars['UUID']['output']>;
-  /** combined/total quanitity of physical and electronic items */
+  /** Combined/total quanitity of physical and electronic items */
   quantity?: Maybe<Scalars['Int']['output']>;
-  /** quantity of electronic items */
+  /** Quantity of electronic items */
   quantityElectronic?: Maybe<Scalars['Int']['output']>;
-  /** quantity of physical items */
+  /** Quantity of physical items */
   quantityPhysical?: Maybe<Scalars['Int']['output']>;
+  /** Associated tenant for ECS-enabled clusters */
+  tenantId?: Maybe<Scalars['String']['output']>;
 };
 
 /** Overdue fine policy to be associated with a loan policy by the Circulation Rules Editor */
@@ -1915,6 +2012,8 @@ export type PatronGroup = {
   metadata?: Maybe<Metadata>;
   /** Origin of the group record, i.e. 'System' or 'User' */
   source?: Maybe<Scalars['String']['output']>;
+  /** Origin of the group record, i.e. 'System' or 'User' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Item schema for patron portal integration */
@@ -2142,6 +2241,16 @@ export enum PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen {
   RequestExpiration = 'Request_expiration'
 }
 
+export enum PaymentStatus {
+  AwaitingPayment = 'AwaitingPayment',
+  Cancelled = 'Cancelled',
+  FullyPaid = 'FullyPaid',
+  Ongoing = 'Ongoing',
+  PartiallyPaid = 'PartiallyPaid',
+  PaymentNotRequired = 'PaymentNotRequired',
+  Pending = 'Pending'
+}
+
 /** Time interval defined by its duration */
 export type Period = {
   __typename?: 'Period';
@@ -2186,10 +2295,18 @@ export enum PhysicalCreateInventory {
 /** Piece details */
 export type Piece = {
   __typename?: 'Piece';
-  /** Volume/enumeration information */
-  caption?: Maybe<Scalars['String']['output']>;
+  /** AccessionNumber is the descriptive information for the accession number of a serial. Synchronized with inventory item. */
+  accessionNumber?: Maybe<Scalars['String']['output']>;
+  /** Barcode is the descriptive information for the barcode of a serial. Synchronized with inventory item. */
+  barcode?: Maybe<Scalars['String']['output']>;
+  /** UUID of the associated bind item record */
+  bindItemId?: Maybe<Scalars['UUID']['output']>;
+  /** CallNumber is the descriptive information for the call number of a serial. Synchronized with inventory item. */
+  callNumber?: Maybe<Scalars['String']['output']>;
   /** Chronology is the descriptive information for the dating scheme of a serial. Synchronized with inventory item. */
   chronology?: Maybe<Scalars['String']['output']>;
+  /** Time interval (in days) for processing claims related to this piece */
+  claimingInterval?: Maybe<Scalars['Int']['output']>;
   /** Free form commentary */
   comment?: Maybe<Scalars['String']['output']>;
   /** Copy number of the piece */
@@ -2198,26 +2315,41 @@ export type Piece = {
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
   /** Whether or not receiving history should be displayed in holding record view */
   displayOnHolding?: Maybe<Scalars['Boolean']['output']>;
+  /** Display summary information */
+  displaySummary?: Maybe<Scalars['String']['output']>;
+  /** Whether or not the piece data should display to patrons at point of receipt */
+  displayToPublic?: Maybe<Scalars['Boolean']['output']>;
   /** Enumeration is the descriptive information for the numbering scheme of a serial. Synchronized with inventory item. */
   enumeration?: Maybe<Scalars['String']['output']>;
+  /** External note for Send Claim action to share with Vendor */
+  externalNote?: Maybe<Scalars['String']['output']>;
   /** The format of the piece */
-  format: Scalars['String']['output'];
+  format: PieceFormat;
   /** UUID of the holding record */
   holdingId?: Maybe<Scalars['UUID']['output']>;
   /** UUID of this piece record */
   id?: Maybe<Scalars['UUID']['output']>;
+  /** Internal note for Send Claim action */
+  internalNote?: Maybe<Scalars['String']['output']>;
+  /** Whether or not piece has already been bound */
+  isBound?: Maybe<Scalars['Boolean']['output']>;
   /** UUID of the associated item record */
   itemId?: Maybe<Scalars['UUID']['output']>;
   /** UUID of the (inventory) location record */
   locationId?: Maybe<Scalars['UUID']['output']>;
+  metadata?: Maybe<Metadata>;
   /** UUID of the purchase order line this record is associated with */
   poLineId: Scalars['UUID']['output'];
   /** Date that associated item is expected to arrive */
   receiptDate?: Maybe<Scalars['DateTime']['output']>;
   /** The date associated item is actually received */
   receivedDate?: Maybe<Scalars['DateTime']['output']>;
-  /** the status of this piece */
+  /** The status of this piece */
   receivingStatus: PieceReceivingStatus;
+  /** Receiving tenant for ECS-enabled clusters */
+  receivingTenantId?: Maybe<Scalars['String']['output']>;
+  /** Date when the status of this piece was last updated */
+  statusUpdatedDate?: Maybe<Scalars['DateTime']['output']>;
   /** Whether or not this is supplementary material */
   supplement?: Maybe<Scalars['Boolean']['output']>;
   /** UUID of the title record */
@@ -2233,20 +2365,28 @@ export type PieceCollection = {
   totalRecords?: Maybe<Scalars['Int']['output']>;
 };
 
+export enum PieceFormat {
+  Electronic = 'Electronic',
+  Other = 'Other',
+  Physical = 'Physical'
+}
+
 export enum PieceReceivingStatus {
+  ClaimDelayed = 'Claim_delayed',
+  ClaimSent = 'Claim_sent',
   Expected = 'Expected',
-  Received = 'Received'
+  Late = 'Late',
+  Received = 'Received',
+  Unreceivable = 'Unreceivable'
 }
 
 /** purchase order line */
 export type PoLine = {
   __typename?: 'PoLine';
   /** UUID of the acquisition method for this purchase order line */
-  acquisitionMethod?: Maybe<Scalars['String']['output']>;
+  acquisitionMethod: Scalars['UUID']['output'];
   /** UUID of the agreement this purchase order line is related to */
   agreementId?: Maybe<Scalars['UUID']['output']>;
-  /** an array of alert record IDs */
-  alerts?: Maybe<Array<Scalars['UUID']['output']>>;
   /** if true then line will be marked as available to export in the EDIFACT format or other format */
   automaticExport?: Maybe<Scalars['Boolean']['output']>;
   /** whether or not there are cancellation restrictions for this purchase order line */
@@ -2255,23 +2395,31 @@ export type PoLine = {
   cancellationRestrictionNote?: Maybe<Scalars['String']['output']>;
   /** if true this will toggle the Check-in workflow for details associated with this PO line */
   checkinItems?: Maybe<Scalars['Boolean']['output']>;
-  /** list of claims */
+  /** Indicates if there is an active claim or dispute */
+  claimingActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Specifies the time interval, in days, within which claims or disputes must be initiated */
+  claimingInterval?: Maybe<Scalars['Int']['output']>;
+  /** claims associated with this purchase order line */
   claims?: Maybe<Array<Claim>>;
   /** whether or not this purchase order line is for a collection */
   collection?: Maybe<Scalars['Boolean']['output']>;
   /** list of contributors to the material */
   contributors?: Maybe<Array<Contributor>>;
-  /** cost record */
-  cost?: Maybe<Cost>;
+  /** cost details associated with this purchase order line */
+  cost: Cost;
+  /** Object that contains custom field */
+  customFields?: Maybe<CustomFields>;
   /** description of the material */
   description?: Maybe<Scalars['String']['output']>;
-  /** details record */
+  /** details about this purchase order line */
   details?: Maybe<Details>;
   /** the donor contributing to this purchase order line */
   donor?: Maybe<Scalars['String']['output']>;
+  /** donor organization ids associated with this fund */
+  donorOrganizationIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** edition of the material */
   edition?: Maybe<Scalars['String']['output']>;
-  /** eresource record */
+  /** eresource-related details of this purchase order line */
   eresource?: Maybe<Eresource>;
   /** Fund distribution records for this purchase order line */
   fundDistribution?: Maybe<Array<FundDistribution>>;
@@ -2286,43 +2434,50 @@ export type PoLine = {
   /** Location records for this purchase order line */
   locations?: Maybe<Array<OrderLocation>>;
   metadata?: Maybe<Metadata>;
-  orderFormat: Scalars['String']['output'];
+  /** The purchase order line format */
+  orderFormat: OrderFormat;
   /** UUID referencing the poLine that represents the package that this POLs title belongs to */
   packagePoLineId?: Maybe<Scalars['UUID']['output']>;
   /** The purchase order line payment status */
-  paymentStatus?: Maybe<Scalars['String']['output']>;
-  /** UUID of the physical (details) record */
+  paymentStatus?: Maybe<PaymentStatus>;
+  /** details of this purchase order line relating to physical materials */
   physical?: Maybe<Physical>;
   pieces?: Maybe<Array<Maybe<Piece>>>;
   /** purchase order line description */
   poLineDescription?: Maybe<Scalars['String']['output']>;
-  /** A human readable number assigned to this PO line */
+  /** A human readable number assigned to this PO line (assigned automatically) */
   poLineNumber?: Maybe<Scalars['String']['output']>;
   /** date (year) of the material's publication */
   publicationDate?: Maybe<Scalars['String']['output']>;
   /** publisher of the material */
   publisher?: Maybe<Scalars['String']['output']>;
   /** UUID of the purchase order */
-  purchaseOrderId: Scalars['UUID']['output'];
+  purchaseOrderId?: Maybe<Scalars['UUID']['output']>;
   /** date the purchase order line was received */
   receiptDate?: Maybe<Scalars['DateTime']['output']>;
-  receiptStatus?: Maybe<Scalars['String']['output']>;
+  /** The purchase order line receipt status */
+  receiptStatus?: Maybe<ReceiptStatus>;
   /** Renewal note for this purchase order line */
   renewalNote?: Maybe<Scalars['String']['output']>;
-  /** a list of reporting codes associated with this purchase order line */
-  reportingCodes?: Maybe<Array<Scalars['UUID']['output']>>;
   /** who requested this purchase order line */
   requester?: Maybe<Scalars['String']['output']>;
   /** whether or not this is a rush order */
   rush?: Maybe<Scalars['Boolean']['output']>;
+  /** location ids used for search */
+  searchLocationIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** who selected this material */
   selector?: Maybe<Scalars['String']['output']>;
-  source: Scalars['String']['output'];
+  /** the source of this purchase order line */
+  source: Source;
+  /** Records the fact that the record should not be displayed in a discovery system */
+  suppressInstanceFromDiscovery?: Maybe<Scalars['Boolean']['output']>;
   /** arbitrary tags associated with this purchase order line */
   tags?: Maybe<Tags>;
   /** title of the material */
   titleOrPackage: Scalars['String']['output'];
-  /** Vendor detail record */
+  /** the source of this purchase order line */
+  type?: Maybe<Source>;
+  /** Details related to the vendor of this purchase order line */
   vendorDetail?: Maybe<VendorDetail>;
 };
 
@@ -2340,7 +2495,8 @@ export type ProductIdentifier = {
   __typename?: 'ProductIdentifier';
   /** The actual product identifier */
   productId?: Maybe<Scalars['String']['output']>;
-  productIdType?: Maybe<Scalars['String']['output']>;
+  /** The type of product identifier */
+  productIdType?: Maybe<Scalars['UUID']['output']>;
   /** Information about the binding, format, volume numbers, part of a set, publisher, distributor, etc. which might be enclosed in parenthesis */
   qualifier?: Maybe<Scalars['String']['output']>;
 };
@@ -2484,6 +2640,16 @@ export type QueryPatronArgs = {
 export type QueryServicePointsArgs = {
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
+
+export enum ReceiptStatus {
+  AwaitingReceipt = 'AwaitingReceipt',
+  Cancelled = 'Cancelled',
+  FullyReceived = 'FullyReceived',
+  Ongoing = 'Ongoing',
+  PartiallyReceived = 'PartiallyReceived',
+  Pending = 'Pending',
+  ReceiptNotRequired = 'ReceiptNotRequired'
+}
 
 /** Reminder fee policy as part of overdue fine policy */
 export type ReminderFeesPolicy = {
@@ -2681,7 +2847,8 @@ export type RequestProxyPatronGroup = {
 };
 
 export enum RequestRequestLevel {
-  Item = 'Item'
+  Item = 'Item',
+  Title = 'Title'
 }
 
 export enum RequestRequestType {
@@ -2744,12 +2911,8 @@ export type ResultInfo = {
   facets?: Maybe<Array<ResultInfoFacetsItem>>;
   /** Response time */
   responseTime?: Maybe<Scalars['Float']['output']>;
-  /** Estimated or exact total number of records */
+  /** Total number of records */
   totalRecords?: Maybe<Scalars['Int']['output']>;
-  /** True if totalRecords is an estimation, false if it is the exact number */
-  totalRecordsEstimated?: Maybe<Scalars['Boolean']['output']>;
-  /** The rounded value of totalRecords if totalRecords is an estimation */
-  totalRecordsRounded?: Maybe<Scalars['Int']['output']>;
 };
 
 /** Diagnostic information */
@@ -2767,6 +2930,8 @@ export type ResultInfoDiagnosticsItem = {
   recordCount?: Maybe<Scalars['Int']['output']>;
   /** Source reporting the diagnostic information */
   source?: Maybe<Scalars['String']['output']>;
+  /** Source reporting the diagnostic information */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** A facet */
@@ -2814,6 +2979,7 @@ export type RtacHolding = {
   id: Scalars['String']['output'];
   /** Copy number is the piece identifier. The copy number reflects if the library has a copy of a single-volume monograph; a copy of a multi-volume, (e.g. Copy 1, or C.7.) */
   itemCopyNumber?: Maybe<Scalars['String']['output']>;
+  /** The third-level location unit */
   library?: Maybe<RtacLibrary>;
   /** The location of the holding */
   location: Scalars['String']['output'];
@@ -2821,7 +2987,10 @@ export type RtacHolding = {
   locationCode?: Maybe<Scalars['String']['output']>;
   /** The location id of the holding */
   locationId?: Maybe<Scalars['String']['output']>;
+  /** Define what type of thing the item is */
   materialType?: Maybe<RtacMaterialType>;
+  /** Notes about action, copy, binding etc. */
+  notes?: Maybe<Array<RtacHoldingNotesItem>>;
   /** Name of the default loan type for a given item */
   permanentLoanType?: Maybe<Scalars['String']['output']>;
   /** The availability status of the holding */
@@ -2858,6 +3027,14 @@ export type RtacHoldingHoldingsStatementsItem = {
   note?: Maybe<Scalars['String']['output']>;
   /** Name of the holdings note type */
   statement?: Maybe<Scalars['String']['output']>;
+};
+
+export type RtacHoldingNotesItem = {
+  __typename?: 'RtacHoldingNotesItem';
+  /** Name of the holdings note type */
+  holdingsNoteTypeName: Scalars['String']['output'];
+  /** Text content of the note */
+  note: Scalars['String']['output'];
 };
 
 /** Collection of holdings */
@@ -2911,11 +3088,15 @@ export type ServicePoint = {
   __typename?: 'ServicePoint';
   /** service-point code, a required field */
   code: Scalars['String']['output'];
+  /** enum for defining the default action when checking in an item that is for use in the library (i.e. in reading room) */
+  defaultCheckInActionForUseAtLocation?: Maybe<ServicepointDefaultCheckInActionForUseAtLocation>;
   /** description of the service-point */
   description?: Maybe<Scalars['String']['output']>;
   details?: Maybe<ServicePointDetails>;
   /** display name, a required field */
   discoveryDisplayName: Scalars['String']['output'];
+  /** Indicates a service point used for the ECS functionality */
+  ecsRequestRouting?: Maybe<Scalars['Boolean']['output']>;
   /** enum for closedLibraryDateManagement associated with hold shelf */
   holdShelfClosedLibraryDateManagement?: Maybe<ServicepointHoldShelfClosedLibraryDateManagement>;
   /** expiration period for items on the hold shelf at the service point */
@@ -2946,6 +3127,12 @@ export type ServicePointDetails = {
   notes?: Maybe<Scalars['String']['output']>;
 };
 
+export enum ServicepointDefaultCheckInActionForUseAtLocation {
+  AskForAction = 'Ask_for_action',
+  CloseLoanAndReturnItem = 'Close_loan_and_return_item',
+  KeepOnHoldShelf = 'Keep_on_hold_shelf'
+}
+
 export enum ServicepointHoldShelfClosedLibraryDateManagement {
   KeepTheCurrentDueDate = 'Keep_the_current_due_date',
   KeepTheCurrentDueDateTime = 'Keep_the_current_due_date_time',
@@ -2962,6 +3149,14 @@ export type ServicepointStaffSlipsItem = {
   /** Whether or not to print the staff slip by default */
   printByDefault: Scalars['Boolean']['output'];
 };
+
+export enum Source {
+  Api = 'API',
+  Ebsconet = 'EBSCONET',
+  Edi = 'EDI',
+  Marc = 'MARC',
+  User = 'User'
+}
 
 /** List of simple tags that can be added to an object */
 export type Tags = {
@@ -2990,6 +3185,14 @@ export enum TimePeriodIntervalId {
 /** Title */
 export type Title = {
   __typename?: 'Title';
+  /** acquisition unit ids associated with this title */
+  acqUnitIds?: Maybe<Array<Scalars['UUID']['output']>>;
+  /** Item ids which bound to this title for independent receiving workflow */
+  bindItemIds?: Maybe<Array<Scalars['UUID']['output']>>;
+  /** Indicates if there is an active claim or dispute */
+  claimingActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Specifies the time interval, in days, within which claims or disputes must be initiated */
+  claimingInterval?: Maybe<Scalars['Int']['output']>;
   /** List of contributors to the material */
   contributors?: Maybe<Array<Contributor>>;
   /** Edition of the material */
@@ -3003,6 +3206,8 @@ export type Title = {
   /** Flag for acknowledge receiving note */
   isAcknowledged?: Maybe<Scalars['Boolean']['output']>;
   metadata?: Maybe<Metadata>;
+  /** The next sequence number to be used for the created Piece records */
+  nextSequenceNumber?: Maybe<Scalars['Int']['output']>;
   /** The name of the package */
   packageName?: Maybe<Scalars['String']['output']>;
   /** UUID of the purchase order line this Title is associated with */
@@ -3060,6 +3265,8 @@ export type User = {
   patronGroupId?: Maybe<Scalars['UUID']['output']>;
   /** Personal information about the user */
   personal?: Maybe<UserdataPersonal>;
+  /** Preferred email communication types */
+  preferredEmailCommunication?: Maybe<Array<UserdataPreferredEmailCommunicationItem>>;
   proxiesFor?: Maybe<Array<Maybe<ProxyFor>>>;
   proxiesOf?: Maybe<Array<Maybe<ProxyFor>>>;
   /** Deprecated */
@@ -3108,8 +3315,10 @@ export type UserdataPersonal = {
   preferredContactTypeId?: Maybe<Scalars['String']['output']>;
   /** The user's preferred name */
   preferredFirstName?: Maybe<Scalars['String']['output']>;
-  /** Link to the profile picture */
+  /** Link to the profile picture, or only the id of the /users/profile-picture entry */
   profilePictureLink?: Maybe<Scalars['String']['output']>;
+  /** The user's pronouns */
+  pronouns?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserdataPersonalAddressesItem = {
@@ -3134,6 +3343,12 @@ export type UserdataPersonalAddressesItem = {
   region?: Maybe<Scalars['String']['output']>;
 };
 
+export enum UserdataPreferredEmailCommunicationItem {
+  Programs = 'Programs',
+  Services = 'Services',
+  Support = 'Support'
+}
+
 /** purchase order line vendor details */
 export type VendorDetail = {
   __typename?: 'VendorDetail';
@@ -3145,3 +3360,9 @@ export type VendorDetail = {
   /** the accound number on the vendor's end associated with this purchase order line */
   vendorAccount?: Maybe<Scalars['String']['output']>;
 };
+
+export enum WorkflowStatus {
+  Closed = 'Closed',
+  Open = 'Open',
+  Pending = 'Pending'
+}

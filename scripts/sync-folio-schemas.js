@@ -26,7 +26,7 @@ async function syncFolioSchemas(module, tag) {
   const modulePath = path.join(folioRoot, module);
   // if the module path already exists, skip it
   if (File.existsSync(modulePath)) {
-    git.cwd(modulePath).fetch(['--tags']).checkout(tag, (err) => {
+    git.cwd(modulePath).checkout(tag, (err) => {
       if (err) {
         console.error(`Error checking out tag ${tag} for module ${module}:`, err);
       } else {
@@ -61,3 +61,4 @@ for (const module of folioModules) {
 
 syncFolioSchemas('acq-models', 'master');
 syncFolioSchemas('raml', 'master');
+syncFolioSchemas('mod-users', 'master');
