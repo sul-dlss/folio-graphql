@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A collection of piece ids and a new status to update",
+  "type": "object",
+  "properties": {
+    "pieceIds": {
+      "description": "A collection of piece ids to update",
+      "type": "array",
+      "id": "pieceIds",
+      "items": {
+        "type": "string",
+        "$ref": "../../common/schemas/uuid.json"
+      }
+    },
+    "receivingStatus": {
+      "description": "The new status of the corresponding pieces",
+      "$ref": "../../mod-orders-storage/schemas/receiving_status.json"
+    },
+    "claimingInterval": {
+      "description": "Time interval (in days) for processing claims related to this piece",
+      "type": "integer"
+    },
+    "internalNote": {
+      "description": "Internal note associated with the piece status update",
+      "type": "string"
+    },
+    "externalNote": {
+      "description": "External note associated with the piece status update",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "pieceIds",
+    "receivingStatus"
+  ]
+}

@@ -6,4 +6,3 @@ mod-inventory-storage
 mod-patron
 mod-patron-blocks
 mod-rtac
-mod-users

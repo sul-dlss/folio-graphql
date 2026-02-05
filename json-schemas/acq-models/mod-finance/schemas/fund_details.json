@@ -47,6 +47,40 @@
         "$ref": "../../common/schemas/uuid.json"
       }
     },
+    "donorOrganizationIds": {
+      "description": "donor organization ids associated with this fund",
+      "type": "array",
+      "items": {
+        "description": "UUID of an donor organization record",
+        "$ref": "../../common/schemas/uuid.json"
+      }
+    },
+    "restrictByLocations": {
+      "description": "restrict usage of this fund by locations",
+      "type": "boolean",
+      "default": false
+    },
+    "locations": {
+      "description": "Locations associated with this fund",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "locationId": {
+            "description": "UUID of the associated location",
+            "$ref": "../../common/schemas/uuid.json"
+          },
+          "tenantId": {
+            "description": "Tenant id of the associated location",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "locationId"
+        ]
+      }
+    },
     "allocatedFromIds": {
       "description": "All the funds ids that this fund is allowed to receive money from. This would be 1 fund or none. If this field is blank their is no restriction on allocating to this fund",
       "type": "array",

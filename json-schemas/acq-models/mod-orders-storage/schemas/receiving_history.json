@@ -7,8 +7,8 @@
       "description": "UUID of this piece record",
       "$ref": "../../common/schemas/uuid.json"
     },
-    "caption": {
-      "description": "Volume/enumeration information",
+    "displaySummary": {
+      "description": "Display summary information",
       "type": "string"
     },
     "checkin": {
@@ -68,13 +68,13 @@
     },
     "poLineNumber": {
       "description": "A human readable number assigned to this PO line",
-      "pattern": "^[a-zA-Z0-9]{1,16}-[0-9]{1,3}$",
+      "pattern": "^[a-zA-Z0-9]{1,22}-[0-9]{1,3}$",
       "type": "string"
     },
     "poLineReceiptStatus": {
       "$ref": "receipt_status.json",
       "description": "The purchase order line receipt status",
-      "type": "object"
+      "type": "string"
     },
     "purchaseOrderId": {
       "$ref": "../../common/schemas/uuid.json",
