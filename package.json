@@ -49,6 +49,7 @@
     "@types/node": "^25.2.1",
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
+    "camelcase": "^9.0.0",
     "eslint": "^9.1.0",
     "glob": "^13.0.0",
     "jest": "^30.0.0",
