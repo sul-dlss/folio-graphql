@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "A collection of binding pieces",
+  "type": "object",
+  "properties": {
+    "poLineId": {
+      "description": "The id of the binding PoLine",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+    },
+    "instanceId": {
+      "description": "The id of the instance associated with PoLine",
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+    },
+    "bindItem": {
+      "description": "The new binding item details",
+      "type": "object",
+      "properties": {
+        "barcode": {
+          "type": "string",
+          "description": "Barcode is the descriptive information for the barcode of a serial. Synchronized with inventory item."
+        },
+        "materialTypeId": {
+          "description": "UUID of the material type",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+        },
+        "callNumber": {
+          "type": "string",
+          "description": "CallNumber is the descriptive information for the call number of a serial. Synchronized with inventory item."
+        },
+        "permanentLoanTypeId": {
+          "description": "UUID of the permanent loan type",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+        },
+        "locationId": {
+          "description": "UUID of the location Id",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+        },
+        "holdingId": {
+          "description": "UUID of the holding Id",
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+        },
+        "tenantId": {
+          "description": "ID of the Tenant where the item should be created in",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "bindPieceIds": {
+      "description": "A collection of IDs of binding piece records",
+      "type": "array",
+      "id": "bindPieceIds",
+      "items": {
+        "type": "string",
+        "$ref": "../../common/schemas/uuid.json"
+      }
+    },
+    "requestsAction": {
+      "description": "Action to determine whether the open circulation requests should be transferred to a new item or not",
+      "type": "object",
+      "$ref": "requestsAction.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "poLineId",
+    "bindItem",
+    "bindPieceIds"
+  ]
+}

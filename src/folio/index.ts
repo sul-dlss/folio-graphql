@@ -16,6 +16,7 @@ import {
   PatronBlockCondition,
   FixedDueDateSchedule,
   HoldStatus,
+  Identifier,
   IdentifierType,
   InstanceNoteType,
   InstanceFormat,
@@ -24,14 +25,14 @@ import {
   LoanType,
   CallNumberType,
   HoldingsRecordsSource,
-  IlLpolicy,
+  IllPolicy,
   ElectronicAccessRelationship,
   ModeOfIssuance,
   HoldingsType,
   AlternativeTitleType,
   ContributorType,
   MaterialType,
-  ItemCirculationNotesItemNoteType,
+  CirculationNoteNoteType,
   ItemNoteType,
 } from "../schema.js"
 import { Resolvers } from '../resolvers-types'
@@ -285,12 +286,12 @@ export const resolvers: Resolvers = {
       return types.getById<ContributorType>("contributor-types", { key: 'contributorTypes' }, contributorTypeId)
     }
   },
-  InstanceIdentifiersItem: {
+  Identifier: {
     identifierTypeObject({ identifierTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<IdentifierType>("identifier-types", { key: 'identifierTypes' }, identifierTypeId)
     },
   },
-  InstanceElectronicAccessItem: {
+  ElectronicAccessItem: {
     relationship({ relationshipId }, args, { dataSources: { types } }, info) {
       return types.getById<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships' }, relationshipId)
     },
@@ -320,7 +321,7 @@ export const resolvers: Resolvers = {
       return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, callNumberTypeId)
     },
     illPolicy({ illPolicyId }, args, { dataSources: { types } }, info) {
-      return types.getById<IlLpolicy>("ill-policies", { key: 'illPolicies' }, illPolicyId)
+      return types.getById<IllPolicy>("ill-policies", { key: 'illPolicies' }, illPolicyId)
     },
     holdingsType({ holdingsTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<HoldingsType>("holdings-types", { key: 'holdingsTypes' }, holdingsTypeId)
@@ -336,11 +337,6 @@ export const resolvers: Resolvers = {
     },
     holdingSummaries({ id }, args, { dataSources: { orders } }, info) {
       return orders.getHoldingSummaries(id)
-    }
-  },
-  HoldingsrecordElectronicAccessItem: {
-    relationship({ relationshipId }, args, { dataSources: { types } }, info) {
-      return types.getById<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships' }, relationshipId)
     }
   },
   Item: {
@@ -403,11 +399,11 @@ export const resolvers: Resolvers = {
       return populatedNotes;
     },
   },
-  ItemCirculationNotesItem: {
+  CirculationNote: {
     noteType({ noteType }, args, { dataSources: { types } }, info) {
       switch (noteType as unknown as string) {
-        case "Check in": return ItemCirculationNotesItemNoteType.CheckIn
-        case "Check out": return ItemCirculationNotesItemNoteType.CheckOut
+        case "Check in": return CirculationNoteNoteType.CheckIn
+        case "Check out": return CirculationNoteNoteType.CheckOut
       }
     }
   },

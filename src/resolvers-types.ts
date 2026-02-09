@@ -118,7 +118,83 @@ export type AlternativeTitleType = {
   name: Scalars['String']['output'];
   /** label indicating where the alternative title type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the alternative title type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
+
+/** Multi-Item Request Processing Status */
+export type BatchRequestStatusResponse = {
+  __typename?: 'BatchRequestStatusResponse';
+  /** The UUID id of the batch request */
+  batchRequestId: Scalars['UUID']['output'];
+  /** The date when the request was completed */
+  completedAt?: Maybe<Scalars['DateTime']['output']>;
+  /** Number of items that failed to be requested */
+  itemsFailed?: Maybe<Scalars['Int']['output']>;
+  /** Collection of items request details that are failed on processing and creating requests */
+  itemsFailedDetails?: Maybe<Array<BatchRequestStatusResponseItemsFailedDetailsItem>>;
+  /** Number of items still pending to be requested */
+  itemsPending?: Maybe<Scalars['Int']['output']>;
+  /** Collection of items request details that are still pending to be processed */
+  itemsPendingDetails?: Maybe<Array<BatchRequestStatusResponseItemsPendingDetailsItem>>;
+  /** Number of items successfully requested */
+  itemsRequested?: Maybe<Scalars['Int']['output']>;
+  /** Collection of processed and created items requests details */
+  itemsRequestedDetails?: Maybe<Array<BatchRequestStatusResponseItemsRequestedDetailsItem>>;
+  /** Total number of items to be requested in batch */
+  itemsTotal?: Maybe<Scalars['Int']['output']>;
+  /** Status of the submitted batch request */
+  status: BatchRequestStatusResponseStatus;
+  /** The date when the request was made */
+  submittedAt: Scalars['DateTime']['output'];
+};
+
+export type BatchRequestStatusResponseItemsFailedDetailsItem = {
+  __typename?: 'BatchRequestStatusResponseItemsFailedDetailsItem';
+  /** Error code indicating the reason for failure */
+  errorCode?: Maybe<Scalars['String']['output']>;
+  /** Detailed message describing the failure */
+  errorDetails?: Maybe<Scalars['String']['output']>;
+  /** The UUID id of the instance */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the item */
+  itemId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the pickup location */
+  pickUpLocationId?: Maybe<Scalars['UUID']['output']>;
+  /** Title of the item */
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type BatchRequestStatusResponseItemsPendingDetailsItem = {
+  __typename?: 'BatchRequestStatusResponseItemsPendingDetailsItem';
+  /** The UUID id of the instance */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the item */
+  itemId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the pickup location */
+  pickUpLocationId?: Maybe<Scalars['UUID']['output']>;
+  /** Title of the item */
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export type BatchRequestStatusResponseItemsRequestedDetailsItem = {
+  __typename?: 'BatchRequestStatusResponseItemsRequestedDetailsItem';
+  /** The UUID id of created item request */
+  confirmedRequestId?: Maybe<Scalars['UUID']['output']>;
+  /** The UUID id of the instance */
+  instanceId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the item */
+  itemId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of the pickup location */
+  pickUpLocationId?: Maybe<Scalars['UUID']['output']>;
+  /** Title of the item */
+  title?: Maybe<Scalars['String']['output']>;
+};
+
+export enum BatchRequestStatusResponseStatus {
+  Completed = 'Completed',
+  InProgress = 'In_progress'
+}
 
 /** Single automated patron block */
 export type Block = {
@@ -157,6 +233,19 @@ export type BoundWithParts = {
   totalRecords: Scalars['Int']['output'];
 };
 
+/** A call number */
+export type CallNumberComponents = {
+  __typename?: 'CallNumberComponents';
+  /** Call Number is an identifier assigned to an item, usually printed on a label attached to the item. */
+  callNumber: Scalars['String']['output'];
+  /** Prefix of the call number on the holding level. */
+  prefix?: Maybe<Scalars['String']['output']>;
+  /** Suffix of the call number on the holding level. */
+  suffix?: Maybe<Scalars['String']['output']>;
+  /** unique ID for the type of call number on a holdings record, a UUID */
+  typeId?: Maybe<Scalars['UUID']['output']>;
+};
+
 /** A call number type */
 export type CallNumberType = {
   __typename?: 'CallNumberType';
@@ -167,6 +256,8 @@ export type CallNumberType = {
   name: Scalars['String']['output'];
   /** label indicating where the call number type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the call number type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** second-level location unit */
@@ -178,6 +269,8 @@ export type Campus = {
   institution?: Maybe<Institution>;
   /** ID of the first-level location unit that the second-level unit belongs to */
   institutionId: Scalars['String']['output'];
+  /** Whether this is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
   libraries?: Maybe<Array<Maybe<Library>>>;
   metadata?: Maybe<Metadata>;
   /** name of the location */
@@ -191,6 +284,66 @@ export type Charge = {
   amount?: Maybe<Scalars['Float']['output']>;
   /** Charge type amount for item may be Actual cost or an amount */
   chargeType?: Maybe<Scalars['String']['output']>;
+};
+
+/** Note to be displayed in circulation processes */
+export type CirculationNote = {
+  __typename?: 'CirculationNote';
+  /** Date and time the record is added/updated. The property is generated by the server and needed to support sorting. */
+  date?: Maybe<Scalars['String']['output']>;
+  /** The id of the circulation note */
+  id?: Maybe<Scalars['String']['output']>;
+  /** Text to display */
+  note?: Maybe<Scalars['String']['output']>;
+  /** Type of circulation process that the note applies to */
+  noteType?: Maybe<CirculationNoteNoteType>;
+  /** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+  source?: Maybe<CirculationNoteSource>;
+  /** Flag to restrict display of this note */
+  staffOnly?: Maybe<Scalars['Boolean']['output']>;
+  /** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+  type?: Maybe<CirculationNoteType>;
+};
+
+export enum CirculationNoteNoteType {
+  CheckIn = 'Check_in',
+  CheckOut = 'Check_out'
+}
+
+/** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+export type CirculationNoteSource = {
+  __typename?: 'CirculationNoteSource';
+  /** The id of the user who added/updated the note. The user information is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+  id?: Maybe<Scalars['String']['output']>;
+  /** Personal information about the user */
+  personal?: Maybe<CirculationNoteSourcePersonal>;
+};
+
+/** Personal information about the user */
+export type CirculationNoteSourcePersonal = {
+  __typename?: 'CirculationNoteSourcePersonal';
+  /** The user's first name */
+  firstName?: Maybe<Scalars['String']['output']>;
+  /** The user's last name */
+  lastName?: Maybe<Scalars['String']['output']>;
+};
+
+/** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+export type CirculationNoteType = {
+  __typename?: 'CirculationNoteType';
+  /** The id of the user who added/updated the note. The user information is generated by the server and needed to support sorting. Points to /users/{id} resource. */
+  id?: Maybe<Scalars['String']['output']>;
+  /** Personal information about the user */
+  personal?: Maybe<CirculationNoteTypePersonal>;
+};
+
+/** Personal information about the user */
+export type CirculationNoteTypePersonal = {
+  __typename?: 'CirculationNoteTypePersonal';
+  /** The user's first name */
+  firstName?: Maybe<Scalars['String']['output']>;
+  /** The user's last name */
+  lastName?: Maybe<Scalars['String']['output']>;
 };
 
 /** details about an order claim */
@@ -213,6 +366,17 @@ export type ClassificationType = {
   name: Scalars['String']['output'];
   /** label indicating where the classification type entry originates from, i.e. 'folio' or 'local' */
   source?: Maybe<Scalars['String']['output']>;
+  /** label indicating where the classification type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** purchase order closing reason record */
+export type CloseReason = {
+  __typename?: 'CloseReason';
+  /** free-form notes related to closing reason */
+  note?: Maybe<Scalars['String']['output']>;
+  /** close reason description */
+  reason?: Maybe<Scalars['String']['output']>;
 };
 
 /** contributor to the material */
@@ -235,6 +399,8 @@ export type ContributorNameType = {
   ordering?: Maybe<Scalars['String']['output']>;
   /** origin of the contributor name type record, e.g. 'local', 'consortium' etc. */
   source?: Maybe<Scalars['String']['output']>;
+  /** origin of the contributor name type record, e.g. 'local', 'consortium' etc. */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** A contributor type */
@@ -248,6 +414,8 @@ export type ContributorType = {
   name: Scalars['String']['output'];
   /** origin of the contributor type record */
   source: Scalars['String']['output'];
+  /** origin of the contributor type record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** purchase order line cost record */
@@ -289,11 +457,19 @@ export type CqlParams = {
   sortby?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Object that contains custom field */
+export type CustomFields = {
+  __typename?: 'CustomFields';
+  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
+};
+
 /** purchase order line details */
 export type Details = {
   __typename?: 'Details';
   /** Flag for acknowledge receiving note */
   isAcknowledged?: Maybe<Scalars['Boolean']['output']>;
+  /** Indicates that this POL is designated as required binding */
+  isBinderyActive?: Maybe<Scalars['Boolean']['output']>;
   /** a list of product identifiers */
   productIds?: Maybe<Array<ProductIdentifier>>;
   /** notes regarding receiving instructions */
@@ -306,6 +482,22 @@ export type Details = {
   subscriptionTo?: Maybe<Scalars['DateTime']['output']>;
 };
 
+/** Electronic access item */
+export type ElectronicAccessItem = {
+  __typename?: 'ElectronicAccessItem';
+  /** the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
+  linkText?: Maybe<Scalars['String']['output']>;
+  /** materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record) */
+  materialsSpecification?: Maybe<Scalars['String']['output']>;
+  /** URL public note to be displayed in the discovery */
+  publicNote?: Maybe<Scalars['String']['output']>;
+  relationship?: Maybe<ElectronicAccessRelationship>;
+  /** relationship between the electronic resource at the location identified and the item described in the record as a whole */
+  relationshipId?: Maybe<Scalars['String']['output']>;
+  /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
+  uri: Scalars['String']['output'];
+};
+
 /** A qualifier indicating the type of relationship that an electronic resource at a given URL has to an Instance */
 export type ElectronicAccessRelationship = {
   __typename?: 'ElectronicAccessRelationship';
@@ -315,6 +507,8 @@ export type ElectronicAccessRelationship = {
   name: Scalars['String']['output'];
   /** Origin of the electronic access relationship record, e.g. 'local', 'consortium' etc. */
   source?: Maybe<Scalars['String']['output']>;
+  /** Origin of the electronic access relationship record, e.g. 'local', 'consortium' etc. */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** purchase order line e-resource details */
@@ -339,7 +533,7 @@ export type Eresource = {
   /** whether or not this is a trial */
   trial?: Maybe<Scalars['Boolean']['output']>;
   /** the concurrent user-limit */
-  userLimit?: Maybe<Scalars['Int']['output']>;
+  userLimit?: Maybe<Scalars['String']['output']>;
 };
 
 export enum EresourceCreateInventory {
@@ -356,8 +550,16 @@ export type Error = {
   code?: Maybe<Scalars['String']['output']>;
   /** Error message text */
   message: Scalars['String']['output'];
+  /** Error message parameters */
+  parameters?: Maybe<Array<ErrorParametersItem>>;
   /** Error message type */
   type?: Maybe<Scalars['String']['output']>;
+};
+
+export type ErrorParametersItem = {
+  __typename?: 'ErrorParametersItem';
+  key?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
 };
 
 /** Fees/fines that are used by the entire library system. They can be a set of fees / fines shared throughout the library or fees / fines that are unique to a specific customer service */
@@ -408,6 +610,8 @@ export type FeeFineAction = {
   source?: Maybe<Scalars['String']['output']>;
   /** Number or other transaction id related to payment */
   transactionInformation?: Maybe<Scalars['String']['output']>;
+  /** Person who processed activity (from login information) */
+  type?: Maybe<Scalars['String']['output']>;
   /** Type of activity including the type of transaction */
   typeAction?: Maybe<Scalars['String']['output']>;
   /** ID of the user */
@@ -452,6 +656,8 @@ export enum FundDistributionDistributionType {
 /** Hold schema for patron portal integration */
 export type Hold = {
   __typename?: 'Hold';
+  /** Information about the batch request this request is part of */
+  batchRequestInfo?: Maybe<HoldBatchRequestInfo>;
   /** The id of the user that cancelled the request */
   canceledByUserId?: Maybe<Scalars['UUID']['output']>;
   /** Date the request was cancelled */
@@ -481,11 +687,21 @@ export type Hold = {
   status?: Maybe<HoldStatus>;
 };
 
+/** Information about the batch request this request is part of */
+export type HoldBatchRequestInfo = {
+  __typename?: 'HoldBatchRequestInfo';
+  /** ID of the batch request */
+  batchRequestId: Scalars['UUID']['output'];
+  /** Date and time when the batch request was submitted */
+  batchRequestSubmittedAt: Scalars['DateTime']['output'];
+};
+
 export enum HoldStatus {
   ClosedCancelled = 'Closed___Cancelled',
   ClosedFilled = 'Closed___Filled',
   ClosedPickupExpired = 'Closed___Pickup_expired',
   ClosedUnfilled = 'Closed___Unfilled',
+  NewAwaitingConfirmation = 'New___Awaiting_confirmation',
   OpenAwaitingDelivery = 'Open___Awaiting_delivery',
   OpenAwaitingPickup = 'Open___Awaiting_pickup',
   OpenInTransit = 'Open___In_transit',
@@ -495,20 +711,22 @@ export enum HoldStatus {
 /** Holding summary */
 export type HoldingSummary = {
   __typename?: 'HoldingSummary';
-  orderCloseReason?: Maybe<Scalars['String']['output']>;
+  /** Close reason for purchase order */
+  orderCloseReason?: Maybe<CloseReason>;
   /** Order sent date */
   orderSentDate?: Maybe<Scalars['DateTime']['output']>;
   /** Order status */
-  orderStatus?: Maybe<Scalars['String']['output']>;
+  orderStatus?: Maybe<WorkflowStatus>;
   /** Purchase order type */
   orderType?: Maybe<HoldingSummaryOrderType>;
   pieces?: Maybe<Array<Maybe<Piece>>>;
   poLine?: Maybe<PoLine>;
   /** Purchase order line id */
-  poLineId?: Maybe<Scalars['String']['output']>;
+  poLineId?: Maybe<Scalars['UUID']['output']>;
   /** Purchase order line number */
   poLineNumber?: Maybe<Scalars['String']['output']>;
-  polReceiptStatus?: Maybe<Scalars['String']['output']>;
+  /** Purchase order line receipt status */
+  polReceiptStatus?: Maybe<ReceiptStatus>;
 };
 
 /** Collection of holding summary elements */
@@ -525,16 +743,35 @@ export enum HoldingSummaryOrderType {
   Ongoing = 'Ongoing'
 }
 
-/** A holdings note type */
-export type HoldingsNoteType = {
-  __typename?: 'HoldingsNoteType';
-  /** unique ID of the holdings note type; a UUID */
-  id?: Maybe<Scalars['String']['output']>;
-  metadata?: Maybe<Metadata>;
-  /** name of the holdings note type */
-  name: Scalars['String']['output'];
-  /** label indicating where the holdings note type entry originates from, i.e. 'folio' or 'local' */
-  source: Scalars['String']['output'];
+/** A holdings record note */
+export type HoldingsNote = {
+  __typename?: 'HoldingsNote';
+  /** ID of the type of note */
+  holdingsNoteTypeId?: Maybe<Scalars['UUID']['output']>;
+  /** Text content of the note */
+  note?: Maybe<Scalars['String']['output']>;
+  /** If true, determines that the note should not be visible for others than staff */
+  staffOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+/** Receiving history of holdings record */
+export type HoldingsReceivingHistory = {
+  __typename?: 'HoldingsReceivingHistory';
+  /** Display hint. 1: Display fields separately. 2: Display fields concatenated */
+  displayType?: Maybe<Scalars['String']['output']>;
+  /** Entries of receiving history */
+  entries?: Maybe<Array<HoldingsReceivingHistoryEntry>>;
+};
+
+/** Receiving history entry of holdings record */
+export type HoldingsReceivingHistoryEntry = {
+  __typename?: 'HoldingsReceivingHistoryEntry';
+  /** Repeated element from Receiving history - Enumeration AND Receiving history - Chronology */
+  chronology?: Maybe<Scalars['String']['output']>;
+  /** This is the volume/issue number (e.g. v.71:no.6-2) */
+  enumeration?: Maybe<Scalars['String']['output']>;
+  /** Defines if the receivingHistory should be visible to the public. */
+  publicDisplay?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** A holdings record */
@@ -546,10 +783,10 @@ export type HoldingsRecord = {
   acquisitionFormat?: Maybe<Scalars['String']['output']>;
   /** Method of holdings record acquisition */
   acquisitionMethod?: Maybe<Scalars['String']['output']>;
+  /** Additional Call Numbers to track the history of identifiers assigned to an item. */
+  additionalCallNumbers?: Maybe<Array<CallNumberComponents>>;
   /** Administrative notes */
   administrativeNotes?: Maybe<Array<Scalars['String']['output']>>;
-  /** Items of bareHoldings. This is a virtual field, accessible only when using mod-graphql. */
-  bareHoldingsItems?: Maybe<Array<Item>>;
   boundWithItem?: Maybe<Item>;
   /** Call Number is an identifier assigned to an item, usually printed on a label attached to the item. */
   callNumber?: Maybe<Scalars['String']['output']>;
@@ -570,20 +807,16 @@ export type HoldingsRecord = {
   /** Effective location is calculated by the system based on the values in the permanent and temporary locationId fields. */
   effectiveLocationId?: Maybe<Scalars['UUID']['output']>;
   /** List of electronic access items */
-  electronicAccess?: Maybe<Array<HoldingsrecordElectronicAccessItem>>;
+  electronicAccess?: Maybe<Array<ElectronicAccessItem>>;
   /** Previous ID(s) assigned to the holdings record */
   formerIds?: Maybe<Array<Scalars['String']['output']>>;
   holdingSummaries?: Maybe<Array<Maybe<HoldingSummary>>>;
-  /** Instance of holding record. This is a virtual field, accessible only when using mod-graphql. */
-  holdingsInstance?: Maybe<Instance>;
-  /** Items related to holdings record. This is a virtual field, accessible only when using mod-graphql. */
-  holdingsItems?: Maybe<Array<Item>>;
-  /** Notes about action, copy, binding etc. */
-  holdingsStatements?: Maybe<Array<HoldingsrecordHoldingsStatementsItem>>;
+  /** Holdings record statements */
+  holdingsStatements?: Maybe<Array<HoldingsStatement>>;
   /** Holdings record indexes statements */
-  holdingsStatementsForIndexes?: Maybe<Array<HoldingsrecordHoldingsStatementsForIndexesItem>>;
+  holdingsStatementsForIndexes?: Maybe<Array<HoldingsStatement>>;
   /** Holdings record supplements statements */
-  holdingsStatementsForSupplements?: Maybe<Array<HoldingsrecordHoldingsStatementsForSupplementsItem>>;
+  holdingsStatementsForSupplements?: Maybe<Array<HoldingsStatement>>;
   holdingsType?: Maybe<HoldingsType>;
   /** unique ID for the type of this holdings record, a UUID */
   holdingsTypeId?: Maybe<Scalars['UUID']['output']>;
@@ -591,8 +824,7 @@ export type HoldingsRecord = {
   hrid?: Maybe<Scalars['String']['output']>;
   /** the unique ID of the holdings record; UUID */
   id?: Maybe<Scalars['UUID']['output']>;
-  /** expanded ILL Policy object corresponding to illPolicyId */
-  illPolicy?: Maybe<IlLpolicy>;
+  illPolicy?: Maybe<IllPolicy>;
   /** unique ID for an ILL policy, a UUID */
   illPolicyId?: Maybe<Scalars['UUID']['output']>;
   instance?: Maybe<Instance>;
@@ -601,24 +833,23 @@ export type HoldingsRecord = {
   items?: Maybe<Array<Maybe<Item>>>;
   metadata?: Maybe<Metadata>;
   /** Notes about action, copy, binding etc. */
-  notes?: Maybe<Array<HoldingsrecordNotesItem>>;
+  notes?: Maybe<Array<HoldingsNote>>;
   /** Text (Number) */
   numberOfItems?: Maybe<Scalars['String']['output']>;
-  /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** The permanent shelving location in which an item resides. */
   permanentLocationId: Scalars['UUID']['output'];
   /** Receipt status (e.g. pending, awaiting receipt, partially received, fully received, receipt not required, and cancelled) */
   receiptStatus?: Maybe<Scalars['String']['output']>;
   /** Receiving history of holdings record */
-  receivingHistory?: Maybe<HoldingsrecordReceivingHistory>;
+  receivingHistory?: Maybe<HoldingsReceivingHistory>;
   /** Records information regarding how long we have agreed to keep something. */
   retentionPolicy?: Maybe<Scalars['String']['output']>;
   /** Indicates the shelving form of title. */
   shelvingTitle?: Maybe<Scalars['String']['output']>;
   source?: Maybe<HoldingsRecordsSource>;
   /** (A reference to) the source of a holdings record */
-  sourceId?: Maybe<Scalars['UUID']['output']>;
+  sourceId: Scalars['UUID']['output'];
   /** List of statistical code IDs */
   statisticalCodeIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** arbitrary tags associated with this holding */
@@ -634,16 +865,6 @@ export type HoldingsRecordItemsArgs = {
   params?: InputMaybe<CqlParams>;
 };
 
-/** A collection of holdings records */
-export type HoldingsRecords = {
-  __typename?: 'HoldingsRecords';
-  /** List of holdings records */
-  holdingsRecords: Array<HoldingsRecord>;
-  resultInfo?: Maybe<ResultInfo>;
-  /** Estimated or exact total number of records */
-  totalRecords: Scalars['Int']['output'];
-};
-
 /** A holdings records source */
 export type HoldingsRecordsSource = {
   __typename?: 'HoldingsRecordsSource';
@@ -653,7 +874,32 @@ export type HoldingsRecordsSource = {
   /** Name of the holdings records source */
   name: Scalars['String']['output'];
   /** The holdings records source */
-  source?: Maybe<HoldingsrecordssourceSource>;
+  source?: Maybe<HoldingsRecordsSourceSource>;
+  /** The holdings records source */
+  type?: Maybe<HoldingsRecordsSourceType>;
+};
+
+export enum HoldingsRecordsSourceSource {
+  Consortium = 'consortium',
+  Folio = 'folio',
+  Local = 'local'
+}
+
+export enum HoldingsRecordsSourceType {
+  Consortium = 'consortium',
+  Folio = 'folio',
+  Local = 'local'
+}
+
+/** Holdings record statement */
+export type HoldingsStatement = {
+  __typename?: 'HoldingsStatement';
+  /** Note attached to a holdings statement */
+  note?: Maybe<Scalars['String']['output']>;
+  /** Private note attached to a holdings statement */
+  staffNote?: Maybe<Scalars['String']['output']>;
+  /** Specifies the exact content to which the library has access, typically for continuing publications. */
+  statement?: Maybe<Scalars['String']['output']>;
 };
 
 /** A holdings type */
@@ -666,99 +912,19 @@ export type HoldingsType = {
   name: Scalars['String']['output'];
   /** label indicating where the holdings type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the holdings type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
-export type HoldingsrecordElectronicAccessItem = {
-  __typename?: 'HoldingsrecordElectronicAccessItem';
-  /** the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
-  linkText?: Maybe<Scalars['String']['output']>;
-  /** materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record) */
-  materialsSpecification?: Maybe<Scalars['String']['output']>;
-  /** URL public note to be displayed in the discovery */
-  publicNote?: Maybe<Scalars['String']['output']>;
-  relationship?: Maybe<ElectronicAccessRelationship>;
-  /** relationship between the electronic resource at the location identified and the item described in the record as a whole */
-  relationshipId?: Maybe<Scalars['String']['output']>;
-  /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
-  uri: Scalars['String']['output'];
-};
-
-export type HoldingsrecordHoldingsStatementsForIndexesItem = {
-  __typename?: 'HoldingsrecordHoldingsStatementsForIndexesItem';
-  /** Note attached to a holdings statement */
-  note?: Maybe<Scalars['String']['output']>;
-  /** Private note attached to a holdings statment */
-  staffNote?: Maybe<Scalars['String']['output']>;
-  /** Textual description of the holdings of indexes */
-  statement?: Maybe<Scalars['String']['output']>;
-};
-
-export type HoldingsrecordHoldingsStatementsForSupplementsItem = {
-  __typename?: 'HoldingsrecordHoldingsStatementsForSupplementsItem';
-  /** note attached to a holdings statement */
-  note?: Maybe<Scalars['String']['output']>;
-  /** Private note attached to a holdings statment */
-  staffNote?: Maybe<Scalars['String']['output']>;
-  /** textual description of the holdings of supplementary material */
-  statement?: Maybe<Scalars['String']['output']>;
-};
-
-export type HoldingsrecordHoldingsStatementsItem = {
-  __typename?: 'HoldingsrecordHoldingsStatementsItem';
-  /** Note attached to a holdings statement */
-  note?: Maybe<Scalars['String']['output']>;
-  /** Private note attached to a holdings statment */
-  staffNote?: Maybe<Scalars['String']['output']>;
-  /** Specifices the exact content to which the library has access, typically for continuing publications. */
-  statement?: Maybe<Scalars['String']['output']>;
-};
-
-export type HoldingsrecordNotesItem = {
-  __typename?: 'HoldingsrecordNotesItem';
-  /** expanded note-type object corresponding to holdingsNoteTypeId */
-  holdingsNoteType?: Maybe<HoldingsNoteType>;
-  /** ID of the type of note */
-  holdingsNoteTypeId?: Maybe<Scalars['UUID']['output']>;
-  /** Text content of the note */
-  note?: Maybe<Scalars['String']['output']>;
-  /** If true, determines that the note should not be visible for others than staff */
-  staffOnly?: Maybe<Scalars['Boolean']['output']>;
-};
-
-/** Receiving history of holdings record */
-export type HoldingsrecordReceivingHistory = {
-  __typename?: 'HoldingsrecordReceivingHistory';
-  /** Display hint. 1: Display fields separately. 2: Display fields concatenated */
-  displayType?: Maybe<Scalars['String']['output']>;
-  /** Entries of receiving history */
-  entries?: Maybe<Array<HoldingsrecordReceivingHistoryEntriesItem>>;
-};
-
-export type HoldingsrecordReceivingHistoryEntriesItem = {
-  __typename?: 'HoldingsrecordReceivingHistoryEntriesItem';
-  /** Repeated element from Receiving history - Enumeration AND Receiving history - Chronology */
-  chronology?: Maybe<Scalars['String']['output']>;
-  /** This is the volume/issue number (e.g. v.71:no.6-2) */
-  enumeration?: Maybe<Scalars['String']['output']>;
-  /** Defines if the receivingHistory should be visible to the public. */
-  publicDisplay?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export enum HoldingsrecordssourceSource {
-  Folio = 'folio',
-  Local = 'local'
-}
-
-/** An ILL policy */
-export type IlLpolicy = {
-  __typename?: 'ILLpolicy';
-  /** unique ID of the ILL policy; UUID */
-  id?: Maybe<Scalars['String']['output']>;
-  metadata?: Maybe<Metadata>;
-  /** name of the policy */
-  name: Scalars['String']['output'];
-  /** label indicating where the ILL policy entry originates from, i.e. 'folio' or 'local' */
-  source: Scalars['String']['output'];
+/** A call number */
+export type Identifier = {
+  __typename?: 'Identifier';
+  /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
+  identifierTypeId: Scalars['UUID']['output'];
+  /** Information about identifier type, looked up from identifierTypeId */
+  identifierTypeObject?: Maybe<IdentifierType>;
+  /** Resource identifier value */
+  value: Scalars['String']['output'];
 };
 
 /** An identifier type */
@@ -770,6 +936,22 @@ export type IdentifierType = {
   name: Scalars['String']['output'];
   /** label indicating where the identifier type entry originates from, i.e. 'folio' or 'local' */
   source?: Maybe<Scalars['String']['output']>;
+  /** label indicating where the identifier type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
+};
+
+/** An ILL policy */
+export type IllPolicy = {
+  __typename?: 'IllPolicy';
+  /** unique ID of the ILL policy; UUID */
+  id?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Metadata>;
+  /** name of the policy */
+  name: Scalars['String']['output'];
+  /** label indicating where the ILL policy entry originates from, i.e. 'folio' or 'local' */
+  source: Scalars['String']['output'];
+  /** label indicating where the ILL policy entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** An instance record */
@@ -787,20 +969,25 @@ export type Instance = {
   classifications?: Maybe<Array<InstanceClassificationsItem>>;
   /** List of contributors */
   contributors?: Maybe<Array<InstanceContributorsItem>>;
+  /** Instance Dates */
+  dates?: Maybe<InstanceDates>;
+  /** Indicates whether the record was marked for deletion */
+  deleted?: Maybe<Scalars['Boolean']['output']>;
   /** Records the fact that the record should not be displayed in a discovery system */
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
   /** The edition statement, imprint and other publication source information */
   editions?: Maybe<Array<Scalars['String']['output']>>;
   /** List of electronic access items */
-  electronicAccess?: Maybe<Array<InstanceElectronicAccessItem>>;
+  electronicAccess?: Maybe<Array<ElectronicAccessItem>>;
   holdingsRecords?: Maybe<Array<Maybe<HoldingsRecord>>>;
-  holdingsRecords2?: Maybe<HoldingsRecords>;
+  /** List of holdings records */
+  holdingsRecords2?: Maybe<Array<HoldingsRecord>>;
   /** The human readable ID, also called eye readable ID. A system-assigned sequential ID which maps to the Instance ID */
   hrid?: Maybe<Scalars['String']['output']>;
   /** The unique ID of the instance record; a UUID */
   id?: Maybe<Scalars['UUID']['output']>;
   /** An extensible set of name-value pairs of identifiers associated with the resource */
-  identifiers?: Maybe<Array<InstanceIdentifiersItem>>;
+  identifiers?: Maybe<Array<Identifier>>;
   /** Title normalized for browsing and searching; based on the title with articles removed */
   indexTitle?: Maybe<Scalars['String']['output']>;
   /** UUIDs for the unique terms for the format whether it's from the RDA carrier term list of locally defined */
@@ -832,8 +1019,6 @@ export type Instance = {
   publication?: Maybe<Array<InstancePublicationItem>>;
   /** List of intervals at which a serial appears (e.g. daily, weekly, monthly, quarterly, etc.) */
   publicationFrequency?: Maybe<Array<Scalars['String']['output']>>;
-  /** Publication period */
-  publicationPeriod?: Maybe<InstancePublicationPeriod>;
   /** The range of sequential designation/chronology of publication, or date range */
   publicationRange?: Maybe<Array<Scalars['String']['output']>>;
   queueTotalLength?: Maybe<Scalars['Int']['output']>;
@@ -843,6 +1028,8 @@ export type Instance = {
   source: Scalars['String']['output'];
   /** Format of the instance source record, if a source record exists (e.g. FOLIO if it's a record created in Inventory,  MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings) */
   sourceRecordFormat?: Maybe<InstanceSourceRecordFormat>;
+  /** A remote URI uniquely identifying the source of the instance */
+  sourceUri?: Maybe<Scalars['String']['output']>;
   /** Records the fact that the record should not be displayed for others than catalogers */
   staffSuppress?: Maybe<Scalars['Boolean']['output']>;
   /** List of statistical code IDs */
@@ -858,6 +1045,8 @@ export type Instance = {
   tags?: Maybe<Tags>;
   /** The primary title (or label) associated with the resource */
   title: Scalars['String']['output'];
+  /** The metadata source and its format of the underlying record to the instance record. (e.g. FOLIO if it's a record created in Inventory; MARC if it's a MARC record created in MARCcat or EPKB if it's a record coming from eHoldings; CONSORTIUM-MARC or CONSORTIUM-FOLIO for sharing Instances). */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -912,19 +1101,15 @@ export type InstanceContributorsItem = {
   primary?: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type InstanceElectronicAccessItem = {
-  __typename?: 'InstanceElectronicAccessItem';
-  /** The value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
-  linkText?: Maybe<Scalars['String']['output']>;
-  /** Materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record) */
-  materialsSpecification?: Maybe<Scalars['String']['output']>;
-  /** URL public note to be displayed in the discovery */
-  publicNote?: Maybe<Scalars['String']['output']>;
-  relationship?: Maybe<ElectronicAccessRelationship>;
-  /** UUID for the type of relationship between the electronic resource at the location identified and the item described in the record as a whole */
-  relationshipId?: Maybe<Scalars['UUID']['output']>;
-  /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
-  uri: Scalars['String']['output'];
+/** Instance Dates */
+export type InstanceDates = {
+  __typename?: 'InstanceDates';
+  /** Date 1 */
+  date1?: Maybe<Scalars['String']['output']>;
+  /** Date 2 */
+  date2?: Maybe<Scalars['String']['output']>;
+  /** Date type ID */
+  dateTypeId?: Maybe<Scalars['UUID']['output']>;
 };
 
 /** The format of an Instance */
@@ -938,15 +1123,8 @@ export type InstanceFormat = {
   name: Scalars['String']['output'];
   /** origin of the Instance format record */
   source: Scalars['String']['output'];
-};
-
-export type InstanceIdentifiersItem = {
-  __typename?: 'InstanceIdentifiersItem';
-  /** UUID of resource identifier type (e.g. ISBN, ISSN, LCCN, CODEN, Locally defined identifiers) */
-  identifierTypeId: Scalars['UUID']['output'];
-  identifierTypeObject?: Maybe<IdentifierType>;
-  /** Resource identifier value */
-  value: Scalars['String']['output'];
+  /** origin of the Instance format record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** An Instance note type */
@@ -959,6 +1137,8 @@ export type InstanceNoteType = {
   name: Scalars['String']['output'];
   /** label indicating where the Instance note type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the Instance note type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 export type InstanceNotesItem = {
@@ -984,15 +1164,6 @@ export type InstancePublicationItem = {
   role?: Maybe<Scalars['String']['output']>;
 };
 
-/** Publication period */
-export type InstancePublicationPeriod = {
-  __typename?: 'InstancePublicationPeriod';
-  /** Publication end year */
-  end?: Maybe<Scalars['Int']['output']>;
-  /** Publication start year */
-  start?: Maybe<Scalars['Int']['output']>;
-};
-
 export type InstanceSeriesItem = {
   __typename?: 'InstanceSeriesItem';
   /** UUID of authority record that controls an series title */
@@ -1016,12 +1187,18 @@ export type InstanceStatus = {
   name: Scalars['String']['output'];
   /** origin of an instance status record */
   source: Scalars['String']['output'];
+  /** origin of an instance status record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 export type InstanceSubjectsItem = {
   __typename?: 'InstanceSubjectsItem';
   /** UUID of authority record that controls a subject heading */
   authorityId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of subject source */
+  sourceId?: Maybe<Scalars['UUID']['output']>;
+  /** UUID of subject type */
+  typeId?: Maybe<Scalars['UUID']['output']>;
   /** Subject heading value */
   value: Scalars['String']['output'];
 };
@@ -1037,6 +1214,8 @@ export type InstanceType = {
   name: Scalars['String']['output'];
   /** origin of a resource type record */
   source: Scalars['String']['output'];
+  /** origin of a resource type record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** highest-level location unit */
@@ -1045,6 +1224,8 @@ export type Institution = {
   /** distinct code for location */
   code: Scalars['String']['output'];
   id?: Maybe<Scalars['String']['output']>;
+  /** Whether this is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
   metadata?: Maybe<Metadata>;
   /** name of location */
   name: Scalars['String']['output'];
@@ -1075,6 +1256,8 @@ export type Item = {
   _version?: Maybe<Scalars['Int']['output']>;
   /** Also called inventar number */
   accessionNumber?: Maybe<Scalars['String']['output']>;
+  /** Additional Call Numbers to track the history of identifiers assigned to an item. */
+  additionalCallNumbers?: Maybe<Array<CallNumberComponents>>;
   /** Administrative notes */
   administrativeNotes?: Maybe<Array<Scalars['String']['output']>>;
   /** Unique inventory control number for physical resources, used largely for circulation purposes */
@@ -1083,7 +1266,7 @@ export type Item = {
   /** Chronology is the descriptive information for the dating scheme of a serial. */
   chronology?: Maybe<Scalars['String']['output']>;
   /** Notes to be displayed in circulation processes */
-  circulationNotes?: Maybe<Array<ItemCirculationNotesItem>>;
+  circulationNotes?: Maybe<Array<CirculationNote>>;
   /** Copy number is the piece identifier. The copy number reflects if the library has a copy of a single-volume monograph; one copy of a multi-volume, (e.g. Copy 1, or C.7.) */
   copyNumber?: Maybe<Scalars['String']['output']>;
   /** Description of item pieces. */
@@ -1101,7 +1284,7 @@ export type Item = {
   /** A system generated normalization of the call number that allows for call number sorting in reports and search results */
   effectiveShelvingOrder?: Maybe<Scalars['String']['output']>;
   /** References for accessing the item by URL. */
-  electronicAccess?: Maybe<Array<ItemElectronicAccessItem>>;
+  electronicAccess?: Maybe<Array<ElectronicAccessItem>>;
   /** Enumeration is the descriptive information for the numbering scheme of a serial. */
   enumeration?: Maybe<Scalars['String']['output']>;
   /** Previous identifiers assigned to the item */
@@ -1134,7 +1317,7 @@ export type Item = {
   itemLevelCallNumberSuffix?: Maybe<Scalars['String']['output']>;
   itemLevelCallNumberType?: Maybe<CallNumberType>;
   /** Identifies the source of the call number, e.g., LCC, Dewey, NLM, etc. */
-  itemLevelCallNumberTypeId?: Maybe<Scalars['String']['output']>;
+  itemLevelCallNumberTypeId?: Maybe<Scalars['UUID']['output']>;
   /** Information about when an item was last scanned in the Inventory app. */
   lastCheckIn?: Maybe<ItemLastCheckIn>;
   /** Item's material type */
@@ -1147,14 +1330,17 @@ export type Item = {
   /** Date when the piece(s) went missing. */
   missingPiecesDate?: Maybe<Scalars['String']['output']>;
   /** Notes about action, copy, binding etc. */
-  notes?: Maybe<Array<ItemNotesItem>>;
+  notes?: Maybe<Array<ItemNote>>;
   /** Number of missing pieces. */
   numberOfMissingPieces?: Maybe<Scalars['String']['output']>;
   /** Number of pieces. Used when an item is checked out or returned to verify that all parts are present (e.g. 7 CDs in a set). */
   numberOfPieces?: Maybe<Scalars['String']['output']>;
+  /** Order of the item in the holdings record. */
+  order?: Maybe<Scalars['Int']['output']>;
   permanentLoanType?: Maybe<LoanType>;
   /** The permanent loan type, is the default loan type for a given item. Loan types are tenant-defined. */
   permanentLoanTypeId: Scalars['String']['output'];
+  /** The permanent shelving location in which an item resides */
   permanentLocation?: Maybe<Location>;
   /** Permanent item location is the default location, shelving location, or holding which is a physical place where items are stored, or an Online location. */
   permanentLocationId?: Maybe<Scalars['String']['output']>;
@@ -1162,7 +1348,7 @@ export type Item = {
   purchaseOrderLineIdentifier?: Maybe<Scalars['String']['output']>;
   queueTotalLength?: Maybe<Scalars['Int']['output']>;
   /** List of statistical code IDs */
-  statisticalCodeIds?: Maybe<Array<Scalars['String']['output']>>;
+  statisticalCodeIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** The status of the item */
   status: ItemStatus;
   /** arbitrary tags associated with this item */
@@ -1180,45 +1366,6 @@ export type Item = {
   yearCaption?: Maybe<Array<Scalars['String']['output']>>;
 };
 
-export type ItemCirculationNotesItem = {
-  __typename?: 'ItemCirculationNotesItem';
-  /** Date and time the record is added/updated. The property is generated by the server and needed to support sorting. */
-  date?: Maybe<Scalars['String']['output']>;
-  /** The id of the circulation note */
-  id?: Maybe<Scalars['String']['output']>;
-  /** Text to display */
-  note?: Maybe<Scalars['String']['output']>;
-  /** Type of circulation process that the note applies to */
-  noteType?: Maybe<ItemCirculationNotesItemNoteType>;
-  /** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
-  source?: Maybe<ItemCirculationNotesItemSource>;
-  /** Flag to restrict display of this note */
-  staffOnly?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export enum ItemCirculationNotesItemNoteType {
-  CheckIn = 'Check_in',
-  CheckOut = 'Check_out'
-}
-
-/** The user who added/updated the note. The property is generated by the server and needed to support sorting. Points to /users/{id} resource. */
-export type ItemCirculationNotesItemSource = {
-  __typename?: 'ItemCirculationNotesItemSource';
-  /** The id of the user who added/updated the note. The user information is generated by the server and needed to support sorting. Points to /users/{id} resource. */
-  id?: Maybe<Scalars['String']['output']>;
-  /** Personal information about the user */
-  personal?: Maybe<ItemCirculationNotesItemSourcePersonal>;
-};
-
-/** Personal information about the user */
-export type ItemCirculationNotesItemSourcePersonal = {
-  __typename?: 'ItemCirculationNotesItemSourcePersonal';
-  /** The user's first name */
-  firstName?: Maybe<Scalars['String']['output']>;
-  /** The user's last name */
-  lastName?: Maybe<Scalars['String']['output']>;
-};
-
 /** An item damage status */
 export type ItemDamagedStatus = {
   __typename?: 'ItemDamagedStatus';
@@ -1229,6 +1376,8 @@ export type ItemDamagedStatus = {
   name: Scalars['String']['output'];
   /** label indicating where the item damage status entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
+  /** label indicating where the item damage status entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Elements of a full call number generated from the item or holding */
@@ -1245,20 +1394,6 @@ export type ItemEffectiveCallNumberComponents = {
   typeId?: Maybe<Scalars['UUID']['output']>;
 };
 
-export type ItemElectronicAccessItem = {
-  __typename?: 'ItemElectronicAccessItem';
-  /** the value of the MARC tag field 856 2nd indicator, where the values are: no information provided, resource, version of resource, related resource, no display constant generated */
-  linkText?: Maybe<Scalars['String']['output']>;
-  /** materials specified is used to specify to what portion or aspect of the resource the electronic location and access information applies (e.g. a portion or subset of the item is electronic, or a related electronic resource is being linked to the record) */
-  materialsSpecification?: Maybe<Scalars['String']['output']>;
-  /** URL public note to be displayed in the discovery */
-  publicNote?: Maybe<Scalars['String']['output']>;
-  /** relationship between the electronic resource at the location identified and the item described in the record as a whole */
-  relationshipId?: Maybe<Scalars['String']['output']>;
-  /** uniform resource identifier (URI) is a string of characters designed for unambiguous identification of resources */
-  uri: Scalars['String']['output'];
-};
-
 /** Information about when an item was last scanned in the Inventory app. */
 export type ItemLastCheckIn = {
   __typename?: 'ItemLastCheckIn';
@@ -1268,6 +1403,18 @@ export type ItemLastCheckIn = {
   servicePointId?: Maybe<Scalars['UUID']['output']>;
   /** ID a staff member who scanned the item */
   staffMemberId?: Maybe<Scalars['UUID']['output']>;
+};
+
+/** An item note */
+export type ItemNote = {
+  __typename?: 'ItemNote';
+  itemNoteType?: Maybe<ItemNoteType>;
+  /** ID of the type of note */
+  itemNoteTypeId?: Maybe<Scalars['String']['output']>;
+  /** Text content of the note */
+  note?: Maybe<Scalars['String']['output']>;
+  /** If true, determines that the note should not be visible for others than staff */
+  staffOnly?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** An item note type */
@@ -1280,18 +1427,8 @@ export type ItemNoteType = {
   name: Scalars['String']['output'];
   /** label indicating where the item note type entry originates from, i.e. 'folio' or 'local' */
   source: Scalars['String']['output'];
-};
-
-export type ItemNotesItem = {
-  __typename?: 'ItemNotesItem';
-  /** Type of item's note */
-  itemNoteType?: Maybe<ItemNoteType>;
-  /** ID of the type of note */
-  itemNoteTypeId?: Maybe<Scalars['String']['output']>;
-  /** Text content of the note */
-  note?: Maybe<Scalars['String']['output']>;
-  /** If true, determines that the note should not be visible for others than staff */
-  staffOnly?: Maybe<Scalars['Boolean']['output']>;
+  /** label indicating where the item note type entry originates from, i.e. 'folio' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** The status of the item */
@@ -1299,8 +1436,33 @@ export type ItemStatus = {
   __typename?: 'ItemStatus';
   /** Date and time when the status was last changed */
   date?: Maybe<Scalars['DateTime']['output']>;
-  name: Scalars['String']['output'];
+  /** Name of the status e.g. Available, Checked out, In transit */
+  name: ItemStatusName;
 };
+
+export enum ItemStatusName {
+  AgedToLost = 'Aged_to_lost',
+  Available = 'Available',
+  AwaitingDelivery = 'Awaiting_delivery',
+  AwaitingPickup = 'Awaiting_pickup',
+  CheckedOut = 'Checked_out',
+  ClaimedReturned = 'Claimed_returned',
+  DeclaredLost = 'Declared_lost',
+  InProcess = 'In_process',
+  InProcessNonRequestable = 'In_process__non_requestable_',
+  InTransit = 'In_transit',
+  IntellectualItem = 'Intellectual_item',
+  LongMissing = 'Long_missing',
+  LostAndPaid = 'Lost_and_paid',
+  Missing = 'Missing',
+  OnOrder = 'On_order',
+  OrderClosed = 'Order_closed',
+  Paged = 'Paged',
+  Restricted = 'Restricted',
+  Unavailable = 'Unavailable',
+  Unknown = 'Unknown',
+  Withdrawn = 'Withdrawn'
+}
 
 /** third-level location unit */
 export type Library = {
@@ -1311,6 +1473,8 @@ export type Library = {
   /** distinct code for the location */
   code: Scalars['String']['output'];
   id?: Maybe<Scalars['String']['output']>;
+  /** Whether this is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
   locations?: Maybe<Array<Maybe<Location>>>;
   metadata?: Maybe<Metadata>;
   /** name of the location */
@@ -1357,8 +1521,12 @@ export type Loan = {
   dueDateChangedByRecall?: Maybe<Scalars['Boolean']['output']>;
   /** Fees and fines associated with loans */
   feesAndFines?: Maybe<LoanFeesAndFines>;
+  /** Status of loan/item that is to be used in the library */
+  forUseAtLocation?: Maybe<LoanForUseAtLocation>;
   /** Unique ID (generated UUID) of the loan */
   id?: Maybe<Scalars['UUID']['output']>;
+  /** Indicates whether or not this loan is associated for DCB use case */
+  isDcb?: Maybe<Scalars['Boolean']['output']>;
   item?: Maybe<Item>;
   itemEffectiveLocationAtCheckOut?: Maybe<Location>;
   /** The effective location, at the time of checkout, of the item loaned to the patron. */
@@ -1409,6 +1577,10 @@ export type LoanBorrower = {
   lastName?: Maybe<Scalars['String']['output']>;
   /** middle name of the borrower (read only, defined by the server) */
   middleName?: Maybe<Scalars['String']['output']>;
+  /** current patron group of the borrower (read only, defined by the server) */
+  patronGroup?: Maybe<Scalars['String']['output']>;
+  /** preferred first name of the borrower (read only, defined by the server) */
+  preferredFirstName?: Maybe<Scalars['String']['output']>;
 };
 
 /** Fees and fines associated with loans */
@@ -1417,6 +1589,21 @@ export type LoanFeesAndFines = {
   /** Total remaining amount due on fees and fines for the loan (read only, defined by the server) */
   amountRemainingToPay?: Maybe<Scalars['Float']['output']>;
 };
+
+/** Status of loan/item that is to be used in the library */
+export type LoanForUseAtLocation = {
+  __typename?: 'LoanForUseAtLocation';
+  /** Indicates if the item is currently used by or being held for the patron */
+  status?: Maybe<LoanForUseAtLocationStatus>;
+  /** Date and time the status was registered */
+  statusDate?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export enum LoanForUseAtLocationStatus {
+  Held = 'Held',
+  InUse = 'In_use',
+  Returned = 'Returned'
+}
 
 /** Additional information about the lost item policy of the item, taken from the loan lostItemPolicyId */
 export type LoanLostItemPolicy = {
@@ -1470,8 +1657,12 @@ export type LoanPolicyLoansPolicy = {
   fixedDueDateSchedule?: Maybe<FixedDueDateSchedule>;
   /** Fixed due date schedule (due date limit) */
   fixedDueDateScheduleId?: Maybe<Scalars['String']['output']>;
+  /** Indicates that loaned items must be used in the library, i.e. in a reading room */
+  forUseAtLocation?: Maybe<Scalars['Boolean']['output']>;
   /** Grace period */
   gracePeriod?: Maybe<Period>;
+  /** Expiration period for items on the hold shelf for use at the location */
+  holdShelfExpiryPeriodForUseAtLocation?: Maybe<TimePeriod>;
   /** Number of items allowed */
   itemLimit?: Maybe<Scalars['Int']['output']>;
   /** Opening offset time period */
@@ -1564,6 +1755,8 @@ export type LoanType = {
   name: Scalars['String']['output'];
   /** Origin of the loan type record, e.g. 'System', 'User', 'Consortium' etc. */
   source?: Maybe<Scalars['String']['output']>;
+  /** Origin of the loan type record, e.g. 'System', 'User', 'Consortium' etc. */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** A (shelf) location, the forth-level location unit below institution, campus, and library. */
@@ -1589,6 +1782,11 @@ export type Location = {
   institutionId: Scalars['String']['output'];
   /** Whether this (shelf) location is active. Inactive (shelf) locations can no longer been used. */
   isActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Items checked in/out from this location can be checked in/out to other locations with the same flag. */
+  isFloatingCollection?: Maybe<Scalars['Boolean']['output']>;
+  /** Whether this location is a shadow location. Shadow locations are used to represent virtual locations that no items are assignable to them. They only relate to external libraries and virtual items. */
+  isShadow?: Maybe<Scalars['Boolean']['output']>;
+  /** The library, the third-level location unit, this (shelf) location belongs to. */
   library?: Maybe<Library>;
   /** The UUID of the library, the third-level location unit, this (shelf) location belongs to. */
   libraryId: Scalars['String']['output'];
@@ -1596,7 +1794,7 @@ export type Location = {
   /** Name of the (shelf) location */
   name: Scalars['String']['output'];
   /** The UUID of the primary service point of this (shelf) location. */
-  primaryServicePoint: Scalars['UUID']['output'];
+  primaryServicePoint: Scalars['String']['output'];
   /** Dereferenced object for primary service point. This should really just be called 'primaryServicePoint', but the field containing the ID of this object has that name -- it should really be called 'primaryServicePointId' -- so we need something different for this one. */
   primaryServicePointObject?: Maybe<ServicePoint>;
   /** All service points that this (shelf) location has. */
@@ -1734,6 +1932,8 @@ export type MaterialType = {
   name: Scalars['String']['output'];
   /** origin of the material type record */
   source?: Maybe<Scalars['String']['output']>;
+  /** origin of the material type record */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Metadata about creation and changes to records, provided by the server (client should not provide) */
@@ -1762,6 +1962,8 @@ export type ModeOfIssuance = {
   name: Scalars['String']['output'];
   /** label indicating where the mode of issuance entry originates from, i.e. 'rdamodeissue' or 'local' */
   source?: Maybe<Scalars['String']['output']>;
+  /** label indicating where the mode of issuance entry originates from, i.e. 'rdamodeissue' or 'local' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Money schema for patron portal integration */
@@ -1773,19 +1975,28 @@ export type Money = {
   isoCurrencyCode: Scalars['String']['output'];
 };
 
+export enum OrderFormat {
+  ElectronicResource = 'ElectronicResource',
+  Other = 'Other',
+  PeMix = 'PEMix',
+  PhysicalResource = 'PhysicalResource'
+}
+
 /** purchase order line location record */
 export type OrderLocation = {
   __typename?: 'OrderLocation';
   /** Holding UUID associated with order line */
-  holdingId?: Maybe<Scalars['String']['output']>;
+  holdingId?: Maybe<Scalars['UUID']['output']>;
   /** UUID of the (inventory) location record */
   locationId?: Maybe<Scalars['UUID']['output']>;
-  /** combined/total quanitity of physical and electronic items */
+  /** Combined/total quanitity of physical and electronic items */
   quantity?: Maybe<Scalars['Int']['output']>;
-  /** quantity of electronic items */
+  /** Quantity of electronic items */
   quantityElectronic?: Maybe<Scalars['Int']['output']>;
-  /** quantity of physical items */
+  /** Quantity of physical items */
   quantityPhysical?: Maybe<Scalars['Int']['output']>;
+  /** Associated tenant for ECS-enabled clusters */
+  tenantId?: Maybe<Scalars['String']['output']>;
 };
 
 /** Overdue fine policy to be associated with a loan policy by the Circulation Rules Editor */
@@ -1821,6 +2032,8 @@ export type OverdueFinePolicy = {
 export type Patron = {
   __typename?: 'Patron';
   accounts: Array<Account>;
+  /** Batch requests for each requests from holds created within a batch request */
+  batches?: Maybe<Array<BatchRequestStatusResponse>>;
   blocks: Array<Block>;
   /** A list of the patron's charges and fines */
   charges: Array<PatronCharge>;
@@ -1918,6 +2131,8 @@ export type PatronGroup = {
   metadata?: Maybe<Metadata>;
   /** Origin of the group record, i.e. 'System' or 'User' */
   source?: Maybe<Scalars['String']['output']>;
+  /** Origin of the group record, i.e. 'System' or 'User' */
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /** Item schema for patron portal integration */
@@ -2082,6 +2297,7 @@ export enum PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen {
   CheckIn = 'Check_in',
   CheckOut = 'Check_out',
   DueDate = 'Due_date',
+  HoldRequestForItem = 'Hold_request_for_item',
   ItemRecalled = 'Item_recalled',
   ManualDueDateChange = 'Manual_due_date_change',
   Renewed = 'Renewed'
@@ -2145,10 +2361,20 @@ export enum PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen {
   RequestExpiration = 'Request_expiration'
 }
 
+export enum PaymentStatus {
+  AwaitingPayment = 'AwaitingPayment',
+  Cancelled = 'Cancelled',
+  FullyPaid = 'FullyPaid',
+  Ongoing = 'Ongoing',
+  PartiallyPaid = 'PartiallyPaid',
+  PaymentNotRequired = 'PaymentNotRequired',
+  Pending = 'Pending'
+}
+
 /** Time interval defined by its duration */
 export type Period = {
   __typename?: 'Period';
-  /** Duration of the period, number of times the interval repeats */
+  /** Duration of the period, number of times the interval repeats; 0 should be used with days only and means until the end of the day */
   duration: Scalars['Int']['output'];
   /** Interval for the period, e.g. hours, days or weeks */
   intervalId: PeriodIntervalId;
@@ -2189,10 +2415,18 @@ export enum PhysicalCreateInventory {
 /** Piece details */
 export type Piece = {
   __typename?: 'Piece';
-  /** Volume/enumeration information */
-  caption?: Maybe<Scalars['String']['output']>;
+  /** AccessionNumber is the descriptive information for the accession number of a serial. Synchronized with inventory item. */
+  accessionNumber?: Maybe<Scalars['String']['output']>;
+  /** Barcode is the descriptive information for the barcode of a serial. Synchronized with inventory item. */
+  barcode?: Maybe<Scalars['String']['output']>;
+  /** UUID of the associated bind item record */
+  bindItemId?: Maybe<Scalars['UUID']['output']>;
+  /** CallNumber is the descriptive information for the call number of a serial. Synchronized with inventory item. */
+  callNumber?: Maybe<Scalars['String']['output']>;
   /** Chronology is the descriptive information for the dating scheme of a serial. Synchronized with inventory item. */
   chronology?: Maybe<Scalars['String']['output']>;
+  /** Time interval (in days) for processing claims related to this piece */
+  claimingInterval?: Maybe<Scalars['Int']['output']>;
   /** Free form commentary */
   comment?: Maybe<Scalars['String']['output']>;
   /** Copy number of the piece */
@@ -2201,26 +2435,41 @@ export type Piece = {
   discoverySuppress?: Maybe<Scalars['Boolean']['output']>;
   /** Whether or not receiving history should be displayed in holding record view */
   displayOnHolding?: Maybe<Scalars['Boolean']['output']>;
+  /** Display summary information */
+  displaySummary?: Maybe<Scalars['String']['output']>;
+  /** Whether or not the piece data should display to patrons at point of receipt */
+  displayToPublic?: Maybe<Scalars['Boolean']['output']>;
   /** Enumeration is the descriptive information for the numbering scheme of a serial. Synchronized with inventory item. */
   enumeration?: Maybe<Scalars['String']['output']>;
+  /** External note for Send Claim action to share with Vendor */
+  externalNote?: Maybe<Scalars['String']['output']>;
   /** The format of the piece */
-  format: Scalars['String']['output'];
+  format: PieceFormat;
   /** UUID of the holding record */
   holdingId?: Maybe<Scalars['UUID']['output']>;
   /** UUID of this piece record */
   id?: Maybe<Scalars['UUID']['output']>;
+  /** Internal note for Send Claim action */
+  internalNote?: Maybe<Scalars['String']['output']>;
+  /** Whether or not piece has already been bound */
+  isBound?: Maybe<Scalars['Boolean']['output']>;
   /** UUID of the associated item record */
   itemId?: Maybe<Scalars['UUID']['output']>;
   /** UUID of the (inventory) location record */
   locationId?: Maybe<Scalars['UUID']['output']>;
+  metadata?: Maybe<Metadata>;
   /** UUID of the purchase order line this record is associated with */
   poLineId: Scalars['UUID']['output'];
   /** Date that associated item is expected to arrive */
   receiptDate?: Maybe<Scalars['DateTime']['output']>;
   /** The date associated item is actually received */
   receivedDate?: Maybe<Scalars['DateTime']['output']>;
-  /** the status of this piece */
+  /** The status of this piece */
   receivingStatus: PieceReceivingStatus;
+  /** Receiving tenant for ECS-enabled clusters */
+  receivingTenantId?: Maybe<Scalars['String']['output']>;
+  /** Date when the status of this piece was last updated */
+  statusUpdatedDate?: Maybe<Scalars['DateTime']['output']>;
   /** Whether or not this is supplementary material */
   supplement?: Maybe<Scalars['Boolean']['output']>;
   /** UUID of the title record */
@@ -2236,20 +2485,28 @@ export type PieceCollection = {
   totalRecords?: Maybe<Scalars['Int']['output']>;
 };
 
+export enum PieceFormat {
+  Electronic = 'Electronic',
+  Other = 'Other',
+  Physical = 'Physical'
+}
+
 export enum PieceReceivingStatus {
+  ClaimDelayed = 'Claim_delayed',
+  ClaimSent = 'Claim_sent',
   Expected = 'Expected',
-  Received = 'Received'
+  Late = 'Late',
+  Received = 'Received',
+  Unreceivable = 'Unreceivable'
 }
 
 /** purchase order line */
 export type PoLine = {
   __typename?: 'PoLine';
   /** UUID of the acquisition method for this purchase order line */
-  acquisitionMethod?: Maybe<Scalars['String']['output']>;
+  acquisitionMethod: Scalars['UUID']['output'];
   /** UUID of the agreement this purchase order line is related to */
   agreementId?: Maybe<Scalars['UUID']['output']>;
-  /** an array of alert record IDs */
-  alerts?: Maybe<Array<Scalars['UUID']['output']>>;
   /** if true then line will be marked as available to export in the EDIFACT format or other format */
   automaticExport?: Maybe<Scalars['Boolean']['output']>;
   /** whether or not there are cancellation restrictions for this purchase order line */
@@ -2258,23 +2515,31 @@ export type PoLine = {
   cancellationRestrictionNote?: Maybe<Scalars['String']['output']>;
   /** if true this will toggle the Check-in workflow for details associated with this PO line */
   checkinItems?: Maybe<Scalars['Boolean']['output']>;
-  /** list of claims */
+  /** Indicates if there is an active claim or dispute */
+  claimingActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Specifies the time interval, in days, within which claims or disputes must be initiated */
+  claimingInterval?: Maybe<Scalars['Int']['output']>;
+  /** claims associated with this purchase order line */
   claims?: Maybe<Array<Claim>>;
   /** whether or not this purchase order line is for a collection */
   collection?: Maybe<Scalars['Boolean']['output']>;
   /** list of contributors to the material */
   contributors?: Maybe<Array<Contributor>>;
-  /** cost record */
-  cost?: Maybe<Cost>;
+  /** cost details associated with this purchase order line */
+  cost: Cost;
+  /** Object that contains custom field */
+  customFields?: Maybe<CustomFields>;
   /** description of the material */
   description?: Maybe<Scalars['String']['output']>;
-  /** details record */
+  /** details about this purchase order line */
   details?: Maybe<Details>;
   /** the donor contributing to this purchase order line */
   donor?: Maybe<Scalars['String']['output']>;
+  /** donor organization ids associated with this fund */
+  donorOrganizationIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** edition of the material */
   edition?: Maybe<Scalars['String']['output']>;
-  /** eresource record */
+  /** eresource-related details of this purchase order line */
   eresource?: Maybe<Eresource>;
   /** Fund distribution records for this purchase order line */
   fundDistribution?: Maybe<Array<FundDistribution>>;
@@ -2289,43 +2554,50 @@ export type PoLine = {
   /** Location records for this purchase order line */
   locations?: Maybe<Array<OrderLocation>>;
   metadata?: Maybe<Metadata>;
-  orderFormat: Scalars['String']['output'];
+  /** The purchase order line format */
+  orderFormat: OrderFormat;
   /** UUID referencing the poLine that represents the package that this POLs title belongs to */
   packagePoLineId?: Maybe<Scalars['UUID']['output']>;
   /** The purchase order line payment status */
-  paymentStatus?: Maybe<Scalars['String']['output']>;
-  /** UUID of the physical (details) record */
+  paymentStatus?: Maybe<PaymentStatus>;
+  /** details of this purchase order line relating to physical materials */
   physical?: Maybe<Physical>;
   pieces?: Maybe<Array<Maybe<Piece>>>;
   /** purchase order line description */
   poLineDescription?: Maybe<Scalars['String']['output']>;
-  /** A human readable number assigned to this PO line */
+  /** A human readable number assigned to this PO line (assigned automatically) */
   poLineNumber?: Maybe<Scalars['String']['output']>;
   /** date (year) of the material's publication */
   publicationDate?: Maybe<Scalars['String']['output']>;
   /** publisher of the material */
   publisher?: Maybe<Scalars['String']['output']>;
   /** UUID of the purchase order */
-  purchaseOrderId: Scalars['UUID']['output'];
+  purchaseOrderId?: Maybe<Scalars['UUID']['output']>;
   /** date the purchase order line was received */
   receiptDate?: Maybe<Scalars['DateTime']['output']>;
-  receiptStatus?: Maybe<Scalars['String']['output']>;
+  /** The purchase order line receipt status */
+  receiptStatus?: Maybe<ReceiptStatus>;
   /** Renewal note for this purchase order line */
   renewalNote?: Maybe<Scalars['String']['output']>;
-  /** a list of reporting codes associated with this purchase order line */
-  reportingCodes?: Maybe<Array<Scalars['UUID']['output']>>;
   /** who requested this purchase order line */
   requester?: Maybe<Scalars['String']['output']>;
   /** whether or not this is a rush order */
   rush?: Maybe<Scalars['Boolean']['output']>;
+  /** location ids used for search */
+  searchLocationIds?: Maybe<Array<Scalars['UUID']['output']>>;
   /** who selected this material */
   selector?: Maybe<Scalars['String']['output']>;
-  source: Scalars['String']['output'];
+  /** the source of this purchase order line */
+  source: Source;
+  /** Records the fact that the record should not be displayed in a discovery system */
+  suppressInstanceFromDiscovery?: Maybe<Scalars['Boolean']['output']>;
   /** arbitrary tags associated with this purchase order line */
   tags?: Maybe<Tags>;
   /** title of the material */
   titleOrPackage: Scalars['String']['output'];
-  /** Vendor detail record */
+  /** the source of this purchase order line */
+  type?: Maybe<Source>;
+  /** Details related to the vendor of this purchase order line */
   vendorDetail?: Maybe<VendorDetail>;
 };
 
@@ -2343,7 +2615,8 @@ export type ProductIdentifier = {
   __typename?: 'ProductIdentifier';
   /** The actual product identifier */
   productId?: Maybe<Scalars['String']['output']>;
-  productIdType?: Maybe<Scalars['String']['output']>;
+  /** The type of product identifier */
+  productIdType?: Maybe<Scalars['UUID']['output']>;
   /** Information about the binding, format, volume numbers, part of a set, publisher, distributor, etc. which might be enclosed in parenthesis */
   qualifier?: Maybe<Scalars['String']['output']>;
 };
@@ -2487,6 +2760,16 @@ export type QueryPatronArgs = {
 export type QueryServicePointsArgs = {
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
+
+export enum ReceiptStatus {
+  AwaitingReceipt = 'AwaitingReceipt',
+  Cancelled = 'Cancelled',
+  FullyReceived = 'FullyReceived',
+  Ongoing = 'Ongoing',
+  PartiallyReceived = 'PartiallyReceived',
+  Pending = 'Pending',
+  ReceiptNotRequired = 'ReceiptNotRequired'
+}
 
 /** Reminder fee policy as part of overdue fine policy */
 export type ReminderFeesPolicy = {
@@ -2684,7 +2967,8 @@ export type RequestProxyPatronGroup = {
 };
 
 export enum RequestRequestLevel {
-  Item = 'Item'
+  Item = 'Item',
+  Title = 'Title'
 }
 
 export enum RequestRequestType {
@@ -2738,64 +3022,6 @@ export enum RequestType {
   Recall = 'Recall'
 }
 
-/** Faceting of result sets */
-export type ResultInfo = {
-  __typename?: 'ResultInfo';
-  /** Array of diagnostic information */
-  diagnostics?: Maybe<Array<ResultInfoDiagnosticsItem>>;
-  /** Array of facets */
-  facets?: Maybe<Array<ResultInfoFacetsItem>>;
-  /** Response time */
-  responseTime?: Maybe<Scalars['Float']['output']>;
-  /** Estimated or exact total number of records */
-  totalRecords?: Maybe<Scalars['Int']['output']>;
-  /** True if totalRecords is an estimation, false if it is the exact number */
-  totalRecordsEstimated?: Maybe<Scalars['Boolean']['output']>;
-  /** The rounded value of totalRecords if totalRecords is an estimation */
-  totalRecordsRounded?: Maybe<Scalars['Int']['output']>;
-};
-
-/** Diagnostic information */
-export type ResultInfoDiagnosticsItem = {
-  __typename?: 'ResultInfoDiagnosticsItem';
-  /** Diagnostic Code */
-  code?: Maybe<Scalars['String']['output']>;
-  /** Diagnostic Message */
-  message?: Maybe<Scalars['String']['output']>;
-  /** Module reporting diagnostic information */
-  module?: Maybe<Scalars['String']['output']>;
-  /** CQL Query associated with results */
-  query?: Maybe<Scalars['String']['output']>;
-  /** Record Count for diagnostics */
-  recordCount?: Maybe<Scalars['Int']['output']>;
-  /** Source reporting the diagnostic information */
-  source?: Maybe<Scalars['String']['output']>;
-};
-
-/** A facet */
-export type ResultInfoFacetsItem = {
-  __typename?: 'ResultInfoFacetsItem';
-  /** Array of facet values */
-  facetValues?: Maybe<Array<ResultInfoFacetsItemFacetValuesItem>>;
-  /** Type of facet */
-  type?: Maybe<Scalars['String']['output']>;
-};
-
-/** A facet value */
-export type ResultInfoFacetsItemFacetValuesItem = {
-  __typename?: 'ResultInfoFacetsItemFacetValuesItem';
-  /** Count of facet values */
-  count?: Maybe<Scalars['Int']['output']>;
-  /** Value Object */
-  value?: Maybe<ResultInfoFacetsItemFacetValuesItemValue>;
-};
-
-/** Value Object */
-export type ResultInfoFacetsItemFacetValuesItemValue = {
-  __typename?: 'ResultInfoFacetsItemFacetValuesItemValue';
-  _typesWithoutFieldsAreNotAllowed_?: Maybe<Scalars['String']['output']>;
-};
-
 /** Real Time Availability Check (RTAC) holding details */
 export type RtacHolding = {
   __typename?: 'RtacHolding';
@@ -2817,6 +3043,9 @@ export type RtacHolding = {
   id: Scalars['String']['output'];
   /** Copy number is the piece identifier. The copy number reflects if the library has a copy of a single-volume monograph; a copy of a multi-volume, (e.g. Copy 1, or C.7.) */
   itemCopyNumber?: Maybe<Scalars['String']['output']>;
+  /** Order of the item in the holdings record. */
+  itemDisplayOrder?: Maybe<Scalars['Int']['output']>;
+  /** The third-level location unit */
   library?: Maybe<RtacLibrary>;
   /** The location of the holding */
   location: Scalars['String']['output'];
@@ -2824,7 +3053,10 @@ export type RtacHolding = {
   locationCode?: Maybe<Scalars['String']['output']>;
   /** The location id of the holding */
   locationId?: Maybe<Scalars['String']['output']>;
+  /** Define what type of thing the item is */
   materialType?: Maybe<RtacMaterialType>;
+  /** Notes about action, copy, binding etc. */
+  notes?: Maybe<Array<RtacHoldingNotesItem>>;
   /** Name of the default loan type for a given item */
   permanentLoanType?: Maybe<Scalars['String']['output']>;
   /** The availability status of the holding */
@@ -2861,6 +3093,14 @@ export type RtacHoldingHoldingsStatementsItem = {
   note?: Maybe<Scalars['String']['output']>;
   /** Name of the holdings note type */
   statement?: Maybe<Scalars['String']['output']>;
+};
+
+export type RtacHoldingNotesItem = {
+  __typename?: 'RtacHoldingNotesItem';
+  /** Name of the holdings note type */
+  holdingsNoteTypeName: Scalars['String']['output'];
+  /** Text content of the note */
+  note: Scalars['String']['output'];
 };
 
 /** Collection of holdings */
@@ -2914,11 +3154,15 @@ export type ServicePoint = {
   __typename?: 'ServicePoint';
   /** service-point code, a required field */
   code: Scalars['String']['output'];
+  /** enum for defining the default action when checking in an item that is for use in the library (i.e. in reading room) */
+  defaultCheckInActionForUseAtLocation?: Maybe<ServicepointDefaultCheckInActionForUseAtLocation>;
   /** description of the service-point */
   description?: Maybe<Scalars['String']['output']>;
   details?: Maybe<ServicePointDetails>;
   /** display name, a required field */
   discoveryDisplayName: Scalars['String']['output'];
+  /** Indicates a service point used for the ECS functionality */
+  ecsRequestRouting?: Maybe<Scalars['Boolean']['output']>;
   /** enum for closedLibraryDateManagement associated with hold shelf */
   holdShelfClosedLibraryDateManagement?: Maybe<ServicepointHoldShelfClosedLibraryDateManagement>;
   /** expiration period for items on the hold shelf at the service point */
@@ -2949,6 +3193,12 @@ export type ServicePointDetails = {
   notes?: Maybe<Scalars['String']['output']>;
 };
 
+export enum ServicepointDefaultCheckInActionForUseAtLocation {
+  AskForAction = 'Ask_for_action',
+  CloseLoanAndReturnItem = 'Close_loan_and_return_item',
+  KeepOnHoldShelf = 'Keep_on_hold_shelf'
+}
+
 export enum ServicepointHoldShelfClosedLibraryDateManagement {
   KeepTheCurrentDueDate = 'Keep_the_current_due_date',
   KeepTheCurrentDueDateTime = 'Keep_the_current_due_date_time',
@@ -2965,6 +3215,14 @@ export type ServicepointStaffSlipsItem = {
   /** Whether or not to print the staff slip by default */
   printByDefault: Scalars['Boolean']['output'];
 };
+
+export enum Source {
+  Api = 'API',
+  Ebsconet = 'EBSCONET',
+  Edi = 'EDI',
+  Marc = 'MARC',
+  User = 'User'
+}
 
 /** List of simple tags that can be added to an object */
 export type Tags = {
@@ -2993,6 +3251,14 @@ export enum TimePeriodIntervalId {
 /** Title */
 export type Title = {
   __typename?: 'Title';
+  /** acquisition unit ids associated with this title */
+  acqUnitIds?: Maybe<Array<Scalars['UUID']['output']>>;
+  /** Item ids which bound to this title for independent receiving workflow */
+  bindItemIds?: Maybe<Array<Scalars['UUID']['output']>>;
+  /** Indicates if there is an active claim or dispute */
+  claimingActive?: Maybe<Scalars['Boolean']['output']>;
+  /** Specifies the time interval, in days, within which claims or disputes must be initiated */
+  claimingInterval?: Maybe<Scalars['Int']['output']>;
   /** List of contributors to the material */
   contributors?: Maybe<Array<Contributor>>;
   /** Edition of the material */
@@ -3006,6 +3272,8 @@ export type Title = {
   /** Flag for acknowledge receiving note */
   isAcknowledged?: Maybe<Scalars['Boolean']['output']>;
   metadata?: Maybe<Metadata>;
+  /** The next sequence number to be used for the created Piece records */
+  nextSequenceNumber?: Maybe<Scalars['Int']['output']>;
   /** The name of the package */
   packageName?: Maybe<Scalars['String']['output']>;
   /** UUID of the purchase order line this Title is associated with */
@@ -3063,6 +3331,8 @@ export type User = {
   patronGroupId?: Maybe<Scalars['UUID']['output']>;
   /** Personal information about the user */
   personal?: Maybe<UserdataPersonal>;
+  /** Preferred email communication types */
+  preferredEmailCommunication?: Maybe<Array<UserdataPreferredEmailCommunicationItem>>;
   proxiesFor?: Maybe<Array<Maybe<ProxyFor>>>;
   proxiesOf?: Maybe<Array<Maybe<ProxyFor>>>;
   /** Deprecated */
@@ -3111,8 +3381,10 @@ export type UserdataPersonal = {
   preferredContactTypeId?: Maybe<Scalars['String']['output']>;
   /** The user's preferred name */
   preferredFirstName?: Maybe<Scalars['String']['output']>;
-  /** Link to the profile picture */
+  /** Link to the profile picture, or only the id of the /users/profile-picture entry */
   profilePictureLink?: Maybe<Scalars['String']['output']>;
+  /** The user's pronouns */
+  pronouns?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserdataPersonalAddressesItem = {
@@ -3137,6 +3409,12 @@ export type UserdataPersonalAddressesItem = {
   region?: Maybe<Scalars['String']['output']>;
 };
 
+export enum UserdataPreferredEmailCommunicationItem {
+  Programs = 'Programs',
+  Services = 'Services',
+  Support = 'Support'
+}
+
 /** purchase order line vendor details */
 export type VendorDetail = {
   __typename?: 'VendorDetail';
@@ -3149,6 +3427,12 @@ export type VendorDetail = {
   vendorAccount?: Maybe<Scalars['String']['output']>;
 };
 
+export enum WorkflowStatus {
+  Closed = 'Closed',
+  Open = 'Open',
+  Pending = 'Pending'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -3158,7 +3442,7 @@ export type ResolverTypeWrapper<T> = Promise<T> | T;
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -3195,27 +3479,29 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+export type SubscriptionResolver<TResult, TKey extends string, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
-export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+export type TypeResolveFn<TTypes, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (
   parent: TParent,
   context: TContext,
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
+
+
 
 
 
@@ -3226,27 +3512,43 @@ export type ResolversTypes = ResolversObject<{
   AccountdataPaymentStatus: ResolverTypeWrapper<AccountdataPaymentStatus>;
   AccountdataStatus: ResolverTypeWrapper<AccountdataStatus>;
   AlternativeTitleType: ResolverTypeWrapper<AlternativeTitleType>;
+  BatchRequestStatusResponse: ResolverTypeWrapper<BatchRequestStatusResponse>;
+  BatchRequestStatusResponseItemsFailedDetailsItem: ResolverTypeWrapper<BatchRequestStatusResponseItemsFailedDetailsItem>;
+  BatchRequestStatusResponseItemsPendingDetailsItem: ResolverTypeWrapper<BatchRequestStatusResponseItemsPendingDetailsItem>;
+  BatchRequestStatusResponseItemsRequestedDetailsItem: ResolverTypeWrapper<BatchRequestStatusResponseItemsRequestedDetailsItem>;
+  BatchRequestStatusResponseStatus: BatchRequestStatusResponseStatus;
   Block: ResolverTypeWrapper<Block>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   BoundWithPart: ResolverTypeWrapper<BoundWithPart>;
   BoundWithParts: ResolverTypeWrapper<BoundWithParts>;
+  CallNumberComponents: ResolverTypeWrapper<CallNumberComponents>;
   CallNumberType: ResolverTypeWrapper<CallNumberType>;
   Campus: ResolverTypeWrapper<Campus>;
   Charge: ResolverTypeWrapper<Charge>;
+  CirculationNote: ResolverTypeWrapper<CirculationNote>;
+  CirculationNoteNoteType: CirculationNoteNoteType;
+  CirculationNoteSource: ResolverTypeWrapper<CirculationNoteSource>;
+  CirculationNoteSourcePersonal: ResolverTypeWrapper<CirculationNoteSourcePersonal>;
+  CirculationNoteType: ResolverTypeWrapper<CirculationNoteType>;
+  CirculationNoteTypePersonal: ResolverTypeWrapper<CirculationNoteTypePersonal>;
   Claim: ResolverTypeWrapper<Claim>;
   ClassificationType: ResolverTypeWrapper<ClassificationType>;
+  CloseReason: ResolverTypeWrapper<CloseReason>;
   Contributor: ResolverTypeWrapper<Contributor>;
   ContributorNameType: ResolverTypeWrapper<ContributorNameType>;
   ContributorType: ResolverTypeWrapper<ContributorType>;
   Cost: ResolverTypeWrapper<Cost>;
   CostDiscountType: CostDiscountType;
   CqlParams: CqlParams;
+  CustomFields: ResolverTypeWrapper<CustomFields>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Details: ResolverTypeWrapper<Details>;
+  ElectronicAccessItem: ResolverTypeWrapper<ElectronicAccessItem>;
   ElectronicAccessRelationship: ResolverTypeWrapper<ElectronicAccessRelationship>;
   Eresource: ResolverTypeWrapper<Eresource>;
   EresourceCreateInventory: EresourceCreateInventory;
   Error: ResolverTypeWrapper<Error>;
+  ErrorParametersItem: ResolverTypeWrapper<ErrorParametersItem>;
   FeeFine: ResolverTypeWrapper<FeeFine>;
   FeeFineAction: ResolverTypeWrapper<FeeFineAction>;
   FixedDueDateSchedule: ResolverTypeWrapper<FixedDueDateSchedule>;
@@ -3254,36 +3556,32 @@ export type ResolversTypes = ResolversObject<{
   FundDistribution: ResolverTypeWrapper<FundDistribution>;
   FundDistributionDistributionType: FundDistributionDistributionType;
   Hold: ResolverTypeWrapper<Hold>;
+  HoldBatchRequestInfo: ResolverTypeWrapper<HoldBatchRequestInfo>;
   HoldStatus: HoldStatus;
   HoldingSummary: ResolverTypeWrapper<HoldingSummary>;
   HoldingSummaryCollection: ResolverTypeWrapper<HoldingSummaryCollection>;
   HoldingSummaryOrderType: HoldingSummaryOrderType;
-  HoldingsNoteType: ResolverTypeWrapper<HoldingsNoteType>;
+  HoldingsNote: ResolverTypeWrapper<HoldingsNote>;
+  HoldingsReceivingHistory: ResolverTypeWrapper<HoldingsReceivingHistory>;
+  HoldingsReceivingHistoryEntry: ResolverTypeWrapper<HoldingsReceivingHistoryEntry>;
   HoldingsRecord: ResolverTypeWrapper<HoldingsRecord>;
-  HoldingsRecords: ResolverTypeWrapper<HoldingsRecords>;
   HoldingsRecordsSource: ResolverTypeWrapper<HoldingsRecordsSource>;
+  HoldingsRecordsSourceSource: HoldingsRecordsSourceSource;
+  HoldingsRecordsSourceType: HoldingsRecordsSourceType;
+  HoldingsStatement: ResolverTypeWrapper<HoldingsStatement>;
   HoldingsType: ResolverTypeWrapper<HoldingsType>;
-  HoldingsrecordElectronicAccessItem: ResolverTypeWrapper<HoldingsrecordElectronicAccessItem>;
-  HoldingsrecordHoldingsStatementsForIndexesItem: ResolverTypeWrapper<HoldingsrecordHoldingsStatementsForIndexesItem>;
-  HoldingsrecordHoldingsStatementsForSupplementsItem: ResolverTypeWrapper<HoldingsrecordHoldingsStatementsForSupplementsItem>;
-  HoldingsrecordHoldingsStatementsItem: ResolverTypeWrapper<HoldingsrecordHoldingsStatementsItem>;
-  HoldingsrecordNotesItem: ResolverTypeWrapper<HoldingsrecordNotesItem>;
-  HoldingsrecordReceivingHistory: ResolverTypeWrapper<HoldingsrecordReceivingHistory>;
-  HoldingsrecordReceivingHistoryEntriesItem: ResolverTypeWrapper<HoldingsrecordReceivingHistoryEntriesItem>;
-  HoldingsrecordssourceSource: HoldingsrecordssourceSource;
-  ILLpolicy: ResolverTypeWrapper<IlLpolicy>;
+  Identifier: ResolverTypeWrapper<Identifier>;
   IdentifierType: ResolverTypeWrapper<IdentifierType>;
+  IllPolicy: ResolverTypeWrapper<IllPolicy>;
   Instance: ResolverTypeWrapper<Instance>;
   InstanceAlternativeTitlesItem: ResolverTypeWrapper<InstanceAlternativeTitlesItem>;
   InstanceClassificationsItem: ResolverTypeWrapper<InstanceClassificationsItem>;
   InstanceContributorsItem: ResolverTypeWrapper<InstanceContributorsItem>;
-  InstanceElectronicAccessItem: ResolverTypeWrapper<InstanceElectronicAccessItem>;
+  InstanceDates: ResolverTypeWrapper<InstanceDates>;
   InstanceFormat: ResolverTypeWrapper<InstanceFormat>;
-  InstanceIdentifiersItem: ResolverTypeWrapper<InstanceIdentifiersItem>;
   InstanceNoteType: ResolverTypeWrapper<InstanceNoteType>;
   InstanceNotesItem: ResolverTypeWrapper<InstanceNotesItem>;
   InstancePublicationItem: ResolverTypeWrapper<InstancePublicationItem>;
-  InstancePublicationPeriod: ResolverTypeWrapper<InstancePublicationPeriod>;
   InstanceSeriesItem: ResolverTypeWrapper<InstanceSeriesItem>;
   InstanceSourceRecordFormat: InstanceSourceRecordFormat;
   InstanceStatus: ResolverTypeWrapper<InstanceStatus>;
@@ -3294,22 +3592,20 @@ export type ResolversTypes = ResolversObject<{
   Interval: ResolverTypeWrapper<Interval>;
   IntervalIntervalId: IntervalIntervalId;
   Item: ResolverTypeWrapper<Item>;
-  ItemCirculationNotesItem: ResolverTypeWrapper<ItemCirculationNotesItem>;
-  ItemCirculationNotesItemNoteType: ItemCirculationNotesItemNoteType;
-  ItemCirculationNotesItemSource: ResolverTypeWrapper<ItemCirculationNotesItemSource>;
-  ItemCirculationNotesItemSourcePersonal: ResolverTypeWrapper<ItemCirculationNotesItemSourcePersonal>;
   ItemDamagedStatus: ResolverTypeWrapper<ItemDamagedStatus>;
   ItemEffectiveCallNumberComponents: ResolverTypeWrapper<ItemEffectiveCallNumberComponents>;
-  ItemElectronicAccessItem: ResolverTypeWrapper<ItemElectronicAccessItem>;
   ItemLastCheckIn: ResolverTypeWrapper<ItemLastCheckIn>;
+  ItemNote: ResolverTypeWrapper<ItemNote>;
   ItemNoteType: ResolverTypeWrapper<ItemNoteType>;
-  ItemNotesItem: ResolverTypeWrapper<ItemNotesItem>;
   ItemStatus: ResolverTypeWrapper<ItemStatus>;
+  ItemStatusName: ItemStatusName;
   Library: ResolverTypeWrapper<Library>;
   License: ResolverTypeWrapper<License>;
   Loan: ResolverTypeWrapper<Loan>;
   LoanBorrower: ResolverTypeWrapper<LoanBorrower>;
   LoanFeesAndFines: ResolverTypeWrapper<LoanFeesAndFines>;
+  LoanForUseAtLocation: ResolverTypeWrapper<LoanForUseAtLocation>;
+  LoanForUseAtLocationStatus: LoanForUseAtLocationStatus;
   LoanLostItemPolicy: ResolverTypeWrapper<LoanLostItemPolicy>;
   LoanOverdueFinePolicy: ResolverTypeWrapper<LoanOverdueFinePolicy>;
   LoanPatronGroupAtCheckout: ResolverTypeWrapper<LoanPatronGroupAtCheckout>;
@@ -3331,6 +3627,7 @@ export type ResolversTypes = ResolversObject<{
   Metadata: ResolverTypeWrapper<Metadata>;
   ModeOfIssuance: ResolverTypeWrapper<ModeOfIssuance>;
   Money: ResolverTypeWrapper<Money>;
+  OrderFormat: OrderFormat;
   OrderLocation: ResolverTypeWrapper<OrderLocation>;
   OverdueFinePolicy: ResolverTypeWrapper<OverdueFinePolicy>;
   Patron: ResolverTypeWrapper<Patron>;
@@ -3360,12 +3657,14 @@ export type ResolversTypes = ResolversObject<{
   PatronNoticePolicyRequestNoticesItemSendOptions: ResolverTypeWrapper<PatronNoticePolicyRequestNoticesItemSendOptions>;
   PatronNoticePolicyRequestNoticesItemSendOptionsSendHow: PatronNoticePolicyRequestNoticesItemSendOptionsSendHow;
   PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen: PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen;
+  PaymentStatus: PaymentStatus;
   Period: ResolverTypeWrapper<Period>;
   PeriodIntervalId: PeriodIntervalId;
   Physical: ResolverTypeWrapper<Physical>;
   PhysicalCreateInventory: PhysicalCreateInventory;
   Piece: ResolverTypeWrapper<Piece>;
   PieceCollection: ResolverTypeWrapper<PieceCollection>;
+  PieceFormat: PieceFormat;
   PieceReceivingStatus: PieceReceivingStatus;
   PoLine: ResolverTypeWrapper<PoLine>;
   PoLineCollection: ResolverTypeWrapper<PoLineCollection>;
@@ -3373,7 +3672,8 @@ export type ResolversTypes = ResolversObject<{
   ProxyFor: ResolverTypeWrapper<ProxyFor>;
   Quantity: ResolverTypeWrapper<Quantity>;
   QuantityIntervalId: QuantityIntervalId;
-  Query: ResolverTypeWrapper<{}>;
+  Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  ReceiptStatus: ReceiptStatus;
   ReminderFeesPolicy: ResolverTypeWrapper<ReminderFeesPolicy>;
   ReminderFeesPolicyReminderScheduleItem: ResolverTypeWrapper<ReminderFeesPolicyReminderScheduleItem>;
   ReminderFeesPolicyReminderScheduleItemNoticeFormat: ReminderFeesPolicyReminderScheduleItemNoticeFormat;
@@ -3392,15 +3692,11 @@ export type ResolversTypes = ResolversObject<{
   RequestRequesterPatronGroup: ResolverTypeWrapper<RequestRequesterPatronGroup>;
   RequestStatus: RequestStatus;
   RequestType: RequestType;
-  ResultInfo: ResolverTypeWrapper<ResultInfo>;
-  ResultInfoDiagnosticsItem: ResolverTypeWrapper<ResultInfoDiagnosticsItem>;
-  ResultInfoFacetsItem: ResolverTypeWrapper<ResultInfoFacetsItem>;
-  ResultInfoFacetsItemFacetValuesItem: ResolverTypeWrapper<ResultInfoFacetsItemFacetValuesItem>;
-  ResultInfoFacetsItemFacetValuesItemValue: ResolverTypeWrapper<ResultInfoFacetsItemFacetValuesItemValue>;
   RtacHolding: ResolverTypeWrapper<RtacHolding>;
   RtacHoldingHoldingsStatementsForIndexesItem: ResolverTypeWrapper<RtacHoldingHoldingsStatementsForIndexesItem>;
   RtacHoldingHoldingsStatementsForSupplementsItem: ResolverTypeWrapper<RtacHoldingHoldingsStatementsForSupplementsItem>;
   RtacHoldingHoldingsStatementsItem: ResolverTypeWrapper<RtacHoldingHoldingsStatementsItem>;
+  RtacHoldingNotesItem: ResolverTypeWrapper<RtacHoldingNotesItem>;
   RtacHoldings: ResolverTypeWrapper<RtacHoldings>;
   RtacHoldingsBatch: ResolverTypeWrapper<RtacHoldingsBatch>;
   RtacLibrary: ResolverTypeWrapper<RtacLibrary>;
@@ -3408,8 +3704,10 @@ export type ResolversTypes = ResolversObject<{
   Schedule: ResolverTypeWrapper<Schedule>;
   ServicePoint: ResolverTypeWrapper<ServicePoint>;
   ServicePointDetails: ResolverTypeWrapper<ServicePointDetails>;
+  ServicepointDefaultCheckInActionForUseAtLocation: ServicepointDefaultCheckInActionForUseAtLocation;
   ServicepointHoldShelfClosedLibraryDateManagement: ServicepointHoldShelfClosedLibraryDateManagement;
   ServicepointStaffSlipsItem: ResolverTypeWrapper<ServicepointStaffSlipsItem>;
+  Source: Source;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Tags: ResolverTypeWrapper<Tags>;
   TimePeriod: ResolverTypeWrapper<TimePeriod>;
@@ -3421,7 +3719,9 @@ export type ResolversTypes = ResolversObject<{
   UserdataMeta: ResolverTypeWrapper<UserdataMeta>;
   UserdataPersonal: ResolverTypeWrapper<UserdataPersonal>;
   UserdataPersonalAddressesItem: ResolverTypeWrapper<UserdataPersonalAddressesItem>;
+  UserdataPreferredEmailCommunicationItem: UserdataPreferredEmailCommunicationItem;
   VendorDetail: ResolverTypeWrapper<VendorDetail>;
+  WorkflowStatus: WorkflowStatus;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -3431,58 +3731,67 @@ export type ResolversParentTypes = ResolversObject<{
   AccountdataPaymentStatus: AccountdataPaymentStatus;
   AccountdataStatus: AccountdataStatus;
   AlternativeTitleType: AlternativeTitleType;
+  BatchRequestStatusResponse: BatchRequestStatusResponse;
+  BatchRequestStatusResponseItemsFailedDetailsItem: BatchRequestStatusResponseItemsFailedDetailsItem;
+  BatchRequestStatusResponseItemsPendingDetailsItem: BatchRequestStatusResponseItemsPendingDetailsItem;
+  BatchRequestStatusResponseItemsRequestedDetailsItem: BatchRequestStatusResponseItemsRequestedDetailsItem;
   Block: Block;
   Boolean: Scalars['Boolean']['output'];
   BoundWithPart: BoundWithPart;
   BoundWithParts: BoundWithParts;
+  CallNumberComponents: CallNumberComponents;
   CallNumberType: CallNumberType;
   Campus: Campus;
   Charge: Charge;
+  CirculationNote: CirculationNote;
+  CirculationNoteSource: CirculationNoteSource;
+  CirculationNoteSourcePersonal: CirculationNoteSourcePersonal;
+  CirculationNoteType: CirculationNoteType;
+  CirculationNoteTypePersonal: CirculationNoteTypePersonal;
   Claim: Claim;
   ClassificationType: ClassificationType;
+  CloseReason: CloseReason;
   Contributor: Contributor;
   ContributorNameType: ContributorNameType;
   ContributorType: ContributorType;
   Cost: Cost;
   CqlParams: CqlParams;
+  CustomFields: CustomFields;
   DateTime: Scalars['DateTime']['output'];
   Details: Details;
+  ElectronicAccessItem: ElectronicAccessItem;
   ElectronicAccessRelationship: ElectronicAccessRelationship;
   Eresource: Eresource;
   Error: Error;
+  ErrorParametersItem: ErrorParametersItem;
   FeeFine: FeeFine;
   FeeFineAction: FeeFineAction;
   FixedDueDateSchedule: FixedDueDateSchedule;
   Float: Scalars['Float']['output'];
   FundDistribution: FundDistribution;
   Hold: Hold;
+  HoldBatchRequestInfo: HoldBatchRequestInfo;
   HoldingSummary: HoldingSummary;
   HoldingSummaryCollection: HoldingSummaryCollection;
-  HoldingsNoteType: HoldingsNoteType;
+  HoldingsNote: HoldingsNote;
+  HoldingsReceivingHistory: HoldingsReceivingHistory;
+  HoldingsReceivingHistoryEntry: HoldingsReceivingHistoryEntry;
   HoldingsRecord: HoldingsRecord;
-  HoldingsRecords: HoldingsRecords;
   HoldingsRecordsSource: HoldingsRecordsSource;
+  HoldingsStatement: HoldingsStatement;
   HoldingsType: HoldingsType;
-  HoldingsrecordElectronicAccessItem: HoldingsrecordElectronicAccessItem;
-  HoldingsrecordHoldingsStatementsForIndexesItem: HoldingsrecordHoldingsStatementsForIndexesItem;
-  HoldingsrecordHoldingsStatementsForSupplementsItem: HoldingsrecordHoldingsStatementsForSupplementsItem;
-  HoldingsrecordHoldingsStatementsItem: HoldingsrecordHoldingsStatementsItem;
-  HoldingsrecordNotesItem: HoldingsrecordNotesItem;
-  HoldingsrecordReceivingHistory: HoldingsrecordReceivingHistory;
-  HoldingsrecordReceivingHistoryEntriesItem: HoldingsrecordReceivingHistoryEntriesItem;
-  ILLpolicy: IlLpolicy;
+  Identifier: Identifier;
   IdentifierType: IdentifierType;
+  IllPolicy: IllPolicy;
   Instance: Instance;
   InstanceAlternativeTitlesItem: InstanceAlternativeTitlesItem;
   InstanceClassificationsItem: InstanceClassificationsItem;
   InstanceContributorsItem: InstanceContributorsItem;
-  InstanceElectronicAccessItem: InstanceElectronicAccessItem;
+  InstanceDates: InstanceDates;
   InstanceFormat: InstanceFormat;
-  InstanceIdentifiersItem: InstanceIdentifiersItem;
   InstanceNoteType: InstanceNoteType;
   InstanceNotesItem: InstanceNotesItem;
   InstancePublicationItem: InstancePublicationItem;
-  InstancePublicationPeriod: InstancePublicationPeriod;
   InstanceSeriesItem: InstanceSeriesItem;
   InstanceStatus: InstanceStatus;
   InstanceSubjectsItem: InstanceSubjectsItem;
@@ -3491,21 +3800,18 @@ export type ResolversParentTypes = ResolversObject<{
   Int: Scalars['Int']['output'];
   Interval: Interval;
   Item: Item;
-  ItemCirculationNotesItem: ItemCirculationNotesItem;
-  ItemCirculationNotesItemSource: ItemCirculationNotesItemSource;
-  ItemCirculationNotesItemSourcePersonal: ItemCirculationNotesItemSourcePersonal;
   ItemDamagedStatus: ItemDamagedStatus;
   ItemEffectiveCallNumberComponents: ItemEffectiveCallNumberComponents;
-  ItemElectronicAccessItem: ItemElectronicAccessItem;
   ItemLastCheckIn: ItemLastCheckIn;
+  ItemNote: ItemNote;
   ItemNoteType: ItemNoteType;
-  ItemNotesItem: ItemNotesItem;
   ItemStatus: ItemStatus;
   Library: Library;
   License: License;
   Loan: Loan;
   LoanBorrower: LoanBorrower;
   LoanFeesAndFines: LoanFeesAndFines;
+  LoanForUseAtLocation: LoanForUseAtLocation;
   LoanLostItemPolicy: LoanLostItemPolicy;
   LoanOverdueFinePolicy: LoanOverdueFinePolicy;
   LoanPatronGroupAtCheckout: LoanPatronGroupAtCheckout;
@@ -3551,7 +3857,7 @@ export type ResolversParentTypes = ResolversObject<{
   ProductIdentifier: ProductIdentifier;
   ProxyFor: ProxyFor;
   Quantity: Quantity;
-  Query: {};
+  Query: Record<PropertyKey, never>;
   ReminderFeesPolicy: ReminderFeesPolicy;
   ReminderFeesPolicyReminderScheduleItem: ReminderFeesPolicyReminderScheduleItem;
   Request: Request;
@@ -3563,15 +3869,11 @@ export type ResolversParentTypes = ResolversObject<{
   RequestProxyPatronGroup: RequestProxyPatronGroup;
   RequestRequester: RequestRequester;
   RequestRequesterPatronGroup: RequestRequesterPatronGroup;
-  ResultInfo: ResultInfo;
-  ResultInfoDiagnosticsItem: ResultInfoDiagnosticsItem;
-  ResultInfoFacetsItem: ResultInfoFacetsItem;
-  ResultInfoFacetsItemFacetValuesItem: ResultInfoFacetsItemFacetValuesItem;
-  ResultInfoFacetsItemFacetValuesItemValue: ResultInfoFacetsItemFacetValuesItemValue;
   RtacHolding: RtacHolding;
   RtacHoldingHoldingsStatementsForIndexesItem: RtacHoldingHoldingsStatementsForIndexesItem;
   RtacHoldingHoldingsStatementsForSupplementsItem: RtacHoldingHoldingsStatementsForSupplementsItem;
   RtacHoldingHoldingsStatementsItem: RtacHoldingHoldingsStatementsItem;
+  RtacHoldingNotesItem: RtacHoldingNotesItem;
   RtacHoldings: RtacHoldings;
   RtacHoldingsBatch: RtacHoldingsBatch;
   RtacLibrary: RtacLibrary;
@@ -3629,22 +3931,18 @@ export type AccountResolvers<ContextType = FolioContext, ParentType extends Reso
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AccountdataItemStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AccountdataItemStatus'] = ResolversParentTypes['AccountdataItemStatus']> = ResolversObject<{
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AccountdataPaymentStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AccountdataPaymentStatus'] = ResolversParentTypes['AccountdataPaymentStatus']> = ResolversObject<{
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AccountdataStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AccountdataStatus'] = ResolversParentTypes['AccountdataStatus']> = ResolversObject<{
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AlternativeTitleTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['AlternativeTitleType'] = ResolversParentTypes['AlternativeTitleType']> = ResolversObject<{
@@ -3652,7 +3950,45 @@ export type AlternativeTitleTypeResolvers<ContextType = FolioContext, ParentType
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+}>;
+
+export type BatchRequestStatusResponseResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BatchRequestStatusResponse'] = ResolversParentTypes['BatchRequestStatusResponse']> = ResolversObject<{
+  batchRequestId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  completedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  itemsFailed?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  itemsFailedDetails?: Resolver<Maybe<Array<ResolversTypes['BatchRequestStatusResponseItemsFailedDetailsItem']>>, ParentType, ContextType>;
+  itemsPending?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  itemsPendingDetails?: Resolver<Maybe<Array<ResolversTypes['BatchRequestStatusResponseItemsPendingDetailsItem']>>, ParentType, ContextType>;
+  itemsRequested?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  itemsRequestedDetails?: Resolver<Maybe<Array<ResolversTypes['BatchRequestStatusResponseItemsRequestedDetailsItem']>>, ParentType, ContextType>;
+  itemsTotal?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['BatchRequestStatusResponseStatus'], ParentType, ContextType>;
+  submittedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+}>;
+
+export type BatchRequestStatusResponseItemsFailedDetailsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BatchRequestStatusResponseItemsFailedDetailsItem'] = ResolversParentTypes['BatchRequestStatusResponseItemsFailedDetailsItem']> = ResolversObject<{
+  errorCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  errorDetails?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  instanceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  itemId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  pickUpLocationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+}>;
+
+export type BatchRequestStatusResponseItemsPendingDetailsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BatchRequestStatusResponseItemsPendingDetailsItem'] = ResolversParentTypes['BatchRequestStatusResponseItemsPendingDetailsItem']> = ResolversObject<{
+  instanceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  itemId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  pickUpLocationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+}>;
+
+export type BatchRequestStatusResponseItemsRequestedDetailsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BatchRequestStatusResponseItemsRequestedDetailsItem'] = ResolversParentTypes['BatchRequestStatusResponseItemsRequestedDetailsItem']> = ResolversObject<{
+  confirmedRequestId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  instanceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  itemId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  pickUpLocationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type BlockResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Block'] = ResolversParentTypes['Block']> = ResolversObject<{
@@ -3662,7 +3998,6 @@ export type BlockResolvers<ContextType = FolioContext, ParentType extends Resolv
   blockRequests?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   patronBlockConditionId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type BoundWithPartResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BoundWithPart'] = ResolversParentTypes['BoundWithPart']> = ResolversObject<{
@@ -3670,13 +4005,18 @@ export type BoundWithPartResolvers<ContextType = FolioContext, ParentType extend
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   itemId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type BoundWithPartsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['BoundWithParts'] = ResolversParentTypes['BoundWithParts']> = ResolversObject<{
   boundWithParts?: Resolver<Array<ResolversTypes['BoundWithPart']>, ParentType, ContextType>;
   totalRecords?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CallNumberComponentsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CallNumberComponents'] = ResolversParentTypes['CallNumberComponents']> = ResolversObject<{
+  callNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  prefix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  suffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  typeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
 }>;
 
 export type CallNumberTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CallNumberType'] = ResolversParentTypes['CallNumberType']> = ResolversObject<{
@@ -3684,7 +4024,7 @@ export type CallNumberTypeResolvers<ContextType = FolioContext, ParentType exten
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type CampusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Campus'] = ResolversParentTypes['Campus']> = ResolversObject<{
@@ -3692,23 +4032,51 @@ export type CampusResolvers<ContextType = FolioContext, ParentType extends Resol
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   institution?: Resolver<Maybe<ResolversTypes['Institution']>, ParentType, ContextType>;
   institutionId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isShadow?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   libraries?: Resolver<Maybe<Array<Maybe<ResolversTypes['Library']>>>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ChargeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Charge'] = ResolversParentTypes['Charge']> = ResolversObject<{
   amount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   chargeType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CirculationNoteResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationNote'] = ResolversParentTypes['CirculationNote']> = ResolversObject<{
+  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  noteType?: Resolver<Maybe<ResolversTypes['CirculationNoteNoteType']>, ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['CirculationNoteSource']>, ParentType, ContextType>;
+  staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['CirculationNoteType']>, ParentType, ContextType>;
+}>;
+
+export type CirculationNoteSourceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationNoteSource'] = ResolversParentTypes['CirculationNoteSource']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  personal?: Resolver<Maybe<ResolversTypes['CirculationNoteSourcePersonal']>, ParentType, ContextType>;
+}>;
+
+export type CirculationNoteSourcePersonalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationNoteSourcePersonal'] = ResolversParentTypes['CirculationNoteSourcePersonal']> = ResolversObject<{
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+}>;
+
+export type CirculationNoteTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationNoteType'] = ResolversParentTypes['CirculationNoteType']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  personal?: Resolver<Maybe<ResolversTypes['CirculationNoteTypePersonal']>, ParentType, ContextType>;
+}>;
+
+export type CirculationNoteTypePersonalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CirculationNoteTypePersonal'] = ResolversParentTypes['CirculationNoteTypePersonal']> = ResolversObject<{
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type ClaimResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Claim'] = ResolversParentTypes['Claim']> = ResolversObject<{
   claimed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   grace?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   sent?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ClassificationTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ClassificationType'] = ResolversParentTypes['ClassificationType']> = ResolversObject<{
@@ -3716,13 +4084,17 @@ export type ClassificationTypeResolvers<ContextType = FolioContext, ParentType e
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+}>;
+
+export type CloseReasonResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CloseReason'] = ResolversParentTypes['CloseReason']> = ResolversObject<{
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type ContributorResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Contributor'] = ResolversParentTypes['Contributor']> = ResolversObject<{
   contributor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contributorNameTypeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ContributorNameTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ContributorNameType'] = ResolversParentTypes['ContributorNameType']> = ResolversObject<{
@@ -3731,7 +4103,7 @@ export type ContributorNameTypeResolvers<ContextType = FolioContext, ParentType 
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   ordering?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type ContributorTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ContributorType'] = ResolversParentTypes['ContributorType']> = ResolversObject<{
@@ -3740,7 +4112,7 @@ export type ContributorTypeResolvers<ContextType = FolioContext, ParentType exte
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type CostResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Cost'] = ResolversParentTypes['Cost']> = ResolversObject<{
@@ -3755,7 +4127,10 @@ export type CostResolvers<ContextType = FolioContext, ParentType extends Resolve
   poLineEstimatedPrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   quantityElectronic?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   quantityPhysical?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CustomFieldsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['CustomFields'] = ResolversParentTypes['CustomFields']> = ResolversObject<{
+  _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -3764,12 +4139,21 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 
 export type DetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Details'] = ResolversParentTypes['Details']> = ResolversObject<{
   isAcknowledged?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isBinderyActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   productIds?: Resolver<Maybe<Array<ResolversTypes['ProductIdentifier']>>, ParentType, ContextType>;
   receivingNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   subscriptionFrom?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   subscriptionInterval?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   subscriptionTo?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ElectronicAccessItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ElectronicAccessItem'] = ResolversParentTypes['ElectronicAccessItem']> = ResolversObject<{
+  linkText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  materialsSpecification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  publicNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  relationship?: Resolver<Maybe<ResolversTypes['ElectronicAccessRelationship']>, ParentType, ContextType>;
+  relationshipId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
 export type ElectronicAccessRelationshipResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ElectronicAccessRelationship'] = ResolversParentTypes['ElectronicAccessRelationship']> = ResolversObject<{
@@ -3777,7 +4161,7 @@ export type ElectronicAccessRelationshipResolvers<ContextType = FolioContext, Pa
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type EresourceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Eresource'] = ResolversParentTypes['Eresource']> = ResolversObject<{
@@ -3790,15 +4174,19 @@ export type EresourceResolvers<ContextType = FolioContext, ParentType extends Re
   materialType?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   resourceUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   trial?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  userLimit?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  userLimit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type ErrorResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Error'] = ResolversParentTypes['Error']> = ResolversObject<{
   code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  parameters?: Resolver<Maybe<Array<ResolversTypes['ErrorParametersItem']>>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ErrorParametersItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ErrorParametersItem'] = ResolversParentTypes['ErrorParametersItem']> = ResolversObject<{
+  key?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type FeeFineResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FeeFine'] = ResolversParentTypes['FeeFine']> = ResolversObject<{
@@ -3810,7 +4198,6 @@ export type FeeFineResolvers<ContextType = FolioContext, ParentType extends Reso
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   ownerId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type FeeFineActionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FeeFineAction'] = ResolversParentTypes['FeeFineAction']> = ResolversObject<{
@@ -3826,9 +4213,9 @@ export type FeeFineActionResolvers<ContextType = FolioContext, ParentType extend
   paymentMethod?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   transactionInformation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   typeAction?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type FixedDueDateScheduleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FixedDueDateSchedule'] = ResolversParentTypes['FixedDueDateSchedule']> = ResolversObject<{
@@ -3837,7 +4224,6 @@ export type FixedDueDateScheduleResolvers<ContextType = FolioContext, ParentType
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   schedules?: Resolver<Maybe<Array<ResolversTypes['Schedule']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type FundDistributionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['FundDistribution'] = ResolversParentTypes['FundDistribution']> = ResolversObject<{
@@ -3847,10 +4233,10 @@ export type FundDistributionResolvers<ContextType = FolioContext, ParentType ext
   expenseClassId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   fundId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type HoldResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Hold'] = ResolversParentTypes['Hold']> = ResolversObject<{
+  batchRequestInfo?: Resolver<Maybe<ResolversTypes['HoldBatchRequestInfo']>, ParentType, ContextType>;
   canceledByUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   canceledDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   cancellationAdditionalInformation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -3866,42 +4252,53 @@ export type HoldResolvers<ContextType = FolioContext, ParentType extends Resolve
   requestDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   requestId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['HoldStatus']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type HoldBatchRequestInfoResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldBatchRequestInfo'] = ResolversParentTypes['HoldBatchRequestInfo']> = ResolversObject<{
+  batchRequestId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  batchRequestSubmittedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
 }>;
 
 export type HoldingSummaryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingSummary'] = ResolversParentTypes['HoldingSummary']> = ResolversObject<{
-  orderCloseReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  orderCloseReason?: Resolver<Maybe<ResolversTypes['CloseReason']>, ParentType, ContextType>;
   orderSentDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  orderStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  orderStatus?: Resolver<Maybe<ResolversTypes['WorkflowStatus']>, ParentType, ContextType>;
   orderType?: Resolver<Maybe<ResolversTypes['HoldingSummaryOrderType']>, ParentType, ContextType>;
   pieces?: Resolver<Maybe<Array<Maybe<ResolversTypes['Piece']>>>, ParentType, ContextType>;
   poLine?: Resolver<Maybe<ResolversTypes['PoLine']>, ParentType, ContextType>;
-  poLineId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  poLineId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   poLineNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  polReceiptStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  polReceiptStatus?: Resolver<Maybe<ResolversTypes['ReceiptStatus']>, ParentType, ContextType>;
 }>;
 
 export type HoldingSummaryCollectionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingSummaryCollection'] = ResolversParentTypes['HoldingSummaryCollection']> = ResolversObject<{
   holdingSummaries?: Resolver<Array<ResolversTypes['HoldingSummary']>, ParentType, ContextType>;
   totalRecords?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type HoldingsNoteTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsNoteType'] = ResolversParentTypes['HoldingsNoteType']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type HoldingsNoteResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsNote'] = ResolversParentTypes['HoldingsNote']> = ResolversObject<{
+  holdingsNoteTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+}>;
+
+export type HoldingsReceivingHistoryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsReceivingHistory'] = ResolversParentTypes['HoldingsReceivingHistory']> = ResolversObject<{
+  displayType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  entries?: Resolver<Maybe<Array<ResolversTypes['HoldingsReceivingHistoryEntry']>>, ParentType, ContextType>;
+}>;
+
+export type HoldingsReceivingHistoryEntryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsReceivingHistoryEntry'] = ResolversParentTypes['HoldingsReceivingHistoryEntry']> = ResolversObject<{
+  chronology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  enumeration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  publicDisplay?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 }>;
 
 export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsRecord'] = ResolversParentTypes['HoldingsRecord']> = ResolversObject<{
   _version?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   acquisitionFormat?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   acquisitionMethod?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  additionalCallNumbers?: Resolver<Maybe<Array<ResolversTypes['CallNumberComponents']>>, ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  bareHoldingsItems?: Resolver<Maybe<Array<ResolversTypes['Item']>>, ParentType, ContextType>;
   boundWithItem?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType>;
   callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   callNumberPrefix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -3913,54 +4310,50 @@ export type HoldingsRecordResolvers<ContextType = FolioContext, ParentType exten
   discoverySuppress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   effectiveLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   effectiveLocationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  electronicAccess?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordElectronicAccessItem']>>, ParentType, ContextType>;
+  electronicAccess?: Resolver<Maybe<Array<ResolversTypes['ElectronicAccessItem']>>, ParentType, ContextType>;
   formerIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   holdingSummaries?: Resolver<Maybe<Array<Maybe<ResolversTypes['HoldingSummary']>>>, ParentType, ContextType>;
-  holdingsInstance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType>;
-  holdingsItems?: Resolver<Maybe<Array<ResolversTypes['Item']>>, ParentType, ContextType>;
-  holdingsStatements?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordHoldingsStatementsItem']>>, ParentType, ContextType>;
-  holdingsStatementsForIndexes?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordHoldingsStatementsForIndexesItem']>>, ParentType, ContextType>;
-  holdingsStatementsForSupplements?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordHoldingsStatementsForSupplementsItem']>>, ParentType, ContextType>;
+  holdingsStatements?: Resolver<Maybe<Array<ResolversTypes['HoldingsStatement']>>, ParentType, ContextType>;
+  holdingsStatementsForIndexes?: Resolver<Maybe<Array<ResolversTypes['HoldingsStatement']>>, ParentType, ContextType>;
+  holdingsStatementsForSupplements?: Resolver<Maybe<Array<ResolversTypes['HoldingsStatement']>>, ParentType, ContextType>;
   holdingsType?: Resolver<Maybe<ResolversTypes['HoldingsType']>, ParentType, ContextType>;
   holdingsTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   hrid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  illPolicy?: Resolver<Maybe<ResolversTypes['ILLpolicy']>, ParentType, ContextType>;
+  illPolicy?: Resolver<Maybe<ResolversTypes['IllPolicy']>, ParentType, ContextType>;
   illPolicyId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   instance?: Resolver<Maybe<ResolversTypes['Instance']>, ParentType, ContextType>;
   instanceId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   items?: Resolver<Maybe<Array<Maybe<ResolversTypes['Item']>>>, ParentType, ContextType, Partial<HoldingsRecordItemsArgs>>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
-  notes?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordNotesItem']>>, ParentType, ContextType>;
+  notes?: Resolver<Maybe<Array<ResolversTypes['HoldingsNote']>>, ParentType, ContextType>;
   numberOfItems?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   permanentLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   permanentLocationId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   receiptStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  receivingHistory?: Resolver<Maybe<ResolversTypes['HoldingsrecordReceivingHistory']>, ParentType, ContextType>;
+  receivingHistory?: Resolver<Maybe<ResolversTypes['HoldingsReceivingHistory']>, ParentType, ContextType>;
   retentionPolicy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   shelvingTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['HoldingsRecordsSource']>, ParentType, ContextType>;
-  sourceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  sourceId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   statisticalCodeIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<ResolversTypes['Tags']>, ParentType, ContextType>;
   temporaryLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   temporaryLocationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HoldingsRecordsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsRecords'] = ResolversParentTypes['HoldingsRecords']> = ResolversObject<{
-  holdingsRecords?: Resolver<Array<ResolversTypes['HoldingsRecord']>, ParentType, ContextType>;
-  resultInfo?: Resolver<Maybe<ResolversTypes['ResultInfo']>, ParentType, ContextType>;
-  totalRecords?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type HoldingsRecordsSourceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsRecordsSource'] = ResolversParentTypes['HoldingsRecordsSource']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  source?: Resolver<Maybe<ResolversTypes['HoldingsrecordssourceSource']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  source?: Resolver<Maybe<ResolversTypes['HoldingsRecordsSourceSource']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['HoldingsRecordsSourceType']>, ParentType, ContextType>;
+}>;
+
+export type HoldingsStatementResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsStatement'] = ResolversParentTypes['HoldingsStatement']> = ResolversObject<{
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  staffNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type HoldingsTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsType'] = ResolversParentTypes['HoldingsType']> = ResolversObject<{
@@ -3968,67 +4361,13 @@ export type HoldingsTypeResolvers<ContextType = FolioContext, ParentType extends
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
-export type HoldingsrecordElectronicAccessItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordElectronicAccessItem'] = ResolversParentTypes['HoldingsrecordElectronicAccessItem']> = ResolversObject<{
-  linkText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  materialsSpecification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  publicNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  relationship?: Resolver<Maybe<ResolversTypes['ElectronicAccessRelationship']>, ParentType, ContextType>;
-  relationshipId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HoldingsrecordHoldingsStatementsForIndexesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordHoldingsStatementsForIndexesItem'] = ResolversParentTypes['HoldingsrecordHoldingsStatementsForIndexesItem']> = ResolversObject<{
-  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  staffNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HoldingsrecordHoldingsStatementsForSupplementsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordHoldingsStatementsForSupplementsItem'] = ResolversParentTypes['HoldingsrecordHoldingsStatementsForSupplementsItem']> = ResolversObject<{
-  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  staffNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HoldingsrecordHoldingsStatementsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordHoldingsStatementsItem'] = ResolversParentTypes['HoldingsrecordHoldingsStatementsItem']> = ResolversObject<{
-  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  staffNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HoldingsrecordNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordNotesItem'] = ResolversParentTypes['HoldingsrecordNotesItem']> = ResolversObject<{
-  holdingsNoteType?: Resolver<Maybe<ResolversTypes['HoldingsNoteType']>, ParentType, ContextType>;
-  holdingsNoteTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HoldingsrecordReceivingHistoryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordReceivingHistory'] = ResolversParentTypes['HoldingsrecordReceivingHistory']> = ResolversObject<{
-  displayType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  entries?: Resolver<Maybe<Array<ResolversTypes['HoldingsrecordReceivingHistoryEntriesItem']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HoldingsrecordReceivingHistoryEntriesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['HoldingsrecordReceivingHistoryEntriesItem'] = ResolversParentTypes['HoldingsrecordReceivingHistoryEntriesItem']> = ResolversObject<{
-  chronology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  enumeration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  publicDisplay?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IlLpolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ILLpolicy'] = ResolversParentTypes['ILLpolicy']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type IdentifierResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Identifier'] = ResolversParentTypes['Identifier']> = ResolversObject<{
+  identifierTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  identifierTypeObject?: Resolver<Maybe<ResolversTypes['IdentifierType']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
 export type IdentifierTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['IdentifierType'] = ResolversParentTypes['IdentifierType']> = ResolversObject<{
@@ -4036,7 +4375,15 @@ export type IdentifierTypeResolvers<ContextType = FolioContext, ParentType exten
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+}>;
+
+export type IllPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['IllPolicy'] = ResolversParentTypes['IllPolicy']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type InstanceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Instance'] = ResolversParentTypes['Instance']> = ResolversObject<{
@@ -4046,14 +4393,16 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   catalogedDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   classifications?: Resolver<Maybe<Array<ResolversTypes['InstanceClassificationsItem']>>, ParentType, ContextType>;
   contributors?: Resolver<Maybe<Array<ResolversTypes['InstanceContributorsItem']>>, ParentType, ContextType>;
+  dates?: Resolver<Maybe<ResolversTypes['InstanceDates']>, ParentType, ContextType>;
+  deleted?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   discoverySuppress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   editions?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  electronicAccess?: Resolver<Maybe<Array<ResolversTypes['InstanceElectronicAccessItem']>>, ParentType, ContextType>;
+  electronicAccess?: Resolver<Maybe<Array<ResolversTypes['ElectronicAccessItem']>>, ParentType, ContextType>;
   holdingsRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['HoldingsRecord']>>>, ParentType, ContextType, Partial<InstanceHoldingsRecordsArgs>>;
-  holdingsRecords2?: Resolver<Maybe<ResolversTypes['HoldingsRecords']>, ParentType, ContextType>;
+  holdingsRecords2?: Resolver<Maybe<Array<ResolversTypes['HoldingsRecord']>>, ParentType, ContextType>;
   hrid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  identifiers?: Resolver<Maybe<Array<ResolversTypes['InstanceIdentifiersItem']>>, ParentType, ContextType>;
+  identifiers?: Resolver<Maybe<Array<ResolversTypes['Identifier']>>, ParentType, ContextType>;
   indexTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   instanceFormatIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   instanceFormats?: Resolver<Maybe<Array<ResolversTypes['InstanceFormat']>>, ParentType, ContextType>;
@@ -4072,12 +4421,12 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   previouslyHeld?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   publication?: Resolver<Maybe<Array<ResolversTypes['InstancePublicationItem']>>, ParentType, ContextType>;
   publicationFrequency?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  publicationPeriod?: Resolver<Maybe<ResolversTypes['InstancePublicationPeriod']>, ParentType, ContextType>;
   publicationRange?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   queueTotalLength?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   series?: Resolver<Maybe<Array<ResolversTypes['InstanceSeriesItem']>>, ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sourceRecordFormat?: Resolver<Maybe<ResolversTypes['InstanceSourceRecordFormat']>, ParentType, ContextType>;
+  sourceUri?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   staffSuppress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   statisticalCodeIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['InstanceStatus']>, ParentType, ContextType>;
@@ -4086,7 +4435,7 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   subjects?: Resolver<Maybe<Array<ResolversTypes['InstanceSubjectsItem']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<ResolversTypes['Tags']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type InstanceAlternativeTitlesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceAlternativeTitlesItem'] = ResolversParentTypes['InstanceAlternativeTitlesItem']> = ResolversObject<{
@@ -4094,14 +4443,12 @@ export type InstanceAlternativeTitlesItemResolvers<ContextType = FolioContext, P
   alternativeTitleType?: Resolver<Maybe<ResolversTypes['AlternativeTitleType']>, ParentType, ContextType>;
   alternativeTitleTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InstanceClassificationsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceClassificationsItem'] = ResolversParentTypes['InstanceClassificationsItem']> = ResolversObject<{
   classificationNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   classificationType?: Resolver<Maybe<ResolversTypes['ClassificationType']>, ParentType, ContextType>;
   classificationTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InstanceContributorsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceContributorsItem'] = ResolversParentTypes['InstanceContributorsItem']> = ResolversObject<{
@@ -4113,17 +4460,12 @@ export type InstanceContributorsItemResolvers<ContextType = FolioContext, Parent
   contributorTypeText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   primary?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type InstanceElectronicAccessItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceElectronicAccessItem'] = ResolversParentTypes['InstanceElectronicAccessItem']> = ResolversObject<{
-  linkText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  materialsSpecification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  publicNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  relationship?: Resolver<Maybe<ResolversTypes['ElectronicAccessRelationship']>, ParentType, ContextType>;
-  relationshipId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+export type InstanceDatesResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceDates'] = ResolversParentTypes['InstanceDates']> = ResolversObject<{
+  date1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  date2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dateTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
 }>;
 
 export type InstanceFormatResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceFormat'] = ResolversParentTypes['InstanceFormat']> = ResolversObject<{
@@ -4132,14 +4474,7 @@ export type InstanceFormatResolvers<ContextType = FolioContext, ParentType exten
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type InstanceIdentifiersItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceIdentifiersItem'] = ResolversParentTypes['InstanceIdentifiersItem']> = ResolversObject<{
-  identifierTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  identifierTypeObject?: Resolver<Maybe<ResolversTypes['IdentifierType']>, ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type InstanceNoteTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceNoteType'] = ResolversParentTypes['InstanceNoteType']> = ResolversObject<{
@@ -4147,7 +4482,7 @@ export type InstanceNoteTypeResolvers<ContextType = FolioContext, ParentType ext
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type InstanceNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceNotesItem'] = ResolversParentTypes['InstanceNotesItem']> = ResolversObject<{
@@ -4155,7 +4490,6 @@ export type InstanceNotesItemResolvers<ContextType = FolioContext, ParentType ex
   instanceNoteTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InstancePublicationItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstancePublicationItem'] = ResolversParentTypes['InstancePublicationItem']> = ResolversObject<{
@@ -4163,19 +4497,11 @@ export type InstancePublicationItemResolvers<ContextType = FolioContext, ParentT
   place?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publisher?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type InstancePublicationPeriodResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstancePublicationPeriod'] = ResolversParentTypes['InstancePublicationPeriod']> = ResolversObject<{
-  end?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  start?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InstanceSeriesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceSeriesItem'] = ResolversParentTypes['InstanceSeriesItem']> = ResolversObject<{
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InstanceStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceStatus'] = ResolversParentTypes['InstanceStatus']> = ResolversObject<{
@@ -4184,13 +4510,14 @@ export type InstanceStatusResolvers<ContextType = FolioContext, ParentType exten
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type InstanceSubjectsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceSubjectsItem'] = ResolversParentTypes['InstanceSubjectsItem']> = ResolversObject<{
   authorityId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  sourceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  typeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type InstanceTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['InstanceType'] = ResolversParentTypes['InstanceType']> = ResolversObject<{
@@ -4199,31 +4526,31 @@ export type InstanceTypeResolvers<ContextType = FolioContext, ParentType extends
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type InstitutionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Institution'] = ResolversParentTypes['Institution']> = ResolversObject<{
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isShadow?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IntervalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Interval'] = ResolversParentTypes['Interval']> = ResolversObject<{
   duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   intervalId?: Resolver<ResolversTypes['IntervalIntervalId'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Item'] = ResolversParentTypes['Item']> = ResolversObject<{
   _version?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   accessionNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  additionalCallNumbers?: Resolver<Maybe<Array<ResolversTypes['CallNumberComponents']>>, ParentType, ContextType>;
   administrativeNotes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   boundWithHoldingsPerItem?: Resolver<Maybe<Array<Maybe<ResolversTypes['HoldingsRecord']>>>, ParentType, ContextType>;
   chronology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  circulationNotes?: Resolver<Maybe<Array<ResolversTypes['ItemCirculationNotesItem']>>, ParentType, ContextType>;
+  circulationNotes?: Resolver<Maybe<Array<ResolversTypes['CirculationNote']>>, ParentType, ContextType>;
   copyNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   descriptionOfPieces?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   discoverySuppress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -4233,7 +4560,7 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   effectiveLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   effectiveLocationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   effectiveShelvingOrder?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  electronicAccess?: Resolver<Maybe<Array<ResolversTypes['ItemElectronicAccessItem']>>, ParentType, ContextType>;
+  electronicAccess?: Resolver<Maybe<Array<ResolversTypes['ElectronicAccessItem']>>, ParentType, ContextType>;
   enumeration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   formerIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   holdingsRecord?: Resolver<Maybe<ResolversTypes['HoldingsRecord']>, ParentType, ContextType>;
@@ -4252,23 +4579,24 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   itemLevelCallNumberPrefix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   itemLevelCallNumberSuffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   itemLevelCallNumberType?: Resolver<Maybe<ResolversTypes['CallNumberType']>, ParentType, ContextType>;
-  itemLevelCallNumberTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  itemLevelCallNumberTypeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   lastCheckIn?: Resolver<Maybe<ResolversTypes['ItemLastCheckIn']>, ParentType, ContextType>;
   materialType?: Resolver<Maybe<ResolversTypes['MaterialType']>, ParentType, ContextType>;
   materialTypeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   missingPieces?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   missingPiecesDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  notes?: Resolver<Maybe<Array<ResolversTypes['ItemNotesItem']>>, ParentType, ContextType>;
+  notes?: Resolver<Maybe<Array<ResolversTypes['ItemNote']>>, ParentType, ContextType>;
   numberOfMissingPieces?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   numberOfPieces?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   permanentLoanType?: Resolver<Maybe<ResolversTypes['LoanType']>, ParentType, ContextType>;
   permanentLoanTypeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   permanentLocation?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   permanentLocationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   purchaseOrderLineIdentifier?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   queueTotalLength?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  statisticalCodeIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  statisticalCodeIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ItemStatus'], ParentType, ContextType>;
   tags?: Resolver<Maybe<ResolversTypes['Tags']>, ParentType, ContextType>;
   temporaryLoanType?: Resolver<Maybe<ResolversTypes['LoanType']>, ParentType, ContextType>;
@@ -4277,29 +4605,6 @@ export type ItemResolvers<ContextType = FolioContext, ParentType extends Resolve
   temporaryLocationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   volume?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   yearCaption?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ItemCirculationNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemCirculationNotesItem'] = ResolversParentTypes['ItemCirculationNotesItem']> = ResolversObject<{
-  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  noteType?: Resolver<Maybe<ResolversTypes['ItemCirculationNotesItemNoteType']>, ParentType, ContextType>;
-  source?: Resolver<Maybe<ResolversTypes['ItemCirculationNotesItemSource']>, ParentType, ContextType>;
-  staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ItemCirculationNotesItemSourceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemCirculationNotesItemSource'] = ResolversParentTypes['ItemCirculationNotesItemSource']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  personal?: Resolver<Maybe<ResolversTypes['ItemCirculationNotesItemSourcePersonal']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ItemCirculationNotesItemSourcePersonalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemCirculationNotesItemSourcePersonal'] = ResolversParentTypes['ItemCirculationNotesItemSourcePersonal']> = ResolversObject<{
-  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ItemDamagedStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemDamagedStatus'] = ResolversParentTypes['ItemDamagedStatus']> = ResolversObject<{
@@ -4307,7 +4612,7 @@ export type ItemDamagedStatusResolvers<ContextType = FolioContext, ParentType ex
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type ItemEffectiveCallNumberComponentsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemEffectiveCallNumberComponents'] = ResolversParentTypes['ItemEffectiveCallNumberComponents']> = ResolversObject<{
@@ -4316,23 +4621,19 @@ export type ItemEffectiveCallNumberComponentsResolvers<ContextType = FolioContex
   suffix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['CallNumberType']>, ParentType, ContextType>;
   typeId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ItemElectronicAccessItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemElectronicAccessItem'] = ResolversParentTypes['ItemElectronicAccessItem']> = ResolversObject<{
-  linkText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  materialsSpecification?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  publicNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  relationshipId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  uri?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ItemLastCheckInResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemLastCheckIn'] = ResolversParentTypes['ItemLastCheckIn']> = ResolversObject<{
   dateTime?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   servicePointId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   staffMemberId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ItemNoteResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemNote'] = ResolversParentTypes['ItemNote']> = ResolversObject<{
+  itemNoteType?: Resolver<Maybe<ResolversTypes['ItemNoteType']>, ParentType, ContextType>;
+  itemNoteTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 }>;
 
 export type ItemNoteTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemNoteType'] = ResolversParentTypes['ItemNoteType']> = ResolversObject<{
@@ -4340,21 +4641,12 @@ export type ItemNoteTypeResolvers<ContextType = FolioContext, ParentType extends
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ItemNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemNotesItem'] = ResolversParentTypes['ItemNotesItem']> = ResolversObject<{
-  itemNoteType?: Resolver<Maybe<ResolversTypes['ItemNoteType']>, ParentType, ContextType>;
-  itemNoteTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  staffOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type ItemStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ItemStatus'] = ResolversParentTypes['ItemStatus']> = ResolversObject<{
   date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['ItemStatusName'], ParentType, ContextType>;
 }>;
 
 export type LibraryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Library'] = ResolversParentTypes['Library']> = ResolversObject<{
@@ -4362,17 +4654,16 @@ export type LibraryResolvers<ContextType = FolioContext, ParentType extends Reso
   campusId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isShadow?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   locations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Location']>>>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LicenseResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['License'] = ResolversParentTypes['License']> = ResolversObject<{
   code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   reference?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Loan'] = ResolversParentTypes['Loan']> = ResolversObject<{
@@ -4389,7 +4680,9 @@ export type LoanResolvers<ContextType = FolioContext, ParentType extends Resolve
   dueDateChangedByNearExpireUser?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   dueDateChangedByRecall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   feesAndFines?: Resolver<Maybe<ResolversTypes['LoanFeesAndFines']>, ParentType, ContextType>;
+  forUseAtLocation?: Resolver<Maybe<ResolversTypes['LoanForUseAtLocation']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  isDcb?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   item?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType>;
   itemEffectiveLocationAtCheckOut?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
   itemEffectiveLocationIdAtCheckOut?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
@@ -4411,7 +4704,6 @@ export type LoanResolvers<ContextType = FolioContext, ParentType extends Resolve
   systemReturnDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanBorrowerResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanBorrower'] = ResolversParentTypes['LoanBorrower']> = ResolversObject<{
@@ -4419,28 +4711,30 @@ export type LoanBorrowerResolvers<ContextType = FolioContext, ParentType extends
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  patronGroup?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  preferredFirstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type LoanFeesAndFinesResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanFeesAndFines'] = ResolversParentTypes['LoanFeesAndFines']> = ResolversObject<{
   amountRemainingToPay?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type LoanForUseAtLocationResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanForUseAtLocation'] = ResolversParentTypes['LoanForUseAtLocation']> = ResolversObject<{
+  status?: Resolver<Maybe<ResolversTypes['LoanForUseAtLocationStatus']>, ParentType, ContextType>;
+  statusDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
 }>;
 
 export type LoanLostItemPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanLostItemPolicy'] = ResolversParentTypes['LoanLostItemPolicy']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanOverdueFinePolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanOverdueFinePolicy'] = ResolversParentTypes['LoanOverdueFinePolicy']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPatronGroupAtCheckoutResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPatronGroupAtCheckout'] = ResolversParentTypes['LoanPatronGroupAtCheckout']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicy'] = ResolversParentTypes['LoanPolicy']> = ResolversObject<{
@@ -4453,19 +4747,19 @@ export type LoanPolicyResolvers<ContextType = FolioContext, ParentType extends R
   renewable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   renewalsPolicy?: Resolver<Maybe<ResolversTypes['LoanPolicyRenewalsPolicy']>, ParentType, ContextType>;
   requestManagement?: Resolver<Maybe<ResolversTypes['LoanPolicyRequestManagement']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPolicyLoansPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicyLoansPolicy'] = ResolversParentTypes['LoanPolicyLoansPolicy']> = ResolversObject<{
   closedLibraryDueDateManagementId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   fixedDueDateSchedule?: Resolver<Maybe<ResolversTypes['FixedDueDateSchedule']>, ParentType, ContextType>;
   fixedDueDateScheduleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  forUseAtLocation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   gracePeriod?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
+  holdShelfExpiryPeriodForUseAtLocation?: Resolver<Maybe<ResolversTypes['TimePeriod']>, ParentType, ContextType>;
   itemLimit?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   openingTimeOffset?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   period?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   profileId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPolicyRenewalsPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicyRenewalsPolicy'] = ResolversParentTypes['LoanPolicyRenewalsPolicy']> = ResolversObject<{
@@ -4476,28 +4770,24 @@ export type LoanPolicyRenewalsPolicyResolvers<ContextType = FolioContext, Parent
   period?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   renewFromId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   unlimited?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPolicyRequestManagementResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicyRequestManagement'] = ResolversParentTypes['LoanPolicyRequestManagement']> = ResolversObject<{
   holds?: Resolver<Maybe<ResolversTypes['LoanPolicyRequestManagementHolds']>, ParentType, ContextType>;
   pages?: Resolver<Maybe<ResolversTypes['LoanPolicyRequestManagementPages']>, ParentType, ContextType>;
   recalls?: Resolver<Maybe<ResolversTypes['LoanPolicyRequestManagementRecalls']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPolicyRequestManagementHoldsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicyRequestManagementHolds'] = ResolversParentTypes['LoanPolicyRequestManagementHolds']> = ResolversObject<{
   alternateCheckoutLoanPeriod?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   alternateRenewalLoanPeriod?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   renewItemsWithRequest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPolicyRequestManagementPagesResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicyRequestManagementPages'] = ResolversParentTypes['LoanPolicyRequestManagementPages']> = ResolversObject<{
   alternateCheckoutLoanPeriod?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   alternateRenewalLoanPeriod?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   renewItemsWithRequest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanPolicyRequestManagementRecallsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanPolicyRequestManagementRecalls'] = ResolversParentTypes['LoanPolicyRequestManagementRecalls']> = ResolversObject<{
@@ -4506,12 +4796,10 @@ export type LoanPolicyRequestManagementRecallsResolvers<ContextType = FolioConte
   alternateRecallReturnInterval?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   minimumGuaranteedLoanPeriod?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
   recallReturnInterval?: Resolver<Maybe<ResolversTypes['Period']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanStatusResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanStatus'] = ResolversParentTypes['LoanStatus']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LoanTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LoanType'] = ResolversParentTypes['LoanType']> = ResolversObject<{
@@ -4519,7 +4807,7 @@ export type LoanTypeResolvers<ContextType = FolioContext, ParentType extends Res
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type LocationResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = ResolversObject<{
@@ -4533,15 +4821,16 @@ export type LocationResolvers<ContextType = FolioContext, ParentType extends Res
   institution?: Resolver<Maybe<ResolversTypes['Institution']>, ParentType, ContextType>;
   institutionId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isFloatingCollection?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isShadow?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   library?: Resolver<Maybe<ResolversTypes['Library']>, ParentType, ContextType>;
   libraryId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  primaryServicePoint?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  primaryServicePoint?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   primaryServicePointObject?: Resolver<Maybe<ResolversTypes['ServicePoint']>, ParentType, ContextType>;
   servicePointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   servicePoints?: Resolver<Maybe<Array<ResolversTypes['ServicePoint']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LocationDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LocationDetails'] = ResolversParentTypes['LocationDetails']> = ResolversObject<{
@@ -4563,7 +4852,6 @@ export type LocationDetailsResolvers<ContextType = FolioContext, ParentType exte
   searchworksTreatTemporaryLocationAsPermanentLocation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   shelvedByText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   stackmapBaseUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type LostItemFeePolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['LostItemFeePolicy'] = ResolversParentTypes['LostItemFeePolicy']> = ResolversObject<{
@@ -4586,7 +4874,6 @@ export type LostItemFeePolicyResolvers<ContextType = FolioContext, ParentType ex
   replacementAllowed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   replacementProcessingFee?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   returnedLostItemProcessingFee?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ManualBlockResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ManualBlock'] = ResolversParentTypes['ManualBlock']> = ResolversObject<{
@@ -4602,7 +4889,6 @@ export type ManualBlockResolvers<ContextType = FolioContext, ParentType extends 
   staffInformation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MaterialTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['MaterialType'] = ResolversParentTypes['MaterialType']> = ResolversObject<{
@@ -4610,7 +4896,7 @@ export type MaterialTypeResolvers<ContextType = FolioContext, ParentType extends
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type MetadataResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Metadata'] = ResolversParentTypes['Metadata']> = ResolversObject<{
@@ -4620,7 +4906,6 @@ export type MetadataResolvers<ContextType = FolioContext, ParentType extends Res
   updatedByUserId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   updatedByUsername?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ModeOfIssuanceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ModeOfIssuance'] = ResolversParentTypes['ModeOfIssuance']> = ResolversObject<{
@@ -4628,22 +4913,21 @@ export type ModeOfIssuanceResolvers<ContextType = FolioContext, ParentType exten
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type MoneyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Money'] = ResolversParentTypes['Money']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   isoCurrencyCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type OrderLocationResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['OrderLocation'] = ResolversParentTypes['OrderLocation']> = ResolversObject<{
-  holdingId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  holdingId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   locationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   quantityElectronic?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   quantityPhysical?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  tenantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type OverdueFinePolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['OverdueFinePolicy'] = ResolversParentTypes['OverdueFinePolicy']> = ResolversObject<{
@@ -4659,11 +4943,11 @@ export type OverdueFinePolicyResolvers<ContextType = FolioContext, ParentType ex
   overdueFine?: Resolver<Maybe<ResolversTypes['Quantity']>, ParentType, ContextType>;
   overdueRecallFine?: Resolver<Maybe<ResolversTypes['Quantity']>, ParentType, ContextType>;
   reminderFeesPolicy?: Resolver<Maybe<ResolversTypes['ReminderFeesPolicy']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Patron'] = ResolversParentTypes['Patron']> = ResolversObject<{
   accounts?: Resolver<Array<ResolversTypes['Account']>, ParentType, ContextType>;
+  batches?: Resolver<Maybe<Array<ResolversTypes['BatchRequestStatusResponse']>>, ParentType, ContextType>;
   blocks?: Resolver<Array<ResolversTypes['Block']>, ParentType, ContextType>;
   charges?: Resolver<Array<ResolversTypes['PatronCharge']>, ParentType, ContextType>;
   holds?: Resolver<Array<ResolversTypes['Hold']>, ParentType, ContextType>;
@@ -4675,7 +4959,6 @@ export type PatronResolvers<ContextType = FolioContext, ParentType extends Resol
   totalHolds?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalLoans?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronBlockConditionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronBlockCondition'] = ResolversParentTypes['PatronBlockCondition']> = ResolversObject<{
@@ -4687,7 +4970,6 @@ export type PatronBlockConditionResolvers<ContextType = FolioContext, ParentType
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   valueType?: Resolver<ResolversTypes['PatronBlockConditionValueType'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronBlockLimitResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronBlockLimit'] = ResolversParentTypes['PatronBlockLimit']> = ResolversObject<{
@@ -4697,7 +4979,6 @@ export type PatronBlockLimitResolvers<ContextType = FolioContext, ParentType ext
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   patronGroupId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronChargeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronCharge'] = ResolversParentTypes['PatronCharge']> = ResolversObject<{
@@ -4709,7 +4990,6 @@ export type PatronChargeResolvers<ContextType = FolioContext, ParentType extends
   item?: Resolver<Maybe<ResolversTypes['PatronItem']>, ParentType, ContextType>;
   reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronGroupResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronGroup'] = ResolversParentTypes['PatronGroup']> = ResolversObject<{
@@ -4720,7 +5000,7 @@ export type PatronGroupResolvers<ContextType = FolioContext, ParentType extends 
   limits?: Resolver<Maybe<Array<Maybe<ResolversTypes['PatronBlockLimit']>>>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type PatronItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronItem'] = ResolversParentTypes['PatronItem']> = ResolversObject<{
@@ -4731,7 +5011,6 @@ export type PatronItemResolvers<ContextType = FolioContext, ParentType extends R
   item?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType>;
   itemId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronLoanResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronLoan'] = ResolversParentTypes['PatronLoan']> = ResolversObject<{
@@ -4741,7 +5020,6 @@ export type PatronLoanResolvers<ContextType = FolioContext, ParentType extends R
   item?: Resolver<ResolversTypes['PatronItem'], ParentType, ContextType>;
   loanDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   overdue?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronNoticePolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicy'] = ResolversParentTypes['PatronNoticePolicy']> = ResolversObject<{
@@ -4753,7 +5031,6 @@ export type PatronNoticePolicyResolvers<ContextType = FolioContext, ParentType e
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   requestNotices?: Resolver<Maybe<Array<ResolversTypes['PatronNoticePolicyRequestNoticesItem']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronNoticePolicyFeeFineNoticesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItem'] = ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItem']> = ResolversObject<{
@@ -4764,7 +5041,6 @@ export type PatronNoticePolicyFeeFineNoticesItemResolvers<ContextType = FolioCon
   sendOptions?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemSendOptions']>, ParentType, ContextType>;
   templateId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   templateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronNoticePolicyFeeFineNoticesItemSendOptionsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItemSendOptions'] = ResolversParentTypes['PatronNoticePolicyFeeFineNoticesItemSendOptions']> = ResolversObject<{
@@ -4772,7 +5048,6 @@ export type PatronNoticePolicyFeeFineNoticesItemSendOptionsResolvers<ContextType
   sendEvery?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
   sendHow?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemSendOptionsSendHow']>, ParentType, ContextType>;
   sendWhen?: Resolver<ResolversTypes['PatronNoticePolicyFeeFineNoticesItemSendOptionsSendWhen'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronNoticePolicyLoanNoticesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyLoanNoticesItem'] = ResolversParentTypes['PatronNoticePolicyLoanNoticesItem']> = ResolversObject<{
@@ -4783,7 +5058,6 @@ export type PatronNoticePolicyLoanNoticesItemResolvers<ContextType = FolioContex
   sendOptions?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyLoanNoticesItemSendOptions']>, ParentType, ContextType>;
   templateId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   templateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronNoticePolicyLoanNoticesItemSendOptionsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyLoanNoticesItemSendOptions'] = ResolversParentTypes['PatronNoticePolicyLoanNoticesItemSendOptions']> = ResolversObject<{
@@ -4791,7 +5065,6 @@ export type PatronNoticePolicyLoanNoticesItemSendOptionsResolvers<ContextType = 
   sendEvery?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
   sendHow?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyLoanNoticesItemSendOptionsSendHow']>, ParentType, ContextType>;
   sendWhen?: Resolver<ResolversTypes['PatronNoticePolicyLoanNoticesItemSendOptionsSendWhen'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronNoticePolicyRequestNoticesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyRequestNoticesItem'] = ResolversParentTypes['PatronNoticePolicyRequestNoticesItem']> = ResolversObject<{
@@ -4802,7 +5075,6 @@ export type PatronNoticePolicyRequestNoticesItemResolvers<ContextType = FolioCon
   sendOptions?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyRequestNoticesItemSendOptions']>, ParentType, ContextType>;
   templateId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   templateName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PatronNoticePolicyRequestNoticesItemSendOptionsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PatronNoticePolicyRequestNoticesItemSendOptions'] = ResolversParentTypes['PatronNoticePolicyRequestNoticesItemSendOptions']> = ResolversObject<{
@@ -4810,13 +5082,11 @@ export type PatronNoticePolicyRequestNoticesItemSendOptionsResolvers<ContextType
   sendEvery?: Resolver<Maybe<ResolversTypes['Interval']>, ParentType, ContextType>;
   sendHow?: Resolver<Maybe<ResolversTypes['PatronNoticePolicyRequestNoticesItemSendOptionsSendHow']>, ParentType, ContextType>;
   sendWhen?: Resolver<ResolversTypes['PatronNoticePolicyRequestNoticesItemSendOptionsSendWhen'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PeriodResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Period'] = ResolversParentTypes['Period']> = ResolversObject<{
   duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   intervalId?: Resolver<ResolversTypes['PeriodIntervalId'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PhysicalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Physical'] = ResolversParentTypes['Physical']> = ResolversObject<{
@@ -4826,52 +5096,64 @@ export type PhysicalResolvers<ContextType = FolioContext, ParentType extends Res
   materialType?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   receiptDue?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   volumes?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PieceResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Piece'] = ResolversParentTypes['Piece']> = ResolversObject<{
-  caption?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  accessionNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  barcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  bindItemId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  callNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   chronology?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  claimingInterval?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   copyNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   discoverySuppress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   displayOnHolding?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  displaySummary?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  displayToPublic?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   enumeration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  format?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  externalNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  format?: Resolver<ResolversTypes['PieceFormat'], ParentType, ContextType>;
   holdingId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  internalNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isBound?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   itemId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   locationId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   poLineId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   receiptDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   receivedDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   receivingStatus?: Resolver<ResolversTypes['PieceReceivingStatus'], ParentType, ContextType>;
+  receivingTenantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  statusUpdatedDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   supplement?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   titleId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PieceCollectionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PieceCollection'] = ResolversParentTypes['PieceCollection']> = ResolversObject<{
   pieces?: Resolver<Maybe<Array<ResolversTypes['Piece']>>, ParentType, ContextType>;
   totalRecords?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PoLineResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PoLine'] = ResolversParentTypes['PoLine']> = ResolversObject<{
-  acquisitionMethod?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  acquisitionMethod?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   agreementId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  alerts?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   automaticExport?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   cancellationRestriction?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   cancellationRestrictionNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   checkinItems?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  claimingActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  claimingInterval?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   claims?: Resolver<Maybe<Array<ResolversTypes['Claim']>>, ParentType, ContextType>;
   collection?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   contributors?: Resolver<Maybe<Array<ResolversTypes['Contributor']>>, ParentType, ContextType>;
-  cost?: Resolver<Maybe<ResolversTypes['Cost']>, ParentType, ContextType>;
+  cost?: Resolver<ResolversTypes['Cost'], ParentType, ContextType>;
+  customFields?: Resolver<Maybe<ResolversTypes['CustomFields']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['Details']>, ParentType, ContextType>;
   donor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  donorOrganizationIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   edition?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   eresource?: Resolver<Maybe<ResolversTypes['Eresource']>, ParentType, ContextType>;
   fundDistribution?: Resolver<Maybe<Array<ResolversTypes['FundDistribution']>>, ParentType, ContextType>;
@@ -4881,41 +5163,40 @@ export type PoLineResolvers<ContextType = FolioContext, ParentType extends Resol
   lastEDIExportDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   locations?: Resolver<Maybe<Array<ResolversTypes['OrderLocation']>>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
-  orderFormat?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  orderFormat?: Resolver<ResolversTypes['OrderFormat'], ParentType, ContextType>;
   packagePoLineId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  paymentStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  paymentStatus?: Resolver<Maybe<ResolversTypes['PaymentStatus']>, ParentType, ContextType>;
   physical?: Resolver<Maybe<ResolversTypes['Physical']>, ParentType, ContextType>;
   pieces?: Resolver<Maybe<Array<Maybe<ResolversTypes['Piece']>>>, ParentType, ContextType>;
   poLineDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   poLineNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publicationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   publisher?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  purchaseOrderId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
+  purchaseOrderId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   receiptDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  receiptStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  receiptStatus?: Resolver<Maybe<ResolversTypes['ReceiptStatus']>, ParentType, ContextType>;
   renewalNote?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  reportingCodes?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   requester?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   rush?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  searchLocationIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
   selector?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  source?: Resolver<ResolversTypes['Source'], ParentType, ContextType>;
+  suppressInstanceFromDiscovery?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   tags?: Resolver<Maybe<ResolversTypes['Tags']>, ParentType, ContextType>;
   titleOrPackage?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['Source']>, ParentType, ContextType>;
   vendorDetail?: Resolver<Maybe<ResolversTypes['VendorDetail']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type PoLineCollectionResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['PoLineCollection'] = ResolversParentTypes['PoLineCollection']> = ResolversObject<{
   poLines?: Resolver<Array<ResolversTypes['PoLine']>, ParentType, ContextType>;
   totalRecords?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ProductIdentifierResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ProductIdentifier'] = ResolversParentTypes['ProductIdentifier']> = ResolversObject<{
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  productIdType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  productIdType?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   qualifier?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ProxyForResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ProxyFor'] = ResolversParentTypes['ProxyFor']> = ResolversObject<{
@@ -4931,13 +5212,11 @@ export type ProxyForResolvers<ContextType = FolioContext, ParentType extends Res
   status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QuantityResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Quantity'] = ResolversParentTypes['Quantity']> = ResolversObject<{
   intervalId?: Resolver<Maybe<ResolversTypes['QuantityIntervalId']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -4975,7 +5254,6 @@ export type ReminderFeesPolicyResolvers<ContextType = FolioContext, ParentType e
   ignoreGracePeriodHolds?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   ignoreGracePeriodRecall?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   reminderSchedule?: Resolver<Maybe<Array<ResolversTypes['ReminderFeesPolicyReminderScheduleItem']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ReminderFeesPolicyReminderScheduleItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ReminderFeesPolicyReminderScheduleItem'] = ResolversParentTypes['ReminderFeesPolicyReminderScheduleItem']> = ResolversObject<{
@@ -4985,7 +5263,6 @@ export type ReminderFeesPolicyReminderScheduleItemResolvers<ContextType = FolioC
   noticeTemplateId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   reminderFee?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   timeUnitId?: Resolver<ResolversTypes['ReminderFeesPolicyReminderScheduleItemTimeUnitId'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Request'] = ResolversParentTypes['Request']> = ResolversObject<{
@@ -5014,7 +5291,6 @@ export type RequestResolvers<ContextType = FolioContext, ParentType extends Reso
   requester?: Resolver<Maybe<ResolversTypes['RequestRequester']>, ParentType, ContextType>;
   requesterId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['RequestStatus']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestDeliveryAddressResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestDeliveryAddress'] = ResolversParentTypes['RequestDeliveryAddress']> = ResolversObject<{
@@ -5025,7 +5301,6 @@ export type RequestDeliveryAddressResolvers<ContextType = FolioContext, ParentTy
   countryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   postalCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestPickupServicePointResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestPickupServicePoint'] = ResolversParentTypes['RequestPickupServicePoint']> = ResolversObject<{
@@ -5035,7 +5310,6 @@ export type RequestPickupServicePointResolvers<ContextType = FolioContext, Paren
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   pickupLocation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   shelvingLagTime?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestPolicy'] = ResolversParentTypes['RequestPolicy']> = ResolversObject<{
@@ -5045,14 +5319,12 @@ export type RequestPolicyResolvers<ContextType = FolioContext, ParentType extend
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   requestTypes?: Resolver<Maybe<Array<ResolversTypes['RequestType']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestPolicyAllowedServicePointsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestPolicyAllowedServicePoints'] = ResolversParentTypes['RequestPolicyAllowedServicePoints']> = ResolversObject<{
   Hold?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   Page?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   Recall?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestProxyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestProxy'] = ResolversParentTypes['RequestProxy']> = ResolversObject<{
@@ -5062,14 +5334,12 @@ export type RequestProxyResolvers<ContextType = FolioContext, ParentType extends
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   patronGroup?: Resolver<Maybe<ResolversTypes['RequestProxyPatronGroup']>, ParentType, ContextType>;
   patronGroupId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestProxyPatronGroupResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestProxyPatronGroup'] = ResolversParentTypes['RequestProxyPatronGroup']> = ResolversObject<{
   desc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   group?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestRequesterResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestRequester'] = ResolversParentTypes['RequestRequester']> = ResolversObject<{
@@ -5079,51 +5349,12 @@ export type RequestRequesterResolvers<ContextType = FolioContext, ParentType ext
   middleName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   patronGroup?: Resolver<Maybe<ResolversTypes['RequestRequesterPatronGroup']>, ParentType, ContextType>;
   patronGroupId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RequestRequesterPatronGroupResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RequestRequesterPatronGroup'] = ResolversParentTypes['RequestRequesterPatronGroup']> = ResolversObject<{
   desc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   group?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ResultInfoResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ResultInfo'] = ResolversParentTypes['ResultInfo']> = ResolversObject<{
-  diagnostics?: Resolver<Maybe<Array<ResolversTypes['ResultInfoDiagnosticsItem']>>, ParentType, ContextType>;
-  facets?: Resolver<Maybe<Array<ResolversTypes['ResultInfoFacetsItem']>>, ParentType, ContextType>;
-  responseTime?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  totalRecords?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  totalRecordsEstimated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  totalRecordsRounded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ResultInfoDiagnosticsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ResultInfoDiagnosticsItem'] = ResolversParentTypes['ResultInfoDiagnosticsItem']> = ResolversObject<{
-  code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  module?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  query?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  recordCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ResultInfoFacetsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ResultInfoFacetsItem'] = ResolversParentTypes['ResultInfoFacetsItem']> = ResolversObject<{
-  facetValues?: Resolver<Maybe<Array<ResolversTypes['ResultInfoFacetsItemFacetValuesItem']>>, ParentType, ContextType>;
-  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ResultInfoFacetsItemFacetValuesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ResultInfoFacetsItemFacetValuesItem'] = ResolversParentTypes['ResultInfoFacetsItemFacetValuesItem']> = ResolversObject<{
-  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['ResultInfoFacetsItemFacetValuesItemValue']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ResultInfoFacetsItemFacetValuesItemValueResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ResultInfoFacetsItemFacetValuesItemValue'] = ResolversParentTypes['ResultInfoFacetsItemFacetValuesItemValue']> = ResolversObject<{
-  _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RtacHoldingResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHolding'] = ResolversParentTypes['RtacHolding']> = ResolversObject<{
@@ -5136,74 +5367,74 @@ export type RtacHoldingResolvers<ContextType = FolioContext, ParentType extends 
   holdingsStatementsForSupplements?: Resolver<Maybe<Array<ResolversTypes['RtacHoldingHoldingsStatementsForSupplementsItem']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   itemCopyNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  itemDisplayOrder?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   library?: Resolver<Maybe<ResolversTypes['RtacLibrary']>, ParentType, ContextType>;
   location?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   locationCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   locationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   materialType?: Resolver<Maybe<ResolversTypes['RtacMaterialType']>, ParentType, ContextType>;
+  notes?: Resolver<Maybe<Array<ResolversTypes['RtacHoldingNotesItem']>>, ParentType, ContextType>;
   permanentLoanType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   suppressFromDiscovery?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   temporaryLoanType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   totalHoldRequests?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   volume?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RtacHoldingHoldingsStatementsForIndexesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldingHoldingsStatementsForIndexesItem'] = ResolversParentTypes['RtacHoldingHoldingsStatementsForIndexesItem']> = ResolversObject<{
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RtacHoldingHoldingsStatementsForSupplementsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldingHoldingsStatementsForSupplementsItem'] = ResolversParentTypes['RtacHoldingHoldingsStatementsForSupplementsItem']> = ResolversObject<{
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RtacHoldingHoldingsStatementsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldingHoldingsStatementsItem'] = ResolversParentTypes['RtacHoldingHoldingsStatementsItem']> = ResolversObject<{
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   statement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type RtacHoldingNotesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldingNotesItem'] = ResolversParentTypes['RtacHoldingNotesItem']> = ResolversObject<{
+  holdingsNoteTypeName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  note?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
 export type RtacHoldingsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldings'] = ResolversParentTypes['RtacHoldings']> = ResolversObject<{
   holdings?: Resolver<Array<ResolversTypes['RtacHolding']>, ParentType, ContextType>;
   instanceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RtacHoldingsBatchResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacHoldingsBatch'] = ResolversParentTypes['RtacHoldingsBatch']> = ResolversObject<{
   errors?: Resolver<Maybe<Array<ResolversTypes['Error']>>, ParentType, ContextType>;
   holdings?: Resolver<Maybe<Array<ResolversTypes['RtacHoldings']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RtacLibraryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacLibrary'] = ResolversParentTypes['RtacLibrary']> = ResolversObject<{
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RtacMaterialTypeResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['RtacMaterialType'] = ResolversParentTypes['RtacMaterialType']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ScheduleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Schedule'] = ResolversParentTypes['Schedule']> = ResolversObject<{
   due?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   from?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   to?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ServicePointResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePoint'] = ResolversParentTypes['ServicePoint']> = ResolversObject<{
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  defaultCheckInActionForUseAtLocation?: Resolver<Maybe<ResolversTypes['ServicepointDefaultCheckInActionForUseAtLocation']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['ServicePointDetails']>, ParentType, ContextType>;
   discoveryDisplayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ecsRequestRouting?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   holdShelfClosedLibraryDateManagement?: Resolver<Maybe<ResolversTypes['ServicepointHoldShelfClosedLibraryDateManagement']>, ParentType, ContextType>;
   holdShelfExpiryPeriod?: Resolver<Maybe<ResolversTypes['TimePeriod']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -5212,7 +5443,6 @@ export type ServicePointResolvers<ContextType = FolioContext, ParentType extends
   pickupLocation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   shelvingLagTime?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   staffSlips?: Resolver<Maybe<Array<ResolversTypes['ServicepointStaffSlipsItem']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ServicePointDetailsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicePointDetails'] = ResolversParentTypes['ServicePointDetails']> = ResolversObject<{
@@ -5221,27 +5451,27 @@ export type ServicePointDetailsResolvers<ContextType = FolioContext, ParentType 
   isDefaultForCampus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isDefaultPickup?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ServicepointStaffSlipsItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ServicepointStaffSlipsItem'] = ResolversParentTypes['ServicepointStaffSlipsItem']> = ResolversObject<{
   id?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   printByDefault?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type TagsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Tags'] = ResolversParentTypes['Tags']> = ResolversObject<{
   tagList?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type TimePeriodResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['TimePeriod'] = ResolversParentTypes['TimePeriod']> = ResolversObject<{
   duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   intervalId?: Resolver<ResolversTypes['TimePeriodIntervalId'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type TitleResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Title'] = ResolversParentTypes['Title']> = ResolversObject<{
+  acqUnitIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
+  bindItemIds?: Resolver<Maybe<Array<ResolversTypes['UUID']>>, ParentType, ContextType>;
+  claimingActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  claimingInterval?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   contributors?: Resolver<Maybe<Array<ResolversTypes['Contributor']>>, ParentType, ContextType>;
   edition?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   expectedReceiptDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -5249,6 +5479,7 @@ export type TitleResolvers<ContextType = FolioContext, ParentType extends Resolv
   instanceId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   isAcknowledged?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
+  nextSequenceNumber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   packageName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   poLineId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   poLineNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -5260,7 +5491,6 @@ export type TitleResolvers<ContextType = FolioContext, ParentType extends Resolv
   subscriptionInterval?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   subscriptionTo?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UUID'], any> {
@@ -5286,6 +5516,7 @@ export type UserResolvers<ContextType = FolioContext, ParentType extends Resolve
   patronGroup?: Resolver<Maybe<ResolversTypes['PatronGroup']>, ParentType, ContextType>;
   patronGroupId?: Resolver<Maybe<ResolversTypes['UUID']>, ParentType, ContextType>;
   personal?: Resolver<Maybe<ResolversTypes['UserdataPersonal']>, ParentType, ContextType>;
+  preferredEmailCommunication?: Resolver<Maybe<Array<ResolversTypes['UserdataPreferredEmailCommunicationItem']>>, ParentType, ContextType>;
   proxiesFor?: Resolver<Maybe<Array<Maybe<ResolversTypes['ProxyFor']>>>, ParentType, ContextType>;
   proxiesOf?: Resolver<Maybe<Array<Maybe<ResolversTypes['ProxyFor']>>>, ParentType, ContextType>;
   proxyFor?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
@@ -5293,17 +5524,14 @@ export type UserResolvers<ContextType = FolioContext, ParentType extends Resolve
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserdataCustomFieldsResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['UserdataCustomFields'] = ResolversParentTypes['UserdataCustomFields']> = ResolversObject<{
   _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserdataMetaResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['UserdataMeta'] = ResolversParentTypes['UserdataMeta']> = ResolversObject<{
   _typesWithoutFieldsAreNotAllowed_?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserdataPersonalResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['UserdataPersonal'] = ResolversParentTypes['UserdataPersonal']> = ResolversObject<{
@@ -5318,7 +5546,7 @@ export type UserdataPersonalResolvers<ContextType = FolioContext, ParentType ext
   preferredContactTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   preferredFirstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   profilePictureLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  pronouns?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 }>;
 
 export type UserdataPersonalAddressesItemResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['UserdataPersonalAddressesItem'] = ResolversParentTypes['UserdataPersonalAddressesItem']> = ResolversObject<{
@@ -5331,7 +5559,6 @@ export type UserdataPersonalAddressesItemResolvers<ContextType = FolioContext, P
   postalCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   primaryAddress?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type VendorDetailResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['VendorDetail'] = ResolversParentTypes['VendorDetail']> = ResolversObject<{
@@ -5339,7 +5566,6 @@ export type VendorDetailResolvers<ContextType = FolioContext, ParentType extends
   noteFromVendor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   referenceNumbers?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   vendorAccount?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = FolioContext> = ResolversObject<{
@@ -5348,55 +5574,64 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   AccountdataPaymentStatus?: AccountdataPaymentStatusResolvers<ContextType>;
   AccountdataStatus?: AccountdataStatusResolvers<ContextType>;
   AlternativeTitleType?: AlternativeTitleTypeResolvers<ContextType>;
+  BatchRequestStatusResponse?: BatchRequestStatusResponseResolvers<ContextType>;
+  BatchRequestStatusResponseItemsFailedDetailsItem?: BatchRequestStatusResponseItemsFailedDetailsItemResolvers<ContextType>;
+  BatchRequestStatusResponseItemsPendingDetailsItem?: BatchRequestStatusResponseItemsPendingDetailsItemResolvers<ContextType>;
+  BatchRequestStatusResponseItemsRequestedDetailsItem?: BatchRequestStatusResponseItemsRequestedDetailsItemResolvers<ContextType>;
   Block?: BlockResolvers<ContextType>;
   BoundWithPart?: BoundWithPartResolvers<ContextType>;
   BoundWithParts?: BoundWithPartsResolvers<ContextType>;
+  CallNumberComponents?: CallNumberComponentsResolvers<ContextType>;
   CallNumberType?: CallNumberTypeResolvers<ContextType>;
   Campus?: CampusResolvers<ContextType>;
   Charge?: ChargeResolvers<ContextType>;
+  CirculationNote?: CirculationNoteResolvers<ContextType>;
+  CirculationNoteSource?: CirculationNoteSourceResolvers<ContextType>;
+  CirculationNoteSourcePersonal?: CirculationNoteSourcePersonalResolvers<ContextType>;
+  CirculationNoteType?: CirculationNoteTypeResolvers<ContextType>;
+  CirculationNoteTypePersonal?: CirculationNoteTypePersonalResolvers<ContextType>;
   Claim?: ClaimResolvers<ContextType>;
   ClassificationType?: ClassificationTypeResolvers<ContextType>;
+  CloseReason?: CloseReasonResolvers<ContextType>;
   Contributor?: ContributorResolvers<ContextType>;
   ContributorNameType?: ContributorNameTypeResolvers<ContextType>;
   ContributorType?: ContributorTypeResolvers<ContextType>;
   Cost?: CostResolvers<ContextType>;
+  CustomFields?: CustomFieldsResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Details?: DetailsResolvers<ContextType>;
+  ElectronicAccessItem?: ElectronicAccessItemResolvers<ContextType>;
   ElectronicAccessRelationship?: ElectronicAccessRelationshipResolvers<ContextType>;
   Eresource?: EresourceResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;
+  ErrorParametersItem?: ErrorParametersItemResolvers<ContextType>;
   FeeFine?: FeeFineResolvers<ContextType>;
   FeeFineAction?: FeeFineActionResolvers<ContextType>;
   FixedDueDateSchedule?: FixedDueDateScheduleResolvers<ContextType>;
   FundDistribution?: FundDistributionResolvers<ContextType>;
   Hold?: HoldResolvers<ContextType>;
+  HoldBatchRequestInfo?: HoldBatchRequestInfoResolvers<ContextType>;
   HoldingSummary?: HoldingSummaryResolvers<ContextType>;
   HoldingSummaryCollection?: HoldingSummaryCollectionResolvers<ContextType>;
-  HoldingsNoteType?: HoldingsNoteTypeResolvers<ContextType>;
+  HoldingsNote?: HoldingsNoteResolvers<ContextType>;
+  HoldingsReceivingHistory?: HoldingsReceivingHistoryResolvers<ContextType>;
+  HoldingsReceivingHistoryEntry?: HoldingsReceivingHistoryEntryResolvers<ContextType>;
   HoldingsRecord?: HoldingsRecordResolvers<ContextType>;
-  HoldingsRecords?: HoldingsRecordsResolvers<ContextType>;
   HoldingsRecordsSource?: HoldingsRecordsSourceResolvers<ContextType>;
+  HoldingsStatement?: HoldingsStatementResolvers<ContextType>;
   HoldingsType?: HoldingsTypeResolvers<ContextType>;
-  HoldingsrecordElectronicAccessItem?: HoldingsrecordElectronicAccessItemResolvers<ContextType>;
-  HoldingsrecordHoldingsStatementsForIndexesItem?: HoldingsrecordHoldingsStatementsForIndexesItemResolvers<ContextType>;
-  HoldingsrecordHoldingsStatementsForSupplementsItem?: HoldingsrecordHoldingsStatementsForSupplementsItemResolvers<ContextType>;
-  HoldingsrecordHoldingsStatementsItem?: HoldingsrecordHoldingsStatementsItemResolvers<ContextType>;
-  HoldingsrecordNotesItem?: HoldingsrecordNotesItemResolvers<ContextType>;
-  HoldingsrecordReceivingHistory?: HoldingsrecordReceivingHistoryResolvers<ContextType>;
-  HoldingsrecordReceivingHistoryEntriesItem?: HoldingsrecordReceivingHistoryEntriesItemResolvers<ContextType>;
-  ILLpolicy?: IlLpolicyResolvers<ContextType>;
+  Identifier?: IdentifierResolvers<ContextType>;
   IdentifierType?: IdentifierTypeResolvers<ContextType>;
+  IllPolicy?: IllPolicyResolvers<ContextType>;
   Instance?: InstanceResolvers<ContextType>;
   InstanceAlternativeTitlesItem?: InstanceAlternativeTitlesItemResolvers<ContextType>;
   InstanceClassificationsItem?: InstanceClassificationsItemResolvers<ContextType>;
   InstanceContributorsItem?: InstanceContributorsItemResolvers<ContextType>;
-  InstanceElectronicAccessItem?: InstanceElectronicAccessItemResolvers<ContextType>;
+  InstanceDates?: InstanceDatesResolvers<ContextType>;
   InstanceFormat?: InstanceFormatResolvers<ContextType>;
-  InstanceIdentifiersItem?: InstanceIdentifiersItemResolvers<ContextType>;
   InstanceNoteType?: InstanceNoteTypeResolvers<ContextType>;
   InstanceNotesItem?: InstanceNotesItemResolvers<ContextType>;
   InstancePublicationItem?: InstancePublicationItemResolvers<ContextType>;
-  InstancePublicationPeriod?: InstancePublicationPeriodResolvers<ContextType>;
   InstanceSeriesItem?: InstanceSeriesItemResolvers<ContextType>;
   InstanceStatus?: InstanceStatusResolvers<ContextType>;
   InstanceSubjectsItem?: InstanceSubjectsItemResolvers<ContextType>;
@@ -5404,21 +5639,18 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   Institution?: InstitutionResolvers<ContextType>;
   Interval?: IntervalResolvers<ContextType>;
   Item?: ItemResolvers<ContextType>;
-  ItemCirculationNotesItem?: ItemCirculationNotesItemResolvers<ContextType>;
-  ItemCirculationNotesItemSource?: ItemCirculationNotesItemSourceResolvers<ContextType>;
-  ItemCirculationNotesItemSourcePersonal?: ItemCirculationNotesItemSourcePersonalResolvers<ContextType>;
   ItemDamagedStatus?: ItemDamagedStatusResolvers<ContextType>;
   ItemEffectiveCallNumberComponents?: ItemEffectiveCallNumberComponentsResolvers<ContextType>;
-  ItemElectronicAccessItem?: ItemElectronicAccessItemResolvers<ContextType>;
   ItemLastCheckIn?: ItemLastCheckInResolvers<ContextType>;
+  ItemNote?: ItemNoteResolvers<ContextType>;
   ItemNoteType?: ItemNoteTypeResolvers<ContextType>;
-  ItemNotesItem?: ItemNotesItemResolvers<ContextType>;
   ItemStatus?: ItemStatusResolvers<ContextType>;
   Library?: LibraryResolvers<ContextType>;
   License?: LicenseResolvers<ContextType>;
   Loan?: LoanResolvers<ContextType>;
   LoanBorrower?: LoanBorrowerResolvers<ContextType>;
   LoanFeesAndFines?: LoanFeesAndFinesResolvers<ContextType>;
+  LoanForUseAtLocation?: LoanForUseAtLocationResolvers<ContextType>;
   LoanLostItemPolicy?: LoanLostItemPolicyResolvers<ContextType>;
   LoanOverdueFinePolicy?: LoanOverdueFinePolicyResolvers<ContextType>;
   LoanPatronGroupAtCheckout?: LoanPatronGroupAtCheckoutResolvers<ContextType>;
@@ -5476,15 +5708,11 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   RequestProxyPatronGroup?: RequestProxyPatronGroupResolvers<ContextType>;
   RequestRequester?: RequestRequesterResolvers<ContextType>;
   RequestRequesterPatronGroup?: RequestRequesterPatronGroupResolvers<ContextType>;
-  ResultInfo?: ResultInfoResolvers<ContextType>;
-  ResultInfoDiagnosticsItem?: ResultInfoDiagnosticsItemResolvers<ContextType>;
-  ResultInfoFacetsItem?: ResultInfoFacetsItemResolvers<ContextType>;
-  ResultInfoFacetsItemFacetValuesItem?: ResultInfoFacetsItemFacetValuesItemResolvers<ContextType>;
-  ResultInfoFacetsItemFacetValuesItemValue?: ResultInfoFacetsItemFacetValuesItemValueResolvers<ContextType>;
   RtacHolding?: RtacHoldingResolvers<ContextType>;
   RtacHoldingHoldingsStatementsForIndexesItem?: RtacHoldingHoldingsStatementsForIndexesItemResolvers<ContextType>;
   RtacHoldingHoldingsStatementsForSupplementsItem?: RtacHoldingHoldingsStatementsForSupplementsItemResolvers<ContextType>;
   RtacHoldingHoldingsStatementsItem?: RtacHoldingHoldingsStatementsItemResolvers<ContextType>;
+  RtacHoldingNotesItem?: RtacHoldingNotesItemResolvers<ContextType>;
   RtacHoldings?: RtacHoldingsResolvers<ContextType>;
   RtacHoldingsBatch?: RtacHoldingsBatchResolvers<ContextType>;
   RtacLibrary?: RtacLibraryResolvers<ContextType>;

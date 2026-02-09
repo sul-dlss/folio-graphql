@@ -58,6 +58,11 @@
       "description": "Personal information about the user",
       "type": "object",
       "properties": {
+        "pronouns": {
+          "description": "The user's pronouns",
+          "type": "string",
+          "maxLength": 300
+        },
         "lastName": {
           "description": "The user's surname",
           "type": "string"
@@ -147,7 +152,7 @@
           "type": "string"
         },
         "profilePictureLink": {
-          "description": "Link to the profile picture",
+          "description": "Link to the profile picture, or only the id of the /users/profile-picture entry",
           "type": "string",
           "format": "uri"
         }
@@ -189,6 +194,16 @@
       "description": "Object that contains custom field",
       "type": "object",
       "additionalProperties": true
+    },
+    "preferredEmailCommunication": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["Support", "Programs", "Services"]
+      },
+      "maxItems": 3,
+      "uniqueItems": true,
+      "description": "Preferred email communication types"
     }
   },
   "additionalProperties": false
