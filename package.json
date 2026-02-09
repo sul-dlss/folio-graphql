@@ -12,6 +12,7 @@
     "codegen": "graphql-codegen-esm --config codegen.yml",
     "lint": "eslint src -c eslint.config.mjs",
     "test": "jest",
+    "sync-folio-schemas": "node scripts/sync-folio-schemas.js",
     "update-graphql-schema": "node scripts/generate-graphql-from-json-schemas.js json-schemas/"
   },
   "jest": {
@@ -54,6 +55,7 @@
     "jest": "^30.0.0",
     "jest-fetch-mock": "^3.0.3",
     "nodemon": "^3.0.0",
+    "simple-git": "^3.30.0",
     "ts-jest": "^29.1.0",
     "ts-jest-resolver": "^2.0.1",
     "ts-node": "^10.9.1",
