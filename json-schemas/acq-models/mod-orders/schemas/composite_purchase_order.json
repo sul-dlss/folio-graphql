@@ -5,7 +5,6 @@
   "properties": {
     "id": {
       "description": "UUID of this purchase order",
-      "type": "string",
       "$ref": "../../common/schemas/uuid.json"
     },
     "approved": {
@@ -15,7 +14,6 @@
     },
     "approvedById": {
       "description": "UUID of the user approving the order",
-      "type": "object",
       "$ref": "../../common/schemas/uuid.json"
     },
     "approvalDate": {
@@ -25,18 +23,20 @@
     },
     "assignedTo": {
       "description": "UUID of the user this purchase order his assigned to",
-      "type": "string",
       "$ref": "../../common/schemas/uuid.json"
     },
     "billTo": {
       "description": "UUID of the billing address",
-      "type": "string",
       "$ref": "../../common/schemas/uuid.json"
     },
     "closeReason": {
       "description": "Close reason for purchase order. Some values are predefined and can trigger actions, such as Cancelled. See mod-orders-storage/src/main/resources/data/system/reasons-for-closure",
       "type": "object",
       "$ref": "../../mod-orders-storage/schemas/close_reason.json"
+    },
+    "openedById": {
+      "description": "UUID of the user opening the Order",
+      "$ref": "../../common/schemas/uuid.json"
     },
     "dateOrdered": {
       "description": "Date and time when purchase order was opened",
@@ -89,13 +89,16 @@
     },
     "shipTo": {
       "description": "UUID of the shipping address",
-      "type": "string",
       "$ref": "../../common/schemas/uuid.json"
     },
     "template": {
       "description": "The ID of the order template used for this order. Applies to both PO and POL",
-      "type": "string",
       "$ref": "../../common/schemas/uuid.json"
+    },
+    "totalCredited": {
+      "description": "Total credited for the order",
+      "type": "number",
+      "readonly": true
     },
     "totalEstimatedPrice": {
       "description": "total estimated price of this purchase order",
@@ -117,7 +120,6 @@
     },
     "vendor": {
       "description": "UUID of the vendorDetails record",
-      "type": "string",
       "$ref": "../../common/schemas/uuid.json"
     },
     "workflowStatus": {
@@ -125,13 +127,13 @@
       "type": "string",
       "$ref": "../../mod-orders-storage/schemas/workflow_status.json"
     },
-    "compositePoLines": {
-      "description": "a list of completely de-referenced purchase order lines",
-      "id": "compositePoLines",
+    "poLines": {
+      "description": "a list of purchase order lines",
+      "id": "poLines",
       "type": "array",
       "items": {
         "type": "object",
-        "$ref": "composite_po_line.json"
+        "$ref": "../../mod-orders-storage/schemas/po_line.json"
       }
     },
     "acqUnitIds": {
@@ -150,6 +152,15 @@
       "type": "object",
       "description": "arbitrary tags associated with this purchase order",
       "$ref": "../../../raml-util/schemas/tags.schema"
+    },
+    "customFields" : {
+      "description": "Object that contains custom field",
+      "type": "object",
+      "$ref": "../../common/schemas/custom_fields.json"
+    },
+    "fiscalYearId": {
+      "description": "Fiscal Year Id of the first Fund Distribution used for Purchase Order opening",
+      "$ref": "../../common/schemas/uuid.json"
     },
     "metadata": {
       "type": "object",

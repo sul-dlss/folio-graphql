@@ -26,6 +26,10 @@
             "items": {
               "type": "object",
               "properties": {
+                "accessionNumber": {
+                  "description": "The accession number assigned to the piece",
+                  "type": "string"
+                },
                 "barcode": {
                   "description": "The barcode assigned to the item",
                   "type": "string"
@@ -38,8 +42,8 @@
                   "description": "The free form notes pertaining to this item",
                   "type": "string"
                 },
-                "caption": {
-                  "description": "The volume or caption of the item",
+                "displaySummary": {
+                  "description": "Display summary of the item",
                   "type": "string"
                 },
                 "itemStatus": {
@@ -59,6 +63,16 @@
                   "description": "Whether or not receiving history should be displayed in holding record view",
                   "type": "boolean",
                   "default": false
+                },
+                "displayToPublic": {
+                  "description": "Whether or not the piece data should display to patrons at point of receipt",
+                  "type": "boolean",
+                  "default": false
+                },
+                "sequenceNumber": {
+                  "description": "The sequence number of this piece to determine the order in which it appears",
+                  "type": "integer",
+                  "minimum": 1
                 },
                 "enumeration": {
                   "type": "string",

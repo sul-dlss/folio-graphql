@@ -24,7 +24,7 @@ import {
   LoanType,
   CallNumberType,
   HoldingsRecordsSource,
-  IlLpolicy,
+  IllPolicy,
   ElectronicAccessRelationship,
   ModeOfIssuance,
   HoldingsType,
@@ -320,7 +320,7 @@ export const resolvers: Resolvers = {
       return types.getById<CallNumberType>("call-number-types", { key: 'callNumberTypes' }, callNumberTypeId)
     },
     illPolicy({ illPolicyId }, args, { dataSources: { types } }, info) {
-      return types.getById<IlLpolicy>("ill-policies", { key: 'illPolicies' }, illPolicyId)
+      return types.getById<IllPolicy>("ill-policies", { key: 'illPolicies' }, illPolicyId)
     },
     holdingsType({ holdingsTypeId }, args, { dataSources: { types } }, info) {
       return types.getById<HoldingsType>("holdings-types", { key: 'holdingsTypes' }, holdingsTypeId)
@@ -336,11 +336,6 @@ export const resolvers: Resolvers = {
     },
     holdingSummaries({ id }, args, { dataSources: { orders } }, info) {
       return orders.getHoldingSummaries(id)
-    }
-  },
-  HoldingsrecordElectronicAccessItem: {
-    relationship({ relationshipId }, args, { dataSources: { types } }, info) {
-      return types.getById<ElectronicAccessRelationship>("electronic-access-relationships", { key: 'electronicAccessRelationships' }, relationshipId)
     }
   },
   Item: {

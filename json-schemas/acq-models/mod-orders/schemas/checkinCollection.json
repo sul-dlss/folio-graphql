@@ -35,6 +35,11 @@
                   "description": "The barcode assigned to the piece",
                   "type": "string"
                 },
+                "receiptDate": {
+                  "description": "The date when associated piece is expected to arrive",
+                  "type": "string",
+                  "format": "date-time"
+                },
                 "callNumber": {
                   "description": "The call number assigned to the piece",
                   "type": "string"
@@ -43,8 +48,8 @@
                   "description": "The free form notes pertaining to the piece",
                   "type": "string"
                 },
-                "caption": {
-                  "description": "The enumeration caption of the piece",
+                "displaySummary": {
+                  "description": "Display summary of the piece",
                   "type": "string"
                 },
                 "createItem": {
@@ -54,6 +59,10 @@
                 "supplement": {
                   "description": "Whether or not this is a supplementary material for this piece",
                   "type": "boolean"
+                },
+                "receivingTenantId": {
+                  "description": "The tenant id where piece should be checked in",
+                  "type": "string"
                 },
                 "locationId": {
                   "description": "The id of the location",
@@ -68,6 +77,16 @@
                   "description": "Whether or not receiving history should be displayed in holding record view",
                   "type": "boolean",
                   "default": false
+                },
+                "displayToPublic": {
+                  "description": "Whether or not the piece data should display to patrons at point of receipt",
+                  "type": "boolean",
+                  "default": false
+                },
+                "sequenceNumber": {
+                  "description": "The sequence number of this piece to determine the order in which it appears",
+                  "type": "integer",
+                  "minimum": 1
                 },
                 "enumeration": {
                   "type": "string",

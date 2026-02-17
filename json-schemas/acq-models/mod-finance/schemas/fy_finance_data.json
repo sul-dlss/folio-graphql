@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "Finance data for a fiscal year",
+  "type": "object",
+  "javaName": "FyFinanceData",
+  "properties": {
+    "fiscalYearId": {
+      "description": "UUID of the fiscal year",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "fiscalYearCode": {
+      "description": "The code of the fiscal year",
+      "type": "string"
+    },
+    "fundId": {
+      "description": "Fund UUID",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "fundCode": {
+      "description": "A unique code associated with the fund",
+      "$ref": "../../common/schemas/fund_code.json"
+    },
+    "fundName": {
+      "description": "The name of this fund",
+      "type": "string"
+    },
+    "fundDescription": {
+      "description": "A description of this fund",
+      "type": "string"
+    },
+    "fundStatus": {
+      "description": "The current status of this fund",
+      "type": "string"
+    },
+    "fundTags": {
+      "type": "object",
+      "description": "Arbitrary tags associated with this fund",
+      "$ref": "../../../raml-util/schemas/tags.schema"
+    },
+    "fundAcqUnitIds": {
+      "description": "List of acquisition unit IDs associated with the fund",
+      "type": "array",
+      "items": {
+        "$ref": "../../common/schemas/uuid.json"
+      }
+    },
+    "ledgerId": {
+      "description": "UUID of this ledger",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "ledgerCode": {
+      "description": "The code for the ledger",
+      "type": "string"
+    },
+    "budgetId": {
+      "description": "UUID of this budget",
+      "type": "string"
+    },
+    "budgetName": {
+      "description": "The name of the budget",
+      "type": "string"
+    },
+    "budgetStatus": {
+      "description": "The status of the budget",
+      "type": "string"
+    },
+    "budgetInitialAllocation": {
+      "description": "The amount of the first allocation made to this budget",
+      "type": "number"
+    },
+    "budgetCurrentAllocation": {
+      "description": "The amount currently allocated to this budget",
+      "type": "number"
+    },
+    "budgetAllocationChange": {
+      "description": "The change in allocation amount for this budget",
+      "type": "number"
+    },
+    "budgetAllowableExpenditure": {
+      "description": "The expenditure percentage limit for this budget",
+      "type": "number"
+    },
+    "budgetAllowableEncumbrance": {
+      "description": "The encumbrance percentage limit for this budget",
+      "type": "number"
+    },
+    "budgetAfterAllocation": {
+      "description": "The amount of the budget after the allocation",
+      "type": "number"
+    },
+    "budgetAcqUnitIds": {
+      "description": "List of acquisition unit IDs associated with the budget",
+      "type": "array",
+      "items": {
+        "$ref": "../../common/schemas/uuid.json"
+      }
+    },
+    "groupId": {
+      "description": "UUID of this group",
+      "$ref": "../../common/schemas/uuid.json"
+    },
+    "groupCode": {
+      "description": "The code for the group",
+      "type": "string"
+    },
+    "transactionDescription": {
+      "description": "A description of this transaction",
+      "type": "string"
+    },
+    "transactionTag": {
+      "type": "object",
+      "description": "Arbitrary tags associated with this transaction",
+      "$ref": "../../../raml-util/schemas/tags.schema"
+    },
+    "isFundChanged": {
+      "description": "Indicates if the fund has changed",
+      "type": "boolean"
+    },
+    "isBudgetChanged": {
+      "description": "Indicates if the budget has changed",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "fiscalYearCode",
+    "fiscalYearId",
+    "fundId"
+  ]
+}

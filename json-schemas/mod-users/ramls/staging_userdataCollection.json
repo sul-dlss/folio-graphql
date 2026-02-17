@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "Collection of staging users",
+  "properties": {
+    "staging_users": {
+      "description": "List of userdata items",
+      "type": "array",
+      "id": "stagingUsersData",
+      "items": {
+        "type": "object",
+        "$ref": "staging_userdata.json"
+      }
+    },
+    "totalRecords": {
+      "type": "integer",
+      "description": "Estimated or exact total number of records, see https://github.com/folio-org/raml-module-builder#estimated-totalrecords for details"
+    },
+    "resultInfo": {
+      "$ref": "raml-util/schemas/resultInfo.schema",
+      "readonly": true
+    }
+  },
+  "required": [
+    "users",
+    "totalRecords"
+  ]
+}
