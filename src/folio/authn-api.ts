@@ -8,7 +8,6 @@ export default class AuthnAPI extends OkapiAPI {
     request.headers["X-Okapi-Tenant"] = config.get("folio.tenant")
     request.headers["User-Agent"] = "FolioApiClient"
     request.headers["Accept"] = "application/json, text/plain"
-    request.headers["Content-Type"] = "application/json"
   }
 
   async login(username: string, password: string) {
