@@ -4411,6 +4411,7 @@ extend type Item {
   dueDate: DateTime
   boundWithHoldingsPerItem: [HoldingsRecord]
   queueTotalLength: Int
+  itemNumber: Int
 }
 
 extend type ItemNotesItem {
