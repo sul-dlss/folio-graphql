@@ -2575,6 +2575,7 @@ export type Query = {
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
   servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+  user?: Maybe<User>;
 };
 
 
@@ -2642,6 +2643,11 @@ export type QueryPatronArgs = {
 
 export type QueryServicePointsArgs = {
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 export enum ReceiptStatus {
@@ -5140,6 +5146,7 @@ export type QueryResolvers<ContextType = FolioContext, ParentType extends Resolv
   patronNoticePolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['PatronNoticePolicy']>>>, ParentType, ContextType>;
   requestPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['RequestPolicy']>>>, ParentType, ContextType>;
   servicePoints?: Resolver<Maybe<Array<Maybe<ResolversTypes['ServicePoint']>>>, ParentType, ContextType, Partial<QueryServicePointsArgs>>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
 }>;
 
 export type ReminderFeesPolicyResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['ReminderFeesPolicy'] = ResolversParentTypes['ReminderFeesPolicy']> = ResolversObject<{
