@@ -12,6 +12,7 @@ input CqlParams {
 # We only need one query; all the magic happens in the resolvers
 type Query {
   patron(id: UUID!): Patron
+  user(id: UUID!): User
 
   feeFineTypes: [FeeFine]
 

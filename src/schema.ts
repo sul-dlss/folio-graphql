@@ -2572,6 +2572,7 @@ export type Query = {
   patronNoticePolicies?: Maybe<Array<Maybe<PatronNoticePolicy>>>;
   requestPolicies?: Maybe<Array<Maybe<RequestPolicy>>>;
   servicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
+  user?: Maybe<User>;
 };
 
 
@@ -2639,6 +2640,11 @@ export type QueryPatronArgs = {
 
 export type QueryServicePointsArgs = {
   id?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 export enum ReceiptStatus {
