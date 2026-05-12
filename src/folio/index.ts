@@ -41,7 +41,8 @@ import { Resolvers } from '../resolvers-types'
 export const resolvers: Resolvers = {
   Query: {
     patron(parent, { id }, { dataSources: { patrons } }, info) {
-      return patrons.getPatron(id)
+      const fields = info.fieldNodes[0]?.selectionSet?.selections.map((s: any) => s.name.value) ?? [];
+      return patrons.getPatron(id, fields)
     },
     feeFineTypes(parent, args, { dataSources: { feefines } }, info) {
       return feefines.getFeeFineTypes(args)
