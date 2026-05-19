@@ -277,3 +277,40 @@ it('resolves patronInfo', async () => {
     const patron = response.body.singleResult.data.patron;
     expect(patron.id).toEqual('ec5a4033-fdec-4f0a-8bbf-77e5411709ce');
 });
+
+it('only requests holds when query includes holds', async () => {
+  const query = `query Query($patronId: UUID!) {
+    patron(id: $patronId) {
+      holds {
+        requestDate
+      }
+    }
+  }`;
+
+  const getPatronSpy = jest.spyOn(dataSources.patrons, 'getPatron').mockResolvedValue({
+    holds: [],
+    totalCharges: { amount: 0, isoCurrencyCode: 'USD' },
+    totalChargesCount: 0,
+    totalLoans: 0,
+    totalHolds: 0,
+    charges: [],
+    loans: [],
+    accounts: [],
+    blocks: [],
+    manualBlocks: [],
+    id: 'ec5a4033-fdec-4f0a-8bbf-77e5411709ce'
+  });
+
+  const response = await queryTestServer({
+    query,
+    variables: { patronId: 'ec5a4033-fdec-4f0a-8bbf-77e5411709ce' },
+  });
+
+  assert(response.body.kind === 'single');
+  expect(response.body.singleResult.errors).toBeUndefined();
+  expect(getPatronSpy).toHaveBeenLastCalledWith(
+    'ec5a4033-fdec-4f0a-8bbf-77e5411709ce',
+    ['holds']
+  );
+
+});

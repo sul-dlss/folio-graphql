@@ -41,7 +41,11 @@ import { Resolvers } from '../resolvers-types'
 export const resolvers: Resolvers = {
   Query: {
     patron(parent, { id }, { dataSources: { patrons } }, info) {
-      return patrons.getPatron(id)
+      const allSelections = info.fieldNodes.flatMap(
+        (node) => node.selectionSet?.selections.map((s: any) => s.name.value) ?? []
+      );
+      const fields = [...new Set(allSelections)];
+      return patrons.getPatron(id, fields)
     },
     user(parent, { id }, { dataSources: { users } }, info) {
       return users.getUser(id)
