@@ -30,6 +30,7 @@ import OrdersAPI from './folio/orders-api.js'
 import AuthnAPI from "./folio/authn-api.js"
 import OkapiAPI from "./folio/okapi-api.js"
 import RtacApi from './folio/rtac-api.js'
+import SourceStorageAPI from './folio/source-storage-api.js'
 import { FolioContext } from './context.js'
 
 // Read the schema.graphql into utf-8 string so we can pass it to Apollo
@@ -88,6 +89,7 @@ const context = async ({ req }: Partial<{ req: express.Request }>) => {
       materialtypes: new MaterialTypesAPI({ cache, token }),
       orders: new OrdersAPI({ cache, token }),
       rtac: new RtacApi({ cache, token }),
+      sourceStorage: new SourceStorageAPI({ cache, token }),
     }
   }
 }

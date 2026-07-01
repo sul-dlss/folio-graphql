@@ -1,4 +1,4 @@
-import { UUIDResolver } from "graphql-scalars"
+import { UUIDResolver, JSONResolver } from "graphql-scalars"
 import {
   Campus,
   ClassificationType,
@@ -280,6 +280,9 @@ export const resolvers: Resolvers = {
     },
     orderLines({ id }, args, { dataSources: { orders } }, info) {
       return orders.getPoLines({ instanceId: id })
+    },
+    marcRecord({ id }, args, { dataSources: { sourceStorage } }, info) {
+      return sourceStorage.getParsedMarcByInstanceId(id)
     }
   },
   InstanceAlternativeTitlesItem: {
@@ -502,5 +505,6 @@ export const resolvers: Resolvers = {
       return orders.getPieces({ poLineId: id })
     }
   },
-  UUID: UUIDResolver
+  UUID: UUIDResolver,
+  JSON: JSONResolver
 }

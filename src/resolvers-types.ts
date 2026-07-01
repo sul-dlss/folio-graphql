@@ -17,6 +17,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date and time */
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
   /** A UUID */
   UUID: { input: any; output: any; }
 };
@@ -838,6 +839,7 @@ export type Instance = {
   items?: Maybe<Array<Maybe<Item>>>;
   /** The set of languages used by the resource */
   languages?: Maybe<Array<Scalars['String']['output']>>;
+  marcRecord?: Maybe<Scalars['JSON']['output']>;
   /** A unique instance identifier matching a client-side bibliographic record identification scheme, in particular for a scenario where multiple separate catalogs with no shared record identifiers contribute to the same Instance in Inventory. A match key is typically generated from select, normalized pieces of metadata in bibliographic records */
   matchKey?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Metadata>;
@@ -3537,6 +3539,7 @@ export type ResolversTypes = ResolversObject<{
   ItemNoteType: ResolverTypeWrapper<ItemNoteType>;
   ItemNotesItem: ResolverTypeWrapper<ItemNotesItem>;
   ItemStatus: ResolverTypeWrapper<ItemStatus>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Library: ResolverTypeWrapper<Library>;
   License: ResolverTypeWrapper<License>;
   Loan: ResolverTypeWrapper<Loan>;
@@ -3744,6 +3747,7 @@ export type ResolversParentTypes = ResolversObject<{
   ItemNoteType: ItemNoteType;
   ItemNotesItem: ItemNotesItem;
   ItemStatus: ItemStatus;
+  JSON: Scalars['JSON']['output'];
   Library: Library;
   License: License;
   Loan: Loan;
@@ -4269,6 +4273,7 @@ export type InstanceResolvers<ContextType = FolioContext, ParentType extends Res
   instanceTypeId?: Resolver<ResolversTypes['UUID'], ParentType, ContextType>;
   items?: Resolver<Maybe<Array<Maybe<ResolversTypes['Item']>>>, ParentType, ContextType, Partial<InstanceItemsArgs>>;
   languages?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  marcRecord?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   matchKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['Metadata']>, ParentType, ContextType>;
   modeOfIssuance?: Resolver<Maybe<ResolversTypes['ModeOfIssuance']>, ParentType, ContextType>;
@@ -4558,6 +4563,10 @@ export type ItemStatusResolvers<ContextType = FolioContext, ParentType extends R
   date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
+
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
 
 export type LibraryResolvers<ContextType = FolioContext, ParentType extends ResolversParentTypes['Library'] = ResolversParentTypes['Library']> = ResolversObject<{
   campus?: Resolver<Maybe<ResolversTypes['Campus']>, ParentType, ContextType>;
@@ -5574,6 +5583,7 @@ export type Resolvers<ContextType = FolioContext> = ResolversObject<{
   ItemNoteType?: ItemNoteTypeResolvers<ContextType>;
   ItemNotesItem?: ItemNotesItemResolvers<ContextType>;
   ItemStatus?: ItemStatusResolvers<ContextType>;
+  JSON?: GraphQLScalarType;
   Library?: LibraryResolvers<ContextType>;
   License?: LicenseResolvers<ContextType>;
   Loan?: LoanResolvers<ContextType>;
