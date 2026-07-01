@@ -1,6 +1,7 @@
 # These are non-core graphql types; resolvers are provided by graphql-scalars
 scalar DateTime
 scalar UUID
+scalar JSON
 
 input CqlParams {
   query: String
@@ -4382,6 +4383,7 @@ extend type Instance {
   modeOfIssuance: ModeOfIssuance
   orderLines: [PoLine]
   queueTotalLength: Int
+  marcRecord: JSON
 }
 
 extend type InstanceAlternativeTitlesItem {

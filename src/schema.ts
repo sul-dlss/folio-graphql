@@ -14,6 +14,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date and time */
   DateTime: { input: any; output: any; }
+  JSON: { input: any; output: any; }
   /** A UUID */
   UUID: { input: any; output: any; }
 };
@@ -835,6 +836,7 @@ export type Instance = {
   items?: Maybe<Array<Maybe<Item>>>;
   /** The set of languages used by the resource */
   languages?: Maybe<Array<Scalars['String']['output']>>;
+  marcRecord?: Maybe<Scalars['JSON']['output']>;
   /** A unique instance identifier matching a client-side bibliographic record identification scheme, in particular for a scenario where multiple separate catalogs with no shared record identifiers contribute to the same Instance in Inventory. A match key is typically generated from select, normalized pieces of metadata in bibliographic records */
   matchKey?: Maybe<Scalars['String']['output']>;
   metadata?: Maybe<Metadata>;

@@ -16,6 +16,7 @@ import UsersAPI from '../src/folio/users-api';
 import MaterialTypesAPI from '../src/folio/material-types-api';
 import OrdersAPI from '../src/folio/orders-api';
 import RtacApi from '../src/folio/rtac-api';
+import SourceStorageAPI from '../src/folio/source-storage-api';
 import FolioAPI from '../src/folio/folio-api';
 import AuthnAPI from '../src/folio/authn-api';
 import OkapiAPI from '../src/folio/okapi-api';
@@ -94,6 +95,7 @@ export const dataSources = {
   materialtypes: new MaterialTypesAPI(apiOptions),
   orders: new OrdersAPI(apiOptions),
   rtac: new RtacApi(apiOptions),
+  sourceStorage: new SourceStorageAPI(apiOptions),
   folio: new FolioAPI(apiOptions),
   okapi: new OkapiAPI(apiOptions)
 }

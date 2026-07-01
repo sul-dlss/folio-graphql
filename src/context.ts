@@ -10,6 +10,7 @@ import CirculationAPI from "./folio/circulation-api.js"
 import MaterialTypesAPI from "./folio/material-types-api.js"
 import OrdersAPI from "./folio/orders-api.js"
 import RtacApi from "./folio/rtac-api.js"
+import SourceStorageAPI from "./folio/source-storage-api.js"
 
 export interface FolioContext {
   token: string;
@@ -26,5 +27,6 @@ export interface FolioContext {
     materialtypes: MaterialTypesAPI;
     orders: OrdersAPI;
     rtac: RtacApi;
+    sourceStorage: SourceStorageAPI;
   };
 }

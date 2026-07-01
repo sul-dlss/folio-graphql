@@ -13,7 +13,8 @@ export default class FolioAPI extends RESTDataSource {
     request.headers["X-Okapi-Tenant"] = config.get("folio.tenant")
     request.headers["User-Agent"] = "FolioApiClient"
     request.headers["Accept"] = "application/json, text/plain"
-    request.headers["Content-Type"] = "application/json"
+    // RESTDataSource adds its own lowercase 'content-type' on JSON bodies; capitalizing here duplicates it
+    request.headers["content-type"] = "application/json"
     console.log("[FOLIO]", request.method, this.baseURL, path, request.params.toString());
   }
 
