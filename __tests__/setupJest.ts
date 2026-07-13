@@ -1,4 +1,5 @@
 import fetchMock from 'jest-fetch-mock';
+import type { Fetcher } from '@apollo/utils.fetcher';
 import { readFileSync } from "fs"
 import path from 'path';
 import { resolvers } from '../src/folio/index';
@@ -79,7 +80,7 @@ const testServer = new ApolloServer<FolioContext>({
 const token = '';
 const apiOptions = {
   token: token,
-  fetch: fetchMock
+  fetch: fetchMock as unknown as Fetcher
 };
 export const dataSources = {
   authn: new AuthnAPI(apiOptions),
