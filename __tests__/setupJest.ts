@@ -90,7 +90,7 @@ export const dataSources = {
   instances: new InstancesAPI(apiOptions),
   items: new ItemsAPI(apiOptions),
   holdings: new HoldingsAPI(apiOptions),
-  types: new TypeAPI(apiOptions),
+  types: new TypeAPI({ ...apiOptions, typeCache: new Map() }),
   feefines: new FeeFinesAPI(apiOptions),
   circulation: new CirculationAPI(apiOptions),
   materialtypes: new MaterialTypesAPI(apiOptions),

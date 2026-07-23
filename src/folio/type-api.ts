@@ -3,9 +3,9 @@ import FolioAPI from "./folio-api.js"
 import type { KeyValueCache } from '@apollo/utils.keyvaluecache';
 
 export default class TypeAPI extends FolioAPI {
-  private typeCache: Map<string, Map<string, any>>
+  private typeCache: Map<string, Promise<Map<string, any>>>
 
-  constructor(options: { token: string, cache?: KeyValueCache, typeCache?: Map<string, Map<string, any>>, fetch?: any }) {
+  constructor(options: { token: string, cache?: KeyValueCache, typeCache?: Map<string, Promise<Map<string, any>>>, fetch?: any }) {
     super(options)
     this.typeCache = options.typeCache;
   }
@@ -22,19 +22,31 @@ export default class TypeAPI extends FolioAPI {
     return ids.map(id => map.get(id));
   }
 
-  async getMapFor<Type>(path: string, { key = undefined }: Partial<{ key: string }>): Promise<Map<string, Type>> {
-    if (this.typeCache?.has(path)) return this.typeCache.get(path)
+  // For tests: reset the per-request cache on the shared test instance.
+  clearCache(): void {
+    this.typeCache?.clear()
+  }
 
+  async getMapFor<Type>(path: string, { key = undefined }: Partial<{ key: string }>): Promise<Map<string, Type>> {
+    const cached = this.typeCache?.get(path)
+    if (cached) return cached
+
+    const pending = this.fetchMapFor<Type>(path, { key })
+    this.typeCache?.set(path, pending)
+    // If the fetch rejects, drop the poisoned entry so subsequent lookups can
+    // retry rather than replaying the same failure for the rest of the request.
+    pending.catch(() => this.typeCache?.delete(path))
+
+    return pending
+  }
+
+  private async fetchMapFor<Type>(path: string, { key = undefined }: Partial<{ key: string }>): Promise<Map<string, Type>> {
     const types = await this.get<Type[]>(`/${path}`, { params: { limit: '2147483647' }})
 
-    const map = types[key || this.camelize(path)].reduce((map, obj) => {
+    return types[key || this.camelize(path)].reduce((map, obj) => {
       map.set(obj.id, obj)
       return map
     }, new Map())
-
-    this.typeCache?.set(path, map)
-
-    return map
   }
 
   async getValuesFor<Type>(path: string, { key = undefined }: Partial<{ key: string }>): Promise<Type[]> {
