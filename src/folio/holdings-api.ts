@@ -1,3 +1,4 @@
+import DataLoader from "dataloader"
 import FolioAPI from "./folio-api.js"
 import { CqlParams, HoldingsRecord, BoundWithPart, BoundWithParts } from '../schema'
 
@@ -6,8 +7,29 @@ interface HoldingsResponse {
 }
 
 export default class HoldingsAPI extends FolioAPI {
-  async getHoldingsRecord(id: string): Promise<HoldingsRecord> {
-    return await this.get<HoldingsRecord>(`/holdings-storage/holdings/${encodeURIComponent(id)}`)
+  private holdingsRecordLoader = this.buildHoldingsRecordLoader()
+
+  private buildHoldingsRecordLoader() {
+    return new DataLoader<string, HoldingsRecord | null>(
+      (ids) => this.batchHoldingsRecords(ids as string[]),
+      { maxBatchSize: 50 },
+    )
+  }
+
+  clearLoaders(): void {
+    this.holdingsRecordLoader = this.buildHoldingsRecordLoader()
+  }
+
+  async getHoldingsRecord(id: string): Promise<HoldingsRecord | null> {
+    if (!id) return null
+    return this.holdingsRecordLoader.load(id)
+  }
+
+  private async batchHoldingsRecords(ids: string[]): Promise<(HoldingsRecord | null)[]> {
+    const records = await this.getHoldingsRecords({ id: ids })
+    const byId = new Map<string, HoldingsRecord>()
+    for (const record of records) byId.set(record.id, record)
+    return ids.map((id) => byId.get(id) ?? null)
   }
 
   async getByInstanceId(instanceId: string, params: Partial<{ params: CqlParams, [key: string]: object | object[] | undefined }>): Promise<HoldingsRecord[]> {
@@ -38,6 +60,7 @@ export default class HoldingsAPI extends FolioAPI {
     const response = await this.get<BoundWithParts>('/inventory-storage/bound-with-parts', { params: urlParams });
 
     const holdingsPromises = response.boundWithParts.map((part) => this.getHoldingsRecord(part.holdingsRecordId));
-    return Promise.all(holdingsPromises);
+    const records = await Promise.all(holdingsPromises);
+    return records.filter((r): r is HoldingsRecord => r !== null);
   }
 }

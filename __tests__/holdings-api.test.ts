@@ -1,3 +1,4 @@
+import fetchMock from 'jest-fetch-mock';
 import { dataSources, mockFolioResponse, mockFolioRequestUrl } from './setupJest';
 
 // See https://s3.amazonaws.com/foliodocs/api/mod-inventory-storage/p/holdings-storage.html for response data
@@ -5,14 +6,57 @@ describe('HoldingsAPI', () => {
     let HoldingsAPI = dataSources.holdings;
 
     describe('getHoldingsRecord', () => {
-        it('queries the expected URL', async () => {
-            mockFolioResponse({
-                "id": "holdingsId123",
-            });
+        beforeEach(() => HoldingsAPI.clearLoaders());
 
+        it('returns null when no id is passed', async () => {
+            const result = await HoldingsAPI.getHoldingsRecord(null as unknown as string);
+            expect(result).toBeNull();
+        });
+
+        it('queries the batch endpoint filtered by id', async () => {
+            mockFolioResponse({
+                "holdingsRecords": [{ "id": "holdingsId123" }]
+            });
             const result = await HoldingsAPI.getHoldingsRecord('holdingsId123');
-            expect(mockFolioRequestUrl()).toContainPath('/holdings-storage/holdings/holdingsId123');
-            expect(result.id).toEqual('holdingsId123');
+            const url = mockFolioRequestUrl();
+            expect(url).toContainPath('/holdings-storage/holdings');
+            expect(url).toContainPath('id=="holdingsId123"');
+            expect(result?.id).toEqual('holdingsId123');
+        });
+
+        it('returns null for ids missing from the batch response', async () => {
+            mockFolioResponse({ "holdingsRecords": [] });
+            const result = await HoldingsAPI.getHoldingsRecord('missing');
+            expect(result).toBeNull();
+        });
+
+        it('batches concurrent lookups into one request with an OR clause', async () => {
+            mockFolioResponse({
+                "holdingsRecords": [
+                    { "id": "holdings-a" },
+                    { "id": "holdings-c" }
+                ]
+            });
+            const [a, b, c] = await Promise.all([
+                HoldingsAPI.getHoldingsRecord('holdings-a'),
+                HoldingsAPI.getHoldingsRecord('holdings-b'),
+                HoldingsAPI.getHoldingsRecord('holdings-c'),
+            ]);
+            expect(fetchMock.mock.calls.length).toEqual(1);
+            const url = mockFolioRequestUrl();
+            expect(url).toContainPath('id=="holdings-a"');
+            expect(url).toContainPath('id=="holdings-b"');
+            expect(url).toContainPath('id=="holdings-c"');
+            expect(a?.id).toEqual('holdings-a');
+            expect(b).toBeNull();
+            expect(c?.id).toEqual('holdings-c');
+        });
+
+        it('splits large batches so the CQL OR clause stays within URL limits', async () => {
+            const ids = Array.from({ length: 120 }, (_, i) => `h-${i}`);
+            for (let i = 0; i < 3; i++) mockFolioResponse({ holdingsRecords: [] });
+            await Promise.all(ids.map((id) => HoldingsAPI.getHoldingsRecord(id)));
+            expect(fetchMock.mock.calls.length).toEqual(3);
         });
     });
 
@@ -68,6 +112,8 @@ describe('HoldingsAPI', () => {
     });
 
     describe('getBoundWithHoldingsPerItem', () => {
+        beforeEach(() => HoldingsAPI.clearLoaders());
+
         it('queries the expected URL', async () => {
             mockFolioResponse({
                 "boundWithParts": [
@@ -78,7 +124,7 @@ describe('HoldingsAPI', () => {
               });
 
               mockFolioResponse({
-                "id": "holdingsId123",
+                "holdingsRecords": [{ "id": "holdingsId123" }]
               });
 
             const result = await HoldingsAPI.getBoundWithHoldingsPerItem('item_id_1');
