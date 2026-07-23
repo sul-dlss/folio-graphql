@@ -82,7 +82,7 @@ const apiOptions = {
   token: token,
   fetch: fetchMock as unknown as Fetcher
 };
-export const dataSources = {
+export const createDataSources = () => ({
   authn: new AuthnAPI(apiOptions),
   patrons: new PatronsAPI(apiOptions),
   users: new UsersAPI(apiOptions),
@@ -99,14 +99,21 @@ export const dataSources = {
   sourceStorage: new SourceStorageAPI(apiOptions),
   folio: new FolioAPI(apiOptions),
   okapi: new OkapiAPI(apiOptions)
-}
-const context: FolioContext = {
-  token,
-  dataSources
-}
+})
+
+// Shared instances for data-source unit tests. GraphQL integration tests use
+// createDataSources() so every operation has the same lifecycle as production.
+export const dataSources = createDataSources()
 
 // expose queryTestServer for use in tests
-export const queryTestServer = async (args: { query: string, variables: any }) => {
+export const queryTestServer = async (
+  args: { query: string, variables: any },
+  operationDataSources = createDataSources(),
+) => {
+  const context: FolioContext = {
+    token,
+    dataSources: operationDataSources,
+  }
   const response = await testServer.executeOperation(
     args,
     {

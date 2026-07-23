@@ -1,7 +1,8 @@
-import { dataSources, queryTestServer } from '../setupJest';
+import { createDataSources, queryTestServer } from '../setupJest';
 import assert from 'assert';
 
 it('resolves items', async () => {
+    const dataSources = createDataSources();
 
     // Source: https://github.com/sul-dlss/sul-requests/blob/35ad5eb23429c838289520eae7a1e91614cf33ae/app/services/folio_graphql_client.rb#L48
     // in sul-requests `barcode` is passed in directly as a string; replicating that here by hardcoding it below
@@ -52,7 +53,7 @@ it('resolves items', async () => {
     const response = await queryTestServer({
         query: query,
         variables: {},
-    });
+    }, dataSources);
 
     // Note the use of Node's assert rather than Jest's expect; if using
     // TypeScript, `assert`` will appropriately narrow the type of `body`
@@ -63,4 +64,42 @@ it('resolves items', async () => {
     expect(items).toBeInstanceOf(Array);
     expect(items).toHaveLength(1);
     expect(items[0].status).toEqual({ name: 'Available' });
+});
+
+it('batches due date lookups for multiple items', async () => {
+    const dataSources = createDataSources();
+    const query = `query ItemsWithDueDates {
+        items {
+            id
+            dueDate
+        }
+    }`;
+
+    dataSources.items.getItems = jest.fn().mockResolvedValue([
+        { id: 'item-a' },
+        { id: 'item-b' },
+        { id: 'item-c' },
+    ]);
+    dataSources.circulation.getLoans = jest.fn().mockResolvedValue([
+        { id: 'loan-a', itemId: 'item-a', dueDate: '2026-01-01T00:00:00Z' },
+        { id: 'loan-c', itemId: 'item-c', dueDate: '2026-03-03T00:00:00Z' },
+    ]);
+
+    const response = await queryTestServer({
+        query,
+        variables: {},
+    }, dataSources);
+
+    assert(response.body.kind === 'single');
+    expect(response.body.singleResult.errors).toBeUndefined();
+    expect(response.body.singleResult.data.items).toEqual([
+        { id: 'item-a', dueDate: '2026-01-01T00:00:00Z' },
+        { id: 'item-b', dueDate: null },
+        { id: 'item-c', dueDate: '2026-03-03T00:00:00Z' },
+    ]);
+    expect(dataSources.circulation.getLoans).toHaveBeenCalledTimes(1);
+    expect(dataSources.circulation.getLoans).toHaveBeenCalledWith({
+        itemId: ['item-a', 'item-b', 'item-c'],
+        'status.name': 'open',
+    });
 });

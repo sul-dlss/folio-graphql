@@ -1,7 +1,8 @@
-import { dataSources, queryTestServer } from '../setupJest';
+import { createDataSources, queryTestServer } from '../setupJest';
 import assert from 'assert';
 
 it('resolves loanPolicies', async () => {
+    const dataSources = createDataSources();
     
     // Source: https://github.com/sul-dlss/mylibrary/blob/4be4b3705c734a7743b019a8450626a6324fe45f/app/services/folio_graphql_client.rb#L75
     const query = `query LoanPolicies {
@@ -88,7 +89,7 @@ it('resolves loanPolicies', async () => {
     const response = await queryTestServer({
         query: query,
         variables: {},
-    });
+    }, dataSources);
 
     // Note the use of Node's assert rather than Jest's expect; if using
     // TypeScript, `assert`` will appropriately narrow the type of `body`

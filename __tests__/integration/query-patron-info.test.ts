@@ -1,7 +1,8 @@
-import { dataSources, queryTestServer } from '../setupJest';
+import { createDataSources, queryTestServer } from '../setupJest';
 import assert from 'assert';
 
 it('resolves patronInfo', async () => {
+    const dataSources = createDataSources();
 
     // Source: https://github.com/sul-dlss/mylibrary/blob/4be4b3705c734a7743b019a8450626a6324fe45f/app/services/folio_graphql_client.rb#L120C7-L120C18
     const query = `query Query($patronId: UUID!) {
@@ -267,7 +268,7 @@ it('resolves patronInfo', async () => {
     const response = await queryTestServer({
         query: query,
         variables: { patronId: 'ec5a4033-fdec-4f0a-8bbf-77e5411709ce' },
-    });
+    }, dataSources);
 
     // Note the use of Node's assert rather than Jest's expect; if using
     // TypeScript, `assert` will appropriately narrow the type of `body`
@@ -279,6 +280,7 @@ it('resolves patronInfo', async () => {
 });
 
 it('only requests holds when query includes holds', async () => {
+  const dataSources = createDataSources();
   const query = `query Query($patronId: UUID!) {
     patron(id: $patronId) {
       holds {
@@ -304,7 +306,7 @@ it('only requests holds when query includes holds', async () => {
   const response = await queryTestServer({
     query,
     variables: { patronId: 'ec5a4033-fdec-4f0a-8bbf-77e5411709ce' },
-  });
+  }, dataSources);
 
   assert(response.body.kind === 'single');
   expect(response.body.singleResult.errors).toBeUndefined();

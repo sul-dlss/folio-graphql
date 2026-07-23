@@ -1,7 +1,8 @@
-import { dataSources, queryTestServer } from '../setupJest';
+import { createDataSources, queryTestServer } from '../setupJest';
 import assert from 'assert';
 
 it('resolves instances', async () => {
+    const dataSources = createDataSources();
 
     // Source: https://github.com/sul-dlss/sul-requests/blob/35ad5eb23429c838289520eae7a1e91614cf33ae/app/services/folio_graphql_client.rb#L71
     // in sul-requests `hrid` is passed in directly as a string; replicating that here by hardcoding it below
@@ -153,7 +154,7 @@ it('resolves instances', async () => {
     const response = await queryTestServer({
         query: query,
         variables: {},
-    });
+    }, dataSources);
 
     // Note the use of Node's assert rather than Jest's expect; if using
     // TypeScript, `assert`` will appropriately narrow the type of `body`

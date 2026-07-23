@@ -1,7 +1,8 @@
-import { dataSources, queryTestServer } from '../setupJest';
+import { createDataSources, queryTestServer } from '../setupJest';
 import assert from 'assert';
 
 it('resolves servicePoints', async () => {
+    const dataSources = createDataSources();
 
     // sul-requests and mylibrary both use this query
     // https://github.com/sul-dlss/mylibrary/blob/4be4b3705c734a7743b019a8450626a6324fe45f/app/services/folio_graphql_client.rb#L55
@@ -45,7 +46,7 @@ it('resolves servicePoints', async () => {
     const response = await queryTestServer({
         query: query,
         variables: {},
-    });
+    }, dataSources);
 
     // Note the use of Node's assert rather than Jest's expect; if using
     // TypeScript, `assert`` will appropriately narrow the type of `body`
@@ -57,4 +58,3 @@ it('resolves servicePoints', async () => {
     expect(servicePoints).toHaveLength(2);
     expect(servicePoints[0].id).toEqual('a5dbb3dc-84f8-4eb3-8bfe-c61f74a9e92d');
 });
-

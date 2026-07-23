@@ -386,11 +386,8 @@ export const resolvers: Resolvers = {
       return await circulation.getItemQueueLength(id);
     },
     async dueDate({ id }, args, { dataSources: { circulation } }, info) {
-      const loans = await circulation.getLoans({ itemId: id, "status.name": 'open' });
-
-      if (loans.length === 0) return null;
-
-      return loans[0].dueDate;
+      const loan = await circulation.getOpenLoanForItem(id);
+      return loan?.dueDate ?? null;
     },
     async boundWithHoldingsPerItem({ id }, args, { dataSources: { holdings, items } }, info) {
       const results = await holdings.getBoundWithHoldingsPerItem(id);
