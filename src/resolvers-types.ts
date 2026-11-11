@@ -1721,6 +1721,8 @@ export type LocationDetails = {
   pageServicePoints?: Maybe<Array<Maybe<ServicePoint>>>;
   /** Location-specific paging schedule code (e.g. SAL3 for offsite locations that aren't nested under the SAL3 library) */
   pagingSchedule?: Maybe<Scalars['String']['output']>;
+  /** Location-specific key to a requests paging schedule that's different from the library */
+  pagingSchedulePullScheduleKey?: Maybe<Scalars['String']['output']>;
   /** Service point where material from this location is scanned */
   scanServicePoint?: Maybe<ServicePoint>;
   /** Code for service point where material from this location is scanned */
